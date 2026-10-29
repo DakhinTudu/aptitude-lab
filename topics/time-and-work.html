@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time, Work & Efficiency — Aptitude & Reasoning Lab</title>
+  <meta name="description" content="Master time and work, rate comparisons, the LCM unit-work method, wage sharing, and pipe-leak problems with interactive timelines and timed practice.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link" aria-label="Aptitude and Reasoning Lab Home">
+        <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="#0f172a" />
+          <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3" />
+          <circle cx="24" cy="24" r="4" fill="#38bdf8" />
+          <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4" />
+          <circle cx="40" cy="40" r="4" fill="#34d399" />
+          <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <span>Aptitude Lab</span>
+      </a>
+
+      <nav aria-label="Topic navigation">
+        <ul class="nav-links">
+          <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+          <li><span class="badge badge-published">Published</span></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" class="page-container">
+    
+    <!-- Model Self-Test Banner -->
+    <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+    <!-- Topic Hero -->
+    <header class="card" style="margin-bottom: 1.25rem;">
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+        <span class="badge badge-tag">Quantitative Aptitude</span>
+        <span class="badge badge-tag">SEBI Gr A (IT & Gen)</span>
+        <span class="badge badge-tag">Banking & SSC</span>
+      </div>
+      <h1>Time, Work & Efficiency</h1>
+      <p class="section-subtitle">
+        Understand why work rates add while times never add. Master the LCM (Unit Work) method, efficiency-to-wage ratios, pipes and cisterns, and multi-stage work timelines.
+      </p>
+    </header>
+
+    <!-- Section 1: Concept & Interactive Model -->
+    <section class="card" aria-labelledby="interactive-model-title">
+      <div class="card-header">
+        <div>
+          <h2 id="interactive-model-title" class="section-title">
+            <span>1. Interactive Work Rate & Timeline Model</span>
+          </h2>
+          <p class="section-subtitle">Change individual worker days to visualize how their combined speed shortens completion time.</p>
+        </div>
+      </div>
+
+      <!-- Quick Preset Buttons -->
+      <div style="margin-bottom: 1.25rem;">
+        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-muted); display: block; margin-bottom: 0.4rem;">
+          Standard Exam Worker Pairs (Days):
+        </span>
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(10, 15)">10 & 15 days (6 d)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(12, 18)">12 & 18 days (7.2 d)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(20, 30)">20 & 30 days (12 d)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(12, 24)">12 & 24 days (8 d)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(10, 10)">10 & 10 days (5 d)</button>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="control-grid">
+        <div class="control-group">
+          <label for="input-da" class="control-label">
+            <span>Worker A Time (<span style="font-family: var(--font-mono);">D_A</span>)</span>
+            <span id="rate-a-badge" class="badge badge-tag">Rate: 3 units/day</span>
+          </label>
+          <input type="number" id="input-da" value="12" min="1" max="120" step="1" aria-describedby="da-desc">
+          <input type="range" id="range-da" min="1" max="60" value="12" aria-label="Worker A Days Slider">
+          <span id="da-desc" class="sr-only">Days required for Worker A to complete the entire job alone.</span>
+        </div>
+
+        <div class="control-group">
+          <label for="input-db" class="control-label">
+            <span>Worker B Time (<span style="font-family: var(--font-mono);">D_B</span>)</span>
+            <span id="rate-b-badge" class="badge badge-tag">Rate: 2 units/day</span>
+          </label>
+          <input type="number" id="input-db" value="18" min="1" max="120" step="1" aria-describedby="db-desc">
+          <input type="range" id="range-db" min="1" max="60" value="18" aria-label="Worker B Days Slider">
+          <span id="db-desc" class="sr-only">Days required for Worker B to complete the entire job alone.</span>
+        </div>
+      </div>
+
+      <!-- SVG Visualization -->
+      <div class="vis-container" aria-label="Work timeline and rate comparison diagram">
+        <svg id="timeline-svg" viewBox="0 0 620 190" width="100%" height="190" role="img" aria-labelledby="svg-desc">
+          <title id="svg-desc">Timeline comparison showing individual vs combined completion times</title>
+          <!-- SVG content rendered by Model Renderer -->
+        </svg>
+      </div>
+
+      <!-- Computed Model Outputs Readout -->
+      <div class="score-bar" id="model-readout" aria-live="polite">
+        <div class="score-stat">
+          <span class="score-stat-label">Total Work (LCM)</span>
+          <span class="score-stat-num" id="readout-lcm">36 units</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Worker A Daily Rate</span>
+          <span class="score-stat-num" id="readout-rate-a">3 units/day (1/12)</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Worker B Daily Rate</span>
+          <span class="score-stat-num" id="readout-rate-b">2 units/day (1/18)</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Combined Daily Rate</span>
+          <span class="score-stat-num" id="readout-combined-rate">5 units/day</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Combined Time (A + B)</span>
+          <span class="score-stat-num" id="readout-combined-time">7.2 days</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Predict-First Worked Example -->
+    <section class="card" aria-labelledby="predict-title">
+      <div class="card-header">
+        <div>
+          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
+          <p class="section-subtitle">Predict the outcome to test your conceptual model before inspecting the steps.</p>
+        </div>
+      </div>
+
+      <div class="predict-box">
+        <div class="predict-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span>Predict the combined completion time:</span>
+        </div>
+        <p id="predict-scenario-text" style="font-size: 1.05rem; font-weight: 500; margin-bottom: 1rem;">
+          If Worker A takes 12 days and Worker B takes 18 days, how many days will they take working together?
+        </p>
+
+        <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options">
+          <!-- Dynamically populated predict options -->
+        </div>
+
+        <div id="predict-feedback" class="callout hidden" role="alert"></div>
+
+        <div style="margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" id="btn-reveal-solution" class="btn btn-secondary">
+            Inspect Worked Solution ↓
+          </button>
+          <span style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            (Notice: Combined time must always be LESS than the fastest worker's individual time)
+          </span>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Worked Solution Trace -->
+      <div id="worked-solution-panel" class="hidden">
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Verified Step-by-Step Mathematical Trace</h3>
+        <div class="steps-container" id="solution-steps-container">
+          <!-- Populated from pure Model.solve() -->
+        </div>
+
+        <!-- Trap Callout -->
+        <div class="callout callout-trap" id="solution-trap-callout">
+          <strong>⚠️ Common Trap to Avoid:</strong>
+          <span id="solution-trap-text"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Core Exam Rules & Fast Shortcuts -->
+    <section class="card" aria-labelledby="reference-title">
+      <div class="card-header">
+        <div>
+          <h2 id="reference-title" class="section-title">3. Core Exam Rules & Fast Shortcuts</h2>
+          <p class="section-subtitle">Mathematical principles, unit work rules, and condition boundaries.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The LCM (Unit Work) Method</h3>
+          <p style="font-size: 0.875rem;">Avoid fractions by setting Total Work equal to the LCM of individual days:</p>
+          <ul style="font-size: 0.875rem; padding-left: 1.25rem; margin-top: 0.3rem;">
+            <li>Total Work $W = \text{LCM}(D_A, D_B)$ units</li>
+            <li>Daily Rate of A = $W / D_A$ units/day</li>
+            <li>Daily Rate of B = $W / D_B$ units/day</li>
+            <li>Combined Days = $W / (u_A + u_B)$</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The Product-Over-Sum Shortcut</h3>
+          <p style="font-size: 0.875rem;">For exactly two workers working together throughout:</p>
+          <div class="step-detail" style="display: block; text-align: center; margin: 0.4rem 0;">
+            $T_{\text{together}} = \frac{D_A \times D_B}{D_A + D_B} \text{ days}$
+          </div>
+          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            *Limitation:* Do NOT extend this formula to 3 workers as $\frac{a \times b \times c}{a + b + c}$ — that is mathematically false! For 3 workers, use the LCM method.
+          </p>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Work, Efficiency & Wages Rule</h3>
+          <p style="font-size: 0.875rem;">When workers work for the same number of days, wages are shared in the ratio of their daily efficiency (rates), NOT their days:</p>
+          <div class="step-detail" style="display: block; text-align: center; margin: 0.4rem 0;">
+            $\text{Wage}_A : \text{Wage}_B = \text{Rate}_A : \text{Rate}_B = D_B : D_A$
+          </div>
+          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            *Warning:* Faster workers take fewer days but do more work per day!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Practice Lab (Independent & Timed) -->
+    <section class="card" aria-labelledby="practice-title" id="practice-section">
+      <div class="card-header">
+        <div>
+          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
+          <p class="section-subtitle">Real competitive exam questions. Unseen questions solved independently build genuine retrieval.</p>
+        </div>
+      </div>
+
+      <!-- Practice Controls & Mode Toggles -->
+      <div class="practice-header">
+        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
+          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
+            Guided Mode
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
+            Try Without Hints
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
+            Timed Practice
+          </button>
+        </div>
+
+        <div id="timer-container" class="timer-badge hidden" aria-live="off">
+          <span>⏱️</span>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+
+      <!-- Score & Accuracy Progress Bar -->
+      <div class="score-bar" aria-label="Current Practice Statistics">
+        <div class="score-stat">
+          <span class="score-stat-label">Questions Attempted</span>
+          <span class="score-stat-num" id="stat-attempts">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Total Correct</span>
+          <span class="score-stat-num" id="stat-correct">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Independent Correct</span>
+          <span class="score-stat-num" id="stat-independent">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Accuracy</span>
+          <span class="score-stat-num" id="stat-accuracy">0%</span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
+          Reset Local Progress
+        </button>
+      </div>
+
+      <!-- Question Box -->
+      <div id="practice-question-card" style="margin-top: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
+            Question 1 of 12
+          </span>
+          <span class="badge" id="practice-q-difficulty">Easy</span>
+        </div>
+
+        <p class="question-stem" id="practice-q-stem">
+          Loading practice question...
+        </p>
+
+        <!-- Options container -->
+        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Practice Feedback Callout -->
+        <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+        <!-- Error Categorizer (appears on incorrect submission) -->
+        <div id="practice-error-categorizer" class="error-categorizer hidden">
+          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
+            Reflective Analysis: What was the primary reason for this mistake?
+          </label>
+          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
+            <option value="concept">Concept Misunderstanding (Averaged times or added days directly)</option>
+            <option value="method">Wrong Setup / Method (Used wrong LCM or inverse relationship)</option>
+            <option value="arithmetic">Arithmetic Slip (Setup was right, calculation erred)</option>
+            <option value="misread">Misread Condition (Solved for remaining vs total days)</option>
+            <option value="time_guess">Time Pressure / Rushed Guess</option>
+          </select>
+        </div>
+
+        <!-- Practice Worked Solution Box (revealed upon answering) -->
+        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
+          <h4 style="margin-bottom: 0.4rem; font-size: 0.95rem;">Step-by-Step Solution:</h4>
+          <p id="practice-solution-text" style="font-size: 0.9rem; line-height: 1.5;"></p>
+        </div>
+
+        <!-- Practice Action Bar -->
+        <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" id="btn-next-question" class="btn btn-primary" onclick="loadNextQuestion()">
+            Next Question →
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <strong>Aptitude & Reasoning Lab</strong> — Quantitative Aptitude Stream
+          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
+            Topic Review Status: <span class="badge badge-published">published</span> • Last Reviewed: 2026-10-29
+          </div>
+        </div>
+        <div style="font-size: 0.8125rem;">
+          <a href="../docs/reviews/time-and-work.md" style="color: var(--color-primary); text-decoration: none;">View Topic Review & Test Specification ↗</a>
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        <strong>Educational Disclaimer:</strong> Educational tool. Check the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority. All questions and solvers are original or derived from public standard mathematical relationships.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/common.js"></script>
+  <script>
+    /* ==========================================================================
+       1. PURE MODEL (Pure calculation functions: No DOM, no random calls)
+       ========================================================================== */
+    const Model = (() => {
+      // Greatest Common Divisor
+      function gcd(a, b) {
+        a = Math.abs(Math.round(a));
+        b = Math.abs(Math.round(b));
+        while (b) {
+          const t = b;
+          b = a % b;
+          a = t;
+        }
+        return a;
+      }
+
+      // Least Common Multiple
+      function lcm(a, b) {
+        if (!a || !b) return 0;
+        return Math.abs(Math.round((a * b) / gcd(a, b)));
+      }
+
+      /**
+       * Pure solver for 2 workers working together.
+       * @param {Object} input - { da, db, trapAnswer }
+       */
+      function solveCombined2(input) {
+        const da = Number(input.da);
+        const db = Number(input.db);
+
+        // Validation
+        if (isNaN(da) || isNaN(db)) {
+          return { valid: false, error: "Days must be valid numbers" };
+        }
+        if (da <= 0 || db <= 0) {
+          return { valid: false, error: "Days required must be greater than zero" };
+        }
+
+        const totalWork = lcm(da, db);
+        const rateA = totalWork / da; // units per day
+        const rateB = totalWork / db; // units per day
+        const combinedRate = rateA + rateB; // units per day
+        const combinedTime = LabCommon.round(totalWork / combinedRate, 2);
+
+        // Steps trace
+        const steps = [
+          {
+            title: "Identify Given Individual Times",
+            explanation: `Worker A takes ${da} days, Worker B takes ${db} days.`
+          },
+          {
+            title: "Find Total Work (LCM Method)",
+            explanation: `Let Total Work = LCM(${da}, ${db}) = ${totalWork} units.`,
+            math: `Total Work W = ${totalWork} units`
+          },
+          {
+            title: "Calculate Daily Work Rates (Efficiency)",
+            explanation: `Rate of A = ${totalWork} ÷ ${da} = ${rateA} units/day. Rate of B = ${totalWork} ÷ ${db} = ${rateB} units/day.`,
+            math: `Rate_A = ${rateA} u/d, Rate_B = ${rateB} u/d`
+          },
+          {
+            title: "Calculate Combined Daily Output",
+            explanation: `Working together, they complete ${rateA} + ${rateB} = ${combinedRate} units per day.`,
+            math: `Combined Rate = ${combinedRate} units/day`
+          },
+          {
+            title: "Calculate Total Days Required",
+            explanation: `Combined Time = Total Work ÷ Combined Rate = ${totalWork} ÷ ${combinedRate} = ${combinedTime} days.`,
+            math: `Time = ${totalWork} / ${combinedRate} = ${combinedTime} days`
+          },
+          {
+            title: "Verify with Product-Over-Sum Formula",
+            explanation: `Formula shortcut: (D_A × D_B) / (D_A + D_B) = (${da} × ${db}) / (${da} + ${db}) = ${da * db} / ${da + db} = ${combinedTime} days.`,
+            math: `T = (${da} × ${db}) / (${da} + ${db}) = ${combinedTime} days`
+          }
+        ];
+
+        // Trap detection
+        let commonTrap = null;
+        const averageTime = LabCommon.round((da + db) / 2, 2);
+        const sumTime = da + db;
+
+        if (input.trapAnswer !== undefined) {
+          const userAns = Number(input.trapAnswer);
+          if (userAns === averageTime) {
+            commonTrap = {
+              type: "average_trap",
+              answer: averageTime,
+              explanation: `You took the average of the times (${da} + ${db})/2 = ${averageTime}. But two people working together cannot take longer than the fastest worker (${Math.min(da, db)} days)! Rates add; times never average.`
+            };
+          } else if (userAns === sumTime) {
+            commonTrap = {
+              type: "sum_trap",
+              answer: sumTime,
+              explanation: `You added the days directly (${da} + ${db} = ${sumTime}). Adding days implies two people take longer than one alone! You must add rates (1/${da} + 1/${db}), not days.`
+            };
+          }
+        }
+
+        if (!commonTrap) {
+          commonTrap = {
+            type: "average_trap",
+            answer: averageTime,
+            explanation: `Common mistake: averaging times (${da} + ${db})/2 = ${averageTime} days. Working together is ALWAYS faster than the fastest worker (${Math.min(da, db)} days).`
+          };
+        }
+
+        return {
+          valid: true,
+          answer: combinedTime,
+          answerDisplay: `${combinedTime} days`,
+          intermediates: {
+            da,
+            db,
+            totalWork,
+            rateA,
+            rateB,
+            combinedRate,
+            combinedTime,
+            fractionA: `1/${da}`,
+            fractionB: `1/${db}`
+          },
+          steps,
+          assumptions: [
+            "Both workers work continuously at a constant rate",
+            "Both workers start and finish together without interruption",
+            "No fatigue factor or diminishing returns"
+          ],
+          commonTrap
+        };
+      }
+
+      /**
+       * Pure solver for 3 workers.
+       */
+      function solveCombined3(da, db, dc) {
+        if (da <= 0 || db <= 0 || dc <= 0) return { valid: false, error: "Days must be strictly positive" };
+        const l1 = lcm(da, db);
+        const totalWork = lcm(l1, dc);
+        const rA = totalWork / da;
+        const rB = totalWork / db;
+        const rC = totalWork / dc;
+        const combRate = rA + rB + rC;
+        const combTime = LabCommon.round(totalWork / combRate, 2);
+        return {
+          valid: true,
+          totalWork,
+          rateA: rA,
+          rateB: rB,
+          rateC: rC,
+          combinedRate: combRate,
+          combinedTime: combTime
+        };
+      }
+
+      /**
+       * Pure solver for pipe and cistern with leak.
+       */
+      function solvePipeLeak(dInflow, dDrain) {
+        if (dInflow <= 0 || dDrain <= 0) return { valid: false, error: "Hours must be strictly positive" };
+        const totalVol = lcm(dInflow, dDrain);
+        const rIn = totalVol / dInflow;
+        const rOut = totalVol / dDrain;
+        const netRate = rIn - rOut;
+        if (netRate <= 0) {
+          return {
+            valid: true,
+            fills: false,
+            netRate,
+            error: "Tank will never fill because drain rate is greater than or equal to inflow rate."
+          };
+        }
+        const timeToFill = LabCommon.round(totalVol / netRate, 2);
+        return {
+          valid: true,
+          fills: true,
+          totalVol,
+          netRate,
+          timeToFill
+        };
+      }
+
+      return {
+        gcd,
+        lcm,
+        solveCombined2,
+        solveCombined3,
+        solvePipeLeak
+      };
+    })();
+
+    if (typeof window !== "undefined") {
+      window.Model = Model;
+    }
+
+    /* ==========================================================================
+       2. DETERMINISTIC SELF-TESTS (Required Quality Gate)
+       ========================================================================== */
+    function runSelfTests() {
+      const results = { passed: 0, failed: 0, failures: [] };
+
+      function assert(condition, testName, details = "") {
+        if (condition) {
+          results.passed += 1;
+        } else {
+          results.failed += 1;
+          results.failures.push({ name: testName, details });
+        }
+      }
+
+      try {
+        // TC-01: Standard 10 and 15 days (clean integer 6.0 days)
+        const t1 = Model.solveCombined2({ da: 10, db: 15 });
+        assert(t1.valid === true && t1.intermediates.combinedTime === 6 && t1.intermediates.totalWork === 30,
+          "TC-01: 10 & 15 days", `Expected combinedTime=6, totalWork=30. Got ${t1.intermediates?.combinedTime}, ${t1.intermediates?.totalWork}`);
+
+        // TC-02: 12 and 18 days (7.2 days, LCM 36)
+        const t2 = Model.solveCombined2({ da: 12, db: 18 });
+        assert(t2.valid === true && t2.intermediates.combinedTime === 7.2 && t2.intermediates.totalWork === 36,
+          "TC-02: 12 & 18 days", `Expected 7.2 days. Got ${t2.intermediates?.combinedTime}`);
+
+        // TC-03: 20 and 30 days (12.0 days, LCM 60)
+        const t3 = Model.solveCombined2({ da: 20, db: 30 });
+        assert(t3.valid === true && t3.intermediates.combinedTime === 12 && t3.intermediates.totalWork === 60,
+          "TC-03: 20 & 30 days", `Expected 12 days. Got ${t3.intermediates?.combinedTime}`);
+
+        // TC-04: Equal workers identity (10 & 10 days = 5.0 days)
+        const t4 = Model.solveCombined2({ da: 10, db: 10 });
+        assert(t4.valid === true && t4.intermediates.combinedTime === 5,
+          "TC-04: Equal workers (10 & 10)", `Expected 5 days. Got ${t4.intermediates?.combinedTime}`);
+
+        // TC-05: Three workers (12, 24, 8 days = 4.0 days, LCM 24)
+        const t5 = Model.solveCombined3(12, 24, 8);
+        assert(t5.valid === true && t5.combinedTime === 4 && t5.totalWork === 24,
+          "TC-05: Three workers (12, 24, 8)", `Expected 4 days. Got ${t5.combinedTime}`);
+
+        // TC-06: Average time trap detection (12 & 18 with trap 15)
+        const t6 = Model.solveCombined2({ da: 12, db: 18, trapAnswer: 15 });
+        assert(t6.valid === true && t6.commonTrap && t6.commonTrap.type === "average_trap",
+          "TC-06: Average trap recognition", "Average trap was not flagged");
+
+        // TC-07: Sum of days trap detection (12 & 18 with trap 30)
+        const t7 = Model.solveCombined2({ da: 12, db: 18, trapAnswer: 30 });
+        assert(t7.valid === true && t7.commonTrap && t7.commonTrap.type === "sum_trap",
+          "TC-07: Sum trap recognition", "Sum of days trap was not flagged");
+
+        // TC-08: Zero days rejection
+        const t8 = Model.solveCombined2({ da: 0, db: 15 });
+        assert(t8.valid === false, "TC-08: Zero days rejection", "Zero days should return valid: false");
+
+        // TC-09: Negative days rejection
+        const t9 = Model.solveCombined2({ da: -10, db: 15 });
+        assert(t9.valid === false, "TC-09: Negative days rejection", "Negative days should return valid: false");
+
+        // TC-10: Pipe leak net rate (fills in 10, drains in 15 = 30 hours)
+        const t10 = Model.solvePipeLeak(10, 15);
+        assert(t10.valid === true && t10.fills === true && t10.timeToFill === 30,
+          "TC-10: Pipe & Cistern with drain", `Expected 30 hours. Got ${t10.timeToFill}`);
+
+        // TC-11: Strictly faster invariant check
+        const t11 = Model.solveCombined2({ da: 14, db: 35 });
+        assert(t11.valid === true && t11.intermediates.combinedTime < Math.min(14, 35),
+          "TC-11: Strictly faster invariant", "Combined time must be less than min(da, db)");
+
+      } catch (err) {
+        results.failed += 1;
+        results.failures.push({ name: "Unexpected test execution error", details: err.message });
+      }
+
+      return results;
+    }
+
+    if (typeof window !== "undefined") {
+      window.runSelfTests = runSelfTests;
+    }
+
+    /* ==========================================================================
+       3. PRACTICE QUESTION BANK (12 Verified Exam-Style Questions)
+       ========================================================================== */
+    const PRACTICE_QUESTIONS = [
+      {
+        id: "TW1",
+        difficulty: "Easy",
+        stem: "A can complete a project in 15 days and B can complete the same project in 30 days. How many days will they take to complete it working together?",
+        options: ["10 days", "22.5 days", "12 days", "45 days"],
+        correctIndex: 0, // 10 days
+        trapOptionIndex: 1, // 22.5 days (average of 15 and 30)
+        trapExplanation: "Trap: averaging the times (15 + 30)/2 = 22.5. Times do not average! Working together must take LESS than 15 days.",
+        solution: "LCM of 15 and 30 = 30 units. Rate of A = 2 u/d, Rate of B = 1 u/d. Combined rate = 3 u/d. Days = 30 / 3 = 10 days. (Or formula: 15 × 30 / 45 = 10 days)."
+      },
+      {
+        id: "TW2",
+        difficulty: "Easy",
+        stem: "A, B, and C can complete a piece of work individually in 10, 12, and 15 days respectively. In how many days can they complete it working all together?",
+        options: ["4 days", "6 days", "5 days", "12.3 days"],
+        correctIndex: 0, // 4 days
+        trapOptionIndex: 3, // average
+        trapExplanation: "Never average times! Find LCM of 10, 12, 15 = 60 units.",
+        solution: "LCM(10, 12, 15) = 60 units. Rate of A = 6 u/d, B = 5 u/d, C = 4 u/d. Total combined rate = 6 + 5 + 4 = 15 units/day. Days required = 60 / 15 = 4 days."
+      },
+      {
+        id: "TW3",
+        difficulty: "Medium",
+        stem: "A alone can do a work in 20 days. When A and B work together, they complete the work in 12 days. In how many days can B alone complete the work?",
+        options: ["30 days", "32 days", "28 days", "16 days"],
+        correctIndex: 0, // 30 days
+        trapOptionIndex: 3, // subtracting days 20 - 12 = 8 or 16
+        trapExplanation: "Trap: subtracting times directly. You must subtract rates: Rate_B = Rate_AB - Rate_A.",
+        solution: "Let Total Work = LCM(20, 12) = 60 units. Combined rate (A + B) = 60 / 12 = 5 units/day. Rate of A = 60 / 20 = 3 units/day. Therefore, Rate of B = 5 - 3 = 2 units/day. Days for B alone = 60 / 2 = 30 days."
+      },
+      {
+        id: "TW4",
+        difficulty: "Medium",
+        stem: "A can do a piece of work in 10 days and B in 15 days. They work together for 2 days, and then A leaves. In how many more days will B complete the remaining work?",
+        options: ["10 days", "8 days", "12 days", "9 days"],
+        correctIndex: 0, // 10 days
+        trapOptionIndex: 2, // 12 days (total days instead of remaining days)
+        trapExplanation: "Careful: The question asks for how many MORE days B takes to finish the REMAINING work, not the total project time.",
+        solution: "Total work = LCM(10, 15) = 30 units. Rate of A = 3 u/d, Rate of B = 2 u/d. In 2 days together, they do (3 + 2) × 2 = 10 units. Remaining work = 30 - 10 = 20 units. Time for B alone = 20 / 2 = 10 more days."
+      },
+      {
+        id: "TW5",
+        difficulty: "Medium",
+        stem: "A is 50% more efficient than B. If B takes 18 days to complete a job alone, how many days will A take working alone?",
+        options: ["12 days", "9 days", "27 days", "15 days"],
+        correctIndex: 0, // 12 days
+        trapOptionIndex: 2, // 27 days (increasing days instead of decreasing)
+        trapExplanation: "Trap: A being MORE efficient means A takes FEWER days! Efficiency ratio = 150 : 100 = 3 : 2. Time ratio is 2 : 3.",
+        solution: "Efficiency ratio A : B = 1.5 : 1 = 3 : 2. Since time is inversely proportional to efficiency: Time_A / Time_B = 2 / 3. Time_A = 18 × (2/3) = 12 days."
+      },
+      {
+        id: "TW6",
+        difficulty: "Exam-Style",
+        stem: "A and B undertake a piece of work for ₹7,000. A alone can do it in 12 days and B alone in 16 days. Working together throughout, what is A's share of the wages?",
+        options: ["₹4,000", "₹3,000", "₹3,500", "₹4,200"],
+        correctIndex: 0, // ₹4,000
+        trapOptionIndex: 1, // ₹3,000 (dividing in ratio of days 12:16 = 3:4)
+        trapExplanation: "Wages trap! Wages are divided in the ratio of daily efficiency (rates), NOT days. Ratio of rates = (1/12) : (1/16) = 16 : 12 = 4 : 3.",
+        solution: "LCM(12, 16) = 48 units. Rate of A = 4 u/d, Rate of B = 3 u/d. Ratio of work done = 4 : 3. A's share = [4 / (4 + 3)] × ₹7,000 = [4/7] × 7,000 = ₹4,000."
+      },
+      {
+        id: "TW7",
+        difficulty: "Medium",
+        stem: "Pipe A can fill a tank in 10 hours, but a leak at the bottom empties the full tank in 15 hours. If both pipe A and the leak are open simultaneously, in how many hours will the tank be filled?",
+        options: ["30 hours", "25 hours", "6 hours", "12 hours"],
+        correctIndex: 0, // 30 hours
+        trapOptionIndex: 2, // 6 hours (adding rates instead of subtracting leak)
+        trapExplanation: "Trap: The leak drains water, so its rate must be SUBTRACTED. Net rate = 1/10 - 1/15 = 1/30.",
+        solution: "Capacity = LCM(10, 15) = 30 units. Inflow rate = +3 units/hr. Drain rate = -2 units/hr. Net filling rate = 3 - 2 = +1 unit/hr. Time to fill = 30 / 1 = 30 hours."
+      },
+      {
+        id: "TW8",
+        difficulty: "Exam-Style",
+        stem: "4 men or 6 women can complete a task in 20 days. In how many days will 6 men and 11 women complete the same task working together?",
+        options: ["6 days", "8 days", "10 days", "5 days"],
+        correctIndex: 0, // 6 days
+        trapOptionIndex: 1,
+        trapExplanation: "First convert men to women: 4 Men = 6 Women ⟹ 1 Man = 1.5 Women. 6 Men = 9 Women.",
+        solution: "4 Men = 6 Women ⟹ 1 Man = 1.5 Women. Total group: 6 Men + 11 Women = (6 × 1.5) + 11 = 9 + 11 = 20 Women. We know 6 Women take 20 days. Total work = 6 × 20 = 120 woman-days. Days for 20 women = 120 / 20 = 6 days."
+      },
+      {
+        id: "TW9",
+        difficulty: "Exam-Style",
+        stem: "A can do a work in 12 days and B in 18 days. If they work on alternate days with A starting on day 1, on which day will the work be completed?",
+        options: ["15th day (14.33 days total)", "14th day", "15 days exact", "14.5 days"],
+        correctIndex: 0, // 14.33 days (finishes on 15th day)
+        trapOptionIndex: 2,
+        trapExplanation: "Alternate day cycles must be calculated in 2-day blocks. Block of 2 days = 3 + 2 = 5 units.",
+        solution: "Total work = LCM(12, 18) = 36 units. Rate A = 3 u/d, Rate B = 2 u/d. 2-day cycle (A on Day 1, B on Day 2) = 5 units. In 7 cycles (14 days), they complete 7 × 5 = 35 units. Remaining work = 36 - 35 = 1 unit. On day 15, A works: time = 1 / 3 day. Total time = 14 + 1/3 = 14.33 days (completed on the 15th day)."
+      },
+      {
+        id: "TW10",
+        difficulty: "Medium",
+        stem: "A and B can do a work in 24 and 36 days respectively. They started working together, but A left 3 days before the completion of the work. What was the total time taken to finish the work?",
+        options: ["16.2 days", "15.6 days", "14.4 days", "18.0 days"],
+        correctIndex: 1, // 15.6 days
+        trapOptionIndex: 2,
+        trapExplanation: "Shortcut: Add the work A would have done in the final 3 days to the total work, then divide by combined rate.",
+        solution: "LCM(24, 36) = 72 units. Rate A = 3 u/d, Rate B = 2 u/d. In the last 3 days, only B worked: 3 × 2 = 6 units. Work done together = 72 - 6 = 66 units. Together time = 66 / (3 + 2) = 66 / 5 = 13.2 days. Total time = 13.2 + 3 = 15.6 days."
+      },
+      {
+        id: "TW11",
+        difficulty: "Exam-Style",
+        stem: "A garrison of 150 men had provisions for 45 days. After 10 days, 25 men left. For how many more days will the remaining provisions last?",
+        options: ["42 days", "40 days", "35 days", "38 days"],
+        correctIndex: 0, // 42 days
+        trapOptionIndex: 2,
+        trapExplanation: "Calculate remaining man-days after 10 days: 150 men × (45 - 10) = 150 × 35 = 5,250 man-days. Remaining men = 125.",
+        solution: "After 10 days, provisions remaining = 150 men × 35 days = 5,250 man-days. Men remaining = 150 - 25 = 125 men. Days remaining = 5,250 / 125 = 42 days."
+      },
+      {
+        id: "TW12",
+        difficulty: "Easy",
+        stem: "A can do a work in 16 days and B in 24 days. If they work together for 4 days, what fraction of the total work is left unfinished?",
+        options: ["7/12", "5/12", "3/8", "1/2"],
+        correctIndex: 0, // 7/12
+        trapOptionIndex: 1, // 5/12 (fraction completed instead of fraction left)
+        trapExplanation: "Trap: 5/12 is the work COMPLETED. The question asked for the work LEFT unfinished (1 - 5/12 = 7/12).",
+        solution: "Total work = LCM(16, 24) = 48 units. Rate A = 3 u/d, Rate B = 2 u/d. In 4 days, they do (3 + 2) × 4 = 20 units. Fraction done = 20/48 = 5/12. Fraction left = 1 - 5/12 = 7/12."
+      }
+    ];
+
+    if (typeof window !== "undefined") {
+      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+    }
+
+    /* ==========================================================================
+       4. INTERACTIVE RENDERING & EVENT HANDLING
+       ========================================================================== */
+    const inputDa = document.getElementById("input-da");
+    const rangeDa = document.getElementById("range-da");
+    const inputDb = document.getElementById("input-db");
+    const rangeDb = document.getElementById("range-db");
+
+    const rateABadge = document.getElementById("rate-a-badge");
+    const rateBBadge = document.getElementById("rate-b-badge");
+
+    const svgEl = document.getElementById("timeline-svg");
+    const readoutLcm = document.getElementById("readout-lcm");
+    const readoutRateA = document.getElementById("readout-rate-a");
+    const readoutRateB = document.getElementById("readout-rate-b");
+    const readoutCombinedRate = document.getElementById("readout-combined-rate");
+    const readoutCombinedTime = document.getElementById("readout-combined-time");
+
+    const predictOptionsContainer = document.getElementById("predict-options-container");
+    const predictScenarioText = document.getElementById("predict-scenario-text");
+    const predictFeedback = document.getElementById("predict-feedback");
+    const btnRevealSolution = document.getElementById("btn-reveal-solution");
+    const workedSolutionPanel = document.getElementById("worked-solution-panel");
+    const solutionStepsContainer = document.getElementById("solution-steps-container");
+    const solutionTrapCallout = document.getElementById("solution-trap-callout");
+    const solutionTrapText = document.getElementById("solution-trap-text");
+
+    function updateModelAndVisual() {
+      const da = parseFloat(inputDa.value) || 0;
+      const db = parseFloat(inputDb.value) || 0;
+
+      const result = Model.solveCombined2({ da, db });
+
+      if (!result.valid) {
+        readoutLcm.textContent = "—";
+        readoutRateA.textContent = "—";
+        readoutRateB.textContent = "—";
+        readoutCombinedRate.textContent = "—";
+        readoutCombinedTime.textContent = result.error;
+        renderErrorSvg(result.error);
+        return;
+      }
+
+      const { totalWork, rateA, rateB, combinedRate, combinedTime } = result.intermediates;
+
+      rateABadge.textContent = `Rate: ${rateA} u/d (1/${da})`;
+      rateBBadge.textContent = `Rate: ${rateB} u/d (1/${db})`;
+
+      readoutLcm.textContent = `${totalWork} units`;
+      readoutRateA.textContent = `${rateA} u/d (1/${da})`;
+      readoutRateB.textContent = `${rateB} u/d (1/${db})`;
+      readoutCombinedRate.textContent = `${combinedRate} units/day`;
+      readoutCombinedTime.textContent = `${combinedTime} days`;
+
+      renderTimelineSvg(result);
+      updatePredictScenario(result);
+    }
+
+    function renderTimelineSvg(result) {
+      const { da, db, combinedTime, rateA, rateB } = result.intermediates;
+
+      const maxDays = Math.max(da, db, 20) * 1.08;
+      const startX = 130;
+      const timelineW = 450;
+      const scale = timelineW / maxDays;
+
+      const barA_W = Math.min(da * scale, timelineW);
+      const barB_W = Math.min(db * scale, timelineW);
+      const barComb_W = Math.min(combinedTime * scale, timelineW);
+
+      svgEl.innerHTML = `
+        <!-- Background guide -->
+        <rect x="0" y="0" width="620" height="190" fill="transparent" />
+
+        <!-- Worker A bar -->
+        <text x="20" y="38" font-size="13" font-weight="700" fill="var(--color-primary, #1e3a8a)">
+          Worker A alone:
+        </text>
+        <rect x="${startX}" y="22" width="${barA_W}" height="24" rx="4"
+              fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
+        <text x="${startX + 10}" y="38" font-size="12" font-weight="600" fill="var(--color-primary, #1e3a8a)">
+          ${da} days (${rateA} u/d)
+        </text>
+
+        <!-- Worker B bar -->
+        <text x="20" y="88" font-size="13" font-weight="700" fill="var(--color-accent, #0284c7)">
+          Worker B alone:
+        </text>
+        <rect x="${startX}" y="72" width="${barB_W}" height="24" rx="4"
+              fill="var(--color-surface-subtle, #f1f5f9)" stroke="var(--color-accent, #0284c7)" stroke-width="2" />
+        <text x="${startX + 10}" y="88" font-size="12" font-weight="600" fill="var(--color-accent, #0284c7)">
+          ${db} days (${rateB} u/d)
+        </text>
+
+        <!-- Both Together Bar (Fastest) -->
+        <text x="20" y="142" font-size="13" font-weight="700" fill="var(--color-success, #059669)">
+          Both Together:
+        </text>
+        <rect x="${startX}" y="124" width="${barComb_W}" height="28" rx="5"
+              fill="var(--color-success-bg, #ecfdf5)" stroke="var(--color-success, #059669)" stroke-width="2.5" />
+        <text x="${startX + 10}" y="143" font-size="13" font-weight="700" fill="var(--color-success, #059669)">
+          ⚡ ${combinedTime} days (${rateA + rateB} u/d)
+        </text>
+
+        <!-- Visual Milestone Guide -->
+        <line x1="${startX + barComb_W}" y1="20" x2="${startX + barComb_W}" y2="165"
+              stroke="var(--color-success, #059669)" stroke-width="1.5" stroke-dasharray="3 3" />
+        <text x="${startX + barComb_W + 5}" y="178" font-size="11" font-weight="700" fill="var(--color-success, #059669)">
+          Finished in ${combinedTime} days
+        </text>
+      `;
+    }
+
+    function renderErrorSvg(msg) {
+      svgEl.innerHTML = `
+        <rect x="20" y="30" width="580" height="110" rx="8" fill="var(--color-danger-bg, #fef2f2)" stroke="var(--color-danger, #b91c1c)" />
+        <text x="310" y="90" text-anchor="middle" font-size="14" font-weight="600" fill="var(--color-danger, #b91c1c)">
+          ⚠️ ${msg}
+        </text>
+      `;
+    }
+
+    function setPreset(da, db) {
+      inputDa.value = da;
+      rangeDa.value = da;
+      inputDb.value = db;
+      rangeDb.value = db;
+      updateModelAndVisual();
+      LabCommon.announce(`Set workers to ${da} and ${db} days.`);
+    }
+
+    // Event Listeners for inputs
+    inputDa.addEventListener("input", (e) => {
+      rangeDa.value = e.target.value;
+      updateModelAndVisual();
+    });
+    rangeDa.addEventListener("input", (e) => {
+      inputDa.value = e.target.value;
+      updateModelAndVisual();
+    });
+
+    inputDb.addEventListener("input", (e) => {
+      rangeDb.value = e.target.value;
+      updateModelAndVisual();
+    });
+    rangeDb.addEventListener("input", (e) => {
+      inputDb.value = e.target.value;
+      updateModelAndVisual();
+    });
+
+    /* ==========================================================================
+       5. PREDICT-FIRST LOGIC
+       ========================================================================== */
+    function updatePredictScenario(modelResult) {
+      const { da, db, combinedTime } = modelResult.intermediates;
+
+      predictScenarioText.textContent = `If Worker A takes ${da} days and Worker B takes ${db} days alone, how many days will they take working together?`;
+
+      const correctAns = combinedTime;
+      const avgTrap = LabCommon.round((da + db) / 2, 2);
+      const sumTrap = da + db;
+      const underAns = LabCommon.round(Math.max(1, combinedTime * 0.75), 1);
+
+      const choices = [
+        { val: correctAns, type: "correct", label: `${correctAns} days` },
+        { val: avgTrap, type: "trap", label: `${avgTrap} days` },
+        { val: sumTrap, type: "trap_sum", label: `${sumTrap} days` },
+        { val: underAns, type: "distractor", label: `${underAns} days` }
+      ];
+
+      // Remove duplicate labels if numbers coincide
+      const uniqueChoices = [];
+      const seen = new Set();
+      choices.forEach(c => {
+        if (!seen.has(c.label)) {
+          seen.add(c.label);
+          uniqueChoices.push(c);
+        }
+      });
+
+      uniqueChoices.sort((a, b) => a.val - b.val);
+
+      predictOptionsContainer.innerHTML = "";
+      predictFeedback.className = "callout hidden";
+      workedSolutionPanel.classList.add("hidden");
+
+      uniqueChoices.forEach(c => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.textContent = c.label;
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.onclick = () => handlePredictChoice(c, modelResult);
+        predictOptionsContainer.appendChild(btn);
+      });
+    }
+
+    function handlePredictChoice(choice, modelResult) {
+      predictFeedback.classList.remove("hidden");
+
+      const buttons = predictOptionsContainer.querySelectorAll(".option-btn");
+      buttons.forEach(b => {
+        b.classList.remove("correct", "trap", "incorrect", "selected");
+        if (b.textContent === choice.label) b.classList.add("selected");
+      });
+
+      if (choice.type === "correct") {
+        predictFeedback.className = "callout callout-success";
+        predictFeedback.innerHTML = `
+          <strong>✓ Excellent deduction!</strong> You recognized that their daily rates combine (${modelResult.intermediates.combinedRate} units/day), completing the ${modelResult.intermediates.totalWork} units in exactly ${choice.label}.
+        `;
+        LabCommon.announce("Prediction correct! You predicted the right time.");
+      } else if (choice.type === "trap") {
+        predictFeedback.className = "callout callout-trap";
+        predictFeedback.innerHTML = `
+          <strong>⚠️ Common Trap Alert!</strong> You averaged the times (${choice.label}). But two people working together cannot take LONGER than the fastest worker (${Math.min(modelResult.intermediates.da, modelResult.intermediates.db)} days)! Rates add; times never average.
+        `;
+        LabCommon.announce("Trap encountered: Avoid averaging times.");
+      } else if (choice.type === "trap_sum") {
+        predictFeedback.className = "callout callout-trap";
+        predictFeedback.innerHTML = `
+          <strong>⚠️ Adding Times Trap!</strong> Adding days (${choice.label}) implies two people work slower than one person! You must add their work rates (1/D_A + 1/D_B), not their completion days.
+        `;
+        LabCommon.announce("Trap encountered: Do not add days.");
+      } else {
+        predictFeedback.className = "callout callout-warning";
+        predictFeedback.innerHTML = `
+          <strong>Not quite:</strong> Use the formula (D_A × D_B) / (D_A + D_B) or the LCM unit-work method.
+        `;
+      }
+
+      revealWorkedSteps(modelResult);
+    }
+
+    btnRevealSolution.addEventListener("click", () => {
+      const da = parseFloat(inputDa.value) || 0;
+      const db = parseFloat(inputDb.value) || 0;
+      const result = Model.solveCombined2({ da, db });
+      revealWorkedSteps(result);
+    });
+
+    function revealWorkedSteps(modelResult) {
+      if (!modelResult || !modelResult.valid) return;
+      workedSolutionPanel.classList.remove("hidden");
+
+      solutionStepsContainer.innerHTML = modelResult.steps.map((st, idx) => `
+        <div class="step-item">
+          <div class="step-num">Step ${idx + 1}</div>
+          <div class="step-title">${st.title}</div>
+          <div>${st.explanation}</div>
+          ${st.math ? `<div class="step-detail">${st.math}</div>` : ''}
+        </div>
+      `).join("");
+
+      if (modelResult.commonTrap) {
+        solutionTrapCallout.classList.remove("hidden");
+        solutionTrapText.textContent = modelResult.commonTrap.explanation;
+      }
+    }
+
+    /* ==========================================================================
+       6. PRACTICE LAB ENGINE
+       ========================================================================== */
+    let currentQIndex = 0;
+    let practiceMode = "hints";
+    let timerInstance = null;
+    let questionStartTime = 0;
+    const TOPIC_ID = "time-and-work";
+
+    function setPracticeMode(mode) {
+      practiceMode = mode;
+      document.querySelectorAll(".mode-btn").forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
+      });
+
+      const activeBtn = document.getElementById(`btn-mode-${mode}`);
+      if (activeBtn) {
+        activeBtn.classList.add("active");
+        activeBtn.setAttribute("aria-selected", "true");
+      }
+
+      const timerContainer = document.getElementById("timer-container");
+      if (mode === "timed") {
+        timerContainer.classList.remove("hidden");
+        if (!timerInstance) {
+          timerInstance = new LabCommon.PracticeTimer((sec) => {
+            document.getElementById("timer-display").textContent = timerInstance.format();
+          });
+        }
+        timerInstance.start();
+      } else {
+        timerContainer.classList.add("hidden");
+        if (timerInstance) timerInstance.stop();
+      }
+
+      const simSection = document.getElementById("interactive-model-title").closest(".card");
+      const refSection = document.getElementById("reference-title").closest(".card");
+      if (mode === "independent") {
+        simSection.style.display = "none";
+        refSection.style.display = "none";
+      } else {
+        simSection.style.display = "block";
+        refSection.style.display = "block";
+      }
+
+      LabCommon.announce(`Switched to ${mode} practice mode.`);
+    }
+
+    function renderPracticeQuestion(index) {
+      const q = PRACTICE_QUESTIONS[index];
+      if (!q) return;
+
+      questionStartTime = Date.now();
+
+      document.getElementById("practice-q-num").textContent = `Question ${index + 1} of ${PRACTICE_QUESTIONS.length}`;
+      const diffBadge = document.getElementById("practice-q-difficulty");
+      diffBadge.textContent = q.difficulty;
+      diffBadge.className = `badge ${q.difficulty === 'Easy' ? 'badge-published' : q.difficulty === 'Medium' ? 'badge-draft' : 'badge-tag'}`;
+
+      document.getElementById("practice-q-stem").textContent = q.stem;
+
+      const feedback = document.getElementById("practice-feedback");
+      feedback.className = "callout hidden";
+      document.getElementById("practice-error-categorizer").classList.add("hidden");
+      document.getElementById("practice-solution-box").classList.add("hidden");
+
+      const optContainer = document.getElementById("practice-options-container");
+      optContainer.innerHTML = "";
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn practice-submit-btn";
+        btn.textContent = optText;
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.onclick = () => submitPracticeAnswer(optIdx, q);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function submitPracticeAnswer(chosenIdx, question) {
+      const isCorrect = chosenIdx === question.correctIndex;
+      const isTrap = chosenIdx === question.trapOptionIndex;
+      const durationSec = Math.round((Date.now() - questionStartTime) / 1000);
+
+      const buttons = document.querySelectorAll("#practice-options-container .option-btn");
+      buttons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === question.correctIndex) b.classList.add("correct");
+        if (idx === chosenIdx && !isCorrect) {
+          b.classList.add(isTrap ? "trap" : "incorrect");
+        }
+      });
+
+      const feedback = document.getElementById("practice-feedback");
+      feedback.classList.remove("hidden");
+
+      if (isCorrect) {
+        feedback.className = "callout callout-success";
+        feedback.innerHTML = `<strong>✓ Correct!</strong> Well reasoned.`;
+        LabCommon.announce("Correct answer!");
+      } else if (isTrap && question.trapExplanation) {
+        feedback.className = "callout callout-trap";
+        feedback.innerHTML = `<strong>⚠️ Common Exam Trap:</strong> ${question.trapExplanation}`;
+        LabCommon.announce("Incorrect: Common trap encountered.");
+        document.getElementById("practice-error-categorizer").classList.remove("hidden");
+      } else {
+        feedback.className = "callout callout-danger";
+        feedback.innerHTML = `<strong>Incorrect:</strong> Review the worked solution below.`;
+        LabCommon.announce("Incorrect answer.");
+        document.getElementById("practice-error-categorizer").classList.remove("hidden");
+      }
+
+      const solBox = document.getElementById("practice-solution-box");
+      solBox.classList.remove("hidden");
+      document.getElementById("practice-solution-text").textContent = question.solution;
+
+      LabCommon.recordTopicAttempt(TOPIC_ID, {
+        isCorrect,
+        isIndependent: practiceMode === "independent" || practiceMode === "timed",
+        timeSec: durationSec,
+        errorCategory: isCorrect ? null : document.getElementById("select-error-category").value
+      });
+
+      renderStats();
+    }
+
+    function handleSaveErrorCategory(category) {
+      const p = LabCommon.getTopicProgress(TOPIC_ID);
+      if (p.errorsByCategory[category] !== undefined) {
+        p.errorsByCategory[category] += 1;
+        LabCommon.storage.set(`lab_progress_${TOPIC_ID}`, p);
+      }
+      LabCommon.announce(`Recorded mistake reason: ${category}`);
+    }
+
+    function loadNextQuestion() {
+      currentQIndex = (currentQIndex + 1) % PRACTICE_QUESTIONS.length;
+      renderPracticeQuestion(currentQIndex);
+    }
+
+    function renderStats() {
+      const p = LabCommon.getTopicProgress(TOPIC_ID);
+      document.getElementById("stat-attempts").textContent = p.attempts;
+      document.getElementById("stat-correct").textContent = p.correct;
+      document.getElementById("stat-independent").textContent = p.independentCorrect;
+      const acc = p.attempts > 0 ? Math.round((p.correct / p.attempts) * 100) : 0;
+      document.getElementById("stat-accuracy").textContent = `${acc}%`;
+    }
+
+    function handleResetStats() {
+      if (confirm("Reset local practice statistics for Time and Work?")) {
+        LabCommon.resetTopicProgress(TOPIC_ID);
+        renderStats();
+        LabCommon.announce("Practice statistics reset.");
+      }
+    }
+
+    /* ==========================================================================
+       7. INITIALIZATION ON LOAD
+       ========================================================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      LabCommon.runAndRenderSelfTests(runSelfTests);
+      updateModelAndVisual();
+      renderPracticeQuestion(0);
+      renderStats();
+    });
+  </script>
+</body>
+</html>

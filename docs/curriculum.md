@@ -17,7 +17,7 @@ Official notices checked for curriculum alignment:
 | Topic ID | Topic Name | File | Primary Exam Target | Status | Review Date | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | `percentages` | Percentages & Percentage Change | `topics/percentages.html` | SEBI Gr A, Banking, SSC | **published** | 2026-10-29 | Milestone 1 complete. Proportional model, predict-first, 12 verified practice questions, full self-test suite. |
-| `time-and-work` | Time, Work & Efficiency | `topics/time-and-work.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Milestone 3 planned. Rate comparison, combined-work timeline. |
+| `time-and-work` | Time, Work & Efficiency | `topics/time-and-work.html` | SEBI Gr A, Banking, SSC | **published** | 2026-10-29 | Rate timeline model, LCM unit-work solver, predict-first, 12 verified practice questions, 11 deterministic self-tests. |
 | `trains-bridge` | Trains, Speed & Distance | `topics/trains-bridge.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Relative speed, bridge clearance visual. |
 | `profit-loss-discount` | Profit, Loss & Marked Price | `topics/profit-loss-discount.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Successive discount, cost-to-price breakdown. |
 | `ratio-proportion` | Ratio, Proportion & Variation | `topics/ratio-proportion.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Proportional bars, part-to-part vs part-to-whole. |
@@ -54,3 +54,4 @@ Official notices checked for curriculum alignment:
 ## Review & Quality Gate Log
 
 - **2026-10-29:** Milestone 0 initialized (repository skeleton, `.nojekyll`, shared design system, test runner, central directory). Milestone 1 created (`topics/percentages.html`): 10 reference deterministic tests, 12 varied practice questions, SVG proportional bar, predict-first flow, full trap breakdown. Status: `published`.
+- **2026-10-29:** Milestone 3 topic added (`topics/time-and-work.html`): 11 reference deterministic self-tests, 12 verified practice questions, SVG timeline rate visualizer, predict-first flow, average/sum trap breakdown. Status: `published`.
