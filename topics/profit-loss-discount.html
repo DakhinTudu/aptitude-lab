@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profit, Loss & Marked Price — Aptitude & Reasoning Lab</title>
+  <meta name="description" content="Master Cost Price, Marked Price, Selling Price, successive discounts, equal SP transactions, and dishonest dealer problems with interactive price waterfall models and timed practice.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link" aria-label="Aptitude and Reasoning Lab Home">
+        <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="#0f172a" />
+          <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3" />
+          <circle cx="24" cy="24" r="4" fill="#38bdf8" />
+          <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4" />
+          <circle cx="40" cy="40" r="4" fill="#34d399" />
+          <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <span>Aptitude Lab</span>
+      </a>
+
+      <nav aria-label="Topic navigation">
+        <ul class="nav-links">
+          <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+          <li><span class="badge badge-published">Published</span></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" class="page-container">
+    
+    <!-- Model Self-Test Banner -->
+    <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+    <!-- Topic Hero -->
+    <header class="card" style="margin-bottom: 1.25rem;">
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+        <span class="badge badge-tag">Quantitative Aptitude</span>
+        <span class="badge badge-tag">SEBI Gr A (IT & Gen)</span>
+        <span class="badge badge-tag">Banking & SSC</span>
+      </div>
+      <h1>Profit, Loss & Marked Price</h1>
+      <p class="section-subtitle">
+        Understand the three commercial pillars: Cost Price ($CP$), Marked Price ($MP$), and Selling Price ($SP$). Master equivalent successive discounts, equal $SP$ transactions, and dishonest dealer shortcuts without memorising dozens of disconnected formulas.
+      </p>
+    </header>
+
+    <!-- Section 1: Concept & Interactive Price Waterfall -->
+    <section class="card" aria-labelledby="interactive-model-title">
+      <div class="card-header">
+        <div>
+          <h2 id="interactive-model-title" class="section-title">
+            <span>1. Interactive Price Waterfall Model</span>
+          </h2>
+          <p class="section-subtitle">Adjust Cost Price, Markup %, and Discount % to see how the profit margin emerges from different base values.</p>
+        </div>
+      </div>
+
+      <!-- Quick Preset Buttons -->
+      <div style="margin-bottom: 1.25rem;">
+        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-muted); display: block; margin-bottom: 0.4rem;">
+          Standard Exam Presets:
+        </span>
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(500, 40, 20)">CP 500, +40% Markup, -20% Discount (+12% Profit)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(800, 25, 20)">CP 800, +25% Markup, -20% Discount (0% Breakeven)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(1000, 20, 30)">CP 1000, +20% Markup, -30% Discount (-16% Net Loss)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(600, 50, 10)">CP 600, +50% Markup, -10% Discount (+35% Profit)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(400, 30, 0)">Zero Discount: Selling at MP (+30% Profit)</button>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="control-grid">
+        <div class="control-group">
+          <label for="input-cp" class="control-label">
+            <span>Cost Price (<span style="font-family: var(--font-mono);">CP</span>)</span>
+            <span id="cp-display-badge" class="badge badge-tag">₹500</span>
+          </label>
+          <input type="number" id="input-cp" value="500" min="10" max="50000" step="50">
+          <input type="range" id="range-cp" min="100" max="2000" value="500" step="50" aria-label="Cost Price Slider">
+        </div>
+
+        <div class="control-group">
+          <label for="input-markup" class="control-label">
+            <span>Markup Percentage (<span style="font-family: var(--font-mono);">m%</span>)</span>
+            <span id="markup-display-badge" class="badge badge-tag">+40% on CP</span>
+          </label>
+          <input type="number" id="input-markup" value="40" min="0" max="200" step="1">
+          <input type="range" id="range-markup" min="0" max="150" value="40" step="5" aria-label="Markup Slider">
+        </div>
+
+        <div class="control-group">
+          <label for="input-discount" class="control-label">
+            <span>Discount Percentage (<span style="font-family: var(--font-mono);">d%</span>)</span>
+            <span id="discount-display-badge" class="badge badge-tag">20% on MP</span>
+          </label>
+          <input type="number" id="input-discount" value="20" min="0" max="90" step="1">
+          <input type="range" id="range-discount" min="0" max="60" value="20" step="5" aria-label="Discount Slider">
+        </div>
+      </div>
+
+      <!-- SVG Visualization -->
+      <div class="vis-container" aria-label="Visual price waterfall breakdown diagram">
+        <svg id="waterfall-svg" viewBox="0 0 620 200" width="100%" height="200" role="img" aria-labelledby="svg-desc">
+          <title id="svg-desc">Price cascade showing Cost Price, Marked Price after markup, and Selling Price after discount</title>
+          <!-- Populated by Model Renderer -->
+        </svg>
+      </div>
+
+      <!-- Computed Model Outputs Readout -->
+      <div class="score-bar" id="model-readout" aria-live="polite">
+        <div class="score-stat">
+          <span class="score-stat-label">Marked Price (MP)</span>
+          <span class="score-stat-num" id="readout-mp">₹700</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Discount Amount</span>
+          <span class="score-stat-num" id="readout-discount-amt">₹140 (20% of MP)</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Selling Price (SP)</span>
+          <span class="score-stat-num" id="readout-sp">₹560</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Net Profit / Loss</span>
+          <span class="score-stat-num" id="readout-net-profit" style="color: var(--color-success, #059669);">+₹60 (+12.0%)</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Net Multiplier</span>
+          <span class="score-stat-num" id="readout-multiplier">1.12×</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Predict-First Worked Example -->
+    <section class="card" aria-labelledby="predict-title">
+      <div class="card-header">
+        <div>
+          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
+          <p class="section-subtitle">Predict the net profit percentage before inspecting the price breakdown.</p>
+        </div>
+      </div>
+
+      <div class="predict-box">
+        <div class="predict-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span>Predict the net profit percentage:</span>
+        </div>
+        <p id="predict-scenario-text" style="font-size: 1.05rem; font-weight: 500; margin-bottom: 1rem;">
+          An article costing ₹500 is marked up by 40% and then sold with a 20% discount on the marked price. What is the net profit percentage?
+        </p>
+
+        <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options">
+          <!-- Dynamically populated predict options -->
+        </div>
+
+        <div id="predict-feedback" class="callout hidden" role="alert"></div>
+
+        <div style="margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" id="btn-reveal-solution" class="btn btn-secondary">
+            Inspect Worked Solution ↓
+          </button>
+          <span style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            (Notice: The 20% discount is applied to the HIGHER Marked Price of ₹700, not ₹500!)
+          </span>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Worked Solution Trace -->
+      <div id="worked-solution-panel" class="hidden">
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Verified Step-by-Step Mathematical Trace</h3>
+        <div class="steps-container" id="solution-steps-container">
+          <!-- Populated from pure Model.solve() -->
+        </div>
+
+        <!-- Trap Callout -->
+        <div class="callout callout-trap" id="solution-trap-callout">
+          <strong>⚠️ Common Trap to Avoid:</strong>
+          <span id="solution-trap-text"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Core Exam Rules Reference -->
+    <section class="card" aria-labelledby="reference-title">
+      <div class="card-header">
+        <div>
+          <h2 id="reference-title" class="section-title">3. Core Exam Rules & Fast Shortcuts</h2>
+          <p class="section-subtitle">The three pillars, successive discounts, and equal SP rules.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The Three Price Pillars</h3>
+          <p style="font-size: 0.875rem;">Always verify which base you are calculating on:</p>
+          <ul style="font-size: 0.8125rem; padding-left: 1.25rem; margin-top: 0.3rem;">
+            <li><strong>Cost Price (CP):</strong> Markup % and Profit/Loss % are calculated on <strong>CP</strong>.</li>
+            <li><strong>Marked Price (MP):</strong> Discount % is strictly calculated on <strong>MP</strong>.</li>
+            <li><strong>Selling Price (SP):</strong> The cash exchanged ($SP = MP - \text{Discount}$).</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Successive Discount Formula</h3>
+          <p style="font-size: 0.875rem;">Two successive discounts $d_1$ and $d_2$ are equivalent to a single discount of:</p>
+          <div class="step-detail" style="display: block; text-align: center; margin: 0.4rem 0;">
+            $D_{\text{eq}} = d_1 + d_2 - \frac{d_1 \times d_2}{100}\%$
+          </div>
+          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            *Example:* Discounts of 20% and 10% give $20 + 10 - 2 = 28\%$ (NOT 30%!).
+          </p>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Equal Selling Price Rule</h3>
+          <p style="font-size: 0.875rem;">When two articles are sold at the <strong>same SP</strong>, one at $x\%$ gain and the other at $x\%$ loss:</p>
+          <div class="step-detail" style="display: block; text-align: center; margin: 0.4rem 0;">
+            $\text{Net Result} = \text{Always a Loss of } \left(\frac{x}{10}\right)^2\% = \frac{x^2}{100}\%$
+          </div>
+          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            *Warning:* If they had the same <em>Cost Price</em>, the result would be 0%. But at same <em>Selling Price</em>, it is always a loss!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Practice Lab (Independent & Timed) -->
+    <section class="card" aria-labelledby="practice-title" id="practice-section">
+      <div class="card-header">
+        <div>
+          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
+          <p class="section-subtitle">Real competitive-exam questions. Unseen questions solved independently build genuine retrieval.</p>
+        </div>
+      </div>
+
+      <!-- Practice Controls & Mode Toggles -->
+      <div class="practice-header">
+        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
+          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
+            Guided Mode
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
+            Try Without Hints
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
+            Timed Practice
+          </button>
+        </div>
+
+        <div id="timer-container" class="timer-badge hidden" aria-live="off">
+          <span>⏱️</span>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+
+      <!-- Score & Accuracy Progress Bar -->
+      <div class="score-bar" aria-label="Current Practice Statistics">
+        <div class="score-stat">
+          <span class="score-stat-label">Questions Attempted</span>
+          <span class="score-stat-num" id="stat-attempts">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Total Correct</span>
+          <span class="score-stat-num" id="stat-correct">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Independent Correct</span>
+          <span class="score-stat-num" id="stat-independent">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Accuracy</span>
+          <span class="score-stat-num" id="stat-accuracy">0%</span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
+          Reset Local Progress
+        </button>
+      </div>
+
+      <!-- Question Box -->
+      <div id="practice-question-card" style="margin-top: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
+            Question 1 of 12
+          </span>
+          <span class="badge" id="practice-q-difficulty">Easy</span>
+        </div>
+
+        <p class="question-stem" id="practice-q-stem">
+          Loading practice question...
+        </p>
+
+        <!-- Options container -->
+        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Practice Feedback Callout -->
+        <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+        <!-- Error Categorizer (appears on incorrect submission) -->
+        <div id="practice-error-categorizer" class="error-categorizer hidden">
+          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
+            Reflective Analysis: What was the primary reason for this mistake?
+          </label>
+          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
+            <option value="concept">Concept Misunderstanding (Applied discount on CP or added discounts directly)</option>
+            <option value="method">Wrong Setup / Method (Used 0% on equal SP or wrong denominator in false weight)</option>
+            <option value="arithmetic">Arithmetic Slip (Setup was right, calculation erred)</option>
+            <option value="misread">Misread Condition (Solved for MP vs SP or Profit on SP vs CP)</option>
+            <option value="time_guess">Time Pressure / Rushed Guess</option>
+          </select>
+        </div>
+
+        <!-- Practice Worked Solution Box (revealed upon answering) -->
+        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
+          <h4 style="margin-bottom: 0.4rem; font-size: 0.95rem;">Step-by-Step Solution:</h4>
+          <p id="practice-solution-text" style="font-size: 0.9rem; line-height: 1.5;"></p>
+        </div>
+
+        <!-- Practice Action Bar -->
+        <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" id="btn-next-question" class="btn btn-primary" onclick="loadNextQuestion()">
+            Next Question →
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <strong>Aptitude & Reasoning Lab</strong> — Quantitative Aptitude Stream
+          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
+            Topic Review Status: <span class="badge badge-published">published</span> • Last Reviewed: 2026-10-29
+          </div>
+        </div>
+        <div style="font-size: 0.8125rem;">
+          <a href="../docs/reviews/profit-loss-discount.md" style="color: var(--color-primary); text-decoration: none;">View Topic Review & Test Specification ↗</a>
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        <strong>Educational Disclaimer:</strong> Educational tool. Check the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority. All questions and solvers are original or derived from public standard mathematical relationships.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/common.js"></script>
+  <script>
+    /* ==========================================================================
+       1. PURE MODEL (Pure calculation functions: No DOM, no random calls)
+       ========================================================================== */
+    const Model = (() => {
+      /**
+       * Pure solver for the three-pillar price chain: CP -> MP -> SP.
+       */
+      function solvePriceChain(input) {
+        const cp = Number(input.cp);
+        const markup = Number(input.markup);
+        const discount = Number(input.discount);
+
+        // Validation
+        if (isNaN(cp) || isNaN(markup) || isNaN(discount)) {
+          return { valid: false, error: "Prices and percentages must be valid numbers" };
+        }
+        if (cp <= 0) {
+          return { valid: false, error: "Cost price must be strictly greater than zero" };
+        }
+        if (markup < 0 || discount < 0 || discount > 100) {
+          return { valid: false, error: "Markup must be >= 0 and discount between 0% and 100%" };
+        }
+
+        const markupMultiplier = 1 + markup / 100;
+        const mp = LabCommon.round(cp * markupMultiplier, 2);
+
+        const discountMultiplier = 1 - discount / 100;
+        const discountAmt = LabCommon.round(mp * (discount / 100), 2);
+        const sp = LabCommon.round(mp * discountMultiplier, 2);
+
+        const netProfitAmt = LabCommon.round(sp - cp, 2);
+        const netProfitPercent = LabCommon.round((netProfitAmt / cp) * 100, 2);
+        const netMultiplier = LabCommon.round(markupMultiplier * discountMultiplier, 4);
+
+        // Steps trace
+        const steps = [
+          {
+            title: "Given Parameters",
+            explanation: `Cost Price (CP) = ₹${cp}, Markup = ${markup}%, Discount = ${discount}%.`
+          },
+          {
+            title: "Calculate Marked Price (MP)",
+            explanation: `Marked Price = CP × (1 + Markup/100) = ₹${cp} × ${markupMultiplier} = ₹${mp}.`,
+            math: `MP = ₹${mp}`
+          },
+          {
+            title: "Calculate Discount on Marked Price",
+            explanation: `Discount is taken on MP: ${discount}% of ₹${mp} = ₹${discountAmt}.`,
+            math: `Discount = ₹${discountAmt}`
+          },
+          {
+            title: "Determine Selling Price (SP)",
+            explanation: `Selling Price = MP - Discount = ₹${mp} - ₹${discountAmt} = ₹${sp}.`,
+            math: `SP = ₹${sp}`
+          },
+          {
+            title: "Calculate Net Profit / Loss",
+            explanation: `Net Gain = SP - CP = ₹${sp} - ₹${cp} = ${netProfitAmt >= 0 ? '+' : ''}₹${netProfitAmt}.`,
+            math: `Profit/Loss = (${netProfitAmt} / ${cp}) × 100% = ${netProfitPercent >= 0 ? '+' : ''}${netProfitPercent}%`
+          },
+          {
+            title: "Fast Net Multiplier Shortcut",
+            explanation: `Net Multiplier = (1 + m/100) × (1 - d/100) = ${markupMultiplier} × ${discountMultiplier} = ${netMultiplier}×.`,
+            math: `Multiplier = ${netMultiplier}× ⟹ Net Gain = ${(netMultiplier - 1) * 100}%`
+          }
+        ];
+
+        // Trap detection
+        let commonTrap = null;
+        const rawSubtractionTrap = LabCommon.round(markup - discount, 2); // 40 - 20 = 20%
+        const discountOnCpTrap = LabCommon.round(cp * (1 - discount / 100), 2);
+
+        if (input.trapAnswer !== undefined) {
+          const userAns = Number(input.trapAnswer);
+          if (userAns === rawSubtractionTrap && discount > 0) {
+            commonTrap = {
+              type: "additive_markup_discount_trap",
+              answer: rawSubtractionTrap,
+              explanation: `You subtracted the discount directly from markup (${markup}% - ${discount}% = ${rawSubtractionTrap}%). But discount is taken on the HIGHER Marked Price (₹${mp}), not on CP! The true gain is ${netProfitPercent}%.`
+            };
+          }
+        }
+
+        if (!commonTrap && discount > 0 && markup > 0) {
+          commonTrap = {
+            type: "additive_markup_discount_trap",
+            answer: rawSubtractionTrap,
+            explanation: `Common mistake: subtracting percentages directly (${markup}% - ${discount}% = ${rawSubtractionTrap}%). Since discount is taken on the marked up price (₹${mp}), actual profit is ${netProfitPercent}%.`
+          };
+        }
+
+        return {
+          valid: true,
+          answer: netProfitPercent,
+          answerDisplay: `${netProfitPercent >= 0 ? '+' : ''}${netProfitPercent}% (${netProfitAmt >= 0 ? 'Profit' : 'Loss'} ₹${Math.abs(netProfitAmt)})`,
+          intermediates: {
+            cp,
+            markup,
+            discount,
+            mp,
+            discountAmt,
+            sp,
+            netProfitAmt,
+            netProfitPercent,
+            netMultiplier
+          },
+          steps,
+          assumptions: [
+            "Cost price is strictly positive",
+            "Markup is applied to Cost Price",
+            "Discount is applied to Marked Price",
+            "Profit/Loss is evaluated against Cost Price"
+          ],
+          commonTrap
+        };
+      }
+
+      /**
+       * Pure solver for single equivalent successive discount.
+       */
+      function solveSuccessiveDiscount(d1, d2) {
+        if (d1 < 0 || d2 < 0 || d1 > 100 || d2 > 100) {
+          return { valid: false, error: "Discounts must be between 0% and 100%" };
+        }
+        const eqDiscount = LabCommon.round(d1 + d2 - (d1 * d2) / 100, 2);
+        return {
+          valid: true,
+          eqDiscount,
+          multiplier: LabCommon.round((1 - d1 / 100) * (1 - d2 / 100), 4)
+        };
+      }
+
+      /**
+       * Pure solver for two articles sold at same SP with equal gain/loss x%.
+       */
+      function solveEqualSP(x) {
+        if (x <= 0) return { valid: false, error: "Percentage must be positive" };
+        const lossPercent = LabCommon.round((x * x) / 100, 2);
+        return {
+          valid: true,
+          isLoss: true,
+          lossPercent,
+          formula: `Loss = (x/10)²% = (${x}/10)² = ${lossPercent}%`
+        };
+      }
+
+      /**
+       * Pure solver for dishonest dealer using false weight.
+       */
+      function solveDishonestDealer(trueW, falseW) {
+        if (trueW <= 0 || falseW <= 0 || falseW >= trueW) {
+          return { valid: false, error: "False weight must be less than true weight" };
+        }
+        const errorW = trueW - falseW;
+        const gainPercent = LabCommon.round((errorW / falseW) * 100, 2);
+        return {
+          valid: true,
+          errorW,
+          gainPercent,
+          formula: `Gain% = (Error / False Weight) × 100% = (${errorW} / ${falseW}) × 100% = ${gainPercent}%`
+        };
+      }
+
+      return {
+        solvePriceChain,
+        solveSuccessiveDiscount,
+        solveEqualSP,
+        solveDishonestDealer
+      };
+    })();
+
+    if (typeof window !== "undefined") {
+      window.Model = Model;
+    }
+
+    /* ==========================================================================
+       2. DETERMINISTIC SELF-TESTS (Quality Gate)
+       ========================================================================== */
+    function runSelfTests() {
+      const results = { passed: 0, failed: 0, failures: [] };
+
+      function assert(condition, testName, details = "") {
+        if (condition) {
+          results.passed += 1;
+        } else {
+          results.failed += 1;
+          results.failures.push({ name: testName, details });
+        }
+      }
+
+      try {
+        // TC-01: CP 500, markup 40%, discount 20% -> MP 700, SP 560, +12% profit
+        const t1 = Model.solvePriceChain({ cp: 500, markup: 40, discount: 20 });
+        assert(t1.valid === true && t1.intermediates.mp === 700 && t1.intermediates.sp === 560 && t1.intermediates.netProfitPercent === 12,
+          "TC-01: CP 500, +40% markup, -20% discount", `Expected MP 700, SP 560, +12%. Got ${t1.intermediates?.mp}, ${t1.intermediates?.sp}, ${t1.intermediates?.netProfitPercent}%`);
+
+        // TC-02: CP 800, markup 25%, discount 20% -> breakeven 0%
+        const t2 = Model.solvePriceChain({ cp: 800, markup: 25, discount: 20 });
+        assert(t2.valid === true && t2.intermediates.mp === 1000 && t2.intermediates.sp === 800 && t2.intermediates.netProfitPercent === 0,
+          "TC-02: Breakeven (+25%, -20%)", `Expected 0% profit. Got ${t2.intermediates?.netProfitPercent}%`);
+
+        // TC-03: CP 1000, markup 20%, discount 30% -> Net Loss -16%
+        const t3 = Model.solvePriceChain({ cp: 1000, markup: 20, discount: 30 });
+        assert(t3.valid === true && t3.intermediates.sp === 840 && t3.intermediates.netProfitPercent === -16,
+          "TC-03: Net loss (+20%, -30%)", `Expected -16%. Got ${t3.intermediates?.netProfitPercent}%`);
+
+        // TC-04: Successive discounts 20% & 10% -> 28.0%
+        const t4 = Model.solveSuccessiveDiscount(20, 10);
+        assert(t4.valid === true && t4.eqDiscount === 28,
+          "TC-04: Successive discount 20% & 10%", `Expected 28%. Got ${t4.eqDiscount}%`);
+
+        // TC-05: Successive discounts 30% & 20% -> 44.0%
+        const t5 = Model.solveSuccessiveDiscount(30, 20);
+        assert(t5.valid === true && t5.eqDiscount === 44,
+          "TC-05: Successive discount 30% & 20%", `Expected 44%. Got ${t5.eqDiscount}%`);
+
+        // TC-06: Equal SP with +-20% -> 4.0% Loss
+        const t6 = Model.solveEqualSP(20);
+        assert(t6.valid === true && t6.isLoss === true && t6.lossPercent === 4,
+          "TC-06: Equal SP +-20%", `Expected 4% loss. Got ${t6.lossPercent}%`);
+
+        // TC-07: Equal SP with +-10% -> 1.0% Loss
+        const t7 = Model.solveEqualSP(10);
+        assert(t7.valid === true && t7.lossPercent === 1,
+          "TC-07: Equal SP +-10%", `Expected 1% loss. Got ${t7.lossPercent}%`);
+
+        // TC-08: False weight: claims 1000g, gives 900g -> 11.11% gain
+        const t8 = Model.solveDishonestDealer(1000, 900);
+        assert(t8.valid === true && t8.gainPercent === 11.11,
+          "TC-08: False weight 900g", `Expected 11.11%. Got ${t8.gainPercent}%`);
+
+        // TC-09: Zero/negative CP rejection
+        const t9 = Model.solvePriceChain({ cp: 0, markup: 20, discount: 10 });
+        assert(t9.valid === false, "TC-09: Zero CP rejection", "Zero CP should return valid: false");
+
+        // TC-10: Additive markup-discount trap detection (40 - 20 = 20)
+        const t10 = Model.solvePriceChain({ cp: 500, markup: 40, discount: 20, trapAnswer: 20 });
+        assert(t10.valid === true && t10.commonTrap && t10.commonTrap.type === "additive_markup_discount_trap",
+          "TC-10: Additive trap detection", "Additive trap was not flagged");
+
+        // TC-11: Successive discount strictly less than sum invariant
+        const t11 = Model.solveSuccessiveDiscount(15, 25);
+        assert(t11.eqDiscount < (15 + 25),
+          "TC-11: Successive discount bound invariant", "Equivalent discount must be < d1 + d2");
+
+      } catch (err) {
+        results.failed += 1;
+        results.failures.push({ name: "Unexpected test execution error", details: err.message });
+      }
+
+      return results;
+    }
+
+    if (typeof window !== "undefined") {
+      window.runSelfTests = runSelfTests;
+    }
+
+    /* ==========================================================================
+       3. PRACTICE QUESTION BANK (12 Verified Exam-Style Questions)
+       ========================================================================== */
+    const PRACTICE_QUESTIONS = [
+      {
+        id: "PL1",
+        difficulty: "Easy",
+        stem: "A shopkeeper marks his goods 40% above the cost price and allows a discount of 25% on the marked price. What is his net profit percentage?",
+        options: ["5% profit", "15% profit", "10% profit", "4% loss"],
+        correctIndex: 0, // 5% profit
+        trapOptionIndex: 1, // 15% profit (40 - 25 = 15%)
+        trapExplanation: "Trap: Subtracting percentages directly (40% - 25% = 15%). The 25% discount is on the higher marked price (1.40). Net multiplier = 1.40 × 0.75 = 1.05 ⟹ 5% profit.",
+        solution: "Let CP = 100. MP = 140. Discount = 25% of 140 = 35. SP = 140 - 35 = 105. Net Profit = 105 - 100 = 5%."
+      },
+      {
+        id: "PL2",
+        difficulty: "Easy",
+        stem: "What is the single discount equivalent to two successive discounts of 20% and 10%?",
+        options: ["28%", "30%", "25%", "27%"],
+        correctIndex: 0, // 28%
+        trapOptionIndex: 1, // 30% (20 + 10)
+        trapExplanation: "Trap: Adding discounts directly (20 + 10 = 30%). The second discount is taken on the already discounted 80%! Formula: d1 + d2 - (d1×d2)/100 = 20 + 10 - 2 = 28%.",
+        solution: "Multiplier = 0.80 × 0.90 = 0.72. Selling at 72% means a discount of 100% - 72% = 28%."
+      },
+      {
+        id: "PL3",
+        difficulty: "Medium",
+        stem: "A man sold two chairs for ₹990 each. On one he gained 10% and on the other he lost 10%. What was his overall gain or loss in the whole transaction?",
+        options: ["1% loss (₹20 loss)", "No profit, no loss", "1% gain", "2% loss"],
+        correctIndex: 0, // 1% loss
+        trapOptionIndex: 1, // No profit no loss
+        trapExplanation: "The Same SP Trap! When two items are sold at the same Selling Price with ±x%, the transaction is ALWAYS a loss of (x/10)²% = (10/10)² = 1% loss.",
+        solution: "Rule for equal SP with ±x% gain/loss: Always Loss = (x/10)²% = (10/10)² = 1% loss. Total SP = 990 + 990 = ₹1,980. Total CP = (990/1.1) + (990/0.9) = 900 + 1100 = ₹2,000. Loss = 2000 - 1980 = ₹20 (1%)."
+      },
+      {
+        id: "PL4",
+        difficulty: "Medium",
+        stem: "A dishonest grocer claims to sell his pulses at cost price, but uses a false weight of 900 grams for a 1 kg (1000 g) measure. What is his profit percentage?",
+        options: ["11.11% (11 1/9%)", "10%", "12.5%", "9.09%"],
+        correctIndex: 0, // 11.11%
+        trapOptionIndex: 1, // 10% (dividing by 1000g instead of 900g)
+        trapExplanation: "Denominator trap! The cost to the shopkeeper is the 900g he actually gave, not the 1000g claimed! Profit% = (Error / False Weight) × 100% = (100 / 900) × 100% = 11.11%.",
+        solution: "Profit% = [Error / (True Weight - Error)] × 100% = (100 / 900) × 100% = 1/9 × 100% = 11.11%."
+      },
+      {
+        id: "PL5",
+        difficulty: "Medium",
+        stem: "If the cost price of 16 articles is equal to the selling price of 12 articles, what is the profit percentage?",
+        options: ["33.33% (33 1/3%)", "25%", "20%", "30%"],
+        correctIndex: 0, // 33.33%
+        trapOptionIndex: 1, // 25% (dividing by 16 instead of 12)
+        trapExplanation: "16 CP = 12 SP ⟹ SP / CP = 16 / 12 = 4 / 3. Profit = 4 - 3 = 1 unit on CP of 3 units ⟹ (1/3) × 100% = 33.33%.",
+        solution: "16 CP = 12 SP ⟹ SP / CP = 16 / 12 = 4/3. Profit% = [(16 - 12) / 12] × 100% = (4 / 12) × 100% = 1/3 = 33.33%."
+      },
+      {
+        id: "PL6",
+        difficulty: "Exam-Style",
+        stem: "A trader marks his goods in such a way that after allowing a discount of 15% on the marked price, he still makes a profit of 19%. By what percentage is the marked price above the cost price?",
+        options: ["40%", "34%", "35%", "45%"],
+        correctIndex: 0, // 40%
+        trapOptionIndex: 1, // 34% (19 + 15)
+        trapExplanation: "Formula: MP / CP = (100 + Profit%) / (100 - Discount%) = (100 + 19) / (100 - 15) = 119 / 85 = 7 / 5 = 1.40 ⟹ 40% markup.",
+        solution: "MP × (1 - 0.15) = CP × (1 + 0.19) ⟹ MP × 0.85 = CP × 1.19 ⟹ MP / CP = 1.19 / 0.85 = 1.40. Markup = 40%."
+      },
+      {
+        id: "PL7",
+        difficulty: "Exam-Style",
+        stem: "A retailer offers 'Buy 3, Get 1 Free'. What is the effective discount percentage offered to the customer?",
+        options: ["25%", "33.33%", "20%", "30%"],
+        correctIndex: 0, // 25%
+        trapOptionIndex: 1, // 33.33% (1 free on 3 bought)
+        trapExplanation: "Trap: The total goods received by the customer is 3 + 1 = 4 articles! 1 article is free out of 4 total articles. Discount = (1 / 4) × 100% = 25%.",
+        solution: "Total goods received = 3 + 1 = 4 articles. Cost of 1 article is waived. Discount% = [Free Goods / Total Goods] × 100% = (1 / 4) × 100% = 25%."
+      },
+      {
+        id: "PL8",
+        difficulty: "Medium",
+        stem: "A merchant calculates his profit percentage on the Selling Price and claims it to be 20%. What is his actual profit percentage calculated on Cost Price?",
+        options: ["25%", "20%", "16.67%", "24%"],
+        correctIndex: 0, // 25%
+        trapOptionIndex: 2, // 16.67% (going backwards)
+        trapExplanation: "If SP = 100 and Profit on SP = 20, then Cost Price = 100 - 20 = 80. Real profit on CP = (20 / 80) × 100% = 25%.",
+        solution: "Let SP = ₹100. Profit = 20% of 100 = ₹20. Cost Price = SP - Profit = 100 - 20 = ₹80. True Profit% on CP = (20 / 80) × 100% = 1/4 = 25%."
+      },
+      {
+        id: "PL9",
+        difficulty: "Easy",
+        stem: "By selling an article for ₹720, a man loses 10%. At what price should he sell it to gain 15%?",
+        options: ["₹920", "₹900", "₹880", "₹950"],
+        correctIndex: 0, // ₹920
+        trapOptionIndex: 1,
+        trapExplanation: "90% of CP = ₹720 ⟹ CP = 720 / 0.9 = ₹800. For 15% gain: SP = 800 × 1.15 = ₹920.",
+        solution: "CP = 720 / (1 - 0.10) = 720 / 0.90 = ₹800. New SP for 15% gain = 800 × 1.15 = ₹920."
+      },
+      {
+        id: "PL10",
+        difficulty: "Exam-Style",
+        stem: "Find the single discount equivalent to three successive discounts of 20%, 10%, and 5%.",
+        options: ["31.6%", "35%", "32.4%", "30.5%"],
+        correctIndex: 0, // 31.6%
+        trapOptionIndex: 1, // 35% (20 + 10 + 5)
+        trapExplanation: "Multiplier = 0.80 × 0.90 × 0.95 = 0.72 × 0.95 = 0.684. Discount = (1 - 0.684) × 100% = 31.6%.",
+        solution: "Net Multiplier = (1 - 0.20) × (1 - 0.10) × (1 - 0.05) = 0.80 × 0.90 × 0.95 = 0.684. Equivalent Discount = (1 - 0.684) × 100% = 31.6%."
+      },
+      {
+        id: "PL11",
+        difficulty: "Medium",
+        stem: "A shopkeeper sells an item at a 10% discount on the marked price of ₹1,200 and still earns a profit of 8%. What was the cost price of the item?",
+        options: ["₹1,000", "₹1,020", "₹980", "₹1,050"],
+        correctIndex: 0, // ₹1,000
+        trapOptionIndex: 1,
+        trapExplanation: "SP = 1200 × 0.90 = ₹1,080. Since SP includes 8% profit on CP: CP = 1080 / 1.08 = ₹1,000.",
+        solution: "SP = 1,200 × (1 - 0.10) = ₹1,080. Since SP = CP × 1.08 ⟹ CP = 1,080 / 1.08 = ₹1,000."
+      },
+      {
+        id: "PL12",
+        difficulty: "Easy",
+        stem: "If an item costing ₹800 is marked up by 25% and then discounted by 20%, what is the final selling price?",
+        options: ["₹800", "₹840", "₹760", "₹820"],
+        correctIndex: 0, // ₹800 (Breakeven)
+        trapOptionIndex: 1,
+        trapExplanation: "Markup 25%: 800 × 1.25 = ₹1,000. Discount 20%: 1,000 × 0.80 = ₹800. Net change is 0%, selling price is exactly ₹800.",
+        solution: "MP = 800 × 1.25 = ₹1,000. SP = 1,000 × 0.80 = ₹800. Net profit is ₹0 (Breakeven)."
+      }
+    ];
+
+    if (typeof window !== "undefined") {
+      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+    }
+
+    /* ==========================================================================
+       4. INTERACTIVE RENDERING & EVENT HANDLING
+       ========================================================================== */
+    const inputCp = document.getElementById("input-cp");
+    const rangeCp = document.getElementById("range-cp");
+    const inputMarkup = document.getElementById("input-markup");
+    const rangeMarkup = document.getElementById("range-markup");
+    const inputDiscount = document.getElementById("input-discount");
+    const rangeDiscount = document.getElementById("range-discount");
+
+    const cpBadge = document.getElementById("cp-display-badge");
+    const markupBadge = document.getElementById("markup-display-badge");
+    const discountBadge = document.getElementById("discount-display-badge");
+
+    const svgEl = document.getElementById("waterfall-svg");
+    const readoutMp = document.getElementById("readout-mp");
+    const readoutDiscountAmt = document.getElementById("readout-discount-amt");
+    const readoutSp = document.getElementById("readout-sp");
+    const readoutNetProfit = document.getElementById("readout-net-profit");
+    const readoutMultiplier = document.getElementById("readout-multiplier");
+
+    const predictOptionsContainer = document.getElementById("predict-options-container");
+    const predictScenarioText = document.getElementById("predict-scenario-text");
+    const predictFeedback = document.getElementById("predict-feedback");
+    const btnRevealSolution = document.getElementById("btn-reveal-solution");
+    const workedSolutionPanel = document.getElementById("worked-solution-panel");
+    const solutionStepsContainer = document.getElementById("solution-steps-container");
+    const solutionTrapCallout = document.getElementById("solution-trap-callout");
+    const solutionTrapText = document.getElementById("solution-trap-text");
+
+    function updateModelAndVisual() {
+      const cp = parseFloat(inputCp.value) || 0;
+      const markup = parseFloat(inputMarkup.value) || 0;
+      const discount = parseFloat(inputDiscount.value) || 0;
+
+      const result = Model.solvePriceChain({ cp, markup, discount });
+
+      if (!result.valid) {
+        readoutMp.textContent = "—";
+        readoutDiscountAmt.textContent = "—";
+        readoutSp.textContent = "—";
+        readoutNetProfit.textContent = result.error;
+        renderErrorSvg(result.error);
+        return;
+      }
+
+      const { mp, discountAmt, sp, netProfitAmt, netProfitPercent, netMultiplier } = result.intermediates;
+
+      cpBadge.textContent = `₹${cp}`;
+      markupBadge.textContent = `+${markup}% on CP`;
+      discountBadge.textContent = `${discount}% on MP`;
+
+      readoutMp.textContent = `₹${mp}`;
+      readoutDiscountAmt.textContent = `₹${discountAmt} (${discount}% of MP)`;
+      readoutSp.textContent = `₹${sp}`;
+
+      const isProfitable = netProfitAmt >= 0;
+      readoutNetProfit.textContent = `${isProfitable ? '+' : ''}₹${netProfitAmt} (${isProfitable ? '+' : ''}${netProfitPercent}%)`;
+      readoutNetProfit.style.color = isProfitable ? "var(--color-success, #059669)" : "var(--color-danger, #b91c1c)";
+      readoutMultiplier.textContent = `${netMultiplier}×`;
+
+      renderWaterfallSvg(result);
+      updatePredictScenario(result);
+    }
+
+    function renderWaterfallSvg(result) {
+      const { cp, mp, sp, netProfitAmt } = result.intermediates;
+
+      const maxVal = Math.max(cp, mp, sp, 100) * 1.15;
+      const scale = 480 / maxVal;
+      const startX = 100;
+      const barH = 26;
+
+      const cpW = cp * scale;
+      const mpW = mp * scale;
+      const spW = sp * scale;
+
+      const isProfit = netProfitAmt >= 0;
+      const marginColor = isProfit ? "var(--color-success, #059669)" : "var(--color-danger, #b91c1c)";
+
+      svgEl.innerHTML = `
+        <rect x="0" y="0" width="620" height="200" fill="transparent" />
+
+        <!-- Cost Price (CP) Bar -->
+        <text x="20" y="38" font-size="12" font-weight="700" fill="var(--color-primary, #1e3a8a)">
+          Cost Price:
+        </text>
+        <rect x="${startX}" y="20" width="${cpW}" height="${barH}" rx="4"
+              fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
+        <text x="${startX + 10}" y="38" font-size="12" font-weight="700" fill="var(--color-primary, #1e3a8a)">
+          CP: ₹${cp}
+        </text>
+
+        <!-- Marked Price (MP) Bar (with Markup extension) -->
+        <text x="20" y="88" font-size="12" font-weight="700" fill="var(--color-warning, #b45309)">
+          Marked Price:
+        </text>
+        <rect x="${startX}" y="70" width="${mpW}" height="${barH}" rx="4"
+              fill="var(--color-warning-bg, #fffbeb)" stroke="var(--color-warning, #b45309)" stroke-width="2" />
+        <text x="${startX + 10}" y="88" font-size="12" font-weight="700" fill="var(--color-warning, #b45309)">
+          MP: ₹${mp} (+${result.intermediates.markup}%)
+        </text>
+
+        <!-- Selling Price (SP) Bar (after discount from MP) -->
+        <text x="20" y="138" font-size="12" font-weight="700" fill="${marginColor}">
+          Selling Price:
+        </text>
+        <rect x="${startX}" y="120" width="${spW}" height="${barH}" rx="4"
+              fill="${isProfit ? 'var(--color-success-bg, #ecfdf5)' : 'var(--color-danger-bg, #fef2f2)'}" stroke="${marginColor}" stroke-width="2" />
+        <text x="${startX + 10}" y="138" font-size="12" font-weight="700" fill="${marginColor}">
+          SP: ₹${sp} (-${result.intermediates.discount}% of MP)
+        </text>
+
+        <!-- Margin difference line between CP and SP -->
+        <line x1="${startX + cpW}" y1="20" x2="${startX + cpW}" y2="160"
+              stroke="var(--color-border, #cbd5e1)" stroke-width="1.5" stroke-dasharray="3 3" />
+        <text x="${startX + cpW + 8}" y="175" font-size="12" font-weight="800" fill="${marginColor}">
+          Net Result: ${isProfit ? '+' : ''}₹${netProfitAmt} (${result.intermediates.netProfitPercent}%)
+        </text>
+      `;
+    }
+
+    function renderErrorSvg(msg) {
+      svgEl.innerHTML = `
+        <rect x="20" y="40" width="580" height="110" rx="8" fill="var(--color-danger-bg, #fef2f2)" stroke="var(--color-danger, #b91c1c)" />
+        <text x="310" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="var(--color-danger, #b91c1c)">
+          ⚠️ ${msg}
+        </text>
+      `;
+    }
+
+    function setPreset(cp, markup, discount) {
+      inputCp.value = cp;
+      rangeCp.value = cp;
+      inputMarkup.value = markup;
+      rangeMarkup.value = markup;
+      inputDiscount.value = discount;
+      rangeDiscount.value = discount;
+      updateModelAndVisual();
+      LabCommon.announce(`Loaded preset: CP ₹${cp}, Markup ${markup}%, Discount ${discount}%.`);
+    }
+
+    inputCp.addEventListener("input", (e) => { rangeCp.value = e.target.value; updateModelAndVisual(); });
+    rangeCp.addEventListener("input", (e) => { inputCp.value = e.target.value; updateModelAndVisual(); });
+
+    inputMarkup.addEventListener("input", (e) => { rangeMarkup.value = e.target.value; updateModelAndVisual(); });
+    rangeMarkup.addEventListener("input", (e) => { inputMarkup.value = e.target.value; updateModelAndVisual(); });
+
+    inputDiscount.addEventListener("input", (e) => { rangeDiscount.value = e.target.value; updateModelAndVisual(); });
+    rangeDiscount.addEventListener("input", (e) => { inputDiscount.value = e.target.value; updateModelAndVisual(); });
+
+    /* ==========================================================================
+       5. PREDICT-FIRST LOGIC
+       ========================================================================== */
+    function updatePredictScenario(modelResult) {
+      const { cp, markup, discount, netProfitPercent } = modelResult.intermediates;
+
+      predictScenarioText.textContent = `An article costing ₹${cp} is marked up by ${markup}% and then sold with a ${discount}% discount on the marked price. What is the net profit percentage?`;
+
+      const correctAns = `${netProfitPercent >= 0 ? '+' : ''}${netProfitPercent}%`;
+      const directSubTrap = `${LabCommon.round(markup - discount, 2)}%`;
+      const distractor1 = `${LabCommon.round(netProfitPercent + 4, 1)}%`;
+      const distractor2 = `${LabCommon.round(netProfitPercent - 4, 1)}%`;
+
+      const choices = [
+        { val: correctAns, type: "correct", label: correctAns },
+        { val: directSubTrap, type: "trap_sub", label: directSubTrap },
+        { val: distractor1, type: "distractor", label: distractor1 },
+        { val: distractor2, type: "distractor", label: distractor2 }
+      ];
+
+      // Remove duplicate labels
+      const uniqueChoices = [];
+      const seen = new Set();
+      choices.forEach(c => {
+        if (!seen.has(c.label)) {
+          seen.add(c.label);
+          uniqueChoices.push(c);
+        }
+      });
+
+      uniqueChoices.sort((a, b) => parseFloat(a.label) - parseFloat(b.label));
+
+      predictOptionsContainer.innerHTML = "";
+      predictFeedback.className = "callout hidden";
+      workedSolutionPanel.classList.add("hidden");
+
+      uniqueChoices.forEach(c => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.textContent = c.label;
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.onclick = () => handlePredictChoice(c, modelResult);
+        predictOptionsContainer.appendChild(btn);
+      });
+    }
+
+    function handlePredictChoice(choice, modelResult) {
+      predictFeedback.classList.remove("hidden");
+
+      const buttons = predictOptionsContainer.querySelectorAll(".option-btn");
+      buttons.forEach(b => {
+        b.classList.remove("correct", "trap", "incorrect", "selected");
+        if (b.textContent === choice.label) b.classList.add("selected");
+      });
+
+      if (choice.type === "correct") {
+        predictFeedback.className = "callout callout-success";
+        predictFeedback.innerHTML = `
+          <strong>✓ Outstanding deduction!</strong> You recognized that the discount applies to the higher Marked Price (₹${modelResult.intermediates.mp}), giving exactly ${choice.label} net margin.
+        `;
+        LabCommon.announce("Prediction correct! You predicted the right net profit.");
+      } else if (choice.type === "trap_sub") {
+        predictFeedback.className = "callout callout-trap";
+        predictFeedback.innerHTML = `
+          <strong>⚠️ Additive Percentages Trap!</strong> You subtracted the discount directly from markup (${modelResult.intermediates.markup}% - ${modelResult.intermediates.discount}% = ${choice.label}). But the discount is taken on the HIGHER Marked Price (₹${modelResult.intermediates.mp}), not on CP!
+        `;
+        LabCommon.announce("Trap encountered: Avoid subtracting discount from markup directly.");
+      } else {
+        predictFeedback.className = "callout callout-warning";
+        predictFeedback.innerHTML = `
+          <strong>Not quite:</strong> Multiplier = (1 + ${modelResult.intermediates.markup}/100) × (1 - ${modelResult.intermediates.discount}/100).
+        `;
+      }
+
+      revealWorkedSteps(modelResult);
+    }
+
+    btnRevealSolution.addEventListener("click", () => {
+      const cp = parseFloat(inputCp.value) || 0;
+      const markup = parseFloat(inputMarkup.value) || 0;
+      const discount = parseFloat(inputDiscount.value) || 0;
+      const result = Model.solvePriceChain({ cp, markup, discount });
+      revealWorkedSteps(result);
+    });
+
+    function revealWorkedSteps(modelResult) {
+      if (!modelResult || !modelResult.valid) return;
+      workedSolutionPanel.classList.remove("hidden");
+
+      solutionStepsContainer.innerHTML = modelResult.steps.map((st, idx) => `
+        <div class="step-item">
+          <div class="step-num">Step ${idx + 1}</div>
+          <div class="step-title">${st.title}</div>
+          <div>${st.explanation}</div>
+          ${st.math ? `<div class="step-detail">${st.math}</div>` : ''}
+        </div>
+      `).join("");
+
+      if (modelResult.commonTrap) {
+        solutionTrapCallout.classList.remove("hidden");
+        solutionTrapText.textContent = modelResult.commonTrap.explanation;
+      }
+    }
+
+    /* ==========================================================================
+       6. PRACTICE LAB ENGINE
+       ========================================================================== */
+    let currentQIndex = 0;
+    let practiceMode = "hints";
+    let timerInstance = null;
+    let questionStartTime = 0;
+    const TOPIC_ID = "profit-loss-discount";
+
+    function setPracticeMode(mode) {
+      practiceMode = mode;
+      document.querySelectorAll(".mode-btn").forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
+      });
+
+      const activeBtn = document.getElementById(`btn-mode-${mode}`);
+      if (activeBtn) {
+        activeBtn.classList.add("active");
+        activeBtn.setAttribute("aria-selected", "true");
+      }
+
+      const timerContainer = document.getElementById("timer-container");
+      if (mode === "timed") {
+        timerContainer.classList.remove("hidden");
+        if (!timerInstance) {
+          timerInstance = new LabCommon.PracticeTimer((sec) => {
+            document.getElementById("timer-display").textContent = timerInstance.format();
+          });
+        }
+        timerInstance.start();
+      } else {
+        timerContainer.classList.add("hidden");
+        if (timerInstance) timerInstance.stop();
+      }
+
+      const simSection = document.getElementById("interactive-model-title").closest(".card");
+      const refSection = document.getElementById("reference-title").closest(".card");
+      if (mode === "independent") {
+        simSection.style.display = "none";
+        refSection.style.display = "none";
+      } else {
+        simSection.style.display = "block";
+        refSection.style.display = "block";
+      }
+
+      LabCommon.announce(`Switched to ${mode} practice mode.`);
+    }
+
+    function renderPracticeQuestion(index) {
+      const q = PRACTICE_QUESTIONS[index];
+      if (!q) return;
+
+      questionStartTime = Date.now();
+
+      document.getElementById("practice-q-num").textContent = `Question ${index + 1} of ${PRACTICE_QUESTIONS.length}`;
+      const diffBadge = document.getElementById("practice-q-difficulty");
+      diffBadge.textContent = q.difficulty;
+      diffBadge.className = `badge ${q.difficulty === 'Easy' ? 'badge-published' : q.difficulty === 'Medium' ? 'badge-draft' : 'badge-tag'}`;
+
+      document.getElementById("practice-q-stem").textContent = q.stem;
+
+      const feedback = document.getElementById("practice-feedback");
+      feedback.className = "callout hidden";
+      document.getElementById("practice-error-categorizer").classList.add("hidden");
+      document.getElementById("practice-solution-box").classList.add("hidden");
+
+      const optContainer = document.getElementById("practice-options-container");
+      optContainer.innerHTML = "";
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn practice-submit-btn";
+        btn.textContent = optText;
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.onclick = () => submitPracticeAnswer(optIdx, q);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function submitPracticeAnswer(chosenIdx, question) {
+      const isCorrect = chosenIdx === question.correctIndex;
+      const isTrap = chosenIdx === question.trapOptionIndex;
+      const durationSec = Math.round((Date.now() - questionStartTime) / 1000);
+
+      const buttons = document.querySelectorAll("#practice-options-container .option-btn");
+      buttons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === question.correctIndex) b.classList.add("correct");
+        if (idx === chosenIdx && !isCorrect) {
+          b.classList.add(isTrap ? "trap" : "incorrect");
+        }
+      });
+
+      const feedback = document.getElementById("practice-feedback");
+      feedback.classList.remove("hidden");
+
+      if (isCorrect) {
+        feedback.className = "callout callout-success";
+        feedback.innerHTML = `<strong>✓ Correct!</strong> Well reasoned.`;
+        LabCommon.announce("Correct answer!");
+      } else if (isTrap && question.trapExplanation) {
+        feedback.className = "callout callout-trap";
+        feedback.innerHTML = `<strong>⚠️ Common Exam Trap:</strong> ${question.trapExplanation}`;
+        LabCommon.announce("Incorrect: Common trap encountered.");
+        document.getElementById("practice-error-categorizer").classList.remove("hidden");
+      } else {
+        feedback.className = "callout callout-danger";
+        feedback.innerHTML = `<strong>Incorrect:</strong> Review the worked solution below.`;
+        LabCommon.announce("Incorrect answer.");
+        document.getElementById("practice-error-categorizer").classList.remove("hidden");
+      }
+
+      const solBox = document.getElementById("practice-solution-box");
+      solBox.classList.remove("hidden");
+      document.getElementById("practice-solution-text").textContent = question.solution;
+
+      LabCommon.recordTopicAttempt(TOPIC_ID, {
+        isCorrect,
+        isIndependent: practiceMode === "independent" || practiceMode === "timed",
+        timeSec: durationSec,
+        errorCategory: isCorrect ? null : document.getElementById("select-error-category").value
+      });
+
+      renderStats();
+    }
+
+    function handleSaveErrorCategory(category) {
+      const p = LabCommon.getTopicProgress(TOPIC_ID);
+      if (p.errorsByCategory[category] !== undefined) {
+        p.errorsByCategory[category] += 1;
+        LabCommon.storage.set(`lab_progress_${TOPIC_ID}`, p);
+      }
+      LabCommon.announce(`Recorded mistake reason: ${category}`);
+    }
+
+    function loadNextQuestion() {
+      currentQIndex = (currentQIndex + 1) % PRACTICE_QUESTIONS.length;
+      renderPracticeQuestion(currentQIndex);
+    }
+
+    function renderStats() {
+      const p = LabCommon.getTopicProgress(TOPIC_ID);
+      document.getElementById("stat-attempts").textContent = p.attempts;
+      document.getElementById("stat-correct").textContent = p.correct;
+      document.getElementById("stat-independent").textContent = p.independentCorrect;
+      const acc = p.attempts > 0 ? Math.round((p.correct / p.attempts) * 100) : 0;
+      document.getElementById("stat-accuracy").textContent = `${acc}%`;
+    }
+
+    function handleResetStats() {
+      if (confirm("Reset local practice statistics for Profit, Loss & Marked Price?")) {
+        LabCommon.resetTopicProgress(TOPIC_ID);
+        renderStats();
+        LabCommon.announce("Practice statistics reset.");
+      }
+    }
+
+    /* ==========================================================================
+       7. INITIALIZATION ON LOAD
+       ========================================================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      LabCommon.runAndRenderSelfTests(runSelfTests);
+      updateModelAndVisual();
+      renderPracticeQuestion(0);
+      renderStats();
+    });
+  </script>
+</body>
+</html>
