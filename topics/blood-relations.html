@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood Relations & Family Tree — Aptitude & Reasoning Lab</title>
+  <meta name="description" content="Master blood relations, genealogical family trees, coded relations, and gender deduction rules with interactive visual graphs and timed practice.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link" aria-label="Aptitude and Reasoning Lab Home">
+        <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="#0f172a" />
+          <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3" />
+          <circle cx="24" cy="24" r="4" fill="#38bdf8" />
+          <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4" />
+          <circle cx="40" cy="40" r="4" fill="#34d399" />
+          <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <span>Aptitude Lab</span>
+      </a>
+
+      <nav aria-label="Topic navigation">
+        <ul class="nav-links">
+          <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+          <li><span class="badge badge-published">Published</span></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" class="page-container">
+    
+    <!-- Model Self-Test Banner -->
+    <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+    <!-- Topic Hero -->
+    <header class="card" style="margin-bottom: 1.25rem;">
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+        <span class="badge badge-tag">Logical Reasoning</span>
+        <span class="badge badge-tag">SEBI Gr A (IT & Gen)</span>
+        <span class="badge badge-tag">Banking & SSC</span>
+      </div>
+      <h1>Blood Relations & Family Tree</h1>
+      <p class="section-subtitle">
+        Construct genealogical family trees using generational tiers and explicit gender constraints. Avoid assuming genders from names or sibling links, parse coded expressions, and distinguish definite relations from "Cannot be determined".
+      </p>
+    </header>
+
+    <!-- Section 1: Concept & Interactive Family Tree Visualizer -->
+    <section class="card" aria-labelledby="interactive-model-title">
+      <div class="card-header">
+        <div>
+          <h2 id="interactive-model-title" class="section-title">
+            <span>1. Interactive Family Tree Graph</span>
+          </h2>
+          <p class="section-subtitle">Toggle genealogical structures and speaker genders to trace the relationship path.</p>
+        </div>
+      </div>
+
+      <!-- Quick Preset Scenarios -->
+      <div style="margin-bottom: 1.25rem;">
+        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-muted); display: block; margin-bottom: 0.4rem;">
+          Standard Exam Relation Presets:
+        </span>
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('only_daughter_woman')">"Only Daughter" (Woman Speaker ⟹ Mother)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('only_daughter_man')">"Only Daughter" (Man Speaker ⟹ Maternal Uncle)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('gender_undetermined')">Sibling Gender Trap (Gender Unknown ⟹ CBD)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('three_gen_tree')">3-Generation Joint Family (Grandparent to Grandchild)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('coded_chain')">Coded Chain ($P + Q \times R$)</button>
+        </div>
+      </div>
+
+      <!-- SVG Family Tree Diagram -->
+      <div class="vis-container" aria-label="Visual family tree graph showing generational tiers, genders, and marriages">
+        <svg id="tree-svg" viewBox="0 0 620 230" width="100%" height="230" role="img" aria-labelledby="svg-desc">
+          <title id="svg-desc">Family tree diagram showing nodes with gender symbols and generational edges</title>
+          <!-- Populated by Model Renderer -->
+        </svg>
+      </div>
+
+      <!-- Computed Model Outputs Readout -->
+      <div class="score-bar" id="model-readout" aria-live="polite">
+        <div class="score-stat">
+          <span class="score-stat-label">Subject & Target</span>
+          <span class="score-stat-num" id="readout-subject-target" style="font-size: 1.05rem;">Woman to Boy</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Deduced Relationship</span>
+          <span class="score-stat-num" id="readout-relation">Mother</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Generational Gap</span>
+          <span class="score-stat-num" id="readout-gen-gap">+1 Generation</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Target Gender Status</span>
+          <span class="score-stat-num" id="readout-gender">Male [+]</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Predict-First Worked Example -->
+    <section class="card" aria-labelledby="predict-title">
+      <div class="card-header">
+        <div>
+          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
+          <p class="section-subtitle">Predict the exact relationship before inspecting the genealogical trace.</p>
+        </div>
+      </div>
+
+      <div class="predict-box">
+        <div class="predict-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span>Identify the relationship:</span>
+        </div>
+        <p id="predict-scenario-text" style="font-size: 1.05rem; font-weight: 500; margin-bottom: 1rem;">
+          Pointing to a photograph of a boy, a woman said: "His mother is the only daughter of my mother." How is the woman related to the boy?
+        </p>
+
+        <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options">
+          <!-- Dynamically populated predict options -->
+        </div>
+
+        <div id="predict-feedback" class="callout hidden" role="alert"></div>
+
+        <div style="margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" id="btn-reveal-solution" class="btn btn-secondary">
+            Inspect Worked Solution ↓
+          </button>
+          <span style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            (Notice how changing who is speaking changes "the only daughter"!)
+          </span>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Worked Solution Trace -->
+      <div id="worked-solution-panel" class="hidden">
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Verified Step-by-Step Genealogical Trace</h3>
+        <div class="steps-container" id="solution-steps-container">
+          <!-- Populated from pure Model.solve() -->
+        </div>
+
+        <!-- Trap Callout -->
+        <div class="callout callout-trap" id="solution-trap-callout">
+          <strong>⚠️ Common Trap to Avoid:</strong>
+          <span id="solution-trap-text"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Core Exam Rules Reference -->
+    <section class="card" aria-labelledby="reference-title">
+      <div class="card-header">
+        <div>
+          <h2 id="reference-title" class="section-title">3. Core Exam Rules & Tree Conventions</h2>
+          <p class="section-subtitle">Standard symbols, generational tiers, and the cardinal rule of gender.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The Cardinal Rule of Gender</h3>
+          <p style="font-size: 0.875rem;"><strong>Never assume gender from a name or sibling link!</strong></p>
+          <ul style="font-size: 0.8125rem; padding-left: 1.25rem; margin-top: 0.3rem;">
+            <li>"A is the brother of B" ⟹ A is definitely Male $[+]$, but B's gender is <strong>Unknown $[?]$</strong>.</li>
+            <li>Unless B is stated as male or female, B can be brother OR sister.</li>
+            <li>If asked "How is B related to A?", the answer is <strong>Cannot be determined</strong>!</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">"Only Child / Daughter / Son"</h3>
+          <p style="font-size: 0.875rem;">Possessive resolution depends on the speaker's gender:</p>
+          <ul style="font-size: 0.8125rem; padding-left: 1.25rem; margin-top: 0.3rem;">
+            <li>Woman: <em>"Only daughter of my mother"</em> ⟹ <strong>Herself</strong>.</li>
+            <li>Man: <em>"Only daughter of my mother"</em> ⟹ <strong>His Sister</strong>.</li>
+            <li>Man: <em>"Only son of my father"</em> ⟹ <strong>Himself</strong>.</li>
+            <li>Woman: <em>"Only son of my father"</em> ⟹ <strong>Her Brother</strong>.</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Standard Symbolic Tree Notation</h3>
+          <ul style="font-size: 0.8125rem; padding-left: 1.25rem; margin-top: 0.3rem;">
+            <li><strong>Male:</strong> Square $[+]$ (Blue)</li>
+            <li><strong>Female:</strong> Circle $[-]$ (Purple)</li>
+            <li><strong>Married Couple:</strong> Double line ($A = B$)</li>
+            <li><strong>Siblings:</strong> Single horizontal line ($A - B$)</li>
+            <li><strong>Parent to Child:</strong> Vertical branch ($\mid$)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Practice Lab (Independent & Timed) -->
+    <section class="card" aria-labelledby="practice-title" id="practice-section">
+      <div class="card-header">
+        <div>
+          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
+          <p class="section-subtitle">Real competitive-exam questions. Unseen questions solved independently build genuine retrieval.</p>
+        </div>
+      </div>
+
+      <!-- Practice Controls & Mode Toggles -->
+      <div class="practice-header">
+        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
+          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
+            Guided Mode
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
+            Try Without Hints
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
+            Timed Practice
+          </button>
+        </div>
+
+        <div id="timer-container" class="timer-badge hidden" aria-live="off">
+          <span>⏱️</span>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+
+      <!-- Score & Accuracy Progress Bar -->
+      <div class="score-bar" aria-label="Current Practice Statistics">
+        <div class="score-stat">
+          <span class="score-stat-label">Questions Attempted</span>
+          <span class="score-stat-num" id="stat-attempts">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Total Correct</span>
+          <span class="score-stat-num" id="stat-correct">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Independent Correct</span>
+          <span class="score-stat-num" id="stat-independent">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Accuracy</span>
+          <span class="score-stat-num" id="stat-accuracy">0%</span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
+          Reset Local Progress
+        </button>
+      </div>
+
+      <!-- Question Box -->
+      <div id="practice-question-card" style="margin-top: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
+            Question 1 of 12
+          </span>
+          <span class="badge" id="practice-q-difficulty">Easy</span>
+        </div>
+
+        <p class="question-stem" id="practice-q-stem">
+          Loading practice question...
+        </p>
+
+        <!-- Options container -->
+        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Practice Feedback Callout -->
+        <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+        <!-- Error Categorizer (appears on incorrect submission) -->
+        <div id="practice-error-categorizer" class="error-categorizer hidden">
+          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
+            Reflective Analysis: What was the primary reason for this mistake?
+          </label>
+          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
+            <option value="concept">Concept Misunderstanding (Assumed gender from name or sibling link)</option>
+            <option value="method">Wrong Setup / Method (Inverted direction of relation: A to B vs B to A)</option>
+            <option value="arithmetic">Deduction Slip (Misplaced a generational tier or branch)</option>
+            <option value="misread">Misread Condition (Missed speaker gender or 'only' qualifier)</option>
+            <option value="time_guess">Time Pressure / Rushed Guess</option>
+          </select>
+        </div>
+
+        <!-- Practice Worked Solution Box (revealed upon answering) -->
+        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
+          <h4 style="margin-bottom: 0.4rem; font-size: 0.95rem;">Step-by-Step Solution:</h4>
+          <p id="practice-solution-text" style="font-size: 0.9rem; line-height: 1.5;"></p>
+        </div>
+
+        <!-- Practice Action Bar -->
+        <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" id="btn-next-question" class="btn btn-primary" onclick="loadNextQuestion()">
+            Next Question →
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <strong>Aptitude & Reasoning Lab</strong> — Logical & Analytical Reasoning Stream
+          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
+            Topic Review Status: <span class="badge badge-published">published</span> • Last Reviewed: 2026-10-29
+          </div>
+        </div>
+        <div style="font-size: 0.8125rem;">
+          <a href="../docs/reviews/blood-relations.md" style="color: var(--color-primary); text-decoration: none;">View Topic Review & Test Specification ↗</a>
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        <strong>Educational Disclaimer:</strong> Educational tool. Check the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority. All questions and solvers are original or derived from public standard mathematical relationships.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/common.js"></script>
+  <script>
+    /* ==========================================================================
+       1. PURE MODEL (Genealogical graph deduction without DOM or random calls)
+       ========================================================================== */
+    const Model = (() => {
+      /**
+       * Pure solver to deduce the relationship from source to target.
+       */
+      function deduceRelation(scenario) {
+        const id = scenario.id;
+
+        if (id === 'only_daughter_woman') {
+          return {
+            valid: true,
+            source: "Woman",
+            target: "Boy",
+            relation: "Mother",
+            answer: "Mother",
+            answerDisplay: "Mother",
+            genGap: "+1 Generation",
+            targetGender: "Male [+]",
+            steps: [
+              { title: "Identify the Speaker", explanation: "Speaker is a Woman (Female [-])." },
+              { title: "Break Down the Statement", explanation: "'The only daughter of my mother' ⟹ Since the speaker is female and her mother has only one daughter, the speaker is referring to HERSELF." },
+              { title: "Apply to Target", explanation: "'His mother is [Myself]' ⟹ The boy's mother is the woman." },
+              { title: "Conclusion", explanation: "The woman is the boy's Mother.", math: "Woman ⟹ Mother of Boy" }
+            ],
+            commonTrap: {
+              type: "maternal_aunt_trap",
+              answer: "Maternal Aunt",
+              explanation: "Trap: Assuming 'the only daughter' is a sister! Since the woman herself is speaking and her mother has only ONE daughter, that daughter must be the woman herself."
+            }
+          };
+        }
+
+        if (id === 'only_daughter_man') {
+          return {
+            valid: true,
+            source: "Man",
+            target: "Boy",
+            relation: "Maternal Uncle",
+            answer: "Maternal Uncle",
+            answerDisplay: "Maternal Uncle",
+            genGap: "+1 Generation",
+            targetGender: "Male [+]",
+            steps: [
+              { title: "Identify the Speaker", explanation: "Speaker is a Man (Male [+])." },
+              { title: "Break Down the Statement", explanation: "'The only daughter of my mother' ⟹ For a male speaker, his mother's only daughter is his SISTER." },
+              { title: "Apply to Target", explanation: "'His mother is [My Sister]' ⟹ The boy's mother is the man's sister." },
+              { title: "Conclusion", explanation: "The brother of someone's mother is their Maternal Uncle.", math: "Man ⟹ Maternal Uncle of Boy" }
+            ],
+            commonTrap: {
+              type: "father_trap",
+              answer: "Father",
+              explanation: "Trap: Confusing the man with the child's father. The boy's mother is the man's SISTER, making the man his Maternal Uncle!"
+            }
+          };
+        }
+
+        if (id === 'gender_undetermined') {
+          return {
+            valid: true,
+            source: "B",
+            target: "A",
+            relation: "Cannot be determined (Brother or Sister)",
+            answer: "Cannot be determined",
+            answerDisplay: "Cannot be determined (Brother or Sister)",
+            genGap: "Same Generation (0)",
+            targetGender: "Unknown [?]",
+            steps: [
+              { title: "Given Clues", explanation: "A is the brother of B; C is the father of A." },
+              { title: "Analyze Genders", explanation: "A is explicitly Male [+]. But B's gender is NEVER specified in the clues!" },
+              { title: "Deduce Relation from B to A", explanation: "B is in the same generation as A with the same father. However, B could be either a Brother or a Sister." },
+              { title: "Conclusion", explanation: "Because B's gender is unknown, the relation cannot be determined uniquely.", math: "B ⟹ Brother or Sister (CBD)" }
+            ],
+            commonTrap: {
+              type: "gender_assumption_trap",
+              answer: "Brother",
+              explanation: "The Cardinal Gender Assumption Trap! You assumed B is a brother because A is a brother. But B can be either brother or sister!"
+            }
+          };
+        }
+
+        if (id === 'three_gen_tree') {
+          return {
+            valid: true,
+            source: "Grandfather",
+            target: "Grandchild",
+            relation: "Paternal Grandfather",
+            answer: "Paternal Grandfather",
+            answerDisplay: "Paternal Grandfather",
+            genGap: "+2 Generations",
+            targetGender: "Male [+]",
+            steps: [
+              { title: "Generation 0 (Grandparents)", explanation: "Grandfather [+] married to Grandmother [-]." },
+              { title: "Generation 1 (Parents)", explanation: "Father [+] married to Mother [-]." },
+              { title: "Generation 2 (Child)", explanation: "Son [+] born to Father." },
+              { title: "Conclusion", explanation: "Grandfather is on the paternal side: Paternal Grandfather." }
+            ]
+          };
+        }
+
+        if (id === 'coded_chain') {
+          return {
+            valid: true,
+            source: "P",
+            target: "R",
+            relation: "Paternal Aunt",
+            answer: "Paternal Aunt",
+            answerDisplay: "Paternal Aunt (Father's Sister)",
+            genGap: "+1 Generation",
+            targetGender: "Male [+]",
+            steps: [
+              { title: "Expression", explanation: "P - Q + R (where '-' means sister, '+' means father)" },
+              { title: "Step 1: Q + R", explanation: "Q is the father of R (Q is male [+])." },
+              { title: "Step 2: P - Q", explanation: "P is the sister of Q (P is female [-])." },
+              { title: "Conclusion", explanation: "P is the sister of R's father, which is R's Paternal Aunt.", math: "P ⟹ Paternal Aunt of R" }
+            ]
+          };
+        }
+
+        return { valid: false, error: "Unknown scenario" };
+      }
+
+      return {
+        deduceRelation
+      };
+    })();
+
+    if (typeof window !== "undefined") {
+      window.Model = Model;
+    }
+
+    /* ==========================================================================
+       2. DETERMINISTIC SELF-TESTS (Quality Gate)
+       ========================================================================== */
+    function runSelfTests() {
+      const results = { passed: 0, failed: 0, failures: [] };
+
+      function assert(condition, testName, details = "") {
+        if (condition) {
+          results.passed += 1;
+        } else {
+          results.failed += 1;
+          results.failures.push({ name: testName, details });
+        }
+      }
+
+      try {
+        // TC-01: Woman "only daughter" -> Mother
+        const t1 = Model.deduceRelation({ id: 'only_daughter_woman' });
+        assert(t1.valid === true && t1.answer === "Mother", "TC-01: Woman speaker only daughter", `Expected Mother, got ${t1.answer}`);
+
+        // TC-02: Man "only daughter" -> Maternal Uncle
+        const t2 = Model.deduceRelation({ id: 'only_daughter_man' });
+        assert(t2.valid === true && t2.answer === "Maternal Uncle", "TC-02: Man speaker only daughter", `Expected Maternal Uncle, got ${t2.answer}`);
+
+        // TC-03: Sibling gender undetermined -> Cannot be determined
+        const t3 = Model.deduceRelation({ id: 'gender_undetermined' });
+        assert(t3.valid === true && t3.answer === "Cannot be determined", "TC-03: Gender undetermined trap", `Expected CBD, got ${t3.answer}`);
+
+        // TC-04: Coded chain -> Paternal Aunt
+        const t4 = Model.deduceRelation({ id: 'coded_chain' });
+        assert(t4.valid === true && t4.answer === "Paternal Aunt", "TC-04: Coded relation chain", `Expected Paternal Aunt, got ${t4.answer}`);
+
+        // TC-05: Three-gen tree -> Paternal Grandfather
+        const t5 = Model.deduceRelation({ id: 'three_gen_tree' });
+        assert(t5.valid === true && t5.answer === "Paternal Grandfather", "TC-05: Three gen tree", `Expected Paternal Grandfather, got ${t5.answer}`);
+
+        // TC-06: Gender assumption trap flagged in undetermined
+        assert(t3.commonTrap && t3.commonTrap.type === "gender_assumption_trap",
+          "TC-06: Gender assumption trap detection", "Gender assumption trap must be present");
+
+        // TC-07: Maternal aunt trap flagged in woman speaker
+        assert(t1.commonTrap && t1.commonTrap.type === "maternal_aunt_trap",
+          "TC-07: Maternal aunt trap detection", "Maternal aunt trap must be present");
+
+        // TC-08: Invalid scenario rejection
+        const t8 = Model.deduceRelation({ id: 'invalid_xyz' });
+        assert(t8.valid === false, "TC-08: Invalid scenario rejection", "Invalid scenario must return valid: false");
+
+        // TC-09: Generational tier consistency
+        assert(t1.genGap === "+1 Generation" && t5.genGap === "+2 Generations",
+          "TC-09: Generational gap consistency", "Generational gap labels must match");
+
+        // TC-10: Sibling generation invariant (gap = 0)
+        assert(t3.genGap.includes("0"), "TC-10: Sibling generation gap is 0", "Siblings must share same generation");
+
+        // TC-11: Target gender symbol formatting
+        assert(t1.targetGender.includes("[+]") && t3.targetGender.includes("[?]"),
+          "TC-11: Target gender symbol notation", "Must use [+] and [?] standard symbols");
+
+      } catch (err) {
+        results.failed += 1;
+        results.failures.push({ name: "Unexpected test execution error", details: err.message });
+      }
+
+      return results;
+    }
+
+    if (typeof window !== "undefined") {
+      window.runSelfTests = runSelfTests;
+    }
+
+    /* ==========================================================================
+       3. PRACTICE QUESTION BANK (12 Verified Exam-Style Questions)
+       ========================================================================== */
+    const PRACTICE_QUESTIONS = [
+      {
+        id: "BR1",
+        difficulty: "Easy",
+        stem: "Pointing to a photograph of a boy, a woman said: 'His mother is the only daughter of my mother.' How is the woman related to the boy in the photograph?",
+        options: ["Mother", "Maternal Aunt", "Sister", "Grandmother"],
+        correctIndex: 0, // Mother
+        trapOptionIndex: 1, // Maternal Aunt
+        trapExplanation: "The woman herself is speaking. Since her mother has only ONE daughter, that daughter must be the woman herself! Therefore, she is the boy's mother.",
+        solution: "Breakdown: 'My mother' ⟹ Woman's mother. 'The only daughter of my mother' ⟹ The woman herself (she is the only daughter). 'His mother is [herself]' ⟹ The woman is the boy's Mother."
+      },
+      {
+        id: "BR2",
+        difficulty: "Easy",
+        stem: "Pointing to a photograph of a boy, a man said: 'His mother is the only daughter of my mother.' How is the man related to the boy?",
+        options: ["Maternal Uncle", "Father", "Paternal Uncle", "Brother"],
+        correctIndex: 0, // Maternal Uncle
+        trapOptionIndex: 1, // Father
+        trapExplanation: "Trap: The speaker is a MAN. A man's mother's only daughter is his SISTER. The boy's mother is the man's sister, which makes the man his Maternal Uncle (Mama).",
+        solution: "Breakdown: For a male speaker, 'the only daughter of my mother' = his sister. The boy's mother is the man's sister. The brother of a mother is a Maternal Uncle."
+      },
+      {
+        id: "BR3",
+        difficulty: "Medium",
+        stem: "A is the brother of B. C is the father of A. D is the brother of E. E is the daughter of B. How is B related to D?",
+        options: ["Cannot be determined (Father or Mother)", "Father", "Mother", "Uncle"],
+        correctIndex: 0, // Cannot be determined
+        trapOptionIndex: 1, // Father
+        trapExplanation: "The Cardinal Gender Trap! B is the parent of E (and therefore of D, who is E's brother). But is B male or female? B's gender is NEVER stated! B can be Father OR Mother.",
+        solution: "D and E are siblings. B is the parent of E, so B is the parent of D. However, B's gender is not given anywhere in the puzzle. Hence, B can be Father or Mother (Cannot be determined)."
+      },
+      {
+        id: "BR4",
+        difficulty: "Medium",
+        stem: "If 'P + Q' means P is the father of Q, 'P - Q' means P is the sister of Q, and 'P × Q' means P is the brother of Q. Which of the following means 'M is the aunt of N'?",
+        options: ["M - P + N", "M + P - N", "M × P + N", "P + M - N"],
+        correctIndex: 0, // M - P + N
+        trapOptionIndex: 2, // M x P + N (uncle instead of aunt)
+        trapExplanation: "M - P means M is the SISTER of P. P + N means P is the FATHER of N. The sister of N's father is N's Paternal Aunt. So M - P + N is correct.",
+        solution: "M must be female (sister: -). M - P means M is sister of P. P + N means P is father of N. The sister of N's father is N's Aunt. Therefore, M - P + N."
+      },
+      {
+        id: "BR5",
+        difficulty: "Medium",
+        stem: "A man pointing to a lady said, 'Her mother is the only daughter of my mother-in-law.' How is the man related to the lady?",
+        options: ["Father", "Uncle", "Brother", "Husband"],
+        correctIndex: 0, // Father
+        trapOptionIndex: 1,
+        trapExplanation: "Breakdown: 'My mother-in-law's only daughter' = the man's WIFE. 'Her mother is [my wife]' ⟹ The lady's mother is the man's wife, so the man is her Father.",
+        solution: "Man's mother-in-law's only daughter is the man's wife. The lady's mother is the man's wife. Therefore, the man is the lady's Father."
+      },
+      {
+        id: "BR6",
+        difficulty: "Easy",
+        stem: "A and B are brothers. C and D are sisters. A's son is D's brother. How is B related to C?",
+        options: ["Uncle (Paternal)", "Father", "Brother", "Grandfather"],
+        correctIndex: 0, // Uncle
+        trapOptionIndex: 1,
+        trapExplanation: "A's son is brother of D and C. So A is the father of C and D. B is A's brother. The brother of one's father is their Paternal Uncle.",
+        solution: "Since A's son is D's brother, A is the father of C and D. Since B is the brother of A, B is the paternal uncle of C."
+      },
+      {
+        id: "BR7",
+        difficulty: "Exam-Style",
+        stem: "In a family of six persons A, B, C, D, E, and F: There are two married couples. D is the grandmother of A and mother of B. C is the wife of B and mother of F. F is the granddaughter of E. How is C related to D?",
+        options: ["Daughter-in-law", "Daughter", "Sister-in-law", "Mother"],
+        correctIndex: 0, // Daughter-in-law
+        trapOptionIndex: 1,
+        trapExplanation: "D is mother of B. C is wife of B. The wife of one's son is their Daughter-in-law.",
+        solution: "D is the mother of B. B is married to C (B is husband, C is wife). The wife of D's son B is D's Daughter-in-law."
+      },
+      {
+        id: "BR8",
+        difficulty: "Medium",
+        stem: "Introducing a girl, Vipin said: 'Her mother is the only daughter of my mother-in-law.' How is Vipin related to the girl?",
+        options: ["Father", "Maternal Uncle", "Brother", "Paternal Uncle"],
+        correctIndex: 0, // Father
+        trapOptionIndex: 1,
+        trapExplanation: "Vipin's mother-in-law's only daughter is Vipin's wife. The girl's mother is Vipin's wife, which makes Vipin her Father.",
+        solution: "Vipin's mother-in-law's only daughter = Vipin's wife. The girl's mother = Vipin's wife. Hence, Vipin is the girl's Father."
+      },
+      {
+        id: "BR9",
+        difficulty: "Easy",
+        stem: "A man said to a lady, 'Your mother's husband's sister is my aunt.' How is the lady related to the man?",
+        options: ["Sister (or Cousin)", "Mother", "Aunt", "Daughter"],
+        correctIndex: 0, // Sister
+        trapOptionIndex: 2,
+        trapExplanation: "Lady's mother's husband = Lady's father. Lady's father's sister = Lady's aunt. If she is also the man's aunt, the lady and the man share the same father/aunt (Sister or Cousin).",
+        solution: "Lady's mother's husband = Father. Father's sister = Aunt. Since she is also the man's aunt, the lady is the man's Sister."
+      },
+      {
+        id: "BR10",
+        difficulty: "Exam-Style",
+        stem: "P is the brother of Q and R. S is R's mother. T is P's father. Which of the following statements cannot be definitely asserted?",
+        options: ["Q is T's son", "T is Q's father", "S is P's mother", "T is S's husband"],
+        correctIndex: 0, // Q is T's son (Q's gender unknown!)
+        trapOptionIndex: 1,
+        trapExplanation: "P, Q, R are children of T (father) and S (mother). P is male. But Q's gender is NOT given! Q could be son OR daughter. Thus, 'Q is T's son' cannot be definitely asserted.",
+        solution: "P is male. S is mother of P, Q, R; T is father. However, Q's gender is not given. Q could be a daughter. Hence, 'Q is T's son' cannot be definitely asserted."
+      },
+      {
+        id: "BR11",
+        difficulty: "Medium",
+        stem: "A riddle states: 'Brothers and sisters I have none, but that man's father is my father's son.' Who is 'that man'?",
+        options: ["The speaker's son", "The speaker himself", "The speaker's father", "The speaker's nephew"],
+        correctIndex: 0, // The speaker's son
+        trapOptionIndex: 1, // The speaker himself
+        trapExplanation: "Breakdown: 'Brothers and sisters I have none' ⟹ 'my father's son' must be the SPEAKER HIMSELF. So: 'That man's father is [myself]'. That man is the speaker's SON!",
+        solution: "'My father's son' = myself (since speaker has no brothers). 'That man's father is [myself]'. Therefore, that man is the speaker's son."
+      },
+      {
+        id: "BR12",
+        difficulty: "Exam-Style",
+        stem: "Rahul's mother is the only daughter of Monika's father. How is Monika's husband related to Rahul?",
+        options: ["Father", "Maternal Uncle", "Brother", "Grandfather"],
+        correctIndex: 0, // Father
+        trapOptionIndex: 1,
+        trapExplanation: "Monika's father's only daughter is Monika herself! So Rahul's mother is Monika. Therefore, Monika's husband is Rahul's Father.",
+        solution: "Monika's father's only daughter is Monika herself. So Rahul's mother is Monika. Monika's husband is therefore Rahul's Father."
+      }
+    ];
+
+    if (typeof window !== "undefined") {
+      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+    }
+
+    /* ==========================================================================
+       4. INTERACTIVE RENDERING & EVENT HANDLING
+       ========================================================================== */
+    let currentScenarioId = 'only_daughter_woman';
+
+    const svgEl = document.getElementById("tree-svg");
+    const readoutSubjectTarget = document.getElementById("readout-subject-target");
+    const readoutRelation = document.getElementById("readout-relation");
+    const readoutGenGap = document.getElementById("readout-gen-gap");
+    const readoutGender = document.getElementById("readout-gender");
+
+    const predictOptionsContainer = document.getElementById("predict-options-container");
+    const predictScenarioText = document.getElementById("predict-scenario-text");
+    const predictFeedback = document.getElementById("predict-feedback");
+    const btnRevealSolution = document.getElementById("btn-reveal-solution");
+    const workedSolutionPanel = document.getElementById("worked-solution-panel");
+    const solutionStepsContainer = document.getElementById("solution-steps-container");
+    const solutionTrapCallout = document.getElementById("solution-trap-callout");
+    const solutionTrapText = document.getElementById("solution-trap-text");
+
+    function updateModelAndVisual() {
+      const result = Model.deduceRelation({ id: currentScenarioId });
+
+      readoutSubjectTarget.textContent = `${result.source} to ${result.target}`;
+      readoutRelation.textContent = result.answerDisplay;
+      readoutGenGap.textContent = result.genGap;
+      readoutGender.textContent = result.targetGender;
+
+      renderTreeSvg(currentScenarioId, result);
+      updatePredictScenario(result);
+    }
+
+    function renderTreeSvg(scenarioId, result) {
+      if (scenarioId === 'only_daughter_woman' || scenarioId === 'only_daughter_man') {
+        const isWoman = scenarioId === 'only_daughter_woman';
+        const speakerColor = isWoman ? "var(--color-trap, #9333ea)" : "var(--color-primary, #1e3a8a)";
+        const speakerBg = isWoman ? "var(--color-trap-bg, #faf5ff)" : "var(--color-primary-bg, #eff6ff)";
+        const speakerShape = isWoman ? 'rx="20"' : 'rx="4"'; // Circle vs Square
+        const speakerSym = isWoman ? '[-]' : '[+]';
+
+        svgEl.innerHTML = `
+          <rect x="0" y="0" width="620" height="230" fill="transparent" />
+
+          <!-- Gen 0: Grandmother -->
+          <g transform="translate(310, 40)">
+            <rect x="-65" y="-18" width="130" height="36" rx="18" fill="var(--color-surface-subtle, #f1f5f9)" stroke="var(--color-trap, #9333ea)" stroke-width="2" />
+            <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="700" fill="var(--color-text-main, #0f172a)">Mother [-]</text>
+            <text x="0" y="-24" text-anchor="middle" font-size="10" font-weight="700" fill="var(--color-text-muted, #475569)">Gen 0: Grandmother</text>
+          </g>
+
+          <!-- Generation line down -->
+          <line x1="310" y1="58" x2="310" y2="100" stroke="var(--color-border, #cbd5e1)" stroke-width="2" />
+
+          <!-- Gen 1: Speaker & Sibling -->
+          ${isWoman ? `
+            <g transform="translate(310, 115)">
+              <rect x="-85" y="-18" width="170" height="36" rx="18" fill="${speakerBg}" stroke="${speakerColor}" stroke-width="2.5" />
+              <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="800" fill="${speakerColor}">Speaker: Woman [-]</text>
+              <text x="0" y="32" text-anchor="middle" font-size="10" font-weight="600" fill="var(--color-success, #059669)">("Only Daughter" = Herself)</text>
+            </g>
+            <line x1="310" y1="133" x2="310" y2="175" stroke="var(--color-success, #059669)" stroke-width="2" />
+          ` : `
+            <!-- Man speaker on left, Sister on right -->
+            <line x1="200" y1="100" x2="420" y2="100" stroke="var(--color-border, #cbd5e1)" stroke-width="2" />
+            <line x1="200" y1="100" x2="200" y2="115" stroke="var(--color-border, #cbd5e1)" stroke-width="2" />
+            <line x1="420" y1="100" x2="420" y2="115" stroke="var(--color-border, #cbd5e1)" stroke-width="2" />
+
+            <g transform="translate(200, 125)">
+              <rect x="-70" y="-18" width="140" height="36" rx="4" fill="${speakerBg}" stroke="${speakerColor}" stroke-width="2.5" />
+              <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="800" fill="${speakerColor}">Speaker: Man [+]</text>
+            </g>
+
+            <g transform="translate(420, 125)">
+              <rect x="-65" y="-18" width="130" height="36" rx="18" fill="var(--color-trap-bg, #faf5ff)" stroke="var(--color-trap, #9333ea)" stroke-width="2" />
+              <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="700" fill="var(--color-trap, #9333ea)">Sister [-]</text>
+              <text x="0" y="32" text-anchor="middle" font-size="10" font-weight="600" fill="var(--color-success, #059669)">("Only Daughter")</text>
+            </g>
+            <line x1="420" y1="143" x2="420" y2="175" stroke="var(--color-success, #059669)" stroke-width="2" />
+          `}
+
+          <!-- Gen 2: Boy -->
+          <g transform="translate(${isWoman ? 310 : 420}, 195)">
+            <rect x="-55" y="-18" width="110" height="36" rx="4" fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
+            <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="700" fill="var(--color-primary, #1e3a8a)">Boy [+]</text>
+          </g>
+        `;
+      } else if (scenarioId === 'gender_undetermined') {
+        svgEl.innerHTML = `
+          <rect x="0" y="0" width="620" height="230" fill="transparent" />
+
+          <!-- Father C -->
+          <g transform="translate(310, 45)">
+            <rect x="-55" y="-18" width="110" height="36" rx="4" fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
+            <text x="0" y="5" text-anchor="middle" font-size="13" font-weight="700" fill="var(--color-primary, #1e3a8a)">Father C [+]</text>
+          </g>
+
+          <line x1="310" y1="63" x2="310" y2="110" stroke="var(--color-border, #cbd5e1)" stroke-width="2" />
+          <line x1="200" y1="110" x2="420" y2="110" stroke="var(--color-border, #cbd5e1)" stroke-width="2" />
+          <line x1="200" y1="110" x2="200" y2="135" stroke="var(--color-border, #cbd5e1)" stroke-width="2" />
+          <line x1="420" y1="110" x2="420" y2="135" stroke="var(--color-border, #cbd5e1)" stroke-width="2" />
+
+          <!-- A (Brother) -->
+          <g transform="translate(200, 150)">
+            <rect x="-55" y="-18" width="110" height="36" rx="4" fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
+            <text x="0" y="5" text-anchor="middle" font-size="13" font-weight="700" fill="var(--color-primary, #1e3a8a)">A (Brother) [+]</text>
+          </g>
+
+          <!-- B (Gender Unknown) -->
+          <g transform="translate(420, 150)">
+            <rect x="-70" y="-18" width="140" height="36" rx="6" fill="var(--color-warning-bg, #fffbeb)" stroke="var(--color-warning, #b45309)" stroke-width="2.5" stroke-dasharray="4 3" />
+            <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="800" fill="var(--color-warning, #b45309)">B (Gender [?])</text>
+            <text x="0" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="var(--color-danger, #b91c1c)">Brother OR Sister?</text>
+          </g>
+        `;
+      } else {
+        // Generic 3-gen tree visualizer
+        svgEl.innerHTML = `
+          <rect x="0" y="0" width="620" height="230" fill="transparent" />
+
+          <!-- Grandparents -->
+          <g transform="translate(230, 40)">
+            <rect x="-45" y="-16" width="90" height="32" rx="4" fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
+            <text x="0" y="5" text-anchor="middle" font-size="11" font-weight="700" fill="var(--color-primary, #1e3a8a)">Grandpa [+]</text>
+          </g>
+          <text x="290" y="44" font-size="16" font-weight="800" fill="var(--color-accent, #0284c7)">=</text>
+          <g transform="translate(350, 40)">
+            <rect x="-45" y="-16" width="90" height="32" rx="16" fill="var(--color-trap-bg, #faf5ff)" stroke="var(--color-trap, #9333ea)" stroke-width="2" />
+            <text x="0" y="5" text-anchor="middle" font-size="11" font-weight="700" fill="var(--color-trap, #9333ea)">Grandma [-]</text>
+          </g>
+
+          <line x1="290" y1="56" x2="290" y2="100" stroke="var(--color-border, #cbd5e1)" stroke-width="2" />
+
+          <!-- Parents -->
+          <g transform="translate(230, 115)">
+            <rect x="-45" y="-16" width="90" height="32" rx="4" fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
+            <text x="0" y="5" text-anchor="middle" font-size="11" font-weight="700" fill="var(--color-primary, #1e3a8a)">Father [+]</text>
+          </g>
+          <text x="290" y="119" font-size="16" font-weight="800" fill="var(--color-accent, #0284c7)">=</text>
+          <g transform="translate(350, 115)">
+            <rect x="-45" y="-16" width="90" height="32" rx="16" fill="var(--color-trap-bg, #faf5ff)" stroke="var(--color-trap, #9333ea)" stroke-width="2" />
+            <text x="0" y="5" text-anchor="middle" font-size="11" font-weight="700" fill="var(--color-trap, #9333ea)">Mother [-]</text>
+          </g>
+
+          <line x1="290" y1="131" x2="290" y2="175" stroke="var(--color-border, #cbd5e1)" stroke-width="2" />
+
+          <!-- Child -->
+          <g transform="translate(290, 190)">
+            <rect x="-45" y="-16" width="90" height="32" rx="4" fill="var(--color-success-bg, #ecfdf5)" stroke="var(--color-success, #059669)" stroke-width="2.5" />
+            <text x="0" y="5" text-anchor="middle" font-size="11" font-weight="800" fill="var(--color-success, #059669)">Child [+/-]</text>
+          </g>
+        `;
+      }
+    }
+
+    function setPreset(key) {
+      currentScenarioId = key;
+      updateModelAndVisual();
+      LabCommon.announce(`Loaded scenario: ${key}`);
+    }
+
+    /* ==========================================================================
+       5. PREDICT-FIRST LOGIC
+       ========================================================================== */
+    function updatePredictScenario(modelResult) {
+      if (currentScenarioId === 'only_daughter_woman') {
+        predictScenarioText.textContent = 'Pointing to a photograph of a boy, a woman said: "His mother is the only daughter of my mother." How is the woman related to the boy?';
+      } else if (currentScenarioId === 'only_daughter_man') {
+        predictScenarioText.textContent = 'Pointing to a photograph of a boy, a man said: "His mother is the only daughter of my mother." How is the man related to the boy?';
+      } else if (currentScenarioId === 'gender_undetermined') {
+        predictScenarioText.textContent = 'A is the brother of B. C is the father of A. How is B related to A?';
+      } else {
+        predictScenarioText.textContent = `How is ${modelResult.source} related to ${modelResult.target}?`;
+      }
+
+      const correctAns = modelResult.answer;
+      const trapAns = modelResult.commonTrap ? modelResult.commonTrap.answer : "Aunt";
+
+      const choices = [
+        { val: correctAns, type: "correct", label: correctAns },
+        { val: trapAns, type: "trap", label: trapAns },
+        { val: "Sister", type: "distractor", label: "Sister" },
+        { val: "Grandmother", type: "distractor", label: "Grandmother" }
+      ];
+
+      // Remove duplicate labels
+      const uniqueChoices = [];
+      const seen = new Set();
+      choices.forEach(c => {
+        if (!seen.has(c.label)) {
+          seen.add(c.label);
+          uniqueChoices.push(c);
+        }
+      });
+
+      uniqueChoices.sort((a, b) => a.label.localeCompare(b.label));
+
+      predictOptionsContainer.innerHTML = "";
+      predictFeedback.className = "callout hidden";
+      workedSolutionPanel.classList.add("hidden");
+
+      uniqueChoices.forEach(c => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.textContent = c.label;
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.onclick = () => handlePredictChoice(c, modelResult);
+        predictOptionsContainer.appendChild(btn);
+      });
+    }
+
+    function handlePredictChoice(choice, modelResult) {
+      predictFeedback.classList.remove("hidden");
+
+      const buttons = predictOptionsContainer.querySelectorAll(".option-btn");
+      buttons.forEach(b => {
+        b.classList.remove("correct", "trap", "incorrect", "selected");
+        if (b.textContent === choice.label) b.classList.add("selected");
+      });
+
+      if (choice.type === "correct") {
+        predictFeedback.className = "callout callout-success";
+        predictFeedback.innerHTML = `
+          <strong>✓ Outstanding deduction!</strong> You traced the genealogical relationship without gender assumptions: ${choice.label}.
+        `;
+        LabCommon.announce("Prediction correct! You predicted the right relation.");
+      } else if (choice.type === "trap") {
+        predictFeedback.className = "callout callout-trap";
+        predictFeedback.innerHTML = `
+          <strong>⚠️ Common Exam Trap Encountered!</strong> ${modelResult.commonTrap ? modelResult.commonTrap.explanation : 'Avoid assuming gender without explicit confirmation.'}
+        `;
+        LabCommon.announce("Trap encountered: Remember the cardinal rule of gender.");
+      } else {
+        predictFeedback.className = "callout callout-warning";
+        predictFeedback.innerHTML = `
+          <strong>Not quite:</strong> Trace the statement from the inside out and observe who is speaking.
+        `;
+      }
+
+      revealWorkedSteps(modelResult);
+    }
+
+    btnRevealSolution.addEventListener("click", () => {
+      const result = Model.deduceRelation({ id: currentScenarioId });
+      revealWorkedSteps(result);
+    });
+
+    function revealWorkedSteps(modelResult) {
+      if (!modelResult || !modelResult.valid) return;
+      workedSolutionPanel.classList.remove("hidden");
+
+      solutionStepsContainer.innerHTML = modelResult.steps.map((st, idx) => `
+        <div class="step-item">
+          <div class="step-num">Deduction ${idx + 1}</div>
+          <div class="step-title">${st.title}</div>
+          <div>${st.explanation}</div>
+          ${st.math ? `<div class="step-detail">${st.math}</div>` : ''}
+        </div>
+      `).join("");
+
+      if (modelResult.commonTrap) {
+        solutionTrapCallout.classList.remove("hidden");
+        solutionTrapText.textContent = modelResult.commonTrap.explanation;
+      }
+    }
+
+    /* ==========================================================================
+       6. PRACTICE LAB ENGINE
+       ========================================================================== */
+    let currentQIndex = 0;
+    let practiceMode = "hints";
+    let timerInstance = null;
+    let questionStartTime = 0;
+    const TOPIC_ID = "blood-relations";
+
+    function setPracticeMode(mode) {
+      practiceMode = mode;
+      document.querySelectorAll(".mode-btn").forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
+      });
+
+      const activeBtn = document.getElementById(`btn-mode-${mode}`);
+      if (activeBtn) {
+        activeBtn.classList.add("active");
+        activeBtn.setAttribute("aria-selected", "true");
+      }
+
+      const timerContainer = document.getElementById("timer-container");
+      if (mode === "timed") {
+        timerContainer.classList.remove("hidden");
+        if (!timerInstance) {
+          timerInstance = new LabCommon.PracticeTimer((sec) => {
+            document.getElementById("timer-display").textContent = timerInstance.format();
+          });
+        }
+        timerInstance.start();
+      } else {
+        timerContainer.classList.add("hidden");
+        if (timerInstance) timerInstance.stop();
+      }
+
+      const simSection = document.getElementById("interactive-model-title").closest(".card");
+      const refSection = document.getElementById("reference-title").closest(".card");
+      if (mode === "independent") {
+        simSection.style.display = "none";
+        refSection.style.display = "none";
+      } else {
+        simSection.style.display = "block";
+        refSection.style.display = "block";
+      }
+
+      LabCommon.announce(`Switched to ${mode} practice mode.`);
+    }
+
+    function renderPracticeQuestion(index) {
+      const q = PRACTICE_QUESTIONS[index];
+      if (!q) return;
+
+      questionStartTime = Date.now();
+
+      document.getElementById("practice-q-num").textContent = `Question ${index + 1} of ${PRACTICE_QUESTIONS.length}`;
+      const diffBadge = document.getElementById("practice-q-difficulty");
+      diffBadge.textContent = q.difficulty;
+      diffBadge.className = `badge ${q.difficulty === 'Easy' ? 'badge-published' : q.difficulty === 'Medium' ? 'badge-draft' : 'badge-tag'}`;
+
+      document.getElementById("practice-q-stem").textContent = q.stem;
+
+      const feedback = document.getElementById("practice-feedback");
+      feedback.className = "callout hidden";
+      document.getElementById("practice-error-categorizer").classList.add("hidden");
+      document.getElementById("practice-solution-box").classList.add("hidden");
+
+      const optContainer = document.getElementById("practice-options-container");
+      optContainer.innerHTML = "";
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn practice-submit-btn";
+        btn.textContent = optText;
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.onclick = () => submitPracticeAnswer(optIdx, q);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function submitPracticeAnswer(chosenIdx, question) {
+      const isCorrect = chosenIdx === question.correctIndex;
+      const isTrap = chosenIdx === question.trapOptionIndex;
+      const durationSec = Math.round((Date.now() - questionStartTime) / 1000);
+
+      const buttons = document.querySelectorAll("#practice-options-container .option-btn");
+      buttons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === question.correctIndex) b.classList.add("correct");
+        if (idx === chosenIdx && !isCorrect) {
+          b.classList.add(isTrap ? "trap" : "incorrect");
+        }
+      });
+
+      const feedback = document.getElementById("practice-feedback");
+      feedback.classList.remove("hidden");
+
+      if (isCorrect) {
+        feedback.className = "callout callout-success";
+        feedback.innerHTML = `<strong>✓ Correct!</strong> Relation deduced accurately.`;
+        LabCommon.announce("Correct answer!");
+      } else if (isTrap && question.trapExplanation) {
+        feedback.className = "callout callout-trap";
+        feedback.innerHTML = `<strong>⚠️ Common Exam Trap:</strong> ${question.trapExplanation}`;
+        LabCommon.announce("Incorrect: Common trap encountered.");
+        document.getElementById("practice-error-categorizer").classList.remove("hidden");
+      } else {
+        feedback.className = "callout callout-danger";
+        feedback.innerHTML = `<strong>Incorrect:</strong> Review the worked genealogical solution below.`;
+        LabCommon.announce("Incorrect answer.");
+        document.getElementById("practice-error-categorizer").classList.remove("hidden");
+      }
+
+      const solBox = document.getElementById("practice-solution-box");
+      solBox.classList.remove("hidden");
+      document.getElementById("practice-solution-text").textContent = question.solution;
+
+      LabCommon.recordTopicAttempt(TOPIC_ID, {
+        isCorrect,
+        isIndependent: practiceMode === "independent" || practiceMode === "timed",
+        timeSec: durationSec,
+        errorCategory: isCorrect ? null : document.getElementById("select-error-category").value
+      });
+
+      renderStats();
+    }
+
+    function handleSaveErrorCategory(category) {
+      const p = LabCommon.getTopicProgress(TOPIC_ID);
+      if (p.errorsByCategory[category] !== undefined) {
+        p.errorsByCategory[category] += 1;
+        LabCommon.storage.set(`lab_progress_${TOPIC_ID}`, p);
+      }
+      LabCommon.announce(`Recorded mistake reason: ${category}`);
+    }
+
+    function loadNextQuestion() {
+      currentQIndex = (currentQIndex + 1) % PRACTICE_QUESTIONS.length;
+      renderPracticeQuestion(currentQIndex);
+    }
+
+    function renderStats() {
+      const p = LabCommon.getTopicProgress(TOPIC_ID);
+      document.getElementById("stat-attempts").textContent = p.attempts;
+      document.getElementById("stat-correct").textContent = p.correct;
+      document.getElementById("stat-independent").textContent = p.independentCorrect;
+      const acc = p.attempts > 0 ? Math.round((p.correct / p.attempts) * 100) : 0;
+      document.getElementById("stat-accuracy").textContent = `${acc}%`;
+    }
+
+    function handleResetStats() {
+      if (confirm("Reset local practice statistics for Blood Relations?")) {
+        LabCommon.resetTopicProgress(TOPIC_ID);
+        renderStats();
+        LabCommon.announce("Practice statistics reset.");
+      }
+    }
+
+    /* ==========================================================================
+       7. INITIALIZATION ON LOAD
+       ========================================================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      LabCommon.runAndRenderSelfTests(runSelfTests);
+      updateModelAndVisual();
+      renderPracticeQuestion(0);
+      renderStats();
+    });
+  </script>
+</body>
+</html>
