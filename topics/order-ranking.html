@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order &amp; Ranking — Aptitude &amp; Reasoning Lab</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .row-vis-container {
+      background: var(--color-surface-subtle);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .row-svg {
+      width: 100%;
+      height: 190px;
+      overflow: visible;
+    }
+
+    .person-node {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .person-node:hover circle {
+      stroke-width: 3;
+    }
+
+    .formula-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--color-primary);
+      font-weight: 700;
+      margin-top: 0.35rem;
+    }
+
+    .mode-tab-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .mode-tab-btn {
+      padding: 0.4rem 0.85rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+      cursor: pointer;
+    }
+
+    .mode-tab-btn.active {
+      background: var(--color-primary);
+      color: #fff;
+      border-color: var(--color-primary);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Navigation Hub -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand" aria-label="Aptitude and Reasoning Lab Home">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+          <path d="M2 12h20" />
+        </svg>
+        <span>Aptitude &amp; Reasoning Lab</span>
+      </a>
+      <nav class="nav-links" aria-label="Breadcrumb">
+        <a href="../index.html" class="nav-link">Hub</a>
+        <span style="color: var(--color-text-muted);">/</span>
+        <span style="color: var(--color-text-main); font-weight: 600;">Order &amp; Ranking</span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Breadcrumb / Topic Metadata Header -->
+    <div style="margin-bottom: 1.5rem;">
+      <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
+        <span class="badge badge-tag">Logical &amp; Analytical Reasoning</span>
+        <span class="badge badge-published">Module 10</span>
+        <span class="badge badge-outline">SEBI Grade A &bull; SBI PO &bull; SSC CGL</span>
+      </div>
+      <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--color-text-main);">
+        Order &amp; Ranking
+      </h1>
+      <p style="font-size: 1.05rem; color: var(--color-text-muted); max-width: 820px;">
+        Master the algebra of linear ranks. Understand why <strong>Total = L + R - 1</strong>, the overlapping cross-over formula 
+        <strong>M = (L + R) - N - 2</strong>, maximum vs. minimum capacity bounds, and seated position swap shifts without off-by-one errors.
+      </p>
+    </div>
+
+    <!-- Quality Gate Fail-Visibly Alert Container -->
+    <div id="quality-alert" class="callout callout-error hidden" role="alert" style="margin-bottom: 1.5rem;">
+      <strong>Quality Gate Alert:</strong> One or more deterministic logic invariants failed. Practice submissions are locked until solver integrity is restored.
+      <div id="quality-alert-details" style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.8125rem;"></div>
+    </div>
+
+    <!-- Section 1: Concept & Interactive Row Visualizer -->
+    <section class="card" aria-labelledby="model-title">
+      <div class="card-header">
+        <div>
+          <h2 id="model-title" class="section-title">1. Interactive Linear Row Visualizer</h2>
+          <p class="section-subtitle">Simulate ranks from Left and Right, detect overlap vs. non-overlap states, and test position swaps.</p>
+        </div>
+      </div>
+
+      <!-- Mode Tab Bar -->
+      <div class="mode-tab-bar" role="tablist" aria-label="Visualizer Mode">
+        <button type="button" class="mode-tab-btn active" id="tab-single" role="tab" aria-selected="true" onclick="setVisualizerMode('single')">
+          Single Person (L + R - 1)
+        </button>
+        <button type="button" class="mode-tab-btn" id="tab-two" role="tab" aria-selected="false" onclick="setVisualizerMode('two')">
+          Two Persons (Between Count &amp; Overlap)
+        </button>
+        <button type="button" class="mode-tab-btn" id="tab-swap" role="tab" aria-selected="false" onclick="setVisualizerMode('swap')">
+          Position Interchange Simulator
+        </button>
+      </div>
+
+      <!-- Controls Grid -->
+      <div class="control-grid" id="controls-container">
+        <!-- Controls injected dynamically based on mode -->
+      </div>
+
+      <!-- Visual Row SVG Container -->
+      <div class="row-vis-container" aria-label="Linear row ranking diagram">
+        <svg id="row-svg" class="row-svg" viewBox="0 0 740 190" role="img" aria-labelledby="svg-desc">
+          <title id="svg-desc">Linear row representation with position markers and counts</title>
+          <!-- Injected by Model renderer -->
+        </svg>
+
+        <div id="row-caption" style="margin-top: 0.75rem; font-size: 0.8125rem; color: var(--color-text-muted); text-align: center;">
+          <!-- Dynamically updated -->
+        </div>
+      </div>
+
+      <!-- Readout Stats Bar -->
+      <div class="score-bar" id="model-readout" aria-live="polite">
+        <div class="score-stat">
+          <span class="score-stat-label">Total in Row (N)</span>
+          <span class="score-stat-num" id="readout-total">30</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">State / Configuration</span>
+          <span class="score-stat-num" id="readout-state" style="color: var(--color-primary);">Simple (No Overlap)</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Persons Between</span>
+          <span class="score-stat-num" id="readout-between">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Key Invariant</span>
+          <span class="score-stat-num" id="readout-formula" style="font-family: var(--font-mono); font-size: 0.875rem;">N = L + R - 1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Predict-First Worked Example -->
+    <section class="card" aria-labelledby="predict-title">
+      <div class="card-header">
+        <div>
+          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
+          <p class="section-subtitle">Avoid the #1 exam trap: Double-counting in overlapping cross-overs.</p>
+        </div>
+      </div>
+
+      <div class="predict-box">
+        <div class="predict-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span style="font-weight: 700; font-size: 0.9375rem;">Challenge Case: The Overlapping Row</span>
+        </div>
+        <p style="margin-bottom: 0.75rem; font-size: 0.9375rem;">
+          In a row of <strong>35 students</strong>, Vikas is <strong>22nd from the left</strong> and Manoj is <strong>19th from the right</strong>.<br>
+          <em>How many students sit strictly between Vikas and Manoj?</em>
+        </p>
+
+        <!-- Predict Radio Options -->
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;" role="radiogroup" aria-label="Predict answer">
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
+            <input type="radio" name="predict-radio" value="6">
+            <strong>6 students</strong> — Calculated as $(22 + 19) - 35 = 6$.
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
+            <input type="radio" name="predict-radio" value="4">
+            <strong>4 students</strong> — Calculated as $(22 + 19) - 35 - 2 = 4$.
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
+            <input type="radio" name="predict-radio" value="5">
+            <strong>5 students</strong> — Calculated as $(22 + 19) - 35 - 1 = 5$.
+          </label>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-sm" id="btn-reveal-predict" onclick="handleRevealPredict()">
+          Reveal Mathematical Resolution
+        </button>
+
+        <!-- Revealed Solution Callout -->
+        <div id="predict-solution" class="callout callout-info hidden" style="margin-top: 1rem;">
+          <h4 style="font-size: 0.9375rem; margin-bottom: 0.5rem; color: #1e40af;">Step-by-Step Resolution:</h4>
+          <p style="font-size: 0.875rem; line-height: 1.5; margin-bottom: 0.5rem;">
+            <strong>Correct Answer: 4 students.</strong>
+          </p>
+          <p style="font-size: 0.875rem; line-height: 1.5; margin-bottom: 0.5rem;">
+            1. Sum of given ranks: $L + R = 22 + 19 = 41$.<br>
+            2. Notice that $L + R (41) > \text{Total } N (35)$. This immediately indicates an <strong>Overlapping (Cross-Over) Case</strong> where Vikas and Manoj have crossed past each other.<br>
+            3. In the overlapping sum $(22 + 19)$, who has been counted twice?<br>
+            &bull; The students sitting between them ($M$) are counted from both left and right.<br>
+            &bull; Vikas himself is counted twice (once in his 22, once when counting Manoj from right).<br>
+            &bull; Manoj himself is counted twice (once in his 19, once when counting Vikas from left).<br>
+            4. Therefore, total excess $= M + 2$.
+          </p>
+          <div class="formula-tag">
+            M = (L + R) - N - 2 = 41 - 35 - 2 = 4
+          </div>
+          <p style="font-size: 0.8125rem; color: #1e3a8a; margin-top: 0.5rem;">
+            <strong>Why 6 is the trap:</strong> Subtracting 35 from 41 gives 6, which forgets to subtract the 2 reference persons themselves!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Comprehensive Rules & Trap Encyclopedia -->
+    <section class="card" aria-labelledby="rules-title">
+      <div class="card-header">
+        <div>
+          <h2 id="rules-title" class="section-title">3. Core Ranking Axioms &amp; Formula Matrix</h2>
+          <p class="section-subtitle">Precise equations that guarantee zero off-by-one errors in competitive tests.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">1. Single Person from Both Ends</h3>
+          <p style="font-size: 0.875rem;">When one individual's rank is known from both terminals:</p>
+          <div class="formula-tag" style="display: block; text-align: center; margin: 0.5rem 0;">
+            N = L + R - 1
+          </div>
+          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            Rank from other end: $R = N - L + 1$ or $L = N - R + 1$. The $+1$ prevents omitting the person.
+          </p>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">2. Overlapping vs. Non-Overlapping</h3>
+          <p style="font-size: 0.875rem;">Compare $(L_A + R_B)$ with total $N$:</p>
+          <ul style="font-size: 0.8125rem; margin-left: 1.25rem; margin-top: 0.35rem; color: var(--color-text-muted);">
+            <li><strong>Simple ($N \ge L_A + R_B$):</strong> $M = N - (L_A + R_B)$</li>
+            <li><strong>Overlapping ($N < L_A + R_B$):</strong> $M = (L_A + R_B) - N - 2$</li>
+            <li><strong>Feasibility Check:</strong> Overlap is only physically possible if $M \le \min(L_A, R_B) - 2$.</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">3. Position Interchange Rule</h3>
+          <p style="font-size: 0.875rem;">A is $L_1$ from left; B is $R_1$ from right. When they swap, A is now $L_2$ from left:</p>
+          <div class="formula-tag" style="display: block; text-align: center; margin: 0.5rem 0;">
+            Total N = L₂ + R₁ - 1
+          </div>
+          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            B's new rank from right $= R_1 + (L_2 - L_1)$. Both persons shift by the exact same distance!
+          </p>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">4. Maximum vs. Minimum Row Capacity</h3>
+          <p style="font-size: 0.875rem;">When $L_A, R_B$, and between count $M$ are given without total $N$:</p>
+          <ul style="font-size: 0.8125rem; margin-left: 1.25rem; margin-top: 0.35rem; color: var(--color-text-muted);">
+            <li><strong>Maximum Capacity:</strong> $N_{\max} = L_A + R_B + M$</li>
+            <li><strong>Minimum Capacity:</strong> $N_{\min} = L_A + R_B - M - 2$ (if feasible)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Independent Practice Lab (12 Verified Questions) -->
+    <section class="card" aria-labelledby="practice-title" id="practice-section">
+      <div class="card-header">
+        <div>
+          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
+          <p class="section-subtitle">12 hand-verified competitive exam questions covering all order, ranking, swap, and overlap variations.</p>
+        </div>
+      </div>
+
+      <!-- Practice Controls & Mode Toggles -->
+      <div class="practice-header">
+        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
+          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
+            Guided Mode
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
+            Try Without Hints
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
+            Timed Practice
+          </button>
+        </div>
+
+        <div id="timer-container" class="timer-badge hidden" aria-live="off">
+          <span>⏱️</span>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+
+      <!-- Score & Accuracy Progress Bar -->
+      <div class="score-bar" aria-label="Current Practice Statistics">
+        <div class="score-stat">
+          <span class="score-stat-label">Questions Attempted</span>
+          <span class="score-stat-num" id="stat-attempts">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Total Correct</span>
+          <span class="score-stat-num" id="stat-correct">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Independent Correct</span>
+          <span class="score-stat-num" id="stat-independent">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Accuracy</span>
+          <span class="score-stat-num" id="stat-accuracy">0%</span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
+          Reset Local Progress
+        </button>
+      </div>
+
+      <!-- Question Box -->
+      <div id="practice-question-card" style="margin-top: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
+            Question 1 of 12
+          </span>
+          <span class="badge" id="practice-q-difficulty">Easy</span>
+        </div>
+
+        <p class="question-stem" id="practice-q-stem">
+          Loading practice question...
+        </p>
+
+        <!-- Options container -->
+        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Practice Feedback Callout -->
+        <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+        <!-- Error Categorizer (appears on incorrect submission) -->
+        <div id="practice-error-categorizer" class="error-categorizer hidden">
+          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
+            Reflective Analysis: What was the primary root cause of this error?
+          </label>
+          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
+            <option value="off_by_one">Off-by-One Slip (Forgot -1 in N = L+R-1 or forgot +1 in N-L+1)</option>
+            <option value="overlap_omission">Overlap Omission (Forgot -2 in M = L+R-N-2)</option>
+            <option value="min_max_confusion">Min/Max Confusion (Used simple sum instead of overlap or vice versa)</option>
+            <option value="swap_shift_error">Swap Shift Error (Miscalibrated new seat rank after interchange)</option>
+            <option value="feasibility_ignored">Feasibility Ignored (Attempted impossible overlap calculation)</option>
+            <option value="time_guess">Rushed / Guess under time pressure</option>
+          </select>
+        </div>
+
+        <!-- Practice Worked Solution Box (revealed upon answering) -->
+        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
+          <h4 style="font-size: 0.9375rem; margin-bottom: 0.5rem; color: #1e40af;">Mathematical Solution:</h4>
+          <div id="practice-solution-text" style="font-size: 0.875rem; line-height: 1.6;"></div>
+          <div id="practice-trap-analysis" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed rgba(30, 64, 175, 0.2); font-size: 0.8125rem; color: #1e3a8a;"></div>
+        </div>
+
+        <!-- Question Navigation Controls -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-prev-q" onclick="navigateQuestion(-1)">
+            ← Previous Question
+          </button>
+          <span style="font-size: 0.8125rem; color: var(--color-text-muted);" id="q-counter-text">
+            1 / 12
+          </span>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-next-q" onclick="navigateQuestion(1)">
+            Next Question →
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/common.js"></script>
+  <script>
+    /* ==========================================================================
+       1. PURE DETERMINISTIC ORDER & RANKING MODEL
+       ========================================================================== */
+    const Model = (function () {
+      /**
+       * Calculate total persons given single person's rank from Left and Right
+       */
+      function totalFromBothEnds(l, r) {
+        if (l < 1 || r < 1) return { valid: false, error: "Ranks must be >= 1" };
+        const total = l + r - 1;
+        return {
+          valid: true,
+          total,
+          formula: `N = L + R - 1 = ${l} + ${r} - 1 = ${total}`
+        };
+      }
+
+      /**
+       * Calculate rank from other end
+       */
+      function rankFromOtherEnd(total, rank) {
+        if (total < 1 || rank < 1 || rank > total) {
+          return { valid: false, error: "Invalid rank or total" };
+        }
+        const otherRank = total - rank + 1;
+        return {
+          valid: true,
+          otherRank,
+          formula: `Other Rank = Total - Rank + 1 = ${total} - ${rank} + 1 = ${otherRank}`
+        };
+      }
+
+      /**
+       * Determine between count and whether overlap exists
+       */
+      function betweenCount(total, left, right) {
+        if (total < 1 || left < 1 || right < 1 || left > total || right > total) {
+          return { valid: false, error: "Invalid inputs" };
+        }
+
+        const sum = left + right;
+        if (sum <= total) {
+          // Simple Non-overlapping
+          const m = total - sum;
+          return {
+            valid: true,
+            isOverlap: false,
+            between: m,
+            formula: `Non-overlapping: M = Total - (L + R) = ${total} - (${left} + ${right}) = ${m}`
+          };
+        } else {
+          // Overlapping Case
+          const m = sum - total - 2;
+          if (m < 0) {
+            return { valid: false, error: "Impossible configuration" };
+          }
+          return {
+            valid: true,
+            isOverlap: true,
+            between: m,
+            formula: `Overlapping: M = (L + R) - Total - 2 = (${left} + ${right}) - ${total} - 2 = ${m}`
+          };
+        }
+      }
+
+      /**
+       * Min and Max possible totals given L, R, and Between (M)
+       */
+      function minMaxTotal(left, right, between) {
+        if (left < 1 || right < 1 || between < 0) {
+          return { valid: false, error: "Inputs must be positive" };
+        }
+
+        const maxTotal = left + right + between;
+        const minFeasible = between <= Math.min(left, right) - 2;
+        let minTotal = null;
+
+        if (minFeasible) {
+          minTotal = left + right - between - 2;
+        }
+
+        return {
+          valid: true,
+          maxTotal,
+          minTotal,
+          isMinFeasible: minFeasible,
+          formulaMax: `N_max = L + R + M = ${left} + ${right} + ${between} = ${maxTotal}`,
+          formulaMin: minFeasible 
+            ? `N_min = L + R - M - 2 = ${left} + ${right} - ${between} - 2 = ${minTotal}`
+            : `Overlap not feasible because M (${between}) > min(L,R) - 2 (${Math.min(left, right) - 2})`
+        };
+      }
+
+      /**
+       * Position Interchange Solver
+       */
+      function solveInterchange(l1, r1, l2) {
+        if (l1 < 1 || r1 < 1 || l2 < 1) {
+          return { valid: false, error: "Ranks must be >= 1" };
+        }
+
+        const total = l2 + r1 - 1;
+        const shift = l2 - l1;
+        const r2 = r1 + shift;
+        const between = Math.abs(shift) - 1;
+
+        return {
+          valid: true,
+          total,
+          shift,
+          newRankRight: r2,
+          between,
+          formulaTotal: `Total = L₂ + R₁ - 1 = ${l2} + ${r1} - 1 = ${total}`,
+          formulaNewRank: `B's new rank = R₁ + (L₂ - L₁) = ${r1} + (${l2} - ${l1}) = ${r2}`,
+          formulaBetween: `Between = |L₂ - L₁| - 1 = |${l2} - ${l1}| - 1 = ${between}`
+        };
+      }
+
+      return {
+        totalFromBothEnds,
+        rankFromOtherEnd,
+        betweenCount,
+        minMaxTotal,
+        solveInterchange
+      };
+    })();
+
+    if (typeof window !== "undefined") {
+      window.Model = Model;
+    }
+
+    /* ==========================================================================
+       2. DETERMINISTIC SELF-TEST SUITE (Quality Gate)
+       ========================================================================== */
+    function runSelfTests() {
+      const results = { passed: 0, failed: 0, failures: [] };
+
+      function assert(condition, testName) {
+        if (condition) {
+          results.passed++;
+        } else {
+          results.failed++;
+          results.failures.push(testName);
+        }
+      }
+
+      // Test 1: Single person from both ends (17, 28 => 44)
+      const t1 = Model.totalFromBothEnds(17, 28);
+      assert(t1.valid && t1.total === 44, "Test 1: Single person N = L + R - 1 (17+28-1 = 44)");
+
+      // Test 2: Rank from other end (Total 45, Top 15 => Bottom 31)
+      const t2 = Model.rankFromOtherEnd(45, 15);
+      assert(t2.valid && t2.otherRank === 31, "Test 2: Rank from other end R = N - L + 1 (45-15+1 = 31)");
+
+      // Test 3: Simple between count (Total 50, L 12, R 18 => M = 20)
+      const t3 = Model.betweenCount(50, 12, 18);
+      assert(t3.valid && !t3.isOverlap && t3.between === 20, "Test 3: Non-overlapping between count M = 20");
+
+      // Test 4: Overlapping between count (Total 35, L 22, R 19 => M = 4)
+      const t4 = Model.betweenCount(35, 22, 19);
+      assert(t4.valid && t4.isOverlap && t4.between === 4, "Test 4: Overlapping between count M = (22+19)-35-2 = 4");
+
+      // Test 5: Minimum total with feasible overlap (L 12, R 15, M 5 => N_min = 20)
+      const t5 = Model.minMaxTotal(12, 15, 5);
+      assert(t5.valid && t5.isMinFeasible && t5.minTotal === 20, "Test 5: Min total N_min = 12 + 15 - 5 - 2 = 20");
+
+      // Test 6: Maximum total (L 12, R 15, M 5 => N_max = 32)
+      assert(t5.valid && t5.maxTotal === 32, "Test 6: Max total N_max = 12 + 15 + 5 = 32");
+
+      // Test 7: Overlap feasibility rejection when M > min(L,R) - 2
+      const t7 = Model.minMaxTotal(6, 7, 8);
+      assert(t7.valid && !t7.isMinFeasible, "Test 7: Feasibility correctly rejects overlap when M > min(L,R)-2");
+
+      // Test 8: Interchange Total (L1=9, R1=13, L2=18 => Total 30)
+      const t8 = Model.solveInterchange(9, 13, 18);
+      assert(t8.valid && t8.total === 30, "Test 8: Position interchange total N = 18 + 13 - 1 = 30");
+
+      // Test 9: Interchange New Rank of B (R1=13, shift=+9 => R2 = 22)
+      assert(t8.valid && t8.newRankRight === 22, "Test 9: Position interchange B's new rank = 13 + 9 = 22");
+
+      // Test 10: Interchange Between Count (L1=9, L2=18 => Between = 8)
+      assert(t8.valid && t8.between === 8, "Test 10: Position interchange between count = |18 - 9| - 1 = 8");
+
+      // Test 11: Exact Middle Invariant (Total 40, L 10, R 15 => M=15; Middle person at Left 18)
+      const t11 = Model.betweenCount(40, 10, 15);
+      const middleLeft = 10 + Math.ceil(t11.between / 2);
+      const middleRight = 40 - middleLeft + 1;
+      assert(middleLeft + middleRight - 1 === 40, "Test 11: Middle person rank consistency N = L + R - 1");
+
+      return results;
+    }
+
+    if (typeof window !== "undefined") {
+      window.runSelfTests = runSelfTests;
+    }
+
+    /* ==========================================================================
+       3. 12 VERIFIED HIGH-QUALITY PRACTICE QUESTIONS
+       ========================================================================== */
+    const PRACTICE_QUESTIONS = [
+      {
+        id: "ord_q1",
+        difficulty: "Easy",
+        stem: `Suresh is ranked <strong>17th from the left end</strong> and <strong>28th from the right end</strong> in a row of people. How many total people are in the row?`,
+        options: ["44", "45", "43", "46"],
+        correctIndex: 0,
+        solution: `<strong>Formula:</strong> $N = L + R - 1$<br>
+                   Here $L = 17$, $R = 28$.<br>
+                   $N = 17 + 28 - 1 = 45 - 1 = \\mathbf{44}$.<br>
+                   Suresh is counted once from left and once from right, so subtracting 1 eliminates the double-count.`,
+        trap: `<strong>Trap Avoidance:</strong> Simply adding $17 + 28 = 45$ counts Suresh twice. Never forget the $-1$.`
+      },
+      {
+        id: "ord_q2",
+        difficulty: "Easy",
+        stem: `In a class of <strong>45 students</strong>, Rita's rank is <strong>15th from the top</strong>. What is her rank from the bottom?`,
+        options: ["30th", "31st", "29th", "32nd"],
+        correctIndex: 1,
+        solution: `<strong>Formula:</strong> $\\text{Rank from Bottom } R = N - L + 1$<br>
+                   $R = 45 - 15 + 1 = 30 + 1 = \\mathbf{31\\text{st}}$.<br>
+                   <em>Verification:</em> $15 + 31 - 1 = 45$.`,
+        trap: `<strong>Trap Avoidance:</strong> $45 - 15 = 30$ gives the number of students ranked below Rita, NOT Rita's own rank! Her rank requires $+1$.`
+      },
+      {
+        id: "ord_q3",
+        difficulty: "Medium",
+        stem: `In a row of <strong>50 students</strong>, Amit is <strong>12th from the left</strong> and Bina is <strong>18th from the right</strong>. How many students are sitting strictly between Amit and Bina?`,
+        options: ["20", "21", "19", "18"],
+        correctIndex: 0,
+        solution: `1. Check configuration: $L + R = 12 + 18 = 30$.<br>
+                   2. Since $30 < 50$ (Total), Amit and Bina have NOT crossed each other (Simple non-overlapping row).<br>
+                   3. <strong>Formula:</strong> $M = \\text{Total} - (L + R) = 50 - 30 = \\mathbf{20}$.`,
+        trap: `<strong>Trap Avoidance:</strong> Confusing non-overlapping with overlapping. Because $L+R < N$, do NOT subtract 2.`
+      },
+      {
+        id: "ord_q4",
+        difficulty: "Medium",
+        stem: `In a row of <strong>35 students</strong>, Vikas is <strong>22nd from the left</strong> and Manoj is <strong>19th from the right</strong>. How many students sit strictly between them?`,
+        options: ["6", "4", "5", "2"],
+        correctIndex: 1,
+        solution: `1. Check configuration: $L + R = 22 + 19 = 41$.<br>
+                   2. Since $41 > 35$ (Total), Vikas and Manoj have crossed each other (Overlapping case).<br>
+                   3. <strong>Formula:</strong> $M = (L + R) - \\text{Total} - 2$<br>
+                   $M = 41 - 35 - 2 = 6 - 2 = \\mathbf{4}$.`,
+        trap: `<strong>The Double-Count Trap:</strong> $41 - 35 = 6$ leaves Vikas and Manoj themselves counted in the middle! Subtracting 2 gives the true count between them.`
+      },
+      {
+        id: "ord_q5",
+        difficulty: "Medium",
+        stem: `In a row of students, Kamal is <strong>12th from the left</strong> and Rohit is <strong>15th from the right</strong>. There are <strong>5 students between them</strong>. What is the <strong>MINIMUM</strong> possible number of students in the row?`,
+        options: ["20", "22", "32", "25"],
+        correctIndex: 0,
+        solution: `Minimum total occurs in the <strong>Overlapping Case</strong>.<br>
+                   1. Feasibility check: $M \\le \\min(L, R) - 2 \\implies 5 \\le \\min(12, 15) - 2 = 10$ (Valid!).<br>
+                   2. <strong>Formula:</strong> $N_{\\min} = L + R - M - 2$<br>
+                   $N_{\\min} = 12 + 15 - 5 - 2 = 27 - 7 = \\mathbf{20}$.`,
+        trap: `<strong>Trap Avoidance:</strong> 32 is the maximum capacity ($12 + 15 + 5$). For minimum capacity, subtract $(M + 2)$.`
+      },
+      {
+        id: "ord_q6",
+        difficulty: "Easy",
+        stem: `In a row of students, Kamal is <strong>12th from the left</strong> and Rohit is <strong>15th from the right</strong>. There are <strong>5 students between them</strong>. What is the <strong>MAXIMUM</strong> possible number of students in the row?`,
+        options: ["32", "30", "28", "35"],
+        correctIndex: 0,
+        solution: `Maximum total occurs in the <strong>Simple Non-Overlapping Case</strong> where Kamal sits on the left and Rohit sits on the right with 5 students separating them.<br>
+                   <strong>Formula:</strong> $N_{\\max} = L + R + M = 12 + 15 + 5 = \\mathbf{32}$.`,
+        trap: `<strong>Trap Avoidance:</strong> Do not subtract 1 or 2 in the maximum non-overlapping configuration. Kamal, Rohit, and the 5 middle students are mutually disjoint sets.`
+      },
+      {
+        id: "ord_q7",
+        difficulty: "Hard",
+        stem: `In a row of boys, Deepak is <strong>9th from the left</strong> and Vijay is <strong>13th from the right</strong>. When they interchange positions, Deepak becomes <strong>18th from the left</strong>. What is the total number of boys in the row?`,
+        options: ["30", "31", "29", "32"],
+        correctIndex: 0,
+        solution: `1. Upon interchanging, Deepak sits in Vijay's original seat.<br>
+                   2. That exact seat is known from both terminals: it is <strong>18th from left</strong> (Deepak's new rank) and <strong>13th from right</strong> (Vijay's original rank).<br>
+                   3. <strong>Formula:</strong> $\\text{Total } N = L_2 + R_1 - 1 = 18 + 13 - 1 = 31 - 1 = \\mathbf{30}$.`,
+        trap: `<strong>Trap Avoidance:</strong> Do not add Deepak's old rank (9). Use the new rank of the person at the other person's known terminal seat.`
+      },
+      {
+        id: "ord_q8",
+        difficulty: "Hard",
+        stem: `In the same scenario (Deepak initially 9th from left, Vijay 13th from right; Deepak becomes 18th from left after swap), what will be <strong>Vijay's new position from the right end</strong>?`,
+        options: ["22nd", "21st", "23rd", "20th"],
+        correctIndex: 0,
+        solution: `1. Calculate the shift: Deepak moved from 9th to 18th $\\implies \\text{Shift } = 18 - 9 = +9$ places.<br>
+                   2. Vijay must shift by the exact same distance in rank: $\\text{New Rank from Right } = 13 + 9 = \\mathbf{22\\text{nd}}$.<br>
+                   <em>Cross-check:</em> Total $= \\text{Deepak's old Left} + \\text{Vijay's new Right} - 1 = 9 + 22 - 1 = 30$. Consistent!`,
+        trap: `<strong>Trap Avoidance:</strong> Some candidates calculate $13 + 8$ by confusing the number of people between (8) with the shift distance (9). The shift distance is 9.`
+      },
+      {
+        id: "ord_q9",
+        difficulty: "Medium",
+        stem: `In a row of <strong>30 girls</strong>, when Radha was shifted <strong>4 places to her left</strong>, she became <strong>10th from the left end</strong>. What was her original rank from the right end of the row?`,
+        options: ["16th", "17th", "18th", "15th"],
+        correctIndex: 1,
+        solution: `1. After shifting 4 places left, she is 10th from left. Hence, her original position was 4 places to the right: $\\text{Original Left } = 10 + 4 = 14\\text{th}$.<br>
+                   2. Original rank from right $= \\text{Total } - \\text{Original Left} + 1 = 30 - 14 + 1 = 16 + 1 = \\mathbf{17\\text{th}}$.`,
+        trap: `<strong>Trap Avoidance:</strong> $10 - 4 = 6$ mistakenly assumes shifting left means she started further left. If she shifted left to reach 10, she was originally at $10 + 4 = 14$.`
+      },
+      {
+        id: "ord_q10",
+        difficulty: "Hard",
+        stem: `In a row of <strong>40 boys</strong>, A is <strong>10th from the left</strong> and B is <strong>15th from the right</strong>. If C sits <strong>exactly halfway between A and B</strong>, what is C's position from the left end?`,
+        options: ["18th", "17th", "19th", "20th"],
+        correctIndex: 0,
+        solution: `1. Boys between A and B: $M = 40 - (10 + 15) = 40 - 25 = 15$ boys.<br>
+                   2. Since C sits exactly in the middle of these 15 boys, C is the $\\frac{15 + 1}{2} = 8\\text{th}$ boy after A.<br>
+                   3. C's position from left $= 10 + 8 = \\mathbf{18\\text{th}}$.<br>
+                   <em>Check from right:</em> C's position from right $= 15 + 8 = 23\\text{rd}$. Total $= 18 + 23 - 1 = 40$.`,
+        trap: `<strong>Trap Avoidance:</strong> Dividing 15 by 2 and rounding carelessly. In an odd count (15), the exact middle element is $(15+1)/2 = 8$ positions ahead of A.`
+      },
+      {
+        id: "ord_q11",
+        difficulty: "Hard",
+        stem: `In a row of <strong>25 children</strong>, Nita is <strong>8th from the left</strong> and Priya is <strong>12th from the right</strong>. If Tanu sits exactly halfway between Nita and Priya, what is Tanu's position from the <strong>right end</strong>?`,
+        options: ["15th", "14th", "16th", "13th"],
+        correctIndex: 0,
+        solution: `1. Children between Nita and Priya: $M = 25 - (8 + 12) = 25 - 20 = 5$ children.<br>
+                   2. Tanu is the middle child among these 5: $\\frac{5 + 1}{2} = 3\\text{rd}$ child.<br>
+                   3. Starting from Priya (who is 12th from right), Tanu is 3 places further left: $\\text{Rank from Right } = 12 + 3 = \\mathbf{15\\text{th}}$.<br>
+                   <em>Check:</em> From left $= 8 + 3 = 11\\text{th}$. Total $= 11 + 15 - 1 = 25$.`,
+        trap: `<strong>Trap Avoidance:</strong> Confusing left-end rank with right-end rank. Tanu is 11th from left and 15th from right; the question specifically asks for rank from the right end.`
+      },
+      {
+        id: "ord_q12",
+        difficulty: "Hard",
+        stem: `In a row, Prakash is <strong>6th from the left</strong> and Qasim is <strong>7th from the right</strong>. Can there be <strong>8 people seated strictly between them in an overlapping arrangement</strong>?`,
+        options: [
+          "No, physically impossible",
+          "Yes, with total = 3",
+          "Yes, with total = 7",
+          "Yes, with total = 9"
+        ],
+        correctIndex: 0,
+        solution: `<strong>Feasibility Invariant for Overlapping Rows:</strong><br>
+                   For two people to overlap with $M$ people between them, the number of between persons cannot exceed $\\min(L, R) - 2$.<br>
+                   Here $\\min(6, 7) - 2 = 6 - 2 = 4$.<br>
+                   Since $M = 8 > 4$, an overlapping arrangement is <strong>physically impossible</strong>. Prakash only has 5 people to his left, so he cannot have crossed past Qasim and 8 intervening people!`,
+        trap: `<strong>Blind Formula Trap:</strong> Blindly computing $N = 6 + 7 - 8 - 2 = 3$ yields a mathematically absurd negative/impossible seating configuration. Always check overlap feasibility!`
+      }
+    ];
+
+    if (typeof window !== "undefined") {
+      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+    }
+
+    /* ==========================================================================
+       4. INTERACTIVE VIEW CONTROLLER & SVG RENDERER
+       ========================================================================== */
+    let currentVisMode = 'single'; // 'single', 'two', 'swap'
+
+    function setVisualizerMode(mode) {
+      currentVisMode = mode;
+      document.getElementById('tab-single').classList.toggle('active', mode === 'single');
+      document.getElementById('tab-two').classList.toggle('active', mode === 'two');
+      document.getElementById('tab-swap').classList.toggle('active', mode === 'swap');
+
+      renderControls();
+      handleParamsChange();
+    }
+
+    function renderControls() {
+      const container = document.getElementById('controls-container');
+
+      if (currentVisMode === 'single') {
+        container.innerHTML = `
+          <div class="control-group">
+            <label class="control-label" for="input-l">
+              <span>Rank from Left (L)</span>
+              <span id="badge-l" class="badge badge-tag">L = 12</span>
+            </label>
+            <input type="number" id="input-l" class="control-input" value="12" min="1" max="40" oninput="handleParamsChange()">
+            <input type="range" id="range-l" min="1" max="40" value="12" oninput="document.getElementById('input-l').value=this.value; handleParamsChange()">
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="input-r">
+              <span>Rank from Right (R)</span>
+              <span id="badge-r" class="badge badge-tag">R = 19</span>
+            </label>
+            <input type="number" id="input-r" class="control-input" value="19" min="1" max="40" oninput="handleParamsChange()">
+            <input type="range" id="range-r" min="1" max="40" value="19" oninput="document.getElementById('input-r').value=this.value; handleParamsChange()">
+          </div>
+        `;
+      } else if (currentVisMode === 'two') {
+        container.innerHTML = `
+          <div class="control-group">
+            <label class="control-label" for="input-total-n">
+              <span>Total Persons in Row (N)</span>
+              <span id="badge-n" class="badge badge-tag">N = 35</span>
+            </label>
+            <input type="number" id="input-total-n" class="control-input" value="35" min="10" max="60" oninput="handleParamsChange()">
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="input-la">
+              <span>Person A (Left Rank)</span>
+              <span id="badge-la" class="badge badge-tag">L_A = 22</span>
+            </label>
+            <input type="number" id="input-la" class="control-input" value="22" min="1" max="40" oninput="handleParamsChange()">
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="input-rb">
+              <span>Person B (Right Rank)</span>
+              <span id="badge-rb" class="badge badge-tag">R_B = 19</span>
+            </label>
+            <input type="number" id="input-rb" class="control-input" value="19" min="1" max="40" oninput="handleParamsChange()">
+          </div>
+        `;
+      } else {
+        // Swap mode
+        container.innerHTML = `
+          <div class="control-group">
+            <label class="control-label" for="input-swap-l1">
+              <span>Person A Initial Left (L₁)</span>
+              <span id="badge-l1" class="badge badge-tag">L₁ = 9</span>
+            </label>
+            <input type="number" id="input-swap-l1" class="control-input" value="9" min="1" max="30" oninput="handleParamsChange()">
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="input-swap-r1">
+              <span>Person B Initial Right (R₁)</span>
+              <span id="badge-r1" class="badge badge-tag">R₁ = 13</span>
+            </label>
+            <input type="number" id="input-swap-r1" class="control-input" value="13" min="1" max="30" oninput="handleParamsChange()">
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="input-swap-l2">
+              <span>Person A Swapped Left (L₂)</span>
+              <span id="badge-l2" class="badge badge-tag">L₂ = 18</span>
+            </label>
+            <input type="number" id="input-swap-l2" class="control-input" value="18" min="1" max="50" oninput="handleParamsChange()">
+          </div>
+        `;
+      }
+    }
+
+    function handleParamsChange() {
+      const svg = document.getElementById('row-svg');
+      let svgHtml = '';
+
+      if (currentVisMode === 'single') {
+        const l = Math.max(1, Number(document.getElementById('input-l')?.value || 12));
+        const r = Math.max(1, Number(document.getElementById('input-r')?.value || 19));
+        document.getElementById('badge-l').textContent = `L = ${l}`;
+        document.getElementById('badge-r').textContent = `R = ${r}`;
+
+        const res = Model.totalFromBothEnds(l, r);
+        const total = res.total;
+
+        document.getElementById('readout-total').textContent = total;
+        document.getElementById('readout-state').textContent = "Single Person";
+        document.getElementById('readout-state').style.color = "var(--color-primary)";
+        document.getElementById('readout-between').textContent = "—";
+        document.getElementById('readout-formula').textContent = `N = ${l} + ${r} - 1 = ${total}`;
+
+        document.getElementById('row-caption').textContent = 
+          `Person sits at Seat ${l} from Left, which is simultaneously Seat ${r} from Right. N = ${l} + ${r} - 1 = ${total}.`;
+
+        // Draw track
+        svgHtml = `
+          <!-- Row Track Line -->
+          <line x1="50" y1="90" x2="690" y2="90" stroke="var(--color-border)" stroke-width="4" stroke-linecap="round" />
+          <text x="50" y="125" font-size="12" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle">Left (1)</text>
+          <text x="690" y="125" font-size="12" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle">Right (${total})</text>
+
+          <!-- Person Marker -->
+          <circle cx="320" cy="90" r="16" fill="#3b82f6" stroke="#1d4ed8" stroke-width="3" />
+          <text x="320" y="95" font-size="12" font-weight="800" fill="#ffffff" text-anchor="middle">P</text>
+
+          <!-- Left Arrow & Bracket -->
+          <line x1="50" y1="50" x2="310" y2="50" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow)" />
+          <text x="180" y="42" font-size="12" font-weight="700" fill="#3b82f6" text-anchor="middle">Rank L = ${l} from Left →</text>
+
+          <!-- Right Arrow & Bracket -->
+          <line x1="690" y1="150" x2="330" y2="150" stroke="#10b981" stroke-width="2" />
+          <text x="510" y="165" font-size="12" font-weight="700" fill="#047857" text-anchor="middle">← Rank R = ${r} from Right</text>
+        `;
+      } else if (currentVisMode === 'two') {
+        const total = Math.max(5, Number(document.getElementById('input-total-n')?.value || 35));
+        const la = Math.max(1, Number(document.getElementById('input-la')?.value || 22));
+        const rb = Math.max(1, Number(document.getElementById('input-rb')?.value || 19));
+
+        document.getElementById('badge-n').textContent = `N = ${total}`;
+        document.getElementById('badge-la').textContent = `L_A = ${la}`;
+        document.getElementById('badge-rb').textContent = `R_B = ${rb}`;
+
+        const betweenRes = Model.betweenCount(total, la, rb);
+
+        if (betweenRes.valid) {
+          document.getElementById('readout-total').textContent = total;
+          document.getElementById('readout-state').textContent = betweenRes.isOverlap ? "Overlapping (Cross-Over)" : "Simple (Disjoint)";
+          document.getElementById('readout-state').style.color = betweenRes.isOverlap ? "#b45309" : "#047857";
+          document.getElementById('readout-between').textContent = betweenRes.between;
+          document.getElementById('readout-formula').textContent = betweenRes.isOverlap 
+            ? `M = (L+R) - N - 2 = ${betweenRes.between}` 
+            : `M = N - (L+R) = ${betweenRes.between}`;
+
+          document.getElementById('row-caption').textContent = betweenRes.isOverlap
+            ? `A and B crossed each other (L + R = ${la + rb} > ${total}). Overlapping persons between = ${betweenRes.between}.`
+            : `A and B have not crossed (L + R = ${la + rb} ≤ ${total}). Persons between = ${betweenRes.between}.`;
+
+          const posA = betweenRes.isOverlap ? 460 : 220;
+          const posB = betweenRes.isOverlap ? 260 : 500;
+
+          svgHtml = `
+            <line x1="50" y1="90" x2="690" y2="90" stroke="var(--color-border)" stroke-width="4" stroke-linecap="round" />
+            <text x="50" y="125" font-size="12" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle">Left (1)</text>
+            <text x="690" y="125" font-size="12" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle">Right (${total})</text>
+
+            <!-- Person A -->
+            <circle cx="${posA}" cy="90" r="15" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2.5" />
+            <text x="${posA}" y="95" font-size="12" font-weight="800" fill="#fff" text-anchor="middle">A</text>
+            <text x="${posA}" y="125" font-size="11" font-weight="700" fill="#3b82f6" text-anchor="middle">L = ${la}</text>
+
+            <!-- Person B -->
+            <circle cx="${posB}" cy="90" r="15" fill="#10b981" stroke="#047857" stroke-width="2.5" />
+            <text x="${posB}" y="95" font-size="12" font-weight="800" fill="#fff" text-anchor="middle">B</text>
+            <text x="${posB}" y="125" font-size="11" font-weight="700" fill="#047857" text-anchor="middle">R = ${rb}</text>
+
+            <!-- Between Bracket -->
+            <rect x="${Math.min(posA, posB) + 18}" y="76" width="${Math.abs(posA - posB) - 36}" height="28" fill="rgba(245, 158, 11, 0.15)" rx="4" />
+            <text x="${(posA + posB)/2}" y="55" font-size="12" font-weight="700" fill="#b45309" text-anchor="middle">Between: ${betweenRes.between}</text>
+          `;
+        } else {
+          document.getElementById('readout-state').textContent = "Invalid / Infeasible";
+        }
+      } else {
+        // Swap Mode
+        const l1 = Math.max(1, Number(document.getElementById('input-swap-l1')?.value || 9));
+        const r1 = Math.max(1, Number(document.getElementById('input-swap-r1')?.value || 13));
+        const l2 = Math.max(1, Number(document.getElementById('input-swap-l2')?.value || 18));
+
+        document.getElementById('badge-l1').textContent = `L₁ = ${l1}`;
+        document.getElementById('badge-r1').textContent = `R₁ = ${r1}`;
+        document.getElementById('badge-l2').textContent = `L₂ = ${l2}`;
+
+        const swapRes = Model.solveInterchange(l1, r1, l2);
+
+        document.getElementById('readout-total').textContent = swapRes.total;
+        document.getElementById('readout-state').textContent = `Swap: B is now ${swapRes.newRankRight} from Right`;
+        document.getElementById('readout-state').style.color = "var(--color-primary)";
+        document.getElementById('readout-between').textContent = swapRes.between;
+        document.getElementById('readout-formula').textContent = `Total = ${l2} + ${r1} - 1 = ${swapRes.total}`;
+
+        document.getElementById('row-caption').textContent = 
+          `A swapped into B's seat (L₂ = ${l2}, originally R₁ = ${r1}). Total = ${swapRes.total}. B's new right rank = ${swapRes.newRankRight}.`;
+
+        svgHtml = `
+          <line x1="50" y1="90" x2="690" y2="90" stroke="var(--color-border)" stroke-width="4" stroke-linecap="round" />
+          <text x="50" y="125" font-size="12" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle">Left (1)</text>
+          <text x="690" y="125" font-size="12" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle">Right (${swapRes.total})</text>
+
+          <!-- Original Seats -->
+          <circle cx="200" cy="90" r="14" fill="#3b82f6" />
+          <text x="200" y="95" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">A₁</text>
+          <text x="200" y="125" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Seat ${l1}</text>
+
+          <circle cx="500" cy="90" r="14" fill="#10b981" />
+          <text x="500" y="95" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">B₁</text>
+          <text x="500" y="125" font-size="11" fill="var(--color-text-muted)" text-anchor="middle">Seat ${swapRes.total - r1 + 1}</text>
+
+          <!-- Swap Path Arc -->
+          <path d="M 200 70 Q 350 25 500 70" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="4 2" />
+          <text x="350" y="38" font-size="12" font-weight="700" fill="#6366f1" text-anchor="middle">Interchange: Shift = +${swapRes.shift}</text>
+        `;
+      }
+
+      svg.innerHTML = svgHtml;
+    }
+
+    function handleRevealPredict() {
+      document.getElementById('predict-solution').classList.remove('hidden');
+      LabCommon.announce("Revealed resolution for overlapping row challenge.");
+    }
+
+    /* ==========================================================================
+       5. PRACTICE LAB INTERACTION & PROGRESS LOGIC
+       ========================================================================== */
+    let currentQIndex = 0;
+    let practiceMode = 'hints';
+    let timerInstance = null;
+    let selectedOptionIndex = null;
+
+    const STORAGE_KEY = 'lab_order_ranking_stats';
+
+    function getStoredStats() {
+      return LabCommon.safeStorage.getItem(STORAGE_KEY, {
+        attempts: 0,
+        correct: 0,
+        independentCorrect: 0,
+        history: {}
+      });
+    }
+
+    function saveStats(stats) {
+      LabCommon.safeStorage.setItem(STORAGE_KEY, stats);
+      updateStatsDisplay();
+    }
+
+    function updateStatsDisplay() {
+      const stats = getStoredStats();
+      document.getElementById('stat-attempts').textContent = stats.attempts;
+      document.getElementById('stat-correct').textContent = stats.correct;
+      document.getElementById('stat-independent').textContent = stats.independentCorrect;
+      const acc = stats.attempts > 0 ? Math.round((stats.correct / stats.attempts) * 100) : 0;
+      document.getElementById('stat-accuracy').textContent = `${acc}%`;
+    }
+
+    function handleResetStats() {
+      if (confirm("Reset all local practice statistics for this module?")) {
+        LabCommon.safeStorage.removeItem(STORAGE_KEY);
+        updateStatsDisplay();
+        renderQuestion(currentQIndex);
+      }
+    }
+
+    function setPracticeMode(mode) {
+      practiceMode = mode;
+      document.getElementById('btn-mode-hints').classList.toggle('active', mode === 'hints');
+      document.getElementById('btn-mode-independent').classList.toggle('active', mode === 'independent');
+      document.getElementById('btn-mode-timed').classList.toggle('active', mode === 'timed');
+
+      const timerContainer = document.getElementById('timer-container');
+      if (mode === 'timed') {
+        timerContainer.classList.remove('hidden');
+        if (!timerInstance) {
+          timerInstance = new LabCommon.PracticeTimer((seconds, formatted) => {
+            document.getElementById('timer-display').textContent = formatted;
+          });
+        }
+        timerInstance.start();
+      } else {
+        timerContainer.classList.add('hidden');
+        if (timerInstance) {
+          timerInstance.stop();
+        }
+      }
+
+      renderQuestion(currentQIndex);
+    }
+
+    function renderQuestion(idx) {
+      currentQIndex = idx;
+      const q = PRACTICE_QUESTIONS[idx];
+      selectedOptionIndex = null;
+
+      document.getElementById('practice-q-num').textContent = `Question ${idx + 1} of ${PRACTICE_QUESTIONS.length}`;
+      document.getElementById('q-counter-text').textContent = `${idx + 1} / ${PRACTICE_QUESTIONS.length}`;
+      document.getElementById('practice-q-difficulty').textContent = q.difficulty;
+      document.getElementById('practice-q-stem').innerHTML = q.stem;
+
+      const fb = document.getElementById('practice-feedback');
+      fb.className = 'callout hidden';
+      fb.innerHTML = '';
+
+      document.getElementById('practice-error-categorizer').classList.add('hidden');
+      document.getElementById('practice-solution-box').classList.add('hidden');
+
+      const optContainer = document.getElementById('practice-options-container');
+      optContainer.innerHTML = q.options.map((opt, i) => `
+        <button type="button" class="option-btn" id="opt-btn-${i}" onclick="handleOptionSelect(${i})">
+          <span style="font-weight: 700; margin-right: 0.5rem; color: var(--color-primary);">${String.fromCharCode(65 + i)}.</span>
+          <span>${opt}</span>
+        </button>
+      `).join('');
+
+      const stats = getStoredStats();
+      if (stats.history && stats.history[q.id]) {
+        const hist = stats.history[q.id];
+        revealQuestionOutcome(hist.chosenIndex, false);
+      }
+    }
+
+    function handleOptionSelect(optIdx) {
+      const q = PRACTICE_QUESTIONS[currentQIndex];
+      const stats = getStoredStats();
+
+      if (stats.history && stats.history[q.id]) return;
+
+      const isCorrect = (optIdx === q.correctIndex);
+
+      stats.attempts++;
+      if (isCorrect) {
+        stats.correct++;
+        if (practiceMode === 'independent' || practiceMode === 'timed') {
+          stats.independentCorrect++;
+        }
+      }
+
+      if (!stats.history) stats.history = {};
+      stats.history[q.id] = {
+        chosenIndex: optIdx,
+        correct: isCorrect,
+        timestamp: Date.now()
+      };
+
+      saveStats(stats);
+      revealQuestionOutcome(optIdx, true);
+    }
+
+    function revealQuestionOutcome(optIdx, isNewAnswer) {
+      const q = PRACTICE_QUESTIONS[currentQIndex];
+      const isCorrect = (optIdx === q.correctIndex);
+
+      q.options.forEach((_, i) => {
+        const btn = document.getElementById(`opt-btn-${i}`);
+        if (btn) {
+          btn.disabled = true;
+          if (i === q.correctIndex) {
+            btn.classList.add('correct');
+          } else if (i === optIdx) {
+            btn.classList.add('incorrect');
+          }
+        }
+      });
+
+      const fb = document.getElementById('practice-feedback');
+      fb.classList.remove('hidden');
+      if (isCorrect) {
+        fb.className = 'callout callout-success';
+        fb.innerHTML = `<strong>Correct!</strong> Exactly right. You applied the ranking equations without off-by-one errors.`;
+      } else {
+        fb.className = 'callout callout-error';
+        fb.innerHTML = `<strong>Incorrect.</strong> You chose (${String.fromCharCode(65 + optIdx)}). The correct answer is (${String.fromCharCode(65 + q.correctIndex)}). See the mathematical deduction below.`;
+        document.getElementById('practice-error-categorizer').classList.remove('hidden');
+      }
+
+      const solBox = document.getElementById('practice-solution-box');
+      solBox.classList.remove('hidden');
+      document.getElementById('practice-solution-text').innerHTML = q.solution;
+      document.getElementById('practice-trap-analysis').innerHTML = q.trap;
+
+      if (isNewAnswer) {
+        LabCommon.announce(isCorrect ? "Correct answer submitted." : "Incorrect answer. Solution revealed.");
+      }
+    }
+
+    function handleSaveErrorCategory(category) {
+      LabCommon.announce("Reflective error reason recorded.");
+    }
+
+    function navigateQuestion(step) {
+      const nextIdx = currentQIndex + step;
+      if (nextIdx >= 0 && nextIdx < PRACTICE_QUESTIONS.length) {
+        renderQuestion(nextIdx);
+      }
+    }
+
+    /* ==========================================================================
+       6. INITIALIZATION & SELF-TEST GATE ENFORCEMENT
+       ========================================================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      const testReport = LabCommon.runAndRenderSelfTests(runSelfTests, 'quality-alert', 'quality-alert-details');
+
+      if (testReport.failed > 0) {
+        console.error("Quality gate triggered! Practice disabled.");
+        const optContainer = document.getElementById('practice-options-container');
+        if (optContainer) {
+          optContainer.innerHTML = `<div class="callout callout-error">Practice locked due to logic invariant test failure. Check developer console.</div>`;
+        }
+        return;
+      }
+
+      renderControls();
+      handleParamsChange();
+      updateStatsDisplay();
+      renderQuestion(0);
+    });
+  </script>
+</body>
+</html>
