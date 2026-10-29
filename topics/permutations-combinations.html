@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Permutations &amp; Combinations | Aptitude &amp; Reasoning Lab</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .pnc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .viz-canvas-container {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 380px;
+    }
+    .calc-breakdown-card {
+      background: var(--color-surface-subtle);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 1rem;
+      margin-top: 1rem;
+      width: 100%;
+      font-size: 0.9rem;
+    }
+    .slot-box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-surface);
+      border: 2px solid var(--color-primary);
+      border-radius: 6px;
+      width: 60px;
+      height: 60px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--color-primary);
+    }
+    .slot-label {
+      font-size: 0.7rem;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+    .toggle-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="../index.html" class="nav-back-link">← All Modules</a>
+        <div class="brand">
+          <span class="brand-title">Aptitude &amp; Reasoning Lab</span>
+          <span class="brand-subtitle">SEBI Grade A • Banking • SSC</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span class="badge badge-published">Published</span>
+        <button id="theme-toggle" class="btn btn-secondary btn-sm" aria-label="Toggle dark mode">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Container -->
+  <main class="page-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a>
+      <span>/</span>
+      <a href="../index.html#quant-section">Quantitative Aptitude</a>
+      <span>/</span>
+      <span aria-current="page">Permutations &amp; Combinations</span>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+        <span class="badge badge-tag">Counting Principles</span>
+        <span class="badge badge-tag">SEBI Gr A (IT/Gen)</span>
+        <span class="badge badge-tag">Combinatorics</span>
+      </div>
+      <h1>Permutations, Combinations &amp; Counting Principles</h1>
+      <p style="color: var(--color-text-muted); font-size: 1.05rem; max-width: 800px; margin-bottom: 1rem;">
+        Explore fundamental counting principles, order-dependent arrangements ($^n P_r$), unordered group selections ($^n C_r$), repeated-letter word permutations, string/block vs. gap methods, and geometric combinatorics.
+      </p>
+
+      <div class="callout callout-info" style="margin: 0; font-size: 0.875rem;">
+        <strong>The Golden Decision Rule:</strong> Ask yourself: <em>Does the order matter?</em> If yes (arranging letters, podium finishes, secret PIN codes), use <strong>Permutations ($^n P_r$)</strong>. If no (selecting committees, choosing pizza toppings, shaking hands), use <strong>Combinations ($^n C_r$)</strong>.
+      </div>
+    </section>
+
+    <!-- Formula Reference Grid -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <h2 style="font-size: 1.3rem; margin-bottom: 1rem;">Foundational Combinatorial Invariants</h2>
+      <div class="control-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border);">
+          <strong style="color: var(--color-primary); display: block; margin-bottom: 0.5rem;">1. Arrangements vs. Selections</strong>
+          <ul style="font-size: 0.85rem; padding-left: 1.2rem; margin: 0; line-height: 1.6;">
+            <li><strong>Permutation ($^n P_r$):</strong> $\frac{n!}{(n - r)!}$ (Order matters).</li>
+            <li><strong>Combination ($^n C_r$):</strong> $\frac{n!}{r!(n - r)!} = \frac{^n P_r}{r!}$ (Divide by $r!$ to remove order).</li>
+            <li><strong>Symmetry:</strong> $^n C_r = ^n C_{n-r}$ and $^n C_0 = ^n C_n = 1$.</li>
+            <li><strong>Pascal's Identity:</strong> $^n C_r + ^n C_{r-1} = ^{n+1} C_r$.</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border);">
+          <strong style="color: var(--color-primary); display: block; margin-bottom: 0.5rem;">2. Restricted Arrangements</strong>
+          <ul style="font-size: 0.85rem; padding-left: 1.2rem; margin: 0; line-height: 1.6;">
+            <li><strong>Repeated Items:</strong> $\frac{n!}{p_1! \cdot p_2! \cdots p_k!}$ for identical duplicates.</li>
+            <li><strong>Block Method ("Always Together"):</strong> Treat constrained items as 1 composite unit. Multiply by internal permutations.</li>
+            <li><strong>Gap Method ("Never Together"):</strong> Arrange unconstrained items ($k!$), then place constrained items in $(k+1)$ gaps.</li>
+            <li><strong>Circular Table:</strong> $(n - 1)!$. <strong>Necklace / Garland:</strong> $\frac{(n - 1)!}{2}$.</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border);">
+          <strong style="color: var(--color-primary); display: block; margin-bottom: 0.5rem;">3. Geometric Combinatorics</strong>
+          <ul style="font-size: 0.85rem; padding-left: 1.2rem; margin: 0; line-height: 1.6;">
+            <li><strong>Handshakes among $n$ people:</strong> $^n C_2 = \frac{n(n - 1)}{2}$.</li>
+            <li><strong>Diagonals of $n$-sided polygon:</strong> $^n C_2 - n = \frac{n(n - 3)}{2}$.</li>
+            <li><strong>Triangles from $n$ points ($m$ collinear):</strong> $^n C_3 - ^m C_3$.</li>
+            <li><strong>At least 1 item chosen from $n$:</strong> $2^n - 1$.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Interactive Permutation & Combination Lab -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <div>
+          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">Interactive Combinatorics Laboratory</h2>
+          <p style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">
+            Explore slot-filling multiplication, compare $^n P_r$ vs $^n C_r$, or solve repeated-letter word anagrams with block and gap constraints.
+          </p>
+        </div>
+      </div>
+
+      <!-- Mode Toggle -->
+      <div class="toggle-group">
+        <button type="button" class="btn btn-primary btn-sm" id="tab-slots" onclick="switchLabMode('slots')">1. Slot-Filling Model ($^n P_r$ vs $^n C_r$)</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="tab-words" onclick="switchLabMode('words')">2. Word Permutations (Repeats, Blocks &amp; Gaps)</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="tab-geom" onclick="switchLabMode('geom')">3. Geometric Combinatorics (Diagonals &amp; Handshakes)</button>
+      </div>
+
+      <!-- Mode 1: Slot-Filling Multiplier -->
+      <div id="mode-slots">
+        <div class="pnc-grid">
+          <div>
+            <label for="input-n" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Total Items ($n$):</label>
+            <input type="number" id="input-n" class="form-control" min="1" max="10" value="5" oninput="updateSlotLab()">
+          </div>
+          <div>
+            <label for="input-r" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Positions / Selection ($r$):</label>
+            <input type="number" id="input-r" class="form-control" min="1" max="10" value="3" oninput="updateSlotLab()">
+          </div>
+          <div>
+            <label for="select-type" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Operation Type:</label>
+            <select id="select-type" class="form-control" onchange="updateSlotLab()">
+              <option value="perm">Permutation: Order Matters ($^n P_r$)</option>
+              <option value="comb">Combination: Order Irrelevant ($^n C_r$)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="viz-canvas-container">
+          <div id="slots-visual-display" style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap;"></div>
+          <div id="slots-calc-text" class="calc-breakdown-card"></div>
+        </div>
+      </div>
+
+      <!-- Mode 2: Word Permutations -->
+      <div id="mode-words" style="display: none;">
+        <div class="pnc-grid">
+          <div style="grid-column: span 2;">
+            <label for="word-input" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Enter Word (or pick preset):</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="word-input" class="form-control" value="ARRANGE" style="text-transform: uppercase;" oninput="updateWordLab()">
+              <select id="word-preset" class="form-control" style="width: auto;" onchange="applyWordPreset(this.value)">
+                <option value="ARRANGE">Preset: ARRANGE</option>
+                <option value="LEADER">Preset: LEADER</option>
+                <option value="SUCCESS">Preset: SUCCESS</option>
+                <option value="CORPORATION">Preset: CORPORATION</option>
+                <option value="STATISTICS">Preset: STATISTICS</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="constraint-select" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Condition / Rule:</label>
+            <select id="constraint-select" class="form-control" onchange="updateWordLab()">
+              <option value="all">All Permutations (Unrestricted)</option>
+              <option value="together">Vowels Always Together (Block Method)</option>
+              <option value="never">Vowels Never Together (Gap Method)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="viz-canvas-container">
+          <div id="word-chips-container" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; justify-content: center;"></div>
+          <div id="word-calc-text" class="calc-breakdown-card"></div>
+        </div>
+      </div>
+
+      <!-- Mode 3: Geometric Combinatorics -->
+      <div id="mode-geom" style="display: none;">
+        <div class="pnc-grid">
+          <div>
+            <label for="polygon-sides" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Polygon Vertices / People ($n$):</label>
+            <input type="number" id="polygon-sides" class="form-control" min="3" max="15" value="8" oninput="updateGeomLab()">
+          </div>
+        </div>
+
+        <div class="viz-canvas-container">
+          <svg id="geom-svg" viewBox="0 0 400 320" width="100%" height="300" style="max-width: 400px;" aria-label="Polygon diagonal graph"></svg>
+          <div id="geom-calc-text" class="calc-breakdown-card"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Predict-First Conceptual Challenge -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <div>
+          <span class="badge badge-tag" style="margin-bottom: 0.25rem;">Conceptual Checkpoint</span>
+          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">Predict-First: The Odd Positions Constraint</h2>
+          <p style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">
+            Apply slot constraints and independent sub-multiplications before inspecting the solution.
+          </p>
+        </div>
+      </div>
+
+      <div style="background: var(--color-surface-subtle); padding: 1.25rem; border-radius: 6px; border: 1px solid var(--color-border); margin-bottom: 1rem;">
+        <p style="font-weight: 600; margin-bottom: 0.75rem;">
+          In how many different ways can the letters of the word <strong>"DETAIL"</strong> be arranged such that all the vowels occupy only the odd-numbered positions?
+        </p>
+        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: 1rem;">
+          <em>Hint:</em> Word length = 6. Odd positions are 1, 3, 5. Vowels are E, A, I (3 vowels). Consonants are D, T, L (3 consonants).
+        </p>
+
+        <div id="predict-options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+          <button type="button" class="btn btn-secondary" onclick="checkPredict(18)">A) 18</button>
+          <button type="button" class="btn btn-secondary" onclick="checkPredict(36)">B) 36</button>
+          <button type="button" class="btn btn-secondary" onclick="checkPredict(72)">C) 72</button>
+          <button type="button" class="btn btn-secondary" onclick="checkPredict(120)">D) 120</button>
+        </div>
+
+        <div id="predict-feedback" style="margin-top: 1rem; display: none;"></div>
+      </div>
+    </section>
+
+    <!-- 12 Verified Practice Questions -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">12 Verified Exam Practice Questions</h2>
+          <p style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">
+            Graded difficulty (Easy, Medium, Hard) matching SEBI Grade A, IBPS PO, and SSC CGL patterns.
+          </p>
+        </div>
+        <div style="text-align: right;">
+          <span id="score-display" class="badge badge-published" style="font-size: 0.9rem;">Score: 0 / 12</span>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="resetPractice()" style="margin-left: 0.5rem;">↺ Reset</button>
+        </div>
+      </div>
+
+      <div id="practice-container" style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.25rem;">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Module Completion Checklist -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <h2 style="font-size: 1.2rem; margin-bottom: 0.75rem;">Mastery Checklist: Permutations &amp; Combinations</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; font-size: 0.875rem;">
+        <div>
+          <input type="checkbox" id="chk1" checked disabled>
+          <label for="chk1">Multiplication principle ($m \times n$) vs Addition ($m + n$)</label>
+        </div>
+        <div>
+          <input type="checkbox" id="chk2" checked disabled>
+          <label for="chk2">Order-dependence: $^n P_r = n! / (n-r)!$</label>
+        </div>
+        <div>
+          <input type="checkbox" id="chk3" checked disabled>
+          <label for="chk3">Group-selection: $^n C_r = n! / (r!(n-r)!)$</label>
+        </div>
+        <div>
+          <input type="checkbox" id="chk4" checked disabled>
+          <label for="chk4">Block method vs Gap method disambiguation</label>
+        </div>
+        <div>
+          <input type="checkbox" id="chk5" checked disabled>
+          <label for="chk5">Geometric formulas: diagonals $\frac{n(n-3)}{2}$, handshakes $\frac{n(n-1)}{2}$</label>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <strong>Aptitude &amp; Reasoning Lab</strong> — Practice-First Competitive Exam Learning
+          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
+            Zero runtime dependencies • Pure HTML5, CSS &amp; Vanilla ES6 JS
+          </div>
+        </div>
+        <div style="font-size: 0.8125rem; display: flex; gap: 1rem;">
+          <a href="../PROJECT.md" style="color: var(--color-primary); text-decoration: none;">Specification</a>
+          <a href="../docs/curriculum.md" style="color: var(--color-primary); text-decoration: none;">Curriculum</a>
+          <a href="../docs/authoring-guide.md" style="color: var(--color-primary); text-decoration: none;">Authoring Guide</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/common.js"></script>
+  <script>
+    /* ==========================================================================
+       MODEL: Pure Deterministic Permutations & Combinations Engine
+       ========================================================================== */
+    const Model = {
+      factorial(n) {
+        if (n < 0) return 0;
+        if (n === 0 || n === 1) return 1;
+        let res = 1;
+        for (let i = 2; i <= n; i++) res *= i;
+        return res;
+      },
+
+      nPr(n, r) {
+        if (n < 0 || r < 0 || r > n) return 0;
+        return this.factorial(n) / this.factorial(n - r);
+      },
+
+      nCr(n, r) {
+        if (n < 0 || r < 0 || r > n) return 0;
+        return this.factorial(n) / (this.factorial(r) * this.factorial(n - r));
+      },
+
+      solveWordPermutations(word) {
+        const clean = word.toUpperCase().replace(/[^A-Z]/g, '');
+        if (!clean) return { valid: false, error: "Empty word" };
+        const freq = {};
+        for (const ch of clean) freq[ch] = (freq[ch] || 0) + 1;
+
+        let denom = 1;
+        const duplicateTerms = [];
+        for (const ch in freq) {
+          if (freq[ch] > 1) {
+            denom *= this.factorial(freq[ch]);
+            duplicateTerms.push(`${ch}: ${freq[ch]}! (${this.factorial(freq[ch])})`);
+          }
+        }
+        const total = this.factorial(clean.length) / denom;
+        return {
+          valid: true,
+          word: clean,
+          length: clean.length,
+          freq,
+          denom,
+          duplicateTerms,
+          total
+        };
+      },
+
+      solveVowelsTogether(word) {
+        const clean = word.toUpperCase().replace(/[^A-Z]/g, '');
+        const isVowel = ch => 'AEIOU'.includes(ch);
+        const vowels = [];
+        const consonants = [];
+        for (const ch of clean) {
+          if (isVowel(ch)) vowels.push(ch);
+          else consonants.push(ch);
+        }
+
+        if (vowels.length === 0) return this.solveWordPermutations(clean);
+
+        // Vowel frequencies
+        const vFreq = {};
+        for (const ch of vowels) vFreq[ch] = (vFreq[ch] || 0) + 1;
+        let vDenom = 1;
+        for (const ch in vFreq) {
+          if (vFreq[ch] > 1) vDenom *= this.factorial(vFreq[ch]);
+        }
+        const internalVowelWays = this.factorial(vowels.length) / vDenom;
+
+        // Consonant frequencies
+        const cFreq = {};
+        for (const ch of consonants) cFreq[ch] = (cFreq[ch] || 0) + 1;
+        let cDenom = 1;
+        for (const ch in cFreq) {
+          if (cFreq[ch] > 1) cDenom *= this.factorial(cFreq[ch]);
+        }
+
+        // Composite block + consonants
+        const compositeUnits = 1 + consonants.length;
+        const outerWays = this.factorial(compositeUnits) / cDenom;
+        const total = outerWays * internalVowelWays;
+
+        return {
+          valid: true,
+          word: clean,
+          vowels,
+          consonants,
+          compositeUnits,
+          internalVowelWays,
+          outerWays,
+          total
+        };
+      },
+
+      solveVowelsNeverTogether(word) {
+        const clean = word.toUpperCase().replace(/[^A-Z]/g, '');
+        const isVowel = ch => 'AEIOU'.includes(ch);
+        const vowels = [];
+        const consonants = [];
+        for (const ch of clean) {
+          if (isVowel(ch)) vowels.push(ch);
+          else consonants.push(ch);
+        }
+
+        const cFreq = {};
+        for (const ch of consonants) cFreq[ch] = (cFreq[ch] || 0) + 1;
+        let cDenom = 1;
+        for (const ch in cFreq) {
+          if (cFreq[ch] > 1) cDenom *= this.factorial(cFreq[ch]);
+        }
+        const consonantWays = this.factorial(consonants.length) / cDenom;
+
+        const gaps = consonants.length + 1;
+        if (vowels.length > gaps) {
+          return { valid: true, total: 0, reason: "More vowels than available gaps" };
+        }
+
+        const vFreq = {};
+        for (const ch of vowels) vFreq[ch] = (vFreq[ch] || 0) + 1;
+        let vDenom = 1;
+        for (const ch in vFreq) {
+          if (vFreq[ch] > 1) vDenom *= this.factorial(vFreq[ch]);
+        }
+
+        const gapPickWays = this.nCr(gaps, vowels.length);
+        const vowelArrangeWays = this.factorial(vowels.length) / vDenom;
+        const total = consonantWays * gapPickWays * vowelArrangeWays;
+
+        return {
+          valid: true,
+          word: clean,
+          consonants,
+          vowels,
+          consonantWays,
+          gaps,
+          gapPickWays,
+          vowelArrangeWays,
+          total
+        };
+      },
+
+      solvePolygonDiagonals(n) {
+        if (n < 3) return 0;
+        return (n * (n - 3)) / 2;
+      },
+
+      solveHandshakes(n) {
+        if (n < 2) return 0;
+        return (n * (n - 1)) / 2;
+      }
+    };
+
+    /* ==========================================================================
+       PRACTICE QUESTIONS: 12 Hand-Verified Combinatorics Questions
+       ========================================================================== */
+    const PRACTICE_QUESTIONS = [
+      {
+        id: 'pnc_q1',
+        difficulty: 'Easy',
+        topic: 'Fundamental Counting Principle',
+        stem: 'A dining hall offers 4 appetizers, 5 main courses, and 3 desserts. In how many different ways can a student choose a 3-course meal consisting of exactly one appetizer, one main course, and one dessert?',
+        options: [
+          '12 ways',
+          '45 ways',
+          '60 ways',
+          '120 ways'
+        ],
+        correctIndex: 2, // 60 ways
+        solution: 'By the Fundamental Multiplication Principle, if independent events occur in sequence, the total number of combined ways is the product of their individual choices: 4 × 5 × 3 = 60.',
+        trap: 'Adding the options (4 + 5 + 3 = 12) instead of multiplying them.'
+      },
+      {
+        id: 'pnc_q2',
+        difficulty: 'Easy',
+        topic: 'Word Permutations with Duplicates',
+        stem: 'In how many distinct ways can all the letters of the word <strong>"ARRANGE"</strong> be arranged?',
+        options: [
+          '5040 ways',
+          '2520 ways',
+          '1260 ways',
+          '630 ways'
+        ],
+        correctIndex: 2, // 1260 ways
+        solution: 'Total letters = 7. Frequencies: A appears 2 times, R appears 2 times, N appears 1, G appears 1, E appears 1. Total distinct permutations = 7! / (2! × 2!) = 5040 / 4 = 1260.',
+        trap: 'Dividing by only one 2! instead of both duplicates, giving 2520.'
+      },
+      {
+        id: 'pnc_q3',
+        difficulty: 'Easy',
+        topic: 'Polygon Diagonals',
+        stem: 'How many straight diagonal lines can be drawn inside a regular <strong>octagon</strong> (8-sided polygon)?',
+        options: [
+          '16 diagonals',
+          '20 diagonals',
+          '24 diagonals',
+          '28 diagonals'
+        ],
+        correctIndex: 1, // 20 diagonals
+        solution: 'A polygon of n sides has n(n - 3) / 2 diagonals. For an octagon (n = 8): 8 × (8 - 3) / 2 = 8 × 5 / 2 = 20 diagonals. Alternatively: 8C2 - 8 = 28 - 8 = 20.',
+        trap: 'Selecting 28 (8C2) without subtracting the 8 perimeter sides.'
+      },
+      {
+        id: 'pnc_q4',
+        difficulty: 'Medium',
+        topic: 'Block Method (Always Together)',
+        stem: 'In how many different ways can the letters of the word <strong>"CORPORATION"</strong> be arranged so that all the vowels always come together?',
+        options: [
+          '25,200 ways',
+          '50,400 ways',
+          '72,000 ways',
+          '100,800 ways'
+        ],
+        correctIndex: 1, // 50,400 ways
+        solution: 'Total letters = 11. Vowels = O, O, A, I, O (5 vowels: O occurs 3 times). Consonants = C, R, P, R, T, N (6 consonants: R occurs 2 times).<br>1. Group the 5 vowels into 1 super-item: Units to arrange = 1 block + 6 consonants = 7 units. Ways = 7! / 2! = 5040 / 2 = 2520.<br>2. Internal arrangements of the vowel block: 5! / 3! = 120 / 6 = 20.<br>Total ways = 2520 × 20 = 50,400.',
+        trap: 'Forgetting to account for the duplicate R (2!) in the outer arrangement or duplicate O (3!) in the vowel block.'
+      },
+      {
+        id: 'pnc_q5',
+        difficulty: 'Medium',
+        topic: 'Gap Method (Never Together)',
+        stem: 'In how many ways can 5 boys and 4 girls be seated in a straight row such that <strong>no two girls sit together</strong>?',
+        options: [
+          '2,880 ways',
+          '14,400 ways',
+          '43,200 ways',
+          '362,880 ways'
+        ],
+        correctIndex: 2, // 43,200 ways
+        solution: '1. First arrange the 5 boys in 5! = 120 ways.<br>2. This creates (5 + 1) = 6 gaps (including ends): _ B1 _ B2 _ B3 _ B4 _ B5 _.<br>3. To ensure no two girls sit together, the 4 girls must occupy 4 distinct gaps out of the 6. Ways = 6P4 = 6 × 5 × 4 × 3 = 360.<br>Total ways = 120 × 360 = 43,200.',
+        trap: 'Attempting to subtract "all girls together" from the total 9!, which fails because pairs of adjacent girls would still be present.'
+      },
+      {
+        id: 'pnc_q6',
+        difficulty: 'Medium',
+        topic: 'Committee Selection ("At Least One")',
+        stem: 'A committee of 5 persons is to be formed from a group of 6 men and 4 women. In how many ways can this committee be formed such that it contains <strong>at least one woman</strong>?',
+        options: [
+          '186 ways',
+          '210 ways',
+          '246 ways',
+          '252 ways'
+        ],
+        correctIndex: 2, // 246 ways
+        solution: 'Total people = 6 + 4 = 10. Total unrestricted committees of 5 = 10C5 = 252.<br>Committees with NO women (all 5 men chosen from 6 men) = 6C5 = 6.<br>Committees with at least one woman = Total - (No women) = 252 - 6 = 246.',
+        trap: 'Attempting 4C1 × 9C4 = 4 × 126 = 504, which massively overcounts duplicate committees.'
+      },
+      {
+        id: 'pnc_q7',
+        difficulty: 'Medium',
+        topic: 'Digit Formation with Zero',
+        stem: 'How many 4-digit numbers can be formed using the digits {0, 1, 2, 4, 6, 8} without repetition?',
+        options: [
+          '240 numbers',
+          '300 numbers',
+          '360 numbers',
+          '480 numbers'
+        ],
+        correctIndex: 1, // 300 numbers
+        solution: 'Available digits: {0, 1, 2, 4, 6, 8} (6 digits).<br>1. Thousands place: Cannot be 0 (otherwise it becomes a 3-digit number). Choices = 5 (1, 2, 4, 6, 8).<br>2. Hundreds place: Any of the remaining 5 digits (0 is now eligible) = 5 choices.<br>3. Tens place: Remaining 4 digits = 4 choices.<br>4. Units place: Remaining 3 digits = 3 choices.<br>Total 4-digit numbers = 5 × 5 × 4 × 3 = 300.',
+        trap: 'Using 6P4 = 360, which includes invalid numbers starting with 0.'
+      },
+      {
+        id: 'pnc_q8',
+        difficulty: 'Medium',
+        topic: 'Circular Necklace / Garland',
+        stem: 'In how many different ways can 7 distinct coloured beads be strung together to form a necklace?',
+        options: [
+          '120 ways',
+          '360 ways',
+          '720 ways',
+          '5,040 ways'
+        ],
+        correctIndex: 1, // 360 ways
+        solution: 'For beads on a necklace or garland, flipping the ring upside down makes clockwise and anti-clockwise rotations indistinguishable. Thus, the formula is (n - 1)! / 2. For n = 7: (7 - 1)! / 2 = 6! / 2 = 720 / 2 = 360 ways.',
+        trap: 'Applying the standard circular table formula (n - 1)! = 720 without dividing by 2 for mirror symmetry.'
+      },
+      {
+        id: 'pnc_q9',
+        difficulty: 'Hard',
+        topic: 'Positional Sub-Multiplication',
+        stem: 'In how many ways can the letters of the word <strong>"DETAIL"</strong> be arranged such that all the vowels occupy only the odd positions?',
+        options: [
+          '18 ways',
+          '36 ways',
+          '72 ways',
+          '120 ways'
+        ],
+        correctIndex: 1, // 36 ways
+        solution: 'Word length = 6. Vowels = E, A, I (3 vowels). Consonants = D, T, L (3 consonants).<br>Odd positions: 1, 3, 5 (exactly 3 spots). The 3 vowels can be arranged in these 3 spots in 3! = 6 ways.<br>Remaining spots: 2, 4, 6 (even positions, 3 spots). The 3 consonants can be arranged in these 3 spots in 3! = 6 ways.<br>Total valid arrangements = 6 × 6 = 36.',
+        trap: 'Permuting only the vowels (6) or adding (6 + 6 = 12) instead of multiplying independent sub-tasks.'
+      },
+      {
+        id: 'pnc_q10',
+        difficulty: 'Hard',
+        topic: 'Handshakes with Exclusions',
+        stem: 'At a formal board meeting of 15 directors, every director shakes hands with every other director exactly once, except that Director X and Director Y refuse to shake hands with each other. How many handshakes occur in total?',
+        options: [
+          '98 handshakes',
+          '104 handshakes',
+          '105 handshakes',
+          '210 handshakes'
+        ],
+        correctIndex: 1, // 104 handshakes
+        solution: 'Total unrestricted handshakes among 15 people = 15C2 = (15 × 14) / 2 = 105. Since Director X and Director Y do not shake hands with each other, exactly 1 handshake is omitted: 105 - 1 = 104.',
+        trap: 'Subtracting 2 handshakes thinking of X and Y as separate events, or using 15P2.'
+      },
+      {
+        id: 'pnc_q11',
+        difficulty: 'Hard',
+        topic: 'Triangles & Collinear Points',
+        stem: 'There are 12 points marked on a plane, out of which exactly 5 points are collinear (lie on the same straight line). How many distinct triangles can be formed with these points as vertices?',
+        options: [
+          '185 triangles',
+          '200 triangles',
+          '210 triangles',
+          '220 triangles'
+        ],
+        correctIndex: 2, // 210 triangles
+        solution: 'Any 3 non-collinear points form a triangle. Total selections of 3 points from 12 = 12C3 = (12 × 11 × 10) / (3 × 2 × 1) = 220.<br>Triplets chosen from the 5 collinear points cannot form triangles (they lie on a straight line): 5C3 = (5 × 4) / 2 = 10.<br>Valid triangles = 220 - 10 = 210.',
+        trap: 'Selecting 220 by failing to subtract the degenerate collinear triplets.'
+      },
+      {
+        id: 'pnc_q12',
+        difficulty: 'Hard',
+        topic: 'Multi-Block Subject Arrangements',
+        stem: 'In how many ways can 4 mathematics books, 3 physics books, and 2 chemistry books be arranged on a shelf such that all books of the same subject are kept together?',
+        options: [
+          '576 ways',
+          '864 ways',
+          '1,728 ways',
+          '3,456 ways'
+        ],
+        correctIndex: 2, // 1,728 ways
+        solution: '1. Group books by subject: 3 blocks (Math block, Physics block, Chemistry block). The 3 blocks can be arranged on the shelf in 3! = 6 ways.<br>2. Internal arrangements within each block:<br>- 4 Math books = 4! = 24 ways.<br>- 3 Physics books = 3! = 6 ways.<br>- 2 Chemistry books = 2! = 2 ways.<br>Total arrangements = 3! × 4! × 3! × 2! = 6 × 24 × 6 × 2 = 1,728.',
+        trap: 'Multiplying only the internal arrangements (4! × 3! × 2! = 288) without permuting the 3 subject blocks (3!).'
+      }
+    ];
+
+    /* ==========================================================================
+       VIEW & INTERACTIVE LAB CONTROLLER
+       ========================================================================== */
+    let activeLabMode = 'slots';
+    let userAnswers = {};
+
+    function init() {
+      updateSlotLab();
+      updateWordLab();
+      updateGeomLab();
+      renderPracticeQuestions();
+      updateScoreDisplay();
+    }
+
+    function switchLabMode(mode) {
+      activeLabMode = mode;
+      document.getElementById('mode-slots').style.display = mode === 'slots' ? 'block' : 'none';
+      document.getElementById('mode-words').style.display = mode === 'words' ? 'block' : 'none';
+      document.getElementById('mode-geom').style.display = mode === 'geom' ? 'block' : 'none';
+
+      ['slots', 'words', 'geom'].forEach(m => {
+        const btn = document.getElementById(`tab-${m}`);
+        if (m === mode) {
+          btn.className = 'btn btn-primary btn-sm';
+        } else {
+          btn.className = 'btn btn-secondary btn-sm';
+        }
+      });
+    }
+
+    function updateSlotLab() {
+      const n = parseInt(document.getElementById('input-n').value) || 1;
+      const r = parseInt(document.getElementById('input-r').value) || 1;
+      const type = document.getElementById('select-type').value;
+
+      const container = document.getElementById('slots-visual-display');
+      const calcDiv = document.getElementById('slots-calc-text');
+      container.innerHTML = '';
+
+      if (r > n) {
+        container.innerHTML = '<span style="color: #c5221f; font-weight: 600;">Error: r cannot exceed n.</span>';
+        calcDiv.innerHTML = '<strong>Invalid Selection:</strong> You cannot select or arrange more items than exist.';
+        return;
+      }
+
+      // Render r slots
+      for (let i = 0; i < r; i++) {
+        const choices = n - i;
+        const box = document.createElement('div');
+        box.className = 'slot-box';
+        box.innerHTML = `<span>${choices}</span><span class="slot-label">Slot ${i + 1}</span>`;
+        container.appendChild(box);
+
+        if (i < r - 1) {
+          const mult = document.createElement('span');
+          mult.style.fontSize = '1.3rem';
+          mult.style.fontWeight = 'bold';
+          mult.style.color = 'var(--color-text-muted)';
+          mult.textContent = '×';
+          container.appendChild(mult);
+        }
+      }
+
+      const npr = Model.nPr(n, r);
+      const ncr = Model.nCr(n, r);
+      const rFact = Model.factorial(r);
+
+      if (type === 'perm') {
+        calcDiv.innerHTML = `
+          <strong>Permutation Calculation ($^${n} P_{${r}}$):</strong><br>
+          Formula: $\\frac{${n}!}{( ${n} - ${r} )!} = \\frac{${n}!}{${n - r}!}$<br>
+          Multiplication trace: ${Array.from({ length: r }, (_, i) => n - i).join(' × ')} = <strong>${npr.toLocaleString()}</strong> distinct arrangements.
+        `;
+      } else {
+        calcDiv.innerHTML = `
+          <strong>Combination Calculation ($^${n} C_{${r}}$):</strong><br>
+          Formula: $\\frac{^${n} P_{${r}}}{${r}!} = \\frac{${npr.toLocaleString()}}{${rFact}} = $ <strong>${ncr.toLocaleString()}</strong> unique selections.<br>
+          <em>Why divide by ${r}! (${rFact})?</em> Because any group of ${r} items can be arranged internally in ${r}! ways. Dividing removes duplicate permutations so only unordered sets remain.
+        `;
+      }
+    }
+
+    function applyWordPreset(w) {
+      document.getElementById('word-input').value = w;
+      updateWordLab();
+    }
+
+    function updateWordLab() {
+      const rawWord = document.getElementById('word-input').value || 'ARRANGE';
+      const clean = rawWord.toUpperCase().replace(/[^A-Z]/g, '');
+      const rule = document.getElementById('constraint-select').value;
+
+      const chipsContainer = document.getElementById('word-chips-container');
+      const calcDiv = document.getElementById('word-calc-text');
+      chipsContainer.innerHTML = '';
+
+      if (!clean) {
+        calcDiv.innerHTML = 'Please enter a valid word.';
+        return;
+      }
+
+      // Display chips
+      for (const ch of clean) {
+        const isVowel = 'AEIOU'.includes(ch);
+        const chip = document.createElement('span');
+        chip.style.display = 'inline-block';
+        chip.style.padding = '0.3rem 0.6rem';
+        chip.style.borderRadius = '4px';
+        chip.style.fontWeight = '700';
+        chip.style.fontSize = '1.1rem';
+        chip.style.border = '1px solid var(--color-border)';
+        chip.style.background = isVowel ? '#e8f0fe' : 'var(--color-surface)';
+        chip.style.color = isVowel ? '#1a73e8' : 'var(--color-text)';
+        chip.textContent = ch;
+        chipsContainer.appendChild(chip);
+      }
+
+      if (rule === 'all') {
+        const res = Model.solveWordPermutations(clean);
+        const dupStr = res.duplicateTerms.length > 0 ? res.duplicateTerms.join(', ') : 'None (all letters distinct)';
+        calcDiv.innerHTML = `
+          <strong>Unrestricted Word Permutations:</strong><br>
+          Word: <strong>${clean}</strong> (Total length: ${clean.length})<br>
+          Duplicate frequencies: ${dupStr}<br>
+          Formula: $\\frac{n!}{p_1! \\cdot p_2! \\cdots} = \\frac{${clean.length}!}{${res.denom}} = $ <strong>${res.total.toLocaleString()}</strong> distinct words.
+        `;
+      } else if (rule === 'together') {
+        const res = Model.solveVowelsTogether(clean);
+        calcDiv.innerHTML = `
+          <strong>Block Method (Vowels Always Together):</strong><br>
+          Vowels identified: [${res.vowels.join(', ')}] (${res.vowels.length} vowels). Consonants: [${res.consonants.join(', ')}] (${res.consonants.length} consonants).<br>
+          1. Treat the vowels as 1 composite unit: Total units = 1 + ${res.consonants.length} = ${res.compositeUnits} units.<br>
+          Outer arrangements of units: <strong>${res.outerWays}</strong>.<br>
+          2. Internal arrangements of vowel block: <strong>${res.internalVowelWays}</strong>.<br>
+          Total ways = ${res.outerWays} × ${res.internalVowelWays} = <strong>${res.total.toLocaleString()}</strong>.
+        `;
+      } else if (rule === 'never') {
+        const res = Model.solveVowelsNeverTogether(clean);
+        if (res.total === 0) {
+          calcDiv.innerHTML = `<strong style="color:#c5221f;">Impossible:</strong> Number of vowels (${res.vowels.length}) exceeds available gaps between consonants (${res.gaps}).`;
+        } else {
+          calcDiv.innerHTML = `
+            <strong>Gap Method (No Two Vowels Together):</strong><br>
+            1. Arrange ${res.consonants.length} consonants first: <strong>${res.consonantWays}</strong> ways.<br>
+            2. This creates ${res.consonants.length} + 1 = <strong>${res.gaps} gaps</strong>.<br>
+            3. Choose ${res.vowels.length} gaps from ${res.gaps} and arrange vowels: ${res.gapPickWays} × ${res.vowelArrangeWays} = <strong>${res.gapPickWays * res.vowelArrangeWays}</strong> ways.<br>
+            Total ways = ${res.consonantWays} × ${res.gapPickWays * res.vowelArrangeWays} = <strong>${res.total.toLocaleString()}</strong>.
+          `;
+        }
+      }
+    }
+
+    function updateGeomLab() {
+      const n = parseInt(document.getElementById('polygon-sides').value) || 8;
+      const svg = document.getElementById('geom-svg');
+      const calcDiv = document.getElementById('geom-calc-text');
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+      const cx = 200;
+      const cy = 150;
+      const r = 110;
+
+      // Calculate vertices
+      const points = [];
+      for (let i = 0; i < n; i++) {
+        const angle = (-90 + (i * 360 / n)) * Math.PI / 180;
+        points.push({ x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) });
+      }
+
+      // Draw diagonals (all non-adjacent chords)
+      for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+          const isAdjacent = Math.abs(i - j) === 1 || (i === 0 && j === n - 1);
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', points[i].x);
+          line.setAttribute('y1', points[i].y);
+          line.setAttribute('x2', points[j].x);
+          line.setAttribute('y2', points[j].y);
+          if (isAdjacent) {
+            line.setAttribute('stroke', 'var(--color-primary)');
+            line.setAttribute('stroke-width', '2.5');
+          } else {
+            line.setAttribute('stroke', 'var(--color-border)');
+            line.setAttribute('stroke-width', '1');
+            line.setAttribute('stroke-dasharray', '3,3');
+          }
+          svg.appendChild(line);
+        }
+      }
+
+      // Draw vertices
+      for (let i = 0; i < n; i++) {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', points[i].x);
+        circle.setAttribute('cy', points[i].y);
+        circle.setAttribute('r', '6');
+        circle.setAttribute('fill', 'var(--color-primary)');
+        svg.appendChild(circle);
+      }
+
+      const totalSegments = Model.nCr(n, 2);
+      const diagCount = Model.solvePolygonDiagonals(n);
+      const handshakeCount = Model.solveHandshakes(n);
+
+      calcDiv.innerHTML = `
+        <strong>Geometric Combinatorics for $n = ${n}$:</strong><br>
+        - Total connections between any 2 vertices ($^${n} C_2$): <strong>${totalSegments}</strong> lines.<br>
+        - Perimeter sides: <strong>${n}</strong>.<br>
+        - Interior Diagonals: $^${n} C_2 - ${n} = \\frac{${n}(${n} - 3)}{2} = $ <strong>${diagCount}</strong> diagonals.<br>
+        - Handshakes among ${n} people: $^${n} C_2 = \\frac{${n} \\times ${n - 1}}{2} = $ <strong>${handshakeCount}</strong> handshakes.
+      `;
+    }
+
+    /* Predict-First Check */
+    function checkPredict(val) {
+      const fb = document.getElementById('predict-feedback');
+      fb.style.display = 'block';
+      if (val === 36) {
+        fb.className = 'callout callout-success';
+        fb.innerHTML = `
+          <strong>Correct! Exactly 36 arrangements.</strong><br>
+          <em>Deduction:</em> In DETAIL (6 letters), the 3 odd positions (1, 3, 5) must be occupied by the 3 vowels (E, A, I) in $3! = 6$ ways.
+          The remaining 3 even positions (2, 4, 6) must be occupied by the 3 consonants (D, T, L) in $3! = 6$ ways.
+          By the Multiplication Principle: $6 \\times 6 = 36$ total ways.
+        `;
+      } else {
+        fb.className = 'callout callout-danger';
+        fb.innerHTML = `
+          <strong>Incorrect.</strong> Remember that both sub-tasks occur in sequence:
+          first place 3 vowels into 3 odd slots ($3! = 6$), then place 3 consonants into 3 remaining slots ($3! = 6$).
+          Multiply the two results: $6 \\times 6 = 36$.
+        `;
+      }
+    }
+
+    /* Practice UI */
+    function renderPracticeQuestions() {
+      const container = document.getElementById('practice-container');
+      container.innerHTML = '';
+
+      PRACTICE_QUESTIONS.forEach((q, idx) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.margin = '0';
+        card.style.border = '1px solid var(--color-border)';
+
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-tag">Question ${idx + 1} • ${q.difficulty}</span>
+            <span class="badge badge-outline">${q.topic}</span>
+          </div>
+          <p style="font-weight: 600; margin-bottom: 1rem; font-size: 0.95rem;">${q.stem}</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; margin-bottom: 1rem;">
+            ${q.options.map((opt, oIdx) => `
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-${q.id}-${oIdx}" onclick="handleAnswer('${q.id}', ${oIdx})">
+                ${String.fromCharCode(65 + oIdx)}) ${opt}
+              </button>
+            `).join('')}
+          </div>
+          <div id="solution-${q.id}" style="display: none; padding: 0.75rem; background: var(--color-surface-subtle); border-radius: 4px; font-size: 0.85rem; border-left: 3px solid var(--color-primary);">
+            <div style="font-weight: 600; margin-bottom: 0.25rem;">Step-by-Step Combinatorial Solution:</div>
+            <div style="margin-bottom: 0.35rem;">${q.solution}</div>
+            <div style="color: #c5221f;"><strong>Common Trap:</strong> ${q.trap}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function handleAnswer(qId, selectedIdx) {
+      const q = PRACTICE_QUESTIONS.find(item => item.id === qId);
+      if (!q) return;
+
+      userAnswers[qId] = selectedIdx;
+      q.options.forEach((_, idx) => {
+        const btn = document.getElementById(`btn-${qId}-${idx}`);
+        if (btn) {
+          btn.classList.remove('btn-primary', 'btn-secondary');
+          if (idx === q.correctIndex) {
+            btn.style.background = '#e6f4ea';
+            btn.style.borderColor = '#137333';
+            btn.style.color = '#137333';
+            btn.style.fontWeight = 'bold';
+          } else if (idx === selectedIdx) {
+            btn.style.background = '#fce8e6';
+            btn.style.borderColor = '#c5221f';
+            btn.style.color = '#c5221f';
+          } else {
+            btn.classList.add('btn-secondary');
+            btn.style.opacity = '0.5';
+          }
+          btn.disabled = true;
+        }
+      });
+
+      const sol = document.getElementById(`solution-${qId}`);
+      if (sol) sol.style.display = 'block';
+      updateScoreDisplay();
+    }
+
+    function updateScoreDisplay() {
+      let score = 0;
+      PRACTICE_QUESTIONS.forEach(q => {
+        if (userAnswers[q.id] === q.correctIndex) score++;
+      });
+      document.getElementById('score-display').textContent = `Score: ${score} / ${PRACTICE_QUESTIONS.length}`;
+    }
+
+    function resetPractice() {
+      userAnswers = {};
+      renderPracticeQuestions();
+      updateScoreDisplay();
+    }
+
+    /* Self-Test Suite */
+    window.runSelfTests = function() {
+      const results = [];
+      function assertTest(desc, cond) {
+        if (!cond) {
+          results.push({ name: desc, status: 'FAILED' });
+          console.error(`TEST FAILED: ${desc}`);
+        } else {
+          results.push({ name: desc, status: 'PASSED' });
+        }
+      }
+
+      assertTest("Factorial 5 is 120", Model.factorial(5) === 120);
+      assertTest("Factorial 0 is 1", Model.factorial(0) === 1);
+      assertTest("5P2 is 20", Model.nPr(5, 2) === 20);
+      assertTest("5C2 is 10", Model.nCr(5, 2) === 10);
+      assertTest("10C3 is 120", Model.nCr(10, 3) === 120);
+
+      // Word permutations
+      const arr = Model.solveWordPermutations("ARRANGE");
+      assertTest("ARRANGE total permutations is 1260", arr.valid && arr.total === 1260);
+
+      const ldrTog = Model.solveVowelsTogether("LEADER");
+      assertTest("LEADER vowels together is 72", ldrTog.valid && ldrTog.total === 72);
+
+      const ldrNev = Model.solveVowelsNeverTogether("LEADER");
+      assertTest("LEADER vowels never together is 72", ldrNev.valid && ldrNev.total === 72);
+
+      // Octagon diagonals
+      assertTest("Octagon diagonals is 20", Model.solvePolygonDiagonals(8) === 20);
+
+      // Handshakes
+      assertTest("15 people handshakes is 105", Model.solveHandshakes(15) === 105);
+
+      // Pascal's identity: 5C2 + 5C1 == 6C2 (10 + 5 == 15)
+      assertTest("Pascal identity 5C2 + 5C1 === 6C2", Model.nCr(5, 2) + Model.nCr(5, 1) === Model.nCr(6, 2));
+
+      const passed = results.filter(r => r.status === 'PASSED').length;
+      const failed = results.filter(r => r.status === 'FAILED').length;
+      console.log(`SelfTests Complete: ${passed} passed, ${failed} failed.`);
+      return { total: results.length, passed, failed, results };
+    };
+
+    window.Model = Model;
+    window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
