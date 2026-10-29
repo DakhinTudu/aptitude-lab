@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number & Letter Series — Aptitude & Reasoning Lab</title>
+  <meta name="description" content="Master number series, multi-tier difference trees, half-step multipliers, prime sequences, and letter shifts with interactive visual models and timed practice.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link" aria-label="Aptitude and Reasoning Lab Home">
+        <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="#0f172a" />
+          <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3" />
+          <circle cx="24" cy="24" r="4" fill="#38bdf8" />
+          <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4" />
+          <circle cx="40" cy="40" r="4" fill="#34d399" />
+          <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <span>Aptitude Lab</span>
+      </a>
+
+      <nav aria-label="Topic navigation">
+        <ul class="nav-links">
+          <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+          <li><span class="badge badge-published">Published</span></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" class="page-container">
+    
+    <!-- Model Self-Test Banner -->
+    <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+    <!-- Topic Hero -->
+    <header class="card" style="margin-bottom: 1.25rem;">
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+        <span class="badge badge-tag">Logical Reasoning</span>
+        <span class="badge badge-tag">SEBI Gr A (IT & Gen)</span>
+        <span class="badge badge-tag">Banking & SSC</span>
+      </div>
+      <h1>Number & Letter Series</h1>
+      <p class="section-subtitle">
+        Systematically uncover the hidden progression in numerical and alphabetical sequences. Master multi-tier difference trees, half-step multipliers, prime number increments, and interleaved patterns.
+      </p>
+    </header>
+
+    <!-- Section 1: Interactive Model & Difference Pyramid -->
+    <section class="card" aria-labelledby="interactive-model-title">
+      <div class="card-header">
+        <div>
+          <h2 id="interactive-model-title" class="section-title">
+            <span>1. Multi-Tier Difference Pyramid</span>
+          </h2>
+          <p class="section-subtitle">Explore how successive levels of differences reveal the underlying constant pattern.</p>
+        </div>
+      </div>
+
+      <!-- Quick Preset Sequences -->
+      <div style="margin-bottom: 1.25rem;">
+        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-muted); display: block; margin-bottom: 0.4rem;">
+          Standard Exam Pattern Presets:
+        </span>
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('3, 7, 13, 21, 31')">Double Difference (+2)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('2, 4, 7, 12, 19')">Prime Differences (+2, +3, +5, +7)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('8, 4, 4, 6, 12, 30')">Half-Step Multiplier (×0.5, ×1, ×1.5...)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('2, 5, 12, 27, 58')">Hybrid Multiplier (×2 + k)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('10, 50, 15, 45, 20, 40')">Alternating Tracks</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('1, 8, 27, 64, 125')">Cubes Progression (n³)</button>
+        </div>
+      </div>
+
+      <!-- Input Controls -->
+      <div class="control-grid" style="grid-template-columns: 1fr;">
+        <div class="control-group">
+          <label for="input-sequence" class="control-label">
+            <span>Input Sequence (comma-separated, min 4 terms)</span>
+            <span id="pattern-family-badge" class="badge badge-tag">Double Difference</span>
+          </label>
+          <input type="text" id="input-sequence" value="3, 7, 13, 21, 31" placeholder="e.g. 3, 7, 13, 21, 31" aria-describedby="seq-desc">
+          <span id="seq-desc" class="sr-only">Enter at least 4 numbers or letters separated by commas to trace differences.</span>
+        </div>
+      </div>
+
+      <!-- SVG Visualization -->
+      <div class="vis-container" aria-label="Visual multi-tier difference tree">
+        <svg id="pyramid-svg" viewBox="0 0 620 200" width="100%" height="200" role="img" aria-labelledby="svg-desc">
+          <title id="svg-desc">Multi-tier difference tree showing level 0 terms, level 1 differences, and level 2 differences</title>
+          <!-- Populated by Model Renderer -->
+        </svg>
+      </div>
+
+      <!-- Computed Model Outputs Readout -->
+      <div class="score-bar" id="model-readout" aria-live="polite">
+        <div class="score-stat">
+          <span class="score-stat-label">Identified Pattern Family</span>
+          <span class="score-stat-num" id="readout-pattern" style="font-size: 1.05rem;">Double Difference</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Tier-1 Differences (D₁)</span>
+          <span class="score-stat-num" id="readout-d1">+4, +6, +8, +10</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Tier-2 Differences (D₂)</span>
+          <span class="score-stat-num" id="readout-d2">Constant +2</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Next Term</span>
+          <span class="score-stat-num" id="readout-next-term">43</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Predict-First Worked Example -->
+    <section class="card" aria-labelledby="predict-title">
+      <div class="card-header">
+        <div>
+          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
+          <p class="section-subtitle">Predict the next term to test your pattern deduction before inspecting the trace.</p>
+        </div>
+      </div>
+
+      <div class="predict-box">
+        <div class="predict-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span>Find the next term in the sequence:</span>
+        </div>
+        <p id="predict-scenario-text" style="font-size: 1.15rem; font-weight: 600; font-family: var(--font-mono); margin-bottom: 1rem; color: var(--color-primary);">
+          3, 7, 13, 21, 31, [ ? ]
+        </p>
+
+        <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options">
+          <!-- Dynamically populated predict options -->
+        </div>
+
+        <div id="predict-feedback" class="callout hidden" role="alert"></div>
+
+        <div style="margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" id="btn-reveal-solution" class="btn btn-secondary">
+            Inspect Worked Solution ↓
+          </button>
+          <span style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            (Notice: Always check whether the differences themselves form a progression)
+          </span>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Worked Solution Trace -->
+      <div id="worked-solution-panel" class="hidden">
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Verified Step-by-Step Mathematical Trace</h3>
+        <div class="steps-container" id="solution-steps-container">
+          <!-- Populated from pure Model.solve() -->
+        </div>
+
+        <!-- Trap Callout -->
+        <div class="callout callout-trap" id="solution-trap-callout">
+          <strong>⚠️ Common Trap to Avoid:</strong>
+          <span id="solution-trap-text"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Core Pattern Signatures Reference -->
+    <section class="card" aria-labelledby="reference-title">
+      <div class="card-header">
+        <div>
+          <h2 id="reference-title" class="section-title">3. Pattern Signatures & Exam Recognition</h2>
+          <p class="section-subtitle">How to spot the pattern family within 5 seconds.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Double Differences (Quadratic)</h3>
+          <p style="font-size: 0.875rem;">If the first differences ($D_1$) grow steadily, check the second difference ($D_2$):</p>
+          <ul style="font-size: 0.875rem; padding-left: 1.25rem; margin-top: 0.3rem;">
+            <li>$D_1$: $+4, +6, +8, +10 \implies D_2: +2$ (constant)</li>
+            <li>Formula type: $a n^2 + b n + c$</li>
+            <li>Next $D_1 = 10 + 2 = 12 \implies$ Next term $= 31 + 12 = 43$.</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The Half-Step Multiplier</h3>
+          <p style="font-size: 0.875rem;">When a series halves first and then increases steadily:</p>
+          <div class="step-detail" style="display: block; text-align: center; margin: 0.4rem 0;">
+            $8 \xrightarrow{\times 0.5} 4 \xrightarrow{\times 1} 4 \xrightarrow{\times 1.5} 6 \xrightarrow{\times 2} 12 \xrightarrow{\times 2.5} 30 \xrightarrow{\times 3} 90$
+          </div>
+          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            *Signature:* $A \to A/2 \to A/2 \to 1.5A$. Multiplier increases by $+0.5$ each time.
+          </p>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Prime Difference vs. Odd Numbers</h3>
+          <p style="font-size: 0.875rem;">If differences are $+2, +3, +5, +7\dots$, beware!</p>
+          <ul style="font-size: 0.875rem; padding-left: 1.25rem; margin-top: 0.3rem;">
+            <li>If the first difference is $+2$ (even), it is a <strong>PRIME</strong> sequence!</li>
+            <li>The next prime after $7$ is <strong>$+11$</strong>, NOT $+9$.</li>
+            <li>Odd numbers would be: $+1, +3, +5, +7, +9$.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Practice Lab (Independent & Timed) -->
+    <section class="card" aria-labelledby="practice-title" id="practice-section">
+      <div class="card-header">
+        <div>
+          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
+          <p class="section-subtitle">Real competitive-exam questions. Unseen questions solved independently build genuine retrieval.</p>
+        </div>
+      </div>
+
+      <!-- Practice Controls & Mode Toggles -->
+      <div class="practice-header">
+        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
+          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
+            Guided Mode
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
+            Try Without Hints
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
+            Timed Practice
+          </button>
+        </div>
+
+        <div id="timer-container" class="timer-badge hidden" aria-live="off">
+          <span>⏱️</span>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+
+      <!-- Score & Accuracy Progress Bar -->
+      <div class="score-bar" aria-label="Current Practice Statistics">
+        <div class="score-stat">
+          <span class="score-stat-label">Questions Attempted</span>
+          <span class="score-stat-num" id="stat-attempts">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Total Correct</span>
+          <span class="score-stat-num" id="stat-correct">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Independent Correct</span>
+          <span class="score-stat-num" id="stat-independent">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Accuracy</span>
+          <span class="score-stat-num" id="stat-accuracy">0%</span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
+          Reset Local Progress
+        </button>
+      </div>
+
+      <!-- Question Box -->
+      <div id="practice-question-card" style="margin-top: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
+            Question 1 of 12
+          </span>
+          <span class="badge" id="practice-q-difficulty">Easy</span>
+        </div>
+
+        <p class="question-stem" id="practice-q-stem">
+          Loading practice question...
+        </p>
+
+        <!-- Options container -->
+        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Practice Feedback Callout -->
+        <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+        <!-- Error Categorizer (appears on incorrect submission) -->
+        <div id="practice-error-categorizer" class="error-categorizer hidden">
+          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
+            Reflective Analysis: What was the primary reason for this mistake?
+          </label>
+          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
+            <option value="concept">Concept Misunderstanding (Misidentified pattern family or prime vs odd)</option>
+            <option value="method">Wrong Setup / Method (Missed alternating series or hybrid drift)</option>
+            <option value="arithmetic">Arithmetic Slip (Identified pattern correctly, added/multiplied wrong)</option>
+            <option value="misread">Misread Condition (Picked wrong term or missed question goal)</option>
+            <option value="time_guess">Time Pressure / Rushed Guess</option>
+          </select>
+        </div>
+
+        <!-- Practice Worked Solution Box (revealed upon answering) -->
+        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
+          <h4 style="margin-bottom: 0.4rem; font-size: 0.95rem;">Step-by-Step Solution:</h4>
+          <p id="practice-solution-text" style="font-size: 0.9rem; line-height: 1.5;"></p>
+        </div>
+
+        <!-- Practice Action Bar -->
+        <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" id="btn-next-question" class="btn btn-primary" onclick="loadNextQuestion()">
+            Next Question →
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <strong>Aptitude & Reasoning Lab</strong> — Logical & Analytical Reasoning Stream
+          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
+            Topic Review Status: <span class="badge badge-published">published</span> • Last Reviewed: 2026-10-29
+          </div>
+        </div>
+        <div style="font-size: 0.8125rem;">
+          <a href="../docs/reviews/number-series.md" style="color: var(--color-primary); text-decoration: none;">View Topic Review & Test Specification ↗</a>
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        <strong>Educational Disclaimer:</strong> Educational tool. Check the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority. All questions and solvers are original or derived from public standard mathematical relationships.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/common.js"></script>
+  <script>
+    /* ==========================================================================
+       1. PURE MODEL (Pure calculation & pattern analysis: No DOM, no random calls)
+       ========================================================================== */
+    const Model = (() => {
+      const PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71];
+
+      function isLetter(str) {
+        return typeof str === 'string' && str.length === 1 && /[a-zA-Z]/.test(str);
+      }
+
+      function letterToNum(c) {
+        return c.toUpperCase().charCodeAt(0) - 64; // A=1, B=2 ...
+      }
+
+      function numToLetter(n) {
+        const mod = ((n - 1) % 26 + 26) % 26 + 1;
+        return String.fromCharCode(64 + mod);
+      }
+
+      /**
+       * Pure solver to analyze sequences and predict the next term.
+       * @param {Object} input - { sequence: Array|String, trapAnswer: Number|String }
+       */
+      function analyzeSequence(input) {
+        let raw = input.sequence;
+        if (typeof raw === 'string') {
+          raw = raw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        }
+
+        if (!Array.isArray(raw) || raw.length < 4) {
+          return {
+            valid: false,
+            error: "Sequence must contain at least 4 terms to identify a defensible pattern without ambiguity."
+          };
+        }
+
+        // Check if letter sequence
+        const allLetters = raw.every(x => isLetter(x));
+        if (allLetters) {
+          return analyzeLetterSequence(raw, input.trapAnswer);
+        }
+
+        // Numeric parsing
+        const nums = raw.map(x => Number(x));
+        if (nums.some(x => isNaN(x))) {
+          return { valid: false, error: "Sequence terms must be numbers or letters." };
+        }
+
+        const len = nums.length;
+        const d1 = [];
+        for (let i = 0; i < len - 1; i++) {
+          d1.push(LabCommon.round(nums[i + 1] - nums[i], 3));
+        }
+
+        const d2 = [];
+        for (let i = 0; i < d1.length - 1; i++) {
+          d2.push(LabCommon.round(d1[i + 1] - d1[i], 3));
+        }
+
+        // Pattern Check 1: Tier-1 Constant Difference (Arithmetic)
+        const isD1Constant = d1.every(x => x === d1[0]);
+        if (isD1Constant) {
+          const nextVal = LabCommon.round(nums[len - 1] + d1[0], 2);
+          return {
+            valid: true,
+            patternFamily: "Arithmetic Progression (Constant Difference)",
+            d1,
+            d2: [],
+            nextTerm: nextVal,
+            answer: nextVal,
+            answerDisplay: `${nextVal}`,
+            steps: [
+              { title: "List Sequence Terms", explanation: nums.join(", ") },
+              { title: "Calculate Consecutive Differences", explanation: `Difference is constant: ${d1[0]}` },
+              { title: "Deduce Next Term", explanation: `${nums[len - 1]} + ${d1[0]} = ${nextVal}`, math: `Next = ${nextVal}` }
+            ]
+          };
+        }
+
+        // Pattern Check 2: Tier-2 Constant Difference (Quadratic)
+        const isD2Constant = d2.length >= 2 && d2.every(x => x === d2[0]);
+        if (isD2Constant) {
+          const nextD1 = LabCommon.round(d1[d1.length - 1] + d2[0], 2);
+          const nextVal = LabCommon.round(nums[len - 1] + nextD1, 2);
+
+          let commonTrap = null;
+          if (input.trapAnswer !== undefined) {
+            const userAns = Number(input.trapAnswer);
+            const rawRepeatTrap = nums[len - 1] + d1[d1.length - 1]; // repeated previous d1
+            if (userAns === rawRepeatTrap) {
+              commonTrap = {
+                type: "tier1_constant_trap",
+                answer: rawRepeatTrap,
+                explanation: `You added the previous difference (${d1[d1.length - 1]}) instead of incrementing it by the second difference (${d2[0]}). The next difference is ${nextD1}, not ${d1[d1.length - 1]}.`
+              };
+            }
+          }
+          if (!commonTrap) {
+            commonTrap = {
+              type: "tier1_constant_trap",
+              answer: nums[len - 1] + d1[d1.length - 1],
+              explanation: `Common error: adding the previous difference (+${d1[d1.length - 1]}) instead of advancing the second difference (+${d2[0]}). Next difference is +${nextD1}.`
+            };
+          }
+
+          return {
+            valid: true,
+            patternFamily: "Double Difference (Quadratic Series)",
+            d1,
+            d2,
+            nextTerm: nextVal,
+            answer: nextVal,
+            answerDisplay: `${nextVal}`,
+            steps: [
+              { title: "Given Sequence", explanation: nums.join(", ") },
+              { title: "Tier-1 Differences (D₁)", explanation: d1.map(x => (x >= 0 ? '+' : '') + x).join(", ") },
+              { title: "Tier-2 Differences (D₂)", explanation: `Second differences are constant: ${d2[0]}` },
+              { title: "Calculate Next D₁ Difference", explanation: `Last D₁ (${d1[d1.length - 1]}) + D₂ (${d2[0]}) = ${nextD1}` },
+              { title: "Calculate Next Term", explanation: `${nums[len - 1]} + ${nextD1} = ${nextVal}`, math: `Next Term = ${nextVal}` }
+            ],
+            commonTrap
+          };
+        }
+
+        // Pattern Check 3: Prime Differences
+        let isPrimeDiff = true;
+        for (let i = 0; i < d1.length; i++) {
+          if (d1[i] !== PRIMES[i]) {
+            isPrimeDiff = false;
+            break;
+          }
+        }
+        if (isPrimeDiff && d1.length <= PRIMES.length - 1) {
+          const nextPrime = PRIMES[d1.length];
+          const nextVal = nums[len - 1] + nextPrime;
+          const oddTrap = nums[len - 1] + (d1[d1.length - 1] + 2); // adding +9 instead of +11
+          return {
+            valid: true,
+            patternFamily: "Prime Number Increments",
+            d1,
+            d2,
+            nextTerm: nextVal,
+            answer: nextVal,
+            answerDisplay: `${nextVal}`,
+            steps: [
+              { title: "Given Sequence", explanation: nums.join(", ") },
+              { title: "Tier-1 Differences", explanation: d1.join(", ") + " (Prime numbers sequence)" },
+              { title: "Identify Next Prime", explanation: `Next prime number after ${d1[d1.length - 1]} is ${nextPrime} (Note: 9 is composite, not prime!)` },
+              { title: "Calculate Next Term", explanation: `${nums[len - 1]} + ${nextPrime} = ${nextVal}`, math: `Next Term = ${nextVal}` }
+            ],
+            commonTrap: {
+              type: "odd_number_trap",
+              answer: oddTrap,
+              explanation: `Trap: Assuming differences are odd numbers and adding 9. Since the first difference is +2, these are PRIME numbers! The next prime after 7 is 11, NOT 9.`
+            }
+          };
+        }
+
+        // Pattern Check 4: Half-Step Multipliers
+        const ratios = [];
+        for (let i = 0; i < len - 1; i++) {
+          ratios.push(LabCommon.round(nums[i + 1] / nums[i], 2));
+        }
+        const isHalfStep = ratios.length >= 3 && ratios[0] === 0.5 && ratios[1] === 1.0 && ratios[2] === 1.5;
+        if (isHalfStep) {
+          const nextRatio = LabCommon.round(ratios[ratios.length - 1] + 0.5, 2);
+          const nextVal = LabCommon.round(nums[len - 1] * nextRatio, 2);
+          return {
+            valid: true,
+            patternFamily: "Half-Step Multiplier (×0.5, ×1.0, ×1.5...)",
+            d1: ratios,
+            d2: [],
+            nextTerm: nextVal,
+            answer: nextVal,
+            answerDisplay: `${nextVal}`,
+            steps: [
+              { title: "Given Sequence", explanation: nums.join(", ") },
+              { title: "Multiplication Factors", explanation: ratios.map(r => `×${r}`).join(", ") },
+              { title: "Deduce Next Multiplier", explanation: `Multipliers increase by +0.5 each step: next is ×${nextRatio}` },
+              { title: "Calculate Next Term", explanation: `${nums[len - 1]} × ${nextRatio} = ${nextVal}`, math: `Next Term = ${nextVal}` }
+            ]
+          };
+        }
+
+        // Pattern Check 5: Hybrid Multiplier (×2 + 1, ×2 + 2, ...)
+        let isHybrid = true;
+        for (let i = 0; i < len - 1; i++) {
+          if (nums[i + 1] !== (nums[i] * 2 + (i + 1))) {
+            isHybrid = false;
+            break;
+          }
+        }
+        if (isHybrid) {
+          const nextK = len;
+          const nextVal = nums[len - 1] * 2 + nextK;
+          return {
+            valid: true,
+            patternFamily: "Hybrid Multiplier & Incremental Drift (×2 + k)",
+            d1,
+            d2,
+            nextTerm: nextVal,
+            answer: nextVal,
+            answerDisplay: `${nextVal}`,
+            steps: [
+              { title: "Given Sequence", explanation: nums.join(", ") },
+              { title: "Formulate Hybrid Rule", explanation: "Each term = Previous × 2 + step_number" },
+              { title: "Calculate Next Term", explanation: `${nums[len - 1]} × 2 + ${nextK} = ${nextVal}`, math: `Next Term = ${nextVal}` }
+            ]
+          };
+        }
+
+        // Pattern Check 6: Alternating Subsequences
+        if (len >= 6) {
+          const track1 = [];
+          const track2 = [];
+          for (let i = 0; i < len; i++) {
+            if (i % 2 === 0) track1.push(nums[i]);
+            else track2.push(nums[i]);
+          }
+          const t1_d = track1[1] - track1[0];
+          const isTrack1Linear = track1.every((val, idx) => idx === 0 || val - track1[idx - 1] === t1_d);
+          if (isTrack1Linear && len % 2 === 0) {
+            const nextVal = track1[track1.length - 1] + t1_d;
+            return {
+              valid: true,
+              patternFamily: "Alternating Interleaved Subsequences",
+              d1: track1,
+              d2: track2,
+              nextTerm: nextVal,
+              answer: nextVal,
+              answerDisplay: `${nextVal}`,
+              steps: [
+                { title: "Given Interleaved Sequence", explanation: nums.join(", ") },
+                { title: "Split into Two Independent Tracks", explanation: `Track 1 (Odd pos): ${track1.join(", ")} | Track 2 (Even pos): ${track2.join(", ")}` },
+                { title: "Target Term Position", explanation: `Next term belongs to Track 1 (progression: +${t1_d})` },
+                { title: "Calculate Next Term", explanation: `${track1[track1.length - 1]} + ${t1_d} = ${nextVal}`, math: `Next Term = ${nextVal}` }
+              ]
+            };
+          }
+        }
+
+        // Pattern Check 7: Pure Cubes (n^3)
+        const isCubes = nums.every((val, idx) => Math.round(Math.cbrt(val)) ** 3 === val);
+        if (isCubes) {
+          const nextN = Math.round(Math.cbrt(nums[len - 1])) + 1;
+          const nextVal = nextN ** 3;
+          return {
+            valid: true,
+            patternFamily: "Cube Progression (n³)",
+            d1,
+            d2,
+            nextTerm: nextVal,
+            answer: nextVal,
+            answerDisplay: `${nextVal}`,
+            steps: [
+              { title: "Given Sequence", explanation: nums.join(", ") },
+              { title: "Examine Cube Roots", explanation: nums.map(x => Math.round(Math.cbrt(x))).join(", ") },
+              { title: "Next Cube", explanation: `${nextN}³ = ${nextVal}`, math: `Next = ${nextVal}` }
+            ]
+          };
+        }
+
+        // Pattern Check 8: Fibonacci / Additive Recursive
+        let isFib = len >= 4;
+        for (let i = 2; i < len; i++) {
+          if (nums[i] !== nums[i - 1] + nums[i - 2]) {
+            isFib = false;
+            break;
+          }
+        }
+        if (isFib) {
+          const nextVal = nums[len - 1] + nums[len - 2];
+          return {
+            valid: true,
+            patternFamily: "Additive Recursive (Fibonacci Type)",
+            d1,
+            d2,
+            nextTerm: nextVal,
+            answer: nextVal,
+            answerDisplay: `${nextVal}`,
+            steps: [
+              { title: "Given Sequence", explanation: nums.join(", ") },
+              { title: "Identify Recursive Sum Rule", explanation: "Each term is the sum of the preceding two terms." },
+              { title: "Calculate Next Term", explanation: `${nums[len - 1]} + ${nums[len - 2]} = ${nextVal}`, math: `Next = ${nextVal}` }
+            ]
+          };
+        }
+
+        // Fallback default: General polynomial / difference
+        const nextD1 = d1[d1.length - 1] + (d2[0] || 0);
+        const nextVal = nums[len - 1] + nextD1;
+        return {
+          valid: true,
+          patternFamily: "Difference Progression",
+          d1,
+          d2,
+          nextTerm: nextVal,
+          answer: nextVal,
+          answerDisplay: `${nextVal}`,
+          steps: [
+            { title: "Given Sequence", explanation: nums.join(", ") },
+            { title: "Tier-1 Differences", explanation: d1.join(", ") },
+            { title: "Projected Next Term", explanation: `${nums[len - 1]} + ${nextD1} = ${nextVal}` }
+          ]
+        };
+      }
+
+      function analyzeLetterSequence(raw, trapAnswer) {
+        const nums = raw.map(c => letterToNum(c));
+        const d = [];
+        for (let i = 0; i < nums.length - 1; i++) {
+          d.push(nums[i + 1] - nums[i]);
+        }
+        const isConstStep = d.every(x => x === d[0]);
+        const nextNum = nums[nums.length - 1] + d[0];
+        const nextLetter = numToLetter(nextNum);
+
+        return {
+          valid: true,
+          patternFamily: "Alphabetical Position Step",
+          d1: d,
+          d2: [],
+          nextTerm: nextLetter,
+          answer: nextLetter,
+          answerDisplay: nextLetter,
+          steps: [
+            { title: "Letter Positions", explanation: raw.map(c => `${c}=${letterToNum(c)}`).join(", ") },
+            { title: "Step Size", explanation: `Constant jump of +${d[0]} positions.` },
+            { title: "Next Letter", explanation: `Position ${nums[nums.length - 1]} + ${d[0]} = ${nextNum} ⟹ Letter '${nextLetter}'` }
+          ]
+        };
+      }
+
+      return {
+        analyzeSequence,
+        isLetter,
+        letterToNum,
+        numToLetter
+      };
+    })();
+
+    if (typeof window !== "undefined") {
+      window.Model = Model;
+    }
+
+    /* ==========================================================================
+       2. DETERMINISTIC SELF-TESTS (Quality Gate)
+       ========================================================================== */
+    function runSelfTests() {
+      const results = { passed: 0, failed: 0, failures: [] };
+
+      function assert(condition, testName, details = "") {
+        if (condition) {
+          results.passed += 1;
+        } else {
+          results.failed += 1;
+          results.failures.push({ name: testName, details });
+        }
+      }
+
+      try {
+        // TC-01: Double difference (+4, +6, +8, +10 -> +12)
+        const t1 = Model.analyzeSequence({ sequence: [3, 7, 13, 21, 31] });
+        assert(t1.valid === true && t1.nextTerm === 43, "TC-01: Double difference", `Expected 43, got ${t1.nextTerm}`);
+
+        // TC-02: Prime differences (+2, +3, +5, +7 -> +11)
+        const t2 = Model.analyzeSequence({ sequence: [2, 4, 7, 12, 19] });
+        assert(t2.valid === true && t2.nextTerm === 30, "TC-02: Prime differences", `Expected 30, got ${t2.nextTerm}`);
+
+        // TC-03: Half-step multiplier (8, 4, 4, 6, 12, 30 -> 90)
+        const t3 = Model.analyzeSequence({ sequence: [8, 4, 4, 6, 12, 30] });
+        assert(t3.valid === true && t3.nextTerm === 90, "TC-03: Half-step multiplier", `Expected 90, got ${t3.nextTerm}`);
+
+        // TC-04: Hybrid multiplier (x2 + 1, x2 + 2... -> 121)
+        const t4 = Model.analyzeSequence({ sequence: [2, 5, 12, 27, 58] });
+        assert(t4.valid === true && t4.nextTerm === 121, "TC-04: Hybrid multiplier", `Expected 121, got ${t4.nextTerm}`);
+
+        // TC-05: Alternating series (10, 50, 15, 45, 20, 40 -> 25)
+        const t5 = Model.analyzeSequence({ sequence: [10, 50, 15, 45, 20, 40] });
+        assert(t5.valid === true && t5.nextTerm === 25, "TC-05: Alternating series", `Expected 25, got ${t5.nextTerm}`);
+
+        // TC-06: Pure cubes (1, 8, 27, 64, 125 -> 216)
+        const t6 = Model.analyzeSequence({ sequence: [1, 8, 27, 64, 125] });
+        assert(t6.valid === true && t6.nextTerm === 216, "TC-06: Cube progression", `Expected 216, got ${t6.nextTerm}`);
+
+        // TC-07: Fibonacci additive recursive (2, 3, 5, 8, 13, 21 -> 34)
+        const t7 = Model.analyzeSequence({ sequence: [2, 3, 5, 8, 13, 21] });
+        assert(t7.valid === true && t7.nextTerm === 34, "TC-07: Additive recursive", `Expected 34, got ${t7.nextTerm}`);
+
+        // TC-08: Letter series jump ('B', 'E', 'H', 'K', 'N' -> 'Q')
+        const t8 = Model.analyzeSequence({ sequence: ['B', 'E', 'H', 'K', 'N'] });
+        assert(t8.valid === true && t8.nextTerm === 'Q', "TC-08: Letter series step", `Expected 'Q', got ${t8.nextTerm}`);
+
+        // TC-09: Common trap recognition (raw d1 repeat trap)
+        const t9 = Model.analyzeSequence({ sequence: [3, 7, 13, 21, 31], trapAnswer: 41 });
+        assert(t9.valid === true && t9.commonTrap && t9.commonTrap.type === "tier1_constant_trap",
+          "TC-09: Tier1 constant trap recognition", "Expected tier1 constant trap flagged");
+
+        // TC-10: Sequence too short rejection (< 4 terms)
+        const t10 = Model.analyzeSequence({ sequence: [5, 10] });
+        assert(t10.valid === false, "TC-10: Short sequence rejection", "Fewer than 4 terms must return valid: false");
+
+        // TC-11: String input parsing
+        const t11 = Model.analyzeSequence({ sequence: "10, 20, 30, 40" });
+        assert(t11.valid === true && t11.nextTerm === 50, "TC-11: String parsing", `Expected 50, got ${t11.nextTerm}`);
+
+      } catch (err) {
+        results.failed += 1;
+        results.failures.push({ name: "Unexpected test execution error", details: err.message });
+      }
+
+      return results;
+    }
+
+    if (typeof window !== "undefined") {
+      window.runSelfTests = runSelfTests;
+    }
+
+    /* ==========================================================================
+       3. PRACTICE QUESTION BANK (12 Verified Exam-Style Questions)
+       ========================================================================== */
+    const PRACTICE_QUESTIONS = [
+      {
+        id: "NS1",
+        difficulty: "Easy",
+        stem: "Find the missing term in the sequence: 4, 11, 22, 37, 56, [ ? ]",
+        options: ["79", "75", "81", "77"],
+        correctIndex: 0, // 79
+        trapOptionIndex: 1, // 75 (adding 19 directly: 56 + 19 = 75)
+        trapExplanation: "Trap: Differences are +7, +11, +15, +19 (growing by +4). The next difference must be 19 + 4 = 23, so 56 + 23 = 79.",
+        solution: "Tier-1 differences: 11-4=7, 22-11=11, 37-22=15, 56-37=19. Tier-2 difference is constant +4. Next difference = 19 + 4 = 23. Next term = 56 + 23 = 79."
+      },
+      {
+        id: "NS2",
+        difficulty: "Medium",
+        stem: "What comes next in the series: 3, 7, 17, 39, 85, [ ? ]",
+        options: ["179", "175", "170", "181"],
+        correctIndex: 0, // 179
+        trapOptionIndex: 2, // 170 (39 * 2 = 78 etc.)
+        trapExplanation: "Look at the multiplier rule: (3×2)+1=7, (7×2)+3=17, (17×2)+5=39, (39×2)+7=85. Next is (85×2)+9 = 179.",
+        solution: "Pattern: ×2 + (consecutive odd numbers: +1, +3, +5, +7, +9). Next term = (85 × 2) + 9 = 170 + 9 = 179."
+      },
+      {
+        id: "NS3",
+        difficulty: "Medium",
+        stem: "Find the next term in the half-step multiplier series: 12, 6, 6, 9, 18, 45, [ ? ]",
+        options: ["135", "90", "120", "180"],
+        correctIndex: 0, // 135
+        trapOptionIndex: 1, // 90 (assuming multiplier is x2 instead of x3)
+        trapExplanation: "Trap: Multipliers are ×0.5, ×1.0, ×1.5, ×2.0, ×2.5. The next multiplier is ×3.0 (45 × 3 = 135, not 45 × 2 = 90).",
+        solution: "Multiplication progression: 12×0.5=6, 6×1=6, 6×1.5=9, 9×2=18, 18×2.5=45. Next multiplier is 2.5 + 0.5 = 3.0. Next term = 45 × 3 = 135."
+      },
+      {
+        id: "NS4",
+        difficulty: "Easy",
+        stem: "Find the next number in the series: 11, 13, 16, 21, 28, [ ? ]",
+        options: ["39", "37", "35", "41"],
+        correctIndex: 0, // 39
+        trapOptionIndex: 1, // 37 (adding 9 instead of 11)
+        trapExplanation: "Prime trap! Differences are +2, +3, +5, +7. Since 2 is prime, this is the prime number series! The next prime after 7 is 11, NOT 9. 28 + 11 = 39.",
+        solution: "Differences: +2, +3, +5, +7. These are consecutive prime numbers. The next prime after 7 is 11. Next term = 28 + 11 = 39."
+      },
+      {
+        id: "NS5",
+        difficulty: "Easy",
+        stem: "What is the next number in the sequence: 2, 5, 10, 17, 26, [ ? ]",
+        options: ["37", "35", "36", "38"],
+        correctIndex: 0, // 37
+        trapOptionIndex: 2, // 36 (6^2 without adding 1)
+        trapExplanation: "Trap: 36 is 6^2, but each term is n^2 + 1! 6^2 + 1 = 37.",
+        solution: "Pattern: n² + 1 for n = 1, 2, 3, 4, 5. Terms: 1²+1=2, 2²+1=5, 3²+1=10, 4²+1=17, 5²+1=26. Next term for n=6 is 6² + 1 = 36 + 1 = 37."
+      },
+      {
+        id: "NS6",
+        difficulty: "Exam-Style",
+        stem: "Find the missing term in the interleaved series: 15, 28, 17, 25, 19, 22, [ ? ]",
+        options: ["21", "19", "23", "20"],
+        correctIndex: 0, // 21
+        trapOptionIndex: 1,
+        trapExplanation: "Recognize two alternating tracks! Track 1 (odd positions): 15, 17, 19, [21] (+2 each step). Track 2: 28, 25, 22 (-3 each step).",
+        solution: "Alternating tracks: Track 1 (1st, 3rd, 5th, 7th terms) = 15, 17, 19, 21 (+2). Track 2 (2nd, 4th, 6th terms) = 28, 25, 22 (-3). The 7th term belongs to Track 1: 19 + 2 = 21."
+      },
+      {
+        id: "NS7",
+        difficulty: "Exam-Style",
+        stem: "Find the next number: 4, 11, 31, 89, 261, [ ? ]",
+        options: ["775", "783", "765", "791"],
+        correctIndex: 0, // 775
+        trapOptionIndex: 1, // 783 (261 * 3 without subtracting drift)
+        trapExplanation: "Notice the multiplier drift: 4×3 - 1 = 11; 11×3 - 2 = 31; 31×3 - 4 = 89; 89×3 - 6 = 261. Subtraction drift: -1, -2, -4, -6, -8. 261×3 - 8 = 783 - 8 = 775.",
+        solution: "Formula: Term_{n+1} = (Term_n × 3) - [even subtractor: 1, 2, 4, 6, 8]. Next = (261 × 3) - 8 = 783 - 8 = 775."
+      },
+      {
+        id: "NS8",
+        difficulty: "Easy",
+        stem: "What is the next number in this sequence: 4, 6, 10, 16, 26, 42, [ ? ]",
+        options: ["68", "64", "58", "72"],
+        correctIndex: 0, // 68
+        trapOptionIndex: 1,
+        trapExplanation: "Fibonacci additive pattern: Each term is the exact sum of the two previous terms. 26 + 42 = 68.",
+        solution: "Additive rule: 4+6=10, 6+10=16, 10+16=26, 16+26=42. Next term = 26 + 42 = 68."
+      },
+      {
+        id: "NS9",
+        difficulty: "Medium",
+        stem: "Find the WRONG number in the series: 5, 10, 17, 27, 37, 50",
+        options: ["27", "17", "37", "50"],
+        correctIndex: 0, // 27 (should be 26)
+        trapOptionIndex: 2,
+        trapExplanation: "Pattern is n² + 1: 2²+1=5, 3²+1=10, 4²+1=17, 5²+1=26 (NOT 27), 6²+1=37, 7²+1=50. The outlier is 27.",
+        solution: "The series follows (n² + 1): 2²+1=5, 3²+1=10, 4²+1=17, 5²+1=26, 6²+1=37, 7²+1=50. The number 27 violates the pattern and should be 26."
+      },
+      {
+        id: "NS10",
+        difficulty: "Medium",
+        stem: "Find the next letter in the sequence: B, D, G, K, P, [ ? ]",
+        options: ["V", "U", "W", "T"],
+        correctIndex: 0, // V
+        trapOptionIndex: 1, // U (adding 4 instead of 6)
+        trapExplanation: "Letter positions: B=2, D=4, G=7, K=11, P=16. Differences are +2, +3, +4, +5. Next difference is +6: 16 + 6 = 22 = 'V'.",
+        solution: "Alphabet positions: B(2) +2 = D(4); D(4) +3 = G(7); G(7) +4 = K(11); K(11) +5 = P(16). Next jump is +6 ⟹ 16 + 6 = 22, which corresponds to 'V'."
+      },
+      {
+        id: "NS11",
+        difficulty: "Exam-Style",
+        stem: "What comes next in the alphanumeric series: Z1A, X2B, V6C, T24D, [ ? ]",
+        options: ["R120E", "S120E", "R96E", "Q120E"],
+        correctIndex: 0, // R120E
+        trapOptionIndex: 1, // S120E (skipping 1 letter instead of 2)
+        trapExplanation: "Three independent tracks: First letter steps -2 (Z, X, V, T ⟹ R). Middle number is factorial multiplier (1, ×2=2, ×3=6, ×4=24 ⟹ 24×5=120). Last letter steps +1 (A, B, C, D ⟹ E).",
+        solution: "First letter: Z(26), X(24), V(22), T(20) ⟹ R(18). Number: 1, 1×2=2, 2×3=6, 6×4=24, 24×5=120. Last letter: A, B, C, D ⟹ E. Combined = R120E."
+      },
+      {
+        id: "NS12",
+        difficulty: "Medium",
+        stem: "Find the next term in the sequence: 0, 7, 26, 63, 124, [ ? ]",
+        options: ["215", "216", "214", "196"],
+        correctIndex: 0, // 215
+        trapOptionIndex: 1, // 216 (pure cube 6^3 without subtracting 1)
+        trapExplanation: "Trap: 216 is 6^3, but every term is n^3 - 1! 6^3 - 1 = 216 - 1 = 215.",
+        solution: "Pattern: n³ - 1 for n = 1, 2, 3, 4, 5. Terms: 1³-1=0, 2³-1=7, 3³-1=26, 4³-1=63, 5³-1=124. For n=6: 6³ - 1 = 216 - 1 = 215."
+      }
+    ];
+
+    if (typeof window !== "undefined") {
+      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+    }
+
+    /* ==========================================================================
+       4. INTERACTIVE RENDERING & EVENT HANDLING
+       ========================================================================== */
+    const inputSeq = document.getElementById("input-sequence");
+    const patternBadge = document.getElementById("pattern-family-badge");
+    const svgEl = document.getElementById("pyramid-svg");
+
+    const readoutPattern = document.getElementById("readout-pattern");
+    const readoutD1 = document.getElementById("readout-d1");
+    const readoutD2 = document.getElementById("readout-d2");
+    const readoutNextTerm = document.getElementById("readout-next-term");
+
+    const predictOptionsContainer = document.getElementById("predict-options-container");
+    const predictScenarioText = document.getElementById("predict-scenario-text");
+    const predictFeedback = document.getElementById("predict-feedback");
+    const btnRevealSolution = document.getElementById("btn-reveal-solution");
+    const workedSolutionPanel = document.getElementById("worked-solution-panel");
+    const solutionStepsContainer = document.getElementById("solution-steps-container");
+    const solutionTrapCallout = document.getElementById("solution-trap-callout");
+    const solutionTrapText = document.getElementById("solution-trap-text");
+
+    function updateModelAndVisual() {
+      const rawText = inputSeq.value || "";
+      const result = Model.analyzeSequence({ sequence: rawText });
+
+      if (!result.valid) {
+        patternBadge.textContent = "Underdetermined";
+        readoutPattern.textContent = "—";
+        readoutD1.textContent = "—";
+        readoutD2.textContent = "—";
+        readoutNextTerm.textContent = result.error;
+        renderErrorSvg(result.error);
+        return;
+      }
+
+      patternBadge.textContent = result.patternFamily;
+      readoutPattern.textContent = result.patternFamily;
+      readoutD1.textContent = result.d1 && result.d1.length > 0 ? result.d1.join(", ") : "—";
+      readoutD2.textContent = result.d2 && result.d2.length > 0 ? result.d2.join(", ") : "—";
+      readoutNextTerm.textContent = `${result.nextTerm}`;
+
+      renderPyramidSvg(rawText.split(',').map(s => s.trim()), result);
+      updatePredictScenario(rawText.split(',').map(s => s.trim()), result);
+    }
+
+    function renderPyramidSvg(terms, result) {
+      const len = terms.length;
+      const totalItems = len + 1; // including the target term node
+      const width = 620;
+      const stepX = width / (totalItems + 1);
+
+      const yRow0 = 40;  // Level 0: Sequence terms
+      const yRow1 = 110; // Level 1: Tier 1 differences
+      const yRow2 = 170; // Level 2: Tier 2 differences
+
+      let nodesSvg = "";
+      let linesSvg = "";
+
+      // Level 0: Main sequence nodes
+      terms.forEach((t, i) => {
+        const x = (i + 1) * stepX;
+        nodesSvg += `
+          <g>
+            <rect x="${x - 24}" y="${yRow0 - 18}" width="48" height="36" rx="6"
+                  fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
+            <text x="${x}" y="${yRow0 + 5}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--color-primary, #1e3a8a)">
+              ${t}
+            </text>
+          </g>
+        `;
+      });
+
+      // Target node (Next term)
+      const targetX = (len + 1) * stepX;
+      nodesSvg += `
+        <g>
+          <rect x="${targetX - 26}" y="${yRow0 - 20}" width="52" height="40" rx="8"
+                fill="var(--color-success-bg, #ecfdf5)" stroke="var(--color-success, #059669)" stroke-width="2.5" stroke-dasharray="4 3" />
+          <text x="${targetX}" y="${yRow0 + 6}" text-anchor="middle" font-size="14" font-weight="800" fill="var(--color-success, #059669)">
+            ?
+          </text>
+        </g>
+      `;
+
+      // Level 1: Differences (D1)
+      if (result.d1 && result.d1.length > 0) {
+        result.d1.forEach((dVal, i) => {
+          if (i < len - 1) {
+            const x1 = (i + 1) * stepX;
+            const x2 = (i + 2) * stepX;
+            const midX = (x1 + x2) / 2;
+
+            linesSvg += `
+              <line x1="${x1}" y1="${yRow0 + 18}" x2="${midX}" y2="${yRow1 - 14}" stroke="var(--color-border, #cbd5e1)" stroke-width="1.5" />
+              <line x1="${x2}" y1="${yRow0 + 18}" x2="${midX}" y2="${yRow1 - 14}" stroke="var(--color-border, #cbd5e1)" stroke-width="1.5" />
+            `;
+
+            nodesSvg += `
+              <g>
+                <circle cx="${midX}" cy="${yRow1}" r="15" fill="var(--color-surface, #ffffff)" stroke="var(--color-accent, #0284c7)" stroke-width="1.5" />
+                <text x="${midX}" y="${yRow1 + 4}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--color-accent, #0284c7)">
+                  ${typeof dVal === 'number' && dVal > 0 ? '+' : ''}${dVal}
+                </text>
+              </g>
+            `;
+          }
+        });
+      }
+
+      // Level 2: Second differences (D2)
+      if (result.d2 && result.d2.length > 0) {
+        result.d2.forEach((d2Val, i) => {
+          if (i < result.d1.length - 1) {
+            const x1 = ((i + 1) * stepX + (i + 2) * stepX) / 2;
+            const x2 = ((i + 2) * stepX + (i + 3) * stepX) / 2;
+            const midX = (x1 + x2) / 2;
+
+            linesSvg += `
+              <line x1="${x1}" y1="${yRow1 + 15}" x2="${midX}" y2="${yRow2 - 12}" stroke="var(--color-border-subtle, #e2e8f0)" stroke-width="1" />
+              <line x1="${x2}" y1="${yRow1 + 15}" x2="${midX}" y2="${yRow2 - 12}" stroke="var(--color-border-subtle, #e2e8f0)" stroke-width="1" />
+            `;
+
+            nodesSvg += `
+              <g>
+                <rect x="${midX - 16}" y="${yRow2 - 10}" width="32" height="20" rx="3" fill="var(--color-surface-subtle, #f1f5f9)" stroke="var(--color-trap, #9333ea)" stroke-width="1" />
+                <text x="${midX}" y="${yRow2 + 4}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--color-trap, #9333ea)">
+                  ${d2Val >= 0 ? '+' : ''}${d2Val}
+                </text>
+              </g>
+            `;
+          }
+        });
+      }
+
+      svgEl.innerHTML = `
+        <rect x="0" y="0" width="${width}" height="200" fill="transparent" />
+        ${linesSvg}
+        ${nodesSvg}
+      `;
+    }
+
+    function renderErrorSvg(msg) {
+      svgEl.innerHTML = `
+        <rect x="20" y="40" width="580" height="110" rx="8" fill="var(--color-danger-bg, #fef2f2)" stroke="var(--color-danger, #b91c1c)" />
+        <text x="310" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="var(--color-danger, #b91c1c)">
+          ⚠️ ${msg}
+        </text>
+      `;
+    }
+
+    function setPreset(seqStr) {
+      inputSeq.value = seqStr;
+      updateModelAndVisual();
+      LabCommon.announce(`Loaded sequence preset: ${seqStr}`);
+    }
+
+    inputSeq.addEventListener("input", () => {
+      updateModelAndVisual();
+    });
+
+    /* ==========================================================================
+       5. PREDICT-FIRST LOGIC
+       ========================================================================== */
+    function updatePredictScenario(terms, modelResult) {
+      const displaySeq = terms.join(", ") + ", [ ? ]";
+      predictScenarioText.textContent = displaySeq;
+
+      const correctAns = modelResult.nextTerm;
+      let trapVal = modelResult.commonTrap ? modelResult.commonTrap.answer : null;
+      if (typeof correctAns === 'number' && !trapVal) {
+        trapVal = correctAns - 2;
+      }
+
+      const choices = [
+        { val: correctAns, type: "correct", label: `${correctAns}` }
+      ];
+
+      if (trapVal !== null && trapVal !== correctAns) {
+        choices.push({ val: trapVal, type: "trap", label: `${trapVal}` });
+      }
+
+      if (typeof correctAns === 'number') {
+        choices.push({ val: correctAns + 4, type: "distractor", label: `${correctAns + 4}` });
+        choices.push({ val: correctAns - 4, type: "distractor", label: `${correctAns - 4}` });
+      } else {
+        // Letter distractor
+        choices.push({ val: 'P', type: 'distractor', label: 'P' });
+        choices.push({ val: 'R', type: 'distractor', label: 'R' });
+      }
+
+      // Unique labels
+      const uniqueChoices = [];
+      const seen = new Set();
+      choices.forEach(c => {
+        if (!seen.has(c.label)) {
+          seen.add(c.label);
+          uniqueChoices.push(c);
+        }
+      });
+
+      uniqueChoices.sort((a, b) => (typeof a.val === 'number' ? a.val - b.val : String(a.val).localeCompare(String(b.val))));
+
+      predictOptionsContainer.innerHTML = "";
+      predictFeedback.className = "callout hidden";
+      workedSolutionPanel.classList.add("hidden");
+
+      uniqueChoices.forEach(c => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.textContent = c.label;
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.onclick = () => handlePredictChoice(c, modelResult);
+        predictOptionsContainer.appendChild(btn);
+      });
+    }
+
+    function handlePredictChoice(choice, modelResult) {
+      predictFeedback.classList.remove("hidden");
+
+      const buttons = predictOptionsContainer.querySelectorAll(".option-btn");
+      buttons.forEach(b => {
+        b.classList.remove("correct", "trap", "incorrect", "selected");
+        if (b.textContent === choice.label) b.classList.add("selected");
+      });
+
+      if (choice.type === "correct") {
+        predictFeedback.className = "callout callout-success";
+        predictFeedback.innerHTML = `
+          <strong>✓ Outstanding deduction!</strong> You identified the ${modelResult.patternFamily} pattern correctly: the next term is ${choice.label}.
+        `;
+        LabCommon.announce("Prediction correct! You predicted the next term.");
+      } else if (choice.type === "trap") {
+        predictFeedback.className = "callout callout-trap";
+        predictFeedback.innerHTML = `
+          <strong>⚠️ Common Trap Encountered!</strong> ${modelResult.commonTrap ? modelResult.commonTrap.explanation : 'Avoid assuming constant Tier-1 difference without testing Tier-2.'}
+        `;
+        LabCommon.announce("Trap encountered in sequence.");
+      } else {
+        predictFeedback.className = "callout callout-warning";
+        predictFeedback.innerHTML = `
+          <strong>Not quite:</strong> Inspect the differences or ratios between consecutive terms.
+        `;
+      }
+
+      revealWorkedSteps(modelResult);
+    }
+
+    btnRevealSolution.addEventListener("click", () => {
+      const rawText = inputSeq.value || "";
+      const result = Model.analyzeSequence({ sequence: rawText });
+      revealWorkedSteps(result);
+    });
+
+    function revealWorkedSteps(modelResult) {
+      if (!modelResult || !modelResult.valid) return;
+      workedSolutionPanel.classList.remove("hidden");
+
+      solutionStepsContainer.innerHTML = modelResult.steps.map((st, idx) => `
+        <div class="step-item">
+          <div class="step-num">Step ${idx + 1}</div>
+          <div class="step-title">${st.title}</div>
+          <div>${st.explanation}</div>
+          ${st.math ? `<div class="step-detail">${st.math}</div>` : ''}
+        </div>
+      `).join("");
+
+      if (modelResult.commonTrap) {
+        solutionTrapCallout.classList.remove("hidden");
+        solutionTrapText.textContent = modelResult.commonTrap.explanation;
+      }
+    }
+
+    /* ==========================================================================
+       6. PRACTICE LAB ENGINE
+       ========================================================================== */
+    let currentQIndex = 0;
+    let practiceMode = "hints";
+    let timerInstance = null;
+    let questionStartTime = 0;
+    const TOPIC_ID = "number-series";
+
+    function setPracticeMode(mode) {
+      practiceMode = mode;
+      document.querySelectorAll(".mode-btn").forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
+      });
+
+      const activeBtn = document.getElementById(`btn-mode-${mode}`);
+      if (activeBtn) {
+        activeBtn.classList.add("active");
+        activeBtn.setAttribute("aria-selected", "true");
+      }
+
+      const timerContainer = document.getElementById("timer-container");
+      if (mode === "timed") {
+        timerContainer.classList.remove("hidden");
+        if (!timerInstance) {
+          timerInstance = new LabCommon.PracticeTimer((sec) => {
+            document.getElementById("timer-display").textContent = timerInstance.format();
+          });
+        }
+        timerInstance.start();
+      } else {
+        timerContainer.classList.add("hidden");
+        if (timerInstance) timerInstance.stop();
+      }
+
+      const simSection = document.getElementById("interactive-model-title").closest(".card");
+      const refSection = document.getElementById("reference-title").closest(".card");
+      if (mode === "independent") {
+        simSection.style.display = "none";
+        refSection.style.display = "none";
+      } else {
+        simSection.style.display = "block";
+        refSection.style.display = "block";
+      }
+
+      LabCommon.announce(`Switched to ${mode} practice mode.`);
+    }
+
+    function renderPracticeQuestion(index) {
+      const q = PRACTICE_QUESTIONS[index];
+      if (!q) return;
+
+      questionStartTime = Date.now();
+
+      document.getElementById("practice-q-num").textContent = `Question ${index + 1} of ${PRACTICE_QUESTIONS.length}`;
+      const diffBadge = document.getElementById("practice-q-difficulty");
+      diffBadge.textContent = q.difficulty;
+      diffBadge.className = `badge ${q.difficulty === 'Easy' ? 'badge-published' : q.difficulty === 'Medium' ? 'badge-draft' : 'badge-tag'}`;
+
+      document.getElementById("practice-q-stem").textContent = q.stem;
+
+      const feedback = document.getElementById("practice-feedback");
+      feedback.className = "callout hidden";
+      document.getElementById("practice-error-categorizer").classList.add("hidden");
+      document.getElementById("practice-solution-box").classList.add("hidden");
+
+      const optContainer = document.getElementById("practice-options-container");
+      optContainer.innerHTML = "";
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn practice-submit-btn";
+        btn.textContent = optText;
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.onclick = () => submitPracticeAnswer(optIdx, q);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function submitPracticeAnswer(chosenIdx, question) {
+      const isCorrect = chosenIdx === question.correctIndex;
+      const isTrap = chosenIdx === question.trapOptionIndex;
+      const durationSec = Math.round((Date.now() - questionStartTime) / 1000);
+
+      const buttons = document.querySelectorAll("#practice-options-container .option-btn");
+      buttons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === question.correctIndex) b.classList.add("correct");
+        if (idx === chosenIdx && !isCorrect) {
+          b.classList.add(isTrap ? "trap" : "incorrect");
+        }
+      });
+
+      const feedback = document.getElementById("practice-feedback");
+      feedback.classList.remove("hidden");
+
+      if (isCorrect) {
+        feedback.className = "callout callout-success";
+        feedback.innerHTML = `<strong>✓ Correct!</strong> Pattern deduced accurately.`;
+        LabCommon.announce("Correct answer!");
+      } else if (isTrap && question.trapExplanation) {
+        feedback.className = "callout callout-trap";
+        feedback.innerHTML = `<strong>⚠️ Common Exam Trap:</strong> ${question.trapExplanation}`;
+        LabCommon.announce("Incorrect: Common trap encountered.");
+        document.getElementById("practice-error-categorizer").classList.remove("hidden");
+      } else {
+        feedback.className = "callout callout-danger";
+        feedback.innerHTML = `<strong>Incorrect:</strong> Review the worked solution below.`;
+        LabCommon.announce("Incorrect answer.");
+        document.getElementById("practice-error-categorizer").classList.remove("hidden");
+      }
+
+      const solBox = document.getElementById("practice-solution-box");
+      solBox.classList.remove("hidden");
+      document.getElementById("practice-solution-text").textContent = question.solution;
+
+      LabCommon.recordTopicAttempt(TOPIC_ID, {
+        isCorrect,
+        isIndependent: practiceMode === "independent" || practiceMode === "timed",
+        timeSec: durationSec,
+        errorCategory: isCorrect ? null : document.getElementById("select-error-category").value
+      });
+
+      renderStats();
+    }
+
+    function handleSaveErrorCategory(category) {
+      const p = LabCommon.getTopicProgress(TOPIC_ID);
+      if (p.errorsByCategory[category] !== undefined) {
+        p.errorsByCategory[category] += 1;
+        LabCommon.storage.set(`lab_progress_${TOPIC_ID}`, p);
+      }
+      LabCommon.announce(`Recorded mistake reason: ${category}`);
+    }
+
+    function loadNextQuestion() {
+      currentQIndex = (currentQIndex + 1) % PRACTICE_QUESTIONS.length;
+      renderPracticeQuestion(currentQIndex);
+    }
+
+    function renderStats() {
+      const p = LabCommon.getTopicProgress(TOPIC_ID);
+      document.getElementById("stat-attempts").textContent = p.attempts;
+      document.getElementById("stat-correct").textContent = p.correct;
+      document.getElementById("stat-independent").textContent = p.independentCorrect;
+      const acc = p.attempts > 0 ? Math.round((p.correct / p.attempts) * 100) : 0;
+      document.getElementById("stat-accuracy").textContent = `${acc}%`;
+    }
+
+    function handleResetStats() {
+      if (confirm("Reset local practice statistics for Number Series?")) {
+        LabCommon.resetTopicProgress(TOPIC_ID);
+        renderStats();
+        LabCommon.announce("Practice statistics reset.");
+      }
+    }
+
+    /* ==========================================================================
+       7. INITIALIZATION ON LOAD
+       ========================================================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      LabCommon.runAndRenderSelfTests(runSelfTests);
+      updateModelAndVisual();
+      renderPracticeQuestion(0);
+      renderStats();
+    });
+  </script>
+</body>
+</html>
