@@ -33,7 +33,7 @@ Official notices checked for curriculum alignment:
 | Topic ID | Topic Name | File | Primary Exam Target | Status | Review Date | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | `number-series` | Number & Letter Series | `topics/number-series.html` | SEBI Gr A, Banking, SSC | **published** | 2026-10-29 | Multi-tier difference tree, half-step multipliers, prime differences, letter shifts, predict-first flow, 12 verified practice questions. |
-| `direction-sense` | Direction & Distance Sense | `topics/direction-sense.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Coordinate grid, turn-by-turn orientation tracking. |
+| `direction-sense` | Direction & Distance Sense | `topics/direction-sense.html` | SEBI Gr A, Banking, SSC | **published** | 2026-10-29 | Interactive coordinate grid, turn-by-turn state tracking, Pythagorean displacement, shadow rules, 12 verified practice questions. |
 | `blood-relations` | Blood Relations & Family Tree | `topics/blood-relations.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Node-edge relationship graph, gender deduction. |
 | `syllogisms` | Syllogisms & Set Logic | `topics/syllogisms.html` | SEBI Gr A, Banking | `not-started` | — | Definite vs possibility conclusions, Euler/Venn model. |
 | `order-ranking` | Order & Ranking | `topics/order-ranking.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Overlap checks, total count formulas with boundary tests. |
@@ -57,3 +57,4 @@ Official notices checked for curriculum alignment:
 - **2026-10-29:** Milestone 3 topic added (`topics/time-and-work.html`): 11 reference deterministic self-tests, 12 verified practice questions, SVG timeline rate visualizer, predict-first flow, average/sum trap breakdown. Status: `published`.
 - **2026-10-29:** Milestone 3 topic added (`topics/number-series.html`): 11 reference deterministic self-tests, 12 verified practice questions, SVG multi-tier difference pyramid, predict-first flow, prime vs odd trap breakdown. Status: `published`.
 - **2026-10-29:** Milestone 4 topic added (`topics/trains-bridge.html`): 11 reference deterministic self-tests, 12 verified practice questions, SVG clearance vector visualizer, predict-first flow, bridge-only trap breakdown. Status: `published`.
+- **2026-10-29:** Milestone 4 topic added (`topics/direction-sense.html`): 11 reference deterministic self-tests, 12 verified practice questions, SVG coordinate grid path tracer, predict-first flow, facing-south trap breakdown. Status: `published`.
