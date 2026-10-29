@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trains, Bridges & Relative Speed — Aptitude & Reasoning Lab</title>
+  <meta name="description" content="Master train crossing times, bridge clearance distance, km/h to m/s conversion, and relative speeds with interactive dynamic models and timed practice.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link" aria-label="Aptitude and Reasoning Lab Home">
+        <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="#0f172a" />
+          <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3" />
+          <circle cx="24" cy="24" r="4" fill="#38bdf8" />
+          <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4" />
+          <circle cx="40" cy="40" r="4" fill="#34d399" />
+          <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <span>Aptitude Lab</span>
+      </a>
+
+      <nav aria-label="Topic navigation">
+        <ul class="nav-links">
+          <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+          <li><span class="badge badge-published">Published</span></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" class="page-container">
+    
+    <!-- Model Self-Test Banner -->
+    <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+    <!-- Topic Hero -->
+    <header class="card" style="margin-bottom: 1.25rem;">
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+        <span class="badge badge-tag">Quantitative Aptitude</span>
+        <span class="badge badge-tag">SEBI Gr A (IT & Gen)</span>
+        <span class="badge badge-tag">Banking & SSC</span>
+      </div>
+      <h1>Trains, Bridges & Relative Speed</h1>
+      <p class="section-subtitle">
+        Understand why a train crossing a platform must travel its own length plus the platform length ($L_{\text{train}} + L_{\text{platform}}$). Master unit conversions ($5/18$) and relative speed rules for same vs. opposite directions.
+      </p>
+    </header>
+
+    <!-- Section 1: Concept & Interactive Model -->
+    <section class="card" aria-labelledby="interactive-model-title">
+      <div class="card-header">
+        <div>
+          <h2 id="interactive-model-title" class="section-title">
+            <span>1. Interactive Clearance & Distance Model</span>
+          </h2>
+          <p class="section-subtitle">Adjust train length, bridge length, and speed to visualize the complete clearance vector.</p>
+        </div>
+      </div>
+
+      <!-- Quick Preset Buttons -->
+      <div style="margin-bottom: 1.25rem;">
+        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-muted); display: block; margin-bottom: 0.4rem;">
+          Standard Exam Presets:
+        </span>
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(200, 300, 72)">200m Train, 300m Bridge @ 72 km/h (25s)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(150, 0, 54)">150m Train, Pole (0m) @ 54 km/h (10s)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(120, 280, 36)">120m Train, 280m Platform @ 36 km/h (40s)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(250, 450, 90)">250m Train, 450m Tunnel @ 90 km/h (28s)</button>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="control-grid">
+        <div class="control-group">
+          <label for="input-lt" class="control-label">
+            <span>Train Length (<span style="font-family: var(--font-mono);">L_t</span>)</span>
+            <span id="lt-display-badge" class="badge badge-tag">200 meters</span>
+          </label>
+          <input type="number" id="input-lt" value="200" min="20" max="600" step="10">
+          <input type="range" id="range-lt" min="50" max="500" value="200" step="10" aria-label="Train Length Slider">
+        </div>
+
+        <div class="control-group">
+          <label for="input-lb" class="control-label">
+            <span>Bridge / Platform (<span style="font-family: var(--font-mono);">L_b</span>)</span>
+            <span id="lb-display-badge" class="badge badge-tag">300 meters</span>
+          </label>
+          <input type="number" id="input-lb" value="300" min="0" max="1000" step="10">
+          <input type="range" id="range-lb" min="0" max="800" value="300" step="10" aria-label="Bridge Length Slider">
+        </div>
+
+        <div class="control-group">
+          <label for="input-speed" class="control-label">
+            <span>Train Speed (<span style="font-family: var(--font-mono);">S</span>)</span>
+            <span id="speed-display-badge" class="badge badge-tag">72 km/h = 20 m/s</span>
+          </label>
+          <input type="number" id="input-speed" value="72" min="18" max="180" step="1">
+          <input type="range" id="range-speed" min="18" max="144" value="72" step="6" aria-label="Speed Slider">
+        </div>
+      </div>
+
+      <!-- SVG Visualization -->
+      <div class="vis-container" aria-label="Visual track and bridge clearance diagram">
+        <svg id="train-svg" viewBox="0 0 620 180" width="100%" height="180" role="img" aria-labelledby="svg-desc">
+          <title id="svg-desc">Diagram showing train, bridge, and traversal distance from engine entry to tail clearance</title>
+          <!-- Populated by Model Renderer -->
+        </svg>
+      </div>
+
+      <!-- Computed Model Outputs Readout -->
+      <div class="score-bar" id="model-readout" aria-live="polite">
+        <div class="score-stat">
+          <span class="score-stat-label">Converted Speed</span>
+          <span class="score-stat-num" id="readout-speed-ms">20 m/s</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Total Distance to Clear</span>
+          <span class="score-stat-num" id="readout-total-dist">500 meters</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Time to Clear Bridge</span>
+          <span class="score-stat-num" id="readout-time-bridge">25.0 seconds</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Time to Cross Pole (0m)</span>
+          <span class="score-stat-num" id="readout-time-pole">10.0 seconds</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Predict-First Worked Example -->
+    <section class="card" aria-labelledby="predict-title">
+      <div class="card-header">
+        <div>
+          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
+          <p class="section-subtitle">Predict the crossing time before revealing the mathematical steps.</p>
+        </div>
+      </div>
+
+      <div class="predict-box">
+        <div class="predict-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span>Predict the bridge crossing time:</span>
+        </div>
+        <p id="predict-scenario-text" style="font-size: 1.05rem; font-weight: 500; margin-bottom: 1rem;">
+          A 200 m long train travelling at 72 km/h crosses a 300 m long bridge. How many seconds does it take to completely clear the bridge?
+        </p>
+
+        <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options">
+          <!-- Dynamically populated predict options -->
+        </div>
+
+        <div id="predict-feedback" class="callout hidden" role="alert"></div>
+
+        <div style="margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" id="btn-reveal-solution" class="btn btn-secondary">
+            Inspect Worked Solution ↓
+          </button>
+          <span style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            (Clearance requires the tail of the train to clear the end of the bridge!)
+          </span>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Worked Solution Trace -->
+      <div id="worked-solution-panel" class="hidden">
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Verified Step-by-Step Mathematical Trace</h3>
+        <div class="steps-container" id="solution-steps-container">
+          <!-- Populated from pure Model.solve() -->
+        </div>
+
+        <!-- Trap Callout -->
+        <div class="callout callout-trap" id="solution-trap-callout">
+          <strong>⚠️ Common Trap to Avoid:</strong>
+          <span id="solution-trap-text"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Core Exam Rules Reference -->
+    <section class="card" aria-labelledby="reference-title">
+      <div class="card-header">
+        <div>
+          <h2 id="reference-title" class="section-title">3. Core Exam Rules & Fast Shortcuts</h2>
+          <p class="section-subtitle">Unit conversions, clearance formulas, and relative speed principles.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The 5/18 Unit Conversion</h3>
+          <p style="font-size: 0.875rem;">Always harmonize units before calculating:</p>
+          <div class="step-detail" style="display: block; text-align: center; margin: 0.4rem 0;">
+            $S_{\text{m/s}} = S_{\text{km/h}} \times \frac{5}{18}$ &nbsp;|&nbsp; $S_{\text{km/h}} = S_{\text{m/s}} \times \frac{18}{5}$
+          </div>
+          <ul style="font-size: 0.8125rem; padding-left: 1.25rem; margin-top: 0.3rem;">
+            <li>36 km/h = 10 m/s &nbsp;•&nbsp; 54 km/h = 15 m/s</li>
+            <li>72 km/h = 20 m/s &nbsp;•&nbsp; 90 km/h = 25 m/s</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The Clearance Distance Law</h3>
+          <p style="font-size: 0.875rem;">The distance depends on whether the object has physical length:</p>
+          <ul style="font-size: 0.875rem; padding-left: 1.25rem; margin-top: 0.3rem;">
+            <li><strong>Pole / Tree / Person (0 length):</strong> $D = L_{\text{train}}$</li>
+            <li><strong>Bridge / Platform / Tunnel:</strong> $D = L_{\text{train}} + L_{\text{bridge}}$</li>
+            <li><strong>Two Trains Crossing:</strong> $D = L_1 + L_2$</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Relative Speed Directions</h3>
+          <p style="font-size: 0.875rem;">When both objects are in motion:</p>
+          <ul style="font-size: 0.875rem; padding-left: 1.25rem; margin-top: 0.3rem;">
+            <li><strong>Opposite Directions ($\to \leftarrow$):</strong> $S_{\text{rel}} = S_1 + S_2$</li>
+            <li><strong>Same Direction ($\to \to$):</strong> $S_{\text{rel}} = |S_1 - S_2|$</li>
+            <li><strong>Man in another train:</strong> $D = L_{\text{passing train}}$ only!</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Practice Lab (Independent & Timed) -->
+    <section class="card" aria-labelledby="practice-title" id="practice-section">
+      <div class="card-header">
+        <div>
+          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
+          <p class="section-subtitle">Real competitive-exam questions. Unseen questions solved independently build genuine retrieval.</p>
+        </div>
+      </div>
+
+      <!-- Practice Controls & Mode Toggles -->
+      <div class="practice-header">
+        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
+          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
+            Guided Mode
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
+            Try Without Hints
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
+            Timed Practice
+          </button>
+        </div>
+
+        <div id="timer-container" class="timer-badge hidden" aria-live="off">
+          <span>⏱️</span>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+
+      <!-- Score & Accuracy Progress Bar -->
+      <div class="score-bar" aria-label="Current Practice Statistics">
+        <div class="score-stat">
+          <span class="score-stat-label">Questions Attempted</span>
+          <span class="score-stat-num" id="stat-attempts">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Total Correct</span>
+          <span class="score-stat-num" id="stat-correct">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Independent Correct</span>
+          <span class="score-stat-num" id="stat-independent">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Accuracy</span>
+          <span class="score-stat-num" id="stat-accuracy">0%</span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
+          Reset Local Progress
+        </button>
+      </div>
+
+      <!-- Question Box -->
+      <div id="practice-question-card" style="margin-top: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
+            Question 1 of 12
+          </span>
+          <span class="badge" id="practice-q-difficulty">Easy</span>
+        </div>
+
+        <p class="question-stem" id="practice-q-stem">
+          Loading practice question...
+        </p>
+
+        <!-- Options container -->
+        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Practice Feedback Callout -->
+        <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+        <!-- Error Categorizer (appears on incorrect submission) -->
+        <div id="practice-error-categorizer" class="error-categorizer hidden">
+          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
+            Reflective Analysis: What was the primary reason for this mistake?
+          </label>
+          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
+            <option value="concept">Concept Misunderstanding (Forgot train length or added passenger's train)</option>
+            <option value="method">Wrong Setup / Method (Forgot 5/18 conversion or inverted relative speed)</option>
+            <option value="arithmetic">Arithmetic Slip (Setup was right, calculation erred)</option>
+            <option value="misread">Misread Condition (Solved for bridge length vs train length)</option>
+            <option value="time_guess">Time Pressure / Rushed Guess</option>
+          </select>
+        </div>
+
+        <!-- Practice Worked Solution Box (revealed upon answering) -->
+        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
+          <h4 style="margin-bottom: 0.4rem; font-size: 0.95rem;">Step-by-Step Solution:</h4>
+          <p id="practice-solution-text" style="font-size: 0.9rem; line-height: 1.5;"></p>
+        </div>
+
+        <!-- Practice Action Bar -->
+        <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" id="btn-next-question" class="btn btn-primary" onclick="loadNextQuestion()">
+            Next Question →
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <strong>Aptitude & Reasoning Lab</strong> — Quantitative Aptitude Stream
+          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
+            Topic Review Status: <span class="badge badge-published">published</span> • Last Reviewed: 2026-10-29
+          </div>
+        </div>
+        <div style="font-size: 0.8125rem;">
+          <a href="../docs/reviews/trains-bridge.md" style="color: var(--color-primary); text-decoration: none;">View Topic Review & Test Specification ↗</a>
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        <strong>Educational Disclaimer:</strong> Educational tool. Check the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority. All questions and solvers are original or derived from public standard mathematical relationships.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/common.js"></script>
+  <script>
+    /* ==========================================================================
+       1. PURE MODEL (Pure calculation functions: No DOM, no random calls)
+       ========================================================================== */
+    const Model = (() => {
+      function kmhToMs(kmh) {
+        return LabCommon.round(kmh * (5 / 18), 3);
+      }
+
+      function msToKmh(ms) {
+        return LabCommon.round(ms * (18 / 5), 2);
+      }
+
+      /**
+       * Pure solver for single train crossing a stationary bridge, platform, or pole.
+       */
+      function solveSingleTrain(input) {
+        const lt = Number(input.lt);
+        const lb = Number(input.lb !== undefined ? input.lb : 0);
+        const s_kmh = Number(input.speed);
+
+        // Validation
+        if (isNaN(lt) || isNaN(lb) || isNaN(s_kmh)) {
+          return { valid: false, error: "Inputs must be valid numbers" };
+        }
+        if (lt <= 0) {
+          return { valid: false, error: "Train length must be strictly greater than zero" };
+        }
+        if (lb < 0) {
+          return { valid: false, error: "Bridge length cannot be negative" };
+        }
+        if (s_kmh <= 0) {
+          return { valid: false, error: "Train speed must be strictly greater than zero" };
+        }
+
+        const s_ms = kmhToMs(s_kmh);
+        const totalDistance = lt + lb;
+        const timeBridge = LabCommon.round(totalDistance / s_ms, 2);
+        const timePole = LabCommon.round(lt / s_ms, 2);
+
+        // Steps trace
+        const steps = [
+          {
+            title: "Given Parameters",
+            explanation: `Train Length = ${lt} m, Bridge Length = ${lb} m, Speed = ${s_kmh} km/h.`
+          },
+          {
+            title: "Convert Speed from km/h to m/s",
+            explanation: `Multiply by 5/18: ${s_kmh} × (5/18) = ${s_ms} m/s.`,
+            math: `S = ${s_ms} m/s`
+          },
+          {
+            title: "Determine Total Clearance Distance",
+            explanation: `The engine enters the bridge, but the train is only fully clear when its tail leaves the bridge: Total D = L_train + L_bridge = ${lt} + ${lb} = ${totalDistance} m.`,
+            math: `D = ${totalDistance} meters`
+          },
+          {
+            title: "Calculate Clearance Time",
+            explanation: `Time = Distance ÷ Speed = ${totalDistance} ÷ ${s_ms} = ${timeBridge} seconds.`,
+            math: `T = ${totalDistance} / ${s_ms} = ${timeBridge} seconds`
+          }
+        ];
+
+        // Pedagogical Trap Detection
+        let commonTrap = null;
+        const bridgeOnlyTime = LabCommon.round(lb / s_ms, 2);
+        const noConversionTime = LabCommon.round(totalDistance / s_kmh, 2);
+
+        if (input.trapAnswer !== undefined) {
+          const userAns = Number(input.trapAnswer);
+          if (userAns === bridgeOnlyTime && lb > 0) {
+            commonTrap = {
+              type: "bridge_only_trap",
+              answer: bridgeOnlyTime,
+              explanation: `You used only the bridge length (${lb} m). But the train is NOT clear until its tail exits the bridge! The train must travel ${lt} + ${lb} = ${totalDistance} m.`
+            };
+          } else if (Math.abs(userAns - noConversionTime) < 0.1) {
+            commonTrap = {
+              type: "no_conversion_trap",
+              answer: noConversionTime,
+              explanation: `You divided meters directly by km/h (${totalDistance} / ${s_kmh}). You must convert ${s_kmh} km/h to ${s_ms} m/s by multiplying by 5/18 first!`
+            };
+          }
+        }
+
+        if (!commonTrap && lb > 0) {
+          commonTrap = {
+            type: "bridge_only_trap",
+            answer: bridgeOnlyTime,
+            explanation: `Common mistake: using only the bridge length (${lb} m) and getting ${bridgeOnlyTime}s. Total distance must include the train's own length (${lt} + ${lb} = ${totalDistance} m).`
+          };
+        }
+
+        return {
+          valid: true,
+          answer: timeBridge,
+          answerDisplay: `${timeBridge} seconds`,
+          intermediates: {
+            lt,
+            lb,
+            s_kmh,
+            s_ms,
+            totalDistance,
+            timeBridge,
+            timePole
+          },
+          steps,
+          assumptions: [
+            "Train travels at constant speed throughout the crossing",
+            "Clearance is measured from engine arrival to tail departure",
+            "No deceleration inside the bridge"
+          ],
+          commonTrap
+        };
+      }
+
+      /**
+       * Pure solver for two trains crossing each other.
+       */
+      function solveTwoTrains(l1, l2, s1_kmh, s2_kmh, direction = "opposite") {
+        if (l1 <= 0 || l2 <= 0 || s1_kmh <= 0 || s2_kmh <= 0) {
+          return { valid: false, error: "Lengths and speeds must be strictly positive" };
+        }
+
+        const isOpp = direction === "opposite";
+        const relSpeedKmh = isOpp ? s1_kmh + s2_kmh : Math.abs(s1_kmh - s2_kmh);
+        if (relSpeedKmh === 0) {
+          return { valid: false, error: "Speeds cannot be equal for same-direction overtaking" };
+        }
+
+        const relSpeedMs = kmhToMs(relSpeedKmh);
+        const totalDist = l1 + l2;
+        const timeCross = LabCommon.round(totalDist / relSpeedMs, 2);
+
+        return {
+          valid: true,
+          relSpeedKmh,
+          relSpeedMs,
+          totalDist,
+          timeCross
+        };
+      }
+
+      /**
+       * Pure solver for a train passing a passenger sitting in another moving train.
+       */
+      function solvePassingPassenger(lPassing, s1_kmh, s2_kmh, direction = "opposite") {
+        if (lPassing <= 0 || s1_kmh <= 0 || s2_kmh <= 0) {
+          return { valid: false, error: "Length and speeds must be strictly positive" };
+        }
+        const relSpeedKmh = direction === "opposite" ? s1_kmh + s2_kmh : Math.abs(s1_kmh - s2_kmh);
+        const relSpeedMs = kmhToMs(relSpeedKmh);
+        const timeCross = LabCommon.round(lPassing / relSpeedMs, 2);
+
+        return {
+          valid: true,
+          distance: lPassing,
+          relSpeedKmh,
+          relSpeedMs,
+          timeCross
+        };
+      }
+
+      return {
+        kmhToMs,
+        msToKmh,
+        solveSingleTrain,
+        solveTwoTrains,
+        solvePassingPassenger
+      };
+    })();
+
+    if (typeof window !== "undefined") {
+      window.Model = Model;
+    }
+
+    /* ==========================================================================
+       2. DETERMINISTIC SELF-TESTS (Quality Gate)
+       ========================================================================== */
+    function runSelfTests() {
+      const results = { passed: 0, failed: 0, failures: [] };
+
+      function assert(condition, testName, details = "") {
+        if (condition) {
+          results.passed += 1;
+        } else {
+          results.failed += 1;
+          results.failures.push({ name: testName, details });
+        }
+      }
+
+      try {
+        // TC-01: 200m train, 300m bridge at 72 km/h (20 m/s -> 25.0s)
+        const t1 = Model.solveSingleTrain({ lt: 200, lb: 300, speed: 72 });
+        assert(t1.valid === true && t1.intermediates.s_ms === 20 && t1.intermediates.totalDistance === 500 && t1.intermediates.timeBridge === 25,
+          "TC-01: 200m train & 300m bridge", `Expected 25s. Got ${t1.intermediates?.timeBridge}s`);
+
+        // TC-02: 150m train, pole (0m bridge) at 54 km/h (15 m/s -> 10.0s)
+        const t2 = Model.solveSingleTrain({ lt: 150, lb: 0, speed: 54 });
+        assert(t2.valid === true && t2.intermediates.s_ms === 15 && t2.intermediates.timeBridge === 10,
+          "TC-02: Pole crossing (0m bridge)", `Expected 10s. Got ${t2.intermediates?.timeBridge}s`);
+
+        // TC-03: 120m train, 280m platform at 36 km/h (10 m/s -> 40.0s)
+        const t3 = Model.solveSingleTrain({ lt: 120, lb: 280, speed: 36 });
+        assert(t3.valid === true && t3.intermediates.s_ms === 10 && t3.intermediates.timeBridge === 40,
+          "TC-03: Clean 36 km/h conversion", `Expected 40s. Got ${t3.intermediates?.timeBridge}s`);
+
+        // TC-04: Two trains opposite direction (120m & 180m, speeds 45 & 27 km/h -> 72 km/h = 20 m/s, 300m / 20 = 15.0s)
+        const t4 = Model.solveTwoTrains(120, 180, 45, 27, "opposite");
+        assert(t4.valid === true && t4.relSpeedMs === 20 && t4.timeCross === 15,
+          "TC-04: Two trains opposite", `Expected 15s. Got ${t4.timeCross}s`);
+
+        // TC-05: Two trains same direction (100m & 150m, speeds 72 & 54 km/h -> 18 km/h = 5 m/s, 250m / 5 = 50.0s)
+        const t5 = Model.solveTwoTrains(100, 150, 72, 54, "same");
+        assert(t5.valid === true && t5.relSpeedMs === 5 && t5.timeCross === 50,
+          "TC-05: Two trains same direction", `Expected 50s. Got ${t5.timeCross}s`);
+
+        // TC-06: Bridge-only trap detection (200m train, 300m bridge, trap 15s)
+        const t6 = Model.solveSingleTrain({ lt: 200, lb: 300, speed: 72, trapAnswer: 15 });
+        assert(t6.valid === true && t6.commonTrap && t6.commonTrap.type === "bridge_only_trap",
+          "TC-06: Bridge-only trap detection", "Bridge-only trap was not recognized");
+
+        // TC-07: No-conversion trap detection (trap 6.94s)
+        const t7 = Model.solveSingleTrain({ lt: 200, lb: 300, speed: 72, trapAnswer: 6.94 });
+        assert(t7.valid === true && t7.commonTrap && t7.commonTrap.type === "no_conversion_trap",
+          "TC-07: No-conversion trap detection", "No-conversion trap was not recognized");
+
+        // TC-08: Zero train length rejection
+        const t8 = Model.solveSingleTrain({ lt: 0, lb: 300, speed: 72 });
+        assert(t8.valid === false, "TC-08: Zero train length rejection", "Zero length should return valid: false");
+
+        // TC-09: Negative speed rejection
+        const t9 = Model.solveSingleTrain({ lt: 100, lb: 300, speed: -50 });
+        assert(t9.valid === false, "TC-09: Negative speed rejection", "Negative speed should return valid: false");
+
+        // TC-10: Passenger in another moving train (160m train passing person at 36 km/h, opp 54 km/h -> 25 m/s, 160/25 = 6.4s)
+        const t10 = Model.solvePassingPassenger(160, 54, 36, "opposite");
+        assert(t10.valid === true && t10.relSpeedMs === 25 && t10.timeCross === 6.4,
+          "TC-10: Passenger in moving train", `Expected 6.4s. Got ${t10.timeCross}s`);
+
+        // TC-11: Distance invariant (Total D == Lt + Lb)
+        const t11 = Model.solveSingleTrain({ lt: 240, lb: 460, speed: 90 });
+        assert(t11.valid === true && t11.intermediates.totalDistance === (240 + 460),
+          "TC-11: Distance clearance invariant", "Total distance must equal Lt + Lb");
+
+      } catch (err) {
+        results.failed += 1;
+        results.failures.push({ name: "Unexpected test execution error", details: err.message });
+      }
+
+      return results;
+    }
+
+    if (typeof window !== "undefined") {
+      window.runSelfTests = runSelfTests;
+    }
+
+    /* ==========================================================================
+       3. PRACTICE QUESTION BANK (12 Verified Exam-Style Questions)
+       ========================================================================== */
+    const PRACTICE_QUESTIONS = [
+      {
+        id: "TB1",
+        difficulty: "Easy",
+        stem: "A 240 m long train is running at a speed of 72 km/h. How many seconds will it take to cross a railway platform 360 m long?",
+        options: ["30 seconds", "18 seconds", "12 seconds", "25 seconds"],
+        correctIndex: 0, // 30 seconds
+        trapOptionIndex: 1, // 18 seconds (platform length only: 360 / 20 = 18s)
+        trapExplanation: "Bridge-only trap! The train is not clear until its tail exits the platform. Total distance = 240 + 360 = 600m. At 20 m/s, time = 600 / 20 = 30 seconds.",
+        solution: "Speed = 72 × (5/18) = 20 m/s. Total distance = Train + Platform = 240 + 360 = 600 m. Time = 600 / 20 = 30 seconds."
+      },
+      {
+        id: "TB2",
+        difficulty: "Easy",
+        stem: "A train 280 m long is moving at 63 km/h. What is the time taken by it to cross an electric pole?",
+        options: ["16 seconds", "14 seconds", "18 seconds", "12 seconds"],
+        correctIndex: 0, // 16 seconds
+        trapOptionIndex: 1,
+        trapExplanation: "An electric pole has negligible length (0m), so distance = train length = 280m. Speed = 63 × 5/18 = 17.5 m/s. 280 ÷ 17.5 = 16 seconds.",
+        solution: "Pole length = 0 m. Distance = 280 m. Speed = 63 × (5/18) = 17.5 m/s. Time = 280 / 17.5 = 16 seconds."
+      },
+      {
+        id: "TB3",
+        difficulty: "Medium",
+        stem: "A train 175 m long crosses a bridge in 27 seconds travelling at a uniform speed of 54 km/h. What is the length of the bridge?",
+        options: ["230 meters", "245 meters", "405 meters", "210 meters"],
+        correctIndex: 0, // 230 meters
+        trapOptionIndex: 2, // 405 meters (total distance without subtracting train length)
+        trapExplanation: "Trap: 405m is the TOTAL distance travelled. You must subtract the train's own length (175m) to get the bridge length: 405 - 175 = 230 m.",
+        solution: "Speed = 54 × (5/18) = 15 m/s. Total distance covered in 27 seconds = 15 × 27 = 405 m. Since Total D = Train + Bridge: Bridge length = 405 - 175 = 230 meters."
+      },
+      {
+        id: "TB4",
+        difficulty: "Medium",
+        stem: "A train crosses a stationary pole in 9 seconds and crosses a 150 m long platform in 15 seconds. What is the speed of the train in km/h?",
+        options: ["90 km/h", "72 km/h", "84 km/h", "100 km/h"],
+        correctIndex: 0, // 90 km/h
+        trapOptionIndex: 1,
+        trapExplanation: "The extra 6 seconds (15 - 9) are taken strictly to cover the 150m platform! Speed = 150 / 6 = 25 m/s. Converted to km/h: 25 × (18/5) = 90 km/h.",
+        solution: "In (15 - 9) = 6 seconds, the train covers exactly the length of the platform (150 m). Speed = 150 / 6 = 25 m/s. In km/h: 25 × (18/5) = 90 km/h."
+      },
+      {
+        id: "TB5",
+        difficulty: "Medium",
+        stem: "Two trains of lengths 140 m and 160 m are travelling towards each other on parallel tracks at speeds of 60 km/h and 48 km/h respectively. How long will they take to completely cross each other from the moment they meet?",
+        options: ["10 seconds", "12 seconds", "8 seconds", "15 seconds"],
+        correctIndex: 0, // 10 seconds
+        trapOptionIndex: 1,
+        trapExplanation: "Opposite directions: speeds ADD. Relative speed = 60 + 48 = 108 km/h = 108 × (5/18) = 30 m/s. Total distance = 140 + 160 = 300 m. Time = 300 / 30 = 10 seconds.",
+        solution: "Total distance = 140 + 160 = 300 m. Opposite direction ⟹ Relative Speed = 60 + 48 = 108 km/h = 108 × (5/18) = 30 m/s. Time = 300 / 30 = 10 seconds."
+      },
+      {
+        id: "TB6",
+        difficulty: "Exam-Style",
+        stem: "Two trains 120 m and 180 m long run on parallel tracks. When moving in the same direction, the faster train completely overtakes the slower train in 30 seconds. If the speed of the slower train is 36 km/h, what is the speed of the faster train?",
+        options: ["72 km/h", "64 km/h", "80 km/h", "54 km/h"],
+        correctIndex: 0, // 72 km/h
+        trapOptionIndex: 3,
+        trapExplanation: "Total distance = 120 + 180 = 300m. Relative speed = 300 / 30 = 10 m/s = 36 km/h. S_fast - S_slow = 36 km/h ⟹ S_fast = 36 + 36 = 72 km/h.",
+        solution: "Total distance = 120 + 180 = 300 m. Same direction ⟹ Relative speed = 300 / 30 = 10 m/s. In km/h: 10 × (18/5) = 36 km/h. Since S_fast - 36 = 36 ⟹ S_fast = 72 km/h."
+      },
+      {
+        id: "TB7",
+        difficulty: "Medium",
+        stem: "A train 150 m long passes a man walking at 6 km/h in the same direction in 10 seconds. What is the speed of the train in km/h?",
+        options: ["60 km/h", "54 km/h", "48 km/h", "66 km/h"],
+        correctIndex: 0, // 60 km/h
+        trapOptionIndex: 1, // 54 km/h (forgetting to add the man's speed)
+        trapExplanation: "Trap: 15 m/s = 54 km/h is the RELATIVE speed! Because the man is running in the SAME direction, S_train - 6 = 54 ⟹ S_train = 60 km/h.",
+        solution: "The man has negligible length (0m), so distance = 150 m. Relative speed = 150 / 10 = 15 m/s = 15 × (18/5) = 54 km/h. Since they move in the same direction: S_train - 6 = 54 ⟹ S_train = 60 km/h."
+      },
+      {
+        id: "TB8",
+        difficulty: "Medium",
+        stem: "A train 220 m long is moving at 54 km/h. A man is jogging at 6 km/h towards the train from the front. How many seconds will it take for the train to pass the man?",
+        options: ["13.2 seconds", "14.6 seconds", "12.0 seconds", "15.0 seconds"],
+        correctIndex: 0, // 13.2 seconds
+        trapOptionIndex: 1,
+        trapExplanation: "Moving towards each other (opposite direction) ⟹ relative speed ADDS: 54 + 6 = 60 km/h = 60 × (5/18) = 50/3 m/s. Time = 220 / (50/3) = 660 / 50 = 13.2 seconds.",
+        solution: "Opposite direction ⟹ Relative Speed = 54 + 6 = 60 km/h = 60 × (5/18) = 50/3 m/s. Man's length = 0 m. Time = 220 ÷ (50/3) = 220 × (3/50) = 13.2 seconds."
+      },
+      {
+        id: "TB9",
+        difficulty: "Exam-Style",
+        stem: "A 200 m long train moving at 54 km/h crosses a passenger sitting inside another train of length 250 m travelling in the opposite direction at 36 km/h. How much time does it take to cross the passenger?",
+        options: ["8 seconds", "18 seconds", "10 seconds", "12 seconds"],
+        correctIndex: 0, // 8 seconds
+        trapOptionIndex: 1, // 18 seconds (adding both train lengths: 450 / 25 = 18s)
+        trapExplanation: "Passenger trap! The object being crossed is the PASSENGER, not the second train. A passenger has 0 length! Distance = length of passing train only = 200m. Rel speed = 54 + 36 = 90 km/h = 25 m/s. Time = 200 / 25 = 8 seconds.",
+        solution: "The passenger is a point object (length = 0). Distance = length of the passing train = 200 m. Relative speed = 54 + 36 = 90 km/h = 25 m/s. Time taken = 200 / 25 = 8 seconds."
+      },
+      {
+        id: "TB10",
+        difficulty: "Exam-Style",
+        stem: "A train travelling at a uniform speed clears two bridges of lengths 210 m and 120 m in 25 seconds and 19 seconds respectively. What is the length of the train?",
+        options: ["165 meters", "150 meters", "175 meters", "180 meters"],
+        correctIndex: 0, // 165 meters
+        trapOptionIndex: 1,
+        trapExplanation: "Difference in distance = 210 - 120 = 90m. Difference in time = 25 - 19 = 6s. Speed = 90 / 6 = 15 m/s. In 19 seconds, total distance = 15 × 19 = 285m. Train length = 285 - 120 = 165 meters.",
+        solution: "Extra distance = 210 - 120 = 90 m. Extra time = 25 - 19 = 6 s. Speed = 90 / 6 = 15 m/s. Total distance in 19 s = 15 × 19 = 285 m. Since D = L_train + 120 ⟹ L_train = 285 - 120 = 165 meters."
+      },
+      {
+        id: "TB11",
+        difficulty: "Medium",
+        stem: "Two trains of equal length are running on parallel lines in the same direction at 46 km/h and 36 km/h. The faster train passes the slower train in 36 seconds. What is the length of each train?",
+        options: ["50 meters", "100 meters", "75 meters", "60 meters"],
+        correctIndex: 0, // 50 meters
+        trapOptionIndex: 1, // 100 meters (total distance for BOTH trains combined)
+        trapExplanation: "Trap: 100m is the combined length of BOTH trains (2L). Each train length is 100 / 2 = 50 meters.",
+        solution: "Relative speed = 46 - 36 = 10 km/h = 10 × (5/18) = 25/9 m/s. Total distance in 36 seconds = (25/9) × 36 = 100 m. Since both trains have equal length: 2L = 100 ⟹ L = 50 meters."
+      },
+      {
+        id: "TB12",
+        difficulty: "Easy",
+        stem: "A train 300 m long crosses a platform of length 200 m in 25 seconds. What is its speed in km/h?",
+        options: ["72 km/h", "20 km/h", "54 km/h", "90 km/h"],
+        correctIndex: 0, // 72 km/h
+        trapOptionIndex: 1, // 20 km/h (speed is 20 m/s, forgot conversion to km/h)
+        trapExplanation: "Trap: Speed is 20 m/s, not 20 km/h! Converted to km/h: 20 × (18/5) = 72 km/h.",
+        solution: "Total distance = 300 + 200 = 500 m. Speed in m/s = 500 / 25 = 20 m/s. Speed in km/h = 20 × (18/5) = 72 km/h."
+      }
+    ];
+
+    if (typeof window !== "undefined") {
+      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+    }
+
+    /* ==========================================================================
+       4. INTERACTIVE RENDERING & EVENT HANDLING
+       ========================================================================== */
+    const inputLt = document.getElementById("input-lt");
+    const rangeLt = document.getElementById("range-lt");
+    const inputLb = document.getElementById("input-lb");
+    const rangeLb = document.getElementById("range-lb");
+    const inputSpeed = document.getElementById("input-speed");
+    const rangeSpeed = document.getElementById("range-speed");
+
+    const ltBadge = document.getElementById("lt-display-badge");
+    const lbBadge = document.getElementById("lb-display-badge");
+    const speedBadge = document.getElementById("speed-display-badge");
+
+    const svgEl = document.getElementById("train-svg");
+    const readoutSpeedMs = document.getElementById("readout-speed-ms");
+    const readoutTotalDist = document.getElementById("readout-total-dist");
+    const readoutTimeBridge = document.getElementById("readout-time-bridge");
+    const readoutTimePole = document.getElementById("readout-time-pole");
+
+    const predictOptionsContainer = document.getElementById("predict-options-container");
+    const predictScenarioText = document.getElementById("predict-scenario-text");
+    const predictFeedback = document.getElementById("predict-feedback");
+    const btnRevealSolution = document.getElementById("btn-reveal-solution");
+    const workedSolutionPanel = document.getElementById("worked-solution-panel");
+    const solutionStepsContainer = document.getElementById("solution-steps-container");
+    const solutionTrapCallout = document.getElementById("solution-trap-callout");
+    const solutionTrapText = document.getElementById("solution-trap-text");
+
+    function updateModelAndVisual() {
+      const lt = parseFloat(inputLt.value) || 0;
+      const lb = parseFloat(inputLb.value) || 0;
+      const speed = parseFloat(inputSpeed.value) || 0;
+
+      const result = Model.solveSingleTrain({ lt, lb, speed });
+
+      if (!result.valid) {
+        readoutSpeedMs.textContent = "—";
+        readoutTotalDist.textContent = "—";
+        readoutTimeBridge.textContent = result.error;
+        readoutTimePole.textContent = "—";
+        renderErrorSvg(result.error);
+        return;
+      }
+
+      const { s_ms, totalDistance, timeBridge, timePole } = result.intermediates;
+
+      ltBadge.textContent = `${lt} meters`;
+      lbBadge.textContent = lb > 0 ? `${lb} meters` : `0 m (Pole)`;
+      speedBadge.textContent = `${speed} km/h = ${s_ms} m/s`;
+
+      readoutSpeedMs.textContent = `${s_ms} m/s (${speed} km/h)`;
+      readoutTotalDist.textContent = `${totalDistance} m (${lt}m + ${lb}m)`;
+      readoutTimeBridge.textContent = `${timeBridge} seconds`;
+      readoutTimePole.textContent = `${timePole} seconds`;
+
+      renderTrainSvg(result);
+      updatePredictScenario(result);
+    }
+
+    function renderTrainSvg(result) {
+      const { lt, lb, totalDistance, timeBridge } = result.intermediates;
+
+      const trackY = 85;
+      const startX = 40;
+      const maxDist = Math.max(totalDistance, 500);
+      const scale = 540 / maxDist;
+
+      const trainW = Math.max(lt * scale, 45);
+      const bridgeW = lb > 0 ? Math.max(lb * scale, 30) : 4;
+      const bridgeX = startX + 160;
+
+      svgEl.innerHTML = `
+        <rect x="0" y="0" width="620" height="180" fill="transparent" />
+
+        <!-- Track rails & ties -->
+        <line x1="20" y1="${trackY}" x2="600" y2="${trackY}" stroke="var(--color-border, #94a3b8)" stroke-width="4" />
+        <line x1="20" y1="${trackY + 8}" x2="600" y2="${trackY + 8}" stroke="var(--color-border, #94a3b8)" stroke-width="4" />
+
+        <!-- Bridge / Platform -->
+        ${lb > 0 ? `
+          <rect x="${bridgeX}" y="${trackY - 14}" width="${bridgeW}" height="28" rx="3"
+                fill="var(--color-surface-hover, #e2e8f0)" stroke="var(--color-accent, #0284c7)" stroke-width="2" stroke-dasharray="2 2" />
+          <text x="${bridgeX + bridgeW / 2}" y="${trackY - 22}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--color-accent, #0284c7)">
+            Bridge / Platform: ${lb}m
+          </text>
+        ` : `
+          <!-- Pole -->
+          <line x1="${bridgeX}" y1="${trackY - 35}" x2="${bridgeX}" y2="${trackY + 15}" stroke="var(--color-danger, #b91c1c)" stroke-width="4" />
+          <circle cx="${bridgeX}" cy="${trackY - 35}" r="5" fill="var(--color-danger, #b91c1c)" />
+          <text x="${bridgeX}" y="${trackY - 44}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--color-danger, #b91c1c)">
+            Pole (0m)
+          </text>
+        `}
+
+        <!-- Train (Positioned approaching the bridge) -->
+        <g transform="translate(${startX}, ${trackY - 24})">
+          <!-- Main train body -->
+          <rect x="0" y="0" width="${trainW}" height="24" rx="4"
+                fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
+          <!-- Engine nose -->
+          <path d="M${trainW} 4 L${trainW + 8} 12 L${trainW} 20 Z" fill="var(--color-primary, #1e3a8a)" />
+          <!-- Tail lamp -->
+          <circle cx="4" cy="12" r="3" fill="var(--color-danger, #b91c1c)" />
+          <!-- Wheels -->
+          <circle cx="8" cy="24" r="3" fill="#0f172a" />
+          <circle cx="${trainW - 8}" cy="24" r="3" fill="#0f172a" />
+          <text x="${trainW / 2}" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="var(--color-primary, #1e3a8a)">
+            Train: ${lt}m
+          </text>
+        </g>
+
+        <!-- Clearance Distance Indicator Bar below -->
+        <g transform="translate(0, 130)">
+          <line x1="${startX}" y1="0" x2="${bridgeX + bridgeW}" y2="0"
+                stroke="var(--color-success, #059669)" stroke-width="2" marker-end="url(#arrow)" />
+          <circle cx="${startX}" cy="0" r="3" fill="var(--color-success, #059669)" />
+          <circle cx="${bridgeX + bridgeW}" cy="0" r="3" fill="var(--color-success, #059669)" />
+          <text x="${(startX + bridgeX + bridgeW) / 2}" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="var(--color-success, #059669)">
+            Total Clearance Vector: ${totalDistance}m (${timeBridge}s)
+          </text>
+        </g>
+      `;
+    }
+
+    function renderErrorSvg(msg) {
+      svgEl.innerHTML = `
+        <rect x="20" y="30" width="580" height="110" rx="8" fill="var(--color-danger-bg, #fef2f2)" stroke="var(--color-danger, #b91c1c)" />
+        <text x="310" y="90" text-anchor="middle" font-size="14" font-weight="600" fill="var(--color-danger, #b91c1c)">
+          ⚠️ ${msg}
+        </text>
+      `;
+    }
+
+    function setPreset(lt, lb, speed) {
+      inputLt.value = lt;
+      rangeLt.value = lt;
+      inputLb.value = lb;
+      rangeLb.value = lb;
+      inputSpeed.value = speed;
+      rangeSpeed.value = speed;
+      updateModelAndVisual();
+      LabCommon.announce(`Loaded preset: ${lt}m train, ${lb}m bridge at ${speed} km/h.`);
+    }
+
+    // Input listeners
+    inputLt.addEventListener("input", (e) => { rangeLt.value = e.target.value; updateModelAndVisual(); });
+    rangeLt.addEventListener("input", (e) => { inputLt.value = e.target.value; updateModelAndVisual(); });
+
+    inputLb.addEventListener("input", (e) => { rangeLb.value = e.target.value; updateModelAndVisual(); });
+    rangeLb.addEventListener("input", (e) => { inputLb.value = e.target.value; updateModelAndVisual(); });
+
+    inputSpeed.addEventListener("input", (e) => { rangeSpeed.value = e.target.value; updateModelAndVisual(); });
+    rangeSpeed.addEventListener("input", (e) => { inputSpeed.value = e.target.value; updateModelAndVisual(); });
+
+    /* ==========================================================================
+       5. PREDICT-FIRST LOGIC
+       ========================================================================== */
+    function updatePredictScenario(modelResult) {
+      const { lt, lb, s_kmh, totalDistance, timeBridge, s_ms } = modelResult.intermediates;
+
+      predictScenarioText.textContent = lb > 0
+        ? `A ${lt} m long train travelling at ${s_kmh} km/h crosses a ${lb} m long platform. How many seconds does it take to completely clear the platform?`
+        : `A ${lt} m long train travelling at ${s_kmh} km/h passes a stationary pole. How many seconds does it take to pass?`;
+
+      const correctAns = timeBridge;
+      const bridgeOnlyTrap = lb > 0 ? LabCommon.round(lb / s_ms, 2) : LabCommon.round(timeBridge * 1.5, 2);
+      const noConvTrap = LabCommon.round(totalDistance / s_kmh, 2);
+      const distractor = LabCommon.round(timeBridge + 5, 2);
+
+      const choices = [
+        { val: correctAns, type: "correct", label: `${correctAns} s` },
+        { val: bridgeOnlyTrap, type: "trap_bridge", label: `${bridgeOnlyTrap} s` },
+        { val: noConvTrap, type: "trap_conv", label: `${noConvTrap} s` },
+        { val: distractor, type: "distractor", label: `${distractor} s` }
+      ];
+
+      // Remove duplicate labels
+      const uniqueChoices = [];
+      const seen = new Set();
+      choices.forEach(c => {
+        if (!seen.has(c.label)) {
+          seen.add(c.label);
+          uniqueChoices.push(c);
+        }
+      });
+
+      uniqueChoices.sort((a, b) => a.val - b.val);
+
+      predictOptionsContainer.innerHTML = "";
+      predictFeedback.className = "callout hidden";
+      workedSolutionPanel.classList.add("hidden");
+
+      uniqueChoices.forEach(c => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.textContent = c.label;
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.onclick = () => handlePredictChoice(c, modelResult);
+        predictOptionsContainer.appendChild(btn);
+      });
+    }
+
+    function handlePredictChoice(choice, modelResult) {
+      predictFeedback.classList.remove("hidden");
+
+      const buttons = predictOptionsContainer.querySelectorAll(".option-btn");
+      buttons.forEach(b => {
+        b.classList.remove("correct", "trap", "incorrect", "selected");
+        if (b.textContent === choice.label) b.classList.add("selected");
+      });
+
+      if (choice.type === "correct") {
+        predictFeedback.className = "callout callout-success";
+        predictFeedback.innerHTML = `
+          <strong>✓ Outstanding deduction!</strong> You converted the speed to ${modelResult.intermediates.s_ms} m/s and added both lengths (${modelResult.intermediates.totalDistance} m), getting exactly ${choice.label}.
+        `;
+        LabCommon.announce("Prediction correct! You predicted the right time.");
+      } else if (choice.type === "trap_bridge") {
+        predictFeedback.className = "callout callout-trap";
+        predictFeedback.innerHTML = `
+          <strong>⚠️ Bridge-Only Trap!</strong> You used only the bridge length (${modelResult.intermediates.lb} m). But the train is NOT clear until its tail exits the bridge! The train must cover ${modelResult.intermediates.totalDistance} m.
+        `;
+        LabCommon.announce("Trap encountered: Remember to include train length.");
+      } else if (choice.type === "trap_conv") {
+        predictFeedback.className = "callout callout-trap";
+        predictFeedback.innerHTML = `
+          <strong>⚠️ Unit Conversion Omission!</strong> You divided meters directly by km/h (${modelResult.intermediates.totalDistance} / ${modelResult.intermediates.s_kmh}). You must multiply ${modelResult.intermediates.s_kmh} km/h by 5/18 to get ${modelResult.intermediates.s_ms} m/s first!
+        `;
+        LabCommon.announce("Trap encountered: Remember 5/18 conversion.");
+      } else {
+        predictFeedback.className = "callout callout-warning";
+        predictFeedback.innerHTML = `
+          <strong>Not quite:</strong> Distance = L_train + L_bridge (${modelResult.intermediates.totalDistance} m), Speed = ${modelResult.intermediates.s_ms} m/s.
+        `;
+      }
+
+      revealWorkedSteps(modelResult);
+    }
+
+    btnRevealSolution.addEventListener("click", () => {
+      const lt = parseFloat(inputLt.value) || 0;
+      const lb = parseFloat(inputLb.value) || 0;
+      const speed = parseFloat(inputSpeed.value) || 0;
+      const result = Model.solveSingleTrain({ lt, lb, speed });
+      revealWorkedSteps(result);
+    });
+
+    function revealWorkedSteps(modelResult) {
+      if (!modelResult || !modelResult.valid) return;
+      workedSolutionPanel.classList.remove("hidden");
+
+      solutionStepsContainer.innerHTML = modelResult.steps.map((st, idx) => `
+        <div class="step-item">
+          <div class="step-num">Step ${idx + 1}</div>
+          <div class="step-title">${st.title}</div>
+          <div>${st.explanation}</div>
+          ${st.math ? `<div class="step-detail">${st.math}</div>` : ''}
+        </div>
+      `).join("");
+
+      if (modelResult.commonTrap) {
+        solutionTrapCallout.classList.remove("hidden");
+        solutionTrapText.textContent = modelResult.commonTrap.explanation;
+      }
+    }
+
+    /* ==========================================================================
+       6. PRACTICE LAB ENGINE
+       ========================================================================== */
+    let currentQIndex = 0;
+    let practiceMode = "hints";
+    let timerInstance = null;
+    let questionStartTime = 0;
+    const TOPIC_ID = "trains-bridge";
+
+    function setPracticeMode(mode) {
+      practiceMode = mode;
+      document.querySelectorAll(".mode-btn").forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
+      });
+
+      const activeBtn = document.getElementById(`btn-mode-${mode}`);
+      if (activeBtn) {
+        activeBtn.classList.add("active");
+        activeBtn.setAttribute("aria-selected", "true");
+      }
+
+      const timerContainer = document.getElementById("timer-container");
+      if (mode === "timed") {
+        timerContainer.classList.remove("hidden");
+        if (!timerInstance) {
+          timerInstance = new LabCommon.PracticeTimer((sec) => {
+            document.getElementById("timer-display").textContent = timerInstance.format();
+          });
+        }
+        timerInstance.start();
+      } else {
+        timerContainer.classList.add("hidden");
+        if (timerInstance) timerInstance.stop();
+      }
+
+      const simSection = document.getElementById("interactive-model-title").closest(".card");
+      const refSection = document.getElementById("reference-title").closest(".card");
+      if (mode === "independent") {
+        simSection.style.display = "none";
+        refSection.style.display = "none";
+      } else {
+        simSection.style.display = "block";
+        refSection.style.display = "block";
+      }
+
+      LabCommon.announce(`Switched to ${mode} practice mode.`);
+    }
+
+    function renderPracticeQuestion(index) {
+      const q = PRACTICE_QUESTIONS[index];
+      if (!q) return;
+
+      questionStartTime = Date.now();
+
+      document.getElementById("practice-q-num").textContent = `Question ${index + 1} of ${PRACTICE_QUESTIONS.length}`;
+      const diffBadge = document.getElementById("practice-q-difficulty");
+      diffBadge.textContent = q.difficulty;
+      diffBadge.className = `badge ${q.difficulty === 'Easy' ? 'badge-published' : q.difficulty === 'Medium' ? 'badge-draft' : 'badge-tag'}`;
+
+      document.getElementById("practice-q-stem").textContent = q.stem;
+
+      const feedback = document.getElementById("practice-feedback");
+      feedback.className = "callout hidden";
+      document.getElementById("practice-error-categorizer").classList.add("hidden");
+      document.getElementById("practice-solution-box").classList.add("hidden");
+
+      const optContainer = document.getElementById("practice-options-container");
+      optContainer.innerHTML = "";
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn practice-submit-btn";
+        btn.textContent = optText;
+        btn.setAttribute("role", "radio");
+        btn.setAttribute("aria-checked", "false");
+        btn.onclick = () => submitPracticeAnswer(optIdx, q);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function submitPracticeAnswer(chosenIdx, question) {
+      const isCorrect = chosenIdx === question.correctIndex;
+      const isTrap = chosenIdx === question.trapOptionIndex;
+      const durationSec = Math.round((Date.now() - questionStartTime) / 1000);
+
+      const buttons = document.querySelectorAll("#practice-options-container .option-btn");
+      buttons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === question.correctIndex) b.classList.add("correct");
+        if (idx === chosenIdx && !isCorrect) {
+          b.classList.add(isTrap ? "trap" : "incorrect");
+        }
+      });
+
+      const feedback = document.getElementById("practice-feedback");
+      feedback.classList.remove("hidden");
+
+      if (isCorrect) {
+        feedback.className = "callout callout-success";
+        feedback.innerHTML = `<strong>✓ Correct!</strong> Well reasoned.`;
+        LabCommon.announce("Correct answer!");
+      } else if (isTrap && question.trapExplanation) {
+        feedback.className = "callout callout-trap";
+        feedback.innerHTML = `<strong>⚠️ Common Exam Trap:</strong> ${question.trapExplanation}`;
+        LabCommon.announce("Incorrect: Common trap encountered.");
+        document.getElementById("practice-error-categorizer").classList.remove("hidden");
+      } else {
+        feedback.className = "callout callout-danger";
+        feedback.innerHTML = `<strong>Incorrect:</strong> Review the worked solution below.`;
+        LabCommon.announce("Incorrect answer.");
+        document.getElementById("practice-error-categorizer").classList.remove("hidden");
+      }
+
+      const solBox = document.getElementById("practice-solution-box");
+      solBox.classList.remove("hidden");
+      document.getElementById("practice-solution-text").textContent = question.solution;
+
+      LabCommon.recordTopicAttempt(TOPIC_ID, {
+        isCorrect,
+        isIndependent: practiceMode === "independent" || practiceMode === "timed",
+        timeSec: durationSec,
+        errorCategory: isCorrect ? null : document.getElementById("select-error-category").value
+      });
+
+      renderStats();
+    }
+
+    function handleSaveErrorCategory(category) {
+      const p = LabCommon.getTopicProgress(TOPIC_ID);
+      if (p.errorsByCategory[category] !== undefined) {
+        p.errorsByCategory[category] += 1;
+        LabCommon.storage.set(`lab_progress_${TOPIC_ID}`, p);
+      }
+      LabCommon.announce(`Recorded mistake reason: ${category}`);
+    }
+
+    function loadNextQuestion() {
+      currentQIndex = (currentQIndex + 1) % PRACTICE_QUESTIONS.length;
+      renderPracticeQuestion(currentQIndex);
+    }
+
+    function renderStats() {
+      const p = LabCommon.getTopicProgress(TOPIC_ID);
+      document.getElementById("stat-attempts").textContent = p.attempts;
+      document.getElementById("stat-correct").textContent = p.correct;
+      document.getElementById("stat-independent").textContent = p.independentCorrect;
+      const acc = p.attempts > 0 ? Math.round((p.correct / p.attempts) * 100) : 0;
+      document.getElementById("stat-accuracy").textContent = `${acc}%`;
+    }
+
+    function handleResetStats() {
+      if (confirm("Reset local practice statistics for Trains and Bridges?")) {
+        LabCommon.resetTopicProgress(TOPIC_ID);
+        renderStats();
+        LabCommon.announce("Practice statistics reset.");
+      }
+    }
+
+    /* ==========================================================================
+       7. INITIALIZATION ON LOAD
+       ========================================================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      LabCommon.runAndRenderSelfTests(runSelfTests);
+      updateModelAndVisual();
+      renderPracticeQuestion(0);
+      renderStats();
+    });
+  </script>
+</body>
+</html>
