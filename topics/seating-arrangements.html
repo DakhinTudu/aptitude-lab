@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linear &amp; Circular Seating Arrangements | Aptitude &amp; Reasoning Lab</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .seating-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .clue-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .clue-box {
+      background: var(--color-surface-subtle);
+      border-left: 4px solid var(--color-primary);
+      padding: 0.85rem 1.15rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .viz-canvas-container {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 420px;
+    }
+    .query-result {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: var(--color-surface-subtle);
+      border-radius: 4px;
+      font-size: 0.9rem;
+      border: 1px solid var(--color-border);
+    }
+    .status-pill {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .status-occupied {
+      background: #e6f4ea;
+      color: #137333;
+    }
+    .status-empty {
+      background: #f1f3f4;
+      color: #5f6368;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="../index.html" class="nav-back-link">← All Modules</a>
+        <div class="brand">
+          <span class="brand-title">Aptitude &amp; Reasoning Lab</span>
+          <span class="brand-subtitle">SEBI Grade A • Banking • SSC</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span class="badge badge-published">Published</span>
+        <button id="theme-toggle" class="btn btn-secondary btn-sm" aria-label="Toggle dark mode">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="page-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a>
+      <span>/</span>
+      <a href="../index.html#reasoning-section">Logical &amp; Analytical Reasoning</a>
+      <span>/</span>
+      <span aria-current="page">Seating Arrangements</span>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+        <span class="badge badge-tag">Constraint Satisfaction</span>
+        <span class="badge badge-tag">Bank PO &amp; SEBI Gr A Core</span>
+        <span class="badge badge-tag">Spatial Logic</span>
+      </div>
+      <h1>Linear &amp; Circular Seating Arrangements</h1>
+      <p style="color: var(--color-text-muted); font-size: 1.05rem; max-width: 800px; margin-bottom: 1rem;">
+        Master the geometric and directional mechanics of competitive reasoning puzzles: facing centre vs. facing outward, linear row perspectives (North vs. South), between-count rules, and systematic branch-and-prune deduction.
+      </p>
+
+      <div class="callout callout-info" style="margin: 0; font-size: 0.875rem;">
+        <strong>Orientation Invariant:</strong> For a person facing the <em>centre</em> of a circle, turning <strong>Left</strong> moves <em>clockwise</em>, and turning <strong>Right</strong> moves <em>anti-clockwise</em>. When facing <em>outward</em>, the orientations invert: Left is <em>anti-clockwise</em> and Right is <em>clockwise</em>.
+      </div>
+    </section>
+
+    <!-- Formula & Spatial Rules Reference -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <h2 style="font-size: 1.3rem; margin-bottom: 1rem;">Core Structural &amp; Directional Rules</h2>
+      <div class="control-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border);">
+          <strong style="color: var(--color-primary); display: block; margin-bottom: 0.5rem;">1. Circular Table Geometry ($N=8$)</strong>
+          <ul style="font-size: 0.85rem; padding-left: 1.2rem; margin: 0; line-height: 1.6;">
+            <li><strong>Opposite Seat ($N$ even):</strong> Position $\text{Opp}(i) = (i + N/2) \pmod N$. For $N=8$, opposite is always 4 steps away.</li>
+            <li><strong>Facing Centre:</strong> Left = Clockwise ($+1$), Right = Anti-Clockwise ($-1$).</li>
+            <li><strong>Facing Outward:</strong> Left = Anti-Clockwise ($-1$), Right = Clockwise ($+1$).</li>
+            <li><strong>Between Count:</strong> $k$-th to the left means $(k - 1)$ persons between them.</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border);">
+          <strong style="color: var(--color-primary); display: block; margin-bottom: 0.5rem;">2. Linear Row Invariants ($0 \dots N-1$)</strong>
+          <ul style="font-size: 0.85rem; padding-left: 1.2rem; margin: 0; line-height: 1.6;">
+            <li><strong>Facing North:</strong> Left = West (index $-1$), Right = East (index $+1$).</li>
+            <li><strong>Facing South:</strong> Left = East (index $+1$), Right = West (index $-1$).</li>
+            <li><strong>Between Count:</strong> $| \text{Index}_A - \text{Index}_B | - 1$.</li>
+            <li><strong>Parallel Rows:</strong> Row 1 (South) faces Row 2 (North); right of Row 1 points West.</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border);">
+          <strong style="color: var(--color-primary); display: block; margin-bottom: 0.5rem;">3. 4-Stage Human Deduction Protocol</strong>
+          <ul style="font-size: 0.85rem; padding-left: 1.2rem; margin: 0; line-height: 1.6;">
+            <li><strong>1. Anchor:</strong> Place the primary fixed/definite clue (e.g. extreme end or relative pair).</li>
+            <li><strong>2. Branch:</strong> If at most 2 possibilities exist, maintain Case 1 vs. Case 2.</li>
+            <li><strong>3. Prune:</strong> Apply negative constraints ("cannot sit next to A") to kill contradictions.</li>
+            <li><strong>4. Close:</strong> Place remaining individuals and verify all $M$ puzzle clues.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Interactive Puzzle Solver & Visualizer -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <div>
+          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">Interactive Step-by-Step Arrangement Visualizer</h2>
+          <p style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">
+            Follow step-by-step constraint resolution, observe directional arrows, and inspect relationships.
+          </p>
+        </div>
+      </div>
+
+      <div class="seating-controls">
+        <div>
+          <label for="puzzle-select" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.35rem;">Select Puzzle Preset:</label>
+          <select id="puzzle-select" class="form-control" onchange="handlePresetChange(this.value)">
+            <option value="circle_inward">Preset 1: 8 Persons Circular (All Facing Centre)</option>
+            <option value="circle_mixed">Preset 2: 8 Persons Circular (Alternating In/Out)</option>
+            <option value="linear_north">Preset 3: 8 Persons Single Row (All Facing North)</option>
+            <option value="dual_row">Preset 4: Dual Parallel Rows (4 South vs 4 North)</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="step-slider" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.35rem;">
+            Deduction Step: <span id="step-label" style="color: var(--color-primary); font-weight: 700;">Step 1 of 5</span>
+          </label>
+          <input type="range" id="step-slider" min="1" max="5" value="1" style="width: 100%;" oninput="handleStepInput(parseInt(this.value))">
+        </div>
+      </div>
+
+      <!-- Clue Navigation Buttons & Banner -->
+      <div class="clue-nav">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="stepPrevious()">← Previous Clue</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="stepNext()">Next Clue →</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="stepReset()">↺ Reset to Start</button>
+      </div>
+
+      <div id="clue-box" class="clue-box">
+        <strong>Active Clue:</strong> <span id="clue-text">Loading clue...</span>
+        <div id="clue-deduction" style="margin-top: 0.35rem; color: var(--color-text-muted); font-size: 0.85rem;"></div>
+      </div>
+
+      <!-- SVG Canvas -->
+      <div class="viz-canvas-container">
+        <svg id="seating-svg" viewBox="0 0 540 440" width="100%" height="400" style="max-width: 540px;" aria-label="Seating arrangement diagram"></svg>
+      </div>
+
+      <!-- Custom Spatial Query Tool -->
+      <div style="margin-top: 1.5rem; border-top: 1px solid var(--color-border); padding-top: 1.25rem;">
+        <h3 style="font-size: 1.05rem; margin-bottom: 0.5rem;">Interactive Spatial Query Inspector</h3>
+        <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.75rem;">
+          Query relative positions between any seated individuals in the current completed arrangement:
+        </p>
+
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+          <label for="query-person-a" class="sr-only">From Person</label>
+          <select id="query-person-a" class="form-control" style="width: auto;"></select>
+
+          <label for="query-type" class="sr-only">Query Type</label>
+          <select id="query-type" class="form-control" style="width: auto;" onchange="updateQueryParamVisibility()">
+            <option value="opposite">Who sits directly opposite?</option>
+            <option value="k_left">Who sits k-th to the left?</option>
+            <option value="k_right">Who sits k-th to the right?</option>
+            <option value="between">How many sit between this person and...</option>
+          </select>
+
+          <span id="query-param-k-wrapper" style="display: none;">
+            <input type="number" id="query-k" class="form-control" style="width: 70px;" min="1" max="4" value="2">
+          </span>
+
+          <span id="query-param-b-wrapper" style="display: none;">
+            <label for="query-person-b" class="sr-only">To Person</label>
+            <select id="query-person-b" class="form-control" style="width: auto;"></select>
+          </span>
+
+          <button type="button" class="btn btn-secondary btn-sm" onclick="runSpatialQuery()">Inspect Relationship</button>
+        </div>
+
+        <div id="query-result" class="query-result" style="display: none;"></div>
+      </div>
+    </section>
+
+    <!-- Predict-First Conceptual Check -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <div>
+          <span class="badge badge-tag" style="margin-bottom: 0.25rem;">Conceptual Checkpoint</span>
+          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">Predict-First: The Inward Clockwise Challenge</h2>
+          <p style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">
+            Test your mental rotation and directional anchoring before proceeding to full exam sets.
+          </p>
+        </div>
+      </div>
+
+      <div style="background: var(--color-surface-subtle); padding: 1.25rem; border-radius: 6px; border: 1px solid var(--color-border); margin-bottom: 1rem;">
+        <p style="font-weight: 600; margin-bottom: 0.75rem;">
+          Eight persons (A, B, C, D, E, F, G, H) sit in a circle facing the center.
+        </p>
+        <ul style="font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.6; padding-left: 1.25rem;">
+          <li>Clue 1: A sits 3rd to the left of B.</li>
+          <li>Clue 2: C sits 2nd to the right of A.</li>
+          <li>Clue 3: D sits directly opposite to C.</li>
+        </ul>
+        <p style="font-size: 0.95rem; font-weight: 600; margin-bottom: 1rem; color: var(--color-primary);">
+          What is the spatial position of Person A with respect to Person D?
+        </p>
+
+        <div id="predict-options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem;">
+          <button type="button" class="btn btn-secondary" onclick="checkPredict('A')">A) 2nd to the right</button>
+          <button type="button" class="btn btn-secondary" onclick="checkPredict('B')">B) 2nd to the left</button>
+          <button type="button" class="btn btn-secondary" onclick="checkPredict('C')">C) Directly opposite</button>
+          <button type="button" class="btn btn-secondary" onclick="checkPredict('D')">D) Immediate left</button>
+        </div>
+
+        <div id="predict-feedback" style="margin-top: 1rem; display: none;"></div>
+      </div>
+    </section>
+
+    <!-- 12 Verified Practice Questions -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">12 Verified Exam Practice Questions</h2>
+          <p style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">
+            Graded difficulty (Easy, Medium, Hard) matching SEBI Grade A, IBPS PO, and SSC CGL patterns.
+          </p>
+        </div>
+        <div style="text-align: right;">
+          <span id="score-display" class="badge badge-published" style="font-size: 0.9rem;">Score: 0 / 12</span>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="resetPractice()" style="margin-left: 0.5rem;">↺ Reset</button>
+        </div>
+      </div>
+
+      <div id="practice-container" style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.25rem;">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Module Completion Checklist -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <h2 style="font-size: 1.2rem; margin-bottom: 0.75rem;">Mastery Checklist: Seating Arrangements</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; font-size: 0.875rem;">
+        <div>
+          <input type="checkbox" id="chk1" checked disabled>
+          <label for="chk1">Facing centre vs outward clockwise inversion</label>
+        </div>
+        <div>
+          <input type="checkbox" id="chk2" checked disabled>
+          <label for="chk2">Opposite seat formula: $(i + N/2) \pmod N$</label>
+        </div>
+        <div>
+          <input type="checkbox" id="chk3" checked disabled>
+          <label for="chk3">$k$-th to the left means $(k-1)$ people in between</label>
+        </div>
+        <div>
+          <input type="checkbox" id="chk4" checked disabled>
+          <label for="chk4">Facing South left/right observer inversion</label>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <strong>Aptitude &amp; Reasoning Lab</strong> — Practice-First Competitive Exam Learning
+          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
+            Zero runtime dependencies • Pure HTML5, CSS &amp; Vanilla ES6 JS
+          </div>
+        </div>
+        <div style="font-size: 0.8125rem; display: flex; gap: 1rem;">
+          <a href="../PROJECT.md" style="color: var(--color-primary); text-decoration: none;">Specification</a>
+          <a href="../docs/curriculum.md" style="color: var(--color-primary); text-decoration: none;">Curriculum</a>
+          <a href="../docs/authoring-guide.md" style="color: var(--color-primary); text-decoration: none;">Authoring Guide</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/common.js"></script>
+  <script>
+    /* ==========================================================================
+       MODEL: Pure Deterministic Seating Engine
+       ========================================================================== */
+    const Model = {
+      // Circular next index:
+      // index: 0..total-1 (clockwise: 0=12 o'clock, 1=1:30, 2=3 o'clock, etc.)
+      // facing: 'inward' or 'outward'
+      // shift: > 0 for Left, < 0 for Right
+      getCircularNext(index, shift, facing = 'inward', total = 8) {
+        if (total <= 0) return null;
+        const normIndex = ((index % total) + total) % total;
+        let step = facing === 'inward' ? shift : -shift;
+        return ((normIndex + step) % total + total) % total;
+      },
+
+      getOppositeSeat(index, total = 8) {
+        if (total % 2 !== 0 || total <= 0) return null;
+        return ((index + total / 2) % total + total) % total;
+      },
+
+      // Linear next index:
+      // index: 0..total-1 (0 is extreme left of page, total-1 is extreme right)
+      // facing: 'north' or 'south'
+      // shift: > 0 for Right, < 0 for Left
+      getLinearNext(index, shift, facing = 'north', total = 8) {
+        const dir = facing === 'north' ? 1 : -1;
+        const target = index + shift * dir;
+        if (target < 0 || target >= total) return null;
+        return target;
+      },
+
+      getBetweenCount(indexA, indexB, type = 'linear', total = 8, dir = 'shorter') {
+        if (type === 'linear') {
+          return Math.max(0, Math.abs(indexA - indexB) - 1);
+        }
+        const distCW = ((indexB - indexA) % total + total) % total;
+        const distCCW = ((indexA - indexB) % total + total) % total;
+        if (dir === 'cw') return Math.max(0, distCW - 1);
+        if (dir === 'ccw') return Math.max(0, distCCW - 1);
+        return Math.max(0, Math.min(distCW, distCCW) - 1);
+      },
+
+      // Presets definition
+      presets: {
+        circle_inward: {
+          type: 'circular',
+          total: 8,
+          defaultFacing: 'inward',
+          persons: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+          steps: [
+            {
+              clue: "Anchor: A sits 3rd to the left of B. Break symmetry by fixing B at Seat 0 (Top).",
+              deduction: "Facing inward, Left is clockwise (+1). 3 steps CW from Seat 0 places A at Seat 3.",
+              seats: { 0: { name: 'B', facing: 'inward' }, 3: { name: 'A', facing: 'inward' } },
+              highlight: [0, 3]
+            },
+            {
+              clue: "C sits 2nd to the right of A.",
+              deduction: "From Seat 3, facing inward, Right is anti-clockwise (-1). 2 steps CCW from Seat 3 is Seat 1. C is at Seat 1.",
+              seats: { 0: { name: 'B', facing: 'inward' }, 1: { name: 'C', facing: 'inward' }, 3: { name: 'A', facing: 'inward' } },
+              highlight: [3, 1]
+            },
+            {
+              clue: "D sits directly opposite to C.",
+              deduction: "Opposite of Seat 1 in an 8-person table is (1 + 4) % 8 = Seat 5. D sits at Seat 5.",
+              seats: { 0: { name: 'B', facing: 'inward' }, 1: { name: 'C', facing: 'inward' }, 3: { name: 'A', facing: 'inward' }, 5: { name: 'D', facing: 'inward' } },
+              highlight: [1, 5]
+            },
+            {
+              clue: "E sits to the immediate left of D. F sits 2nd to the left of E.",
+              deduction: "Left of Seat 5 (CW) is Seat 6. E is at Seat 6. Left of Seat 6 by 2 steps is Seat 0, but Seat 0 is B. So F sits 2nd to the right of E -> Seat 4. F is at Seat 4.",
+              seats: { 0: { name: 'B', facing: 'inward' }, 1: { name: 'C', facing: 'inward' }, 3: { name: 'A', facing: 'inward' }, 4: { name: 'F', facing: 'inward' }, 5: { name: 'D', facing: 'inward' }, 6: { name: 'E', facing: 'inward' } },
+              highlight: [5, 6, 4]
+            },
+            {
+              clue: "G is not an immediate neighbor of A. H occupies the final vacant seat.",
+              deduction: "Remaining empty seats are 2 and 7. Neighbors of A(3) are 2 and 4. G cannot be at Seat 2, so G must be at Seat 7. H sits at Seat 2. Arrangement Complete!",
+              seats: { 0: { name: 'B', facing: 'inward' }, 1: { name: 'C', facing: 'inward' }, 2: { name: 'H', facing: 'inward' }, 3: { name: 'A', facing: 'inward' }, 4: { name: 'F', facing: 'inward' }, 5: { name: 'D', facing: 'inward' }, 6: { name: 'E', facing: 'inward' }, 7: { name: 'G', facing: 'inward' } },
+              highlight: [2, 7]
+            }
+          ]
+        },
+
+        circle_mixed: {
+          type: 'circular',
+          total: 8,
+          defaultFacing: 'mixed',
+          persons: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+          steps: [
+            {
+              clue: "Anchor: A sits at Seat 0 facing Center. Adjacent seats strictly alternate facing direction.",
+              deduction: "Seats 0, 2, 4, 6 face Inward (Center). Seats 1, 3, 5, 7 face Outward.",
+              seats: { 0: { name: 'A', facing: 'inward' } },
+              highlight: [0]
+            },
+            {
+              clue: "B sits 3rd to the left of A.",
+              deduction: "A faces Center -> Left is CW (+1). 3 steps CW places B at Seat 3. Note: Seat 3 faces Outward!",
+              seats: { 0: { name: 'A', facing: 'inward' }, 3: { name: 'B', facing: 'outward' } },
+              highlight: [0, 3]
+            },
+            {
+              clue: "C sits 2nd to the right of B.",
+              deduction: "B is at Seat 3 and faces Outward -> Right is CW (+1)! (3 + 2) = Seat 5 (faces Outward). C is at Seat 5.",
+              seats: { 0: { name: 'A', facing: 'inward' }, 3: { name: 'B', facing: 'outward' }, 5: { name: 'C', facing: 'outward' } },
+              highlight: [3, 5]
+            },
+            {
+              clue: "D sits directly opposite to C.",
+              deduction: "Opposite of Seat 5 is (5 + 4) % 8 = Seat 1. D sits at Seat 1 (faces Outward).",
+              seats: { 0: { name: 'A', facing: 'inward' }, 1: { name: 'D', facing: 'outward' }, 3: { name: 'B', facing: 'outward' }, 5: { name: 'C', facing: 'outward' } },
+              highlight: [5, 1]
+            },
+            {
+              clue: "E, F, G, H take remaining seats: E is opposite A (Seat 4), F is at 2, G is at 6, H is at 7.",
+              deduction: "All 8 seats resolved. Inward facers: A, F, E, G. Outward facers: D, B, C, H.",
+              seats: { 0: { name: 'A', facing: 'inward' }, 1: { name: 'D', facing: 'outward' }, 2: { name: 'F', facing: 'inward' }, 3: { name: 'B', facing: 'outward' }, 4: { name: 'E', facing: 'inward' }, 5: { name: 'C', facing: 'outward' }, 6: { name: 'G', facing: 'inward' }, 7: { name: 'H', facing: 'outward' } },
+              highlight: [4, 2, 6, 7]
+            }
+          ]
+        },
+
+        linear_north: {
+          type: 'linear',
+          total: 8,
+          defaultFacing: 'north',
+          persons: ['P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W'],
+          steps: [
+            {
+              clue: "Anchor: T sits at the extreme left end (Seat 0).",
+              deduction: "Extreme left is index 0. T is fixed at Seat 0.",
+              seats: { 0: { name: 'T', facing: 'north' } },
+              highlight: [0]
+            },
+            {
+              clue: "Exactly three people sit between T and W.",
+              deduction: "T is at 0 -> 3 intervening seats (1, 2, 3) -> W is at Seat 4 (index 4).",
+              seats: { 0: { name: 'T', facing: 'north' }, 4: { name: 'W', facing: 'north' } },
+              highlight: [0, 4]
+            },
+            {
+              clue: "R sits 2nd to the right of W.",
+              deduction: "Facing North, Right is +1. 2 steps to the right of Seat 4 is Seat 6. R is at Seat 6.",
+              seats: { 0: { name: 'T', facing: 'north' }, 4: { name: 'W', facing: 'north' }, 6: { name: 'R', facing: 'north' } },
+              highlight: [4, 6]
+            },
+            {
+              clue: "V sits 3rd to the left of R.",
+              deduction: "From Seat 6, 3 steps to the left is Seat 3. V is at Seat 3.",
+              seats: { 0: { name: 'T', facing: 'north' }, 3: { name: 'V', facing: 'north' }, 4: { name: 'W', facing: 'north' }, 6: { name: 'R', facing: 'north' } },
+              highlight: [6, 3]
+            },
+            {
+              clue: "P, Q, S, U fill the remaining positions: P at 1, Q at 2, S at 5, U at 7 (extreme right).",
+              deduction: "Full linear row validated. Between count between T(0) and R(6) is 5 persons.",
+              seats: { 0: { name: 'T', facing: 'north' }, 1: { name: 'P', facing: 'north' }, 2: { name: 'Q', facing: 'north' }, 3: { name: 'V', facing: 'north' }, 4: { name: 'W', facing: 'north' }, 5: { name: 'S', facing: 'north' }, 6: { name: 'R', facing: 'north' }, 7: { name: 'U', facing: 'north' } },
+              highlight: [1, 2, 5, 7]
+            }
+          ]
+        },
+
+        dual_row: {
+          type: 'dual_row',
+          total: 8,
+          defaultFacing: 'dual',
+          persons: ['P', 'Q', 'R', 'S', 'A', 'B', 'C', 'D'],
+          steps: [
+            {
+              clue: "Row 1 (P,Q,R,S) faces South at Top (0..3). Row 2 (A,B,C,D) faces North at Bottom (0..3).",
+              deduction: "P sits at Seat 0 (West end) of Row 1. Facing South, Left is East (+1), Right is West (-1).",
+              seats: { 0: { name: 'P', facing: 'south', row: 1 } },
+              highlight: [0]
+            },
+            {
+              clue: "Q sits 2nd to the left of P.",
+              deduction: "Facing South, Left is +1 (towards East). 2 steps left of 0 is Seat 2. Q is at Seat 2.",
+              seats: { 0: { name: 'P', facing: 'south', row: 1 }, 2: { name: 'Q', facing: 'south', row: 1 } },
+              highlight: [0, 2]
+            },
+            {
+              clue: "The person facing Q sits to the immediate right of B in Row 2.",
+              deduction: "Person facing Q is Seat 2 in Row 2. Row 2 faces North -> Right is +1. Seat 2 is immediate right of Seat 1. B is at Seat 1.",
+              seats: { 0: { name: 'P', facing: 'south', row: 1 }, 2: { name: 'Q', facing: 'south', row: 1 }, 5: { name: 'B', facing: 'north', row: 2 } },
+              highlight: [2, 5]
+            },
+            {
+              clue: "C sits directly opposite to P. A sits at the extreme right of Row 2 (Seat 3).",
+              deduction: "C is at Seat 0 in Row 2 (index 4). A is at Seat 3 in Row 2 (index 7).",
+              seats: { 0: { name: 'P', facing: 'south', row: 1 }, 2: { name: 'Q', facing: 'south', row: 1 }, 4: { name: 'C', facing: 'north', row: 2 }, 5: { name: 'B', facing: 'north', row: 2 }, 7: { name: 'A', facing: 'north', row: 2 } },
+              highlight: [4, 7]
+            },
+            {
+              clue: "D takes Seat 2 in Row 2. R and S take Seats 1 and 3 in Row 1.",
+              deduction: "Parallel dual-row arrangement solved. D faces Q. B faces R. C faces P. A faces S.",
+              seats: { 0: { name: 'P', facing: 'south', row: 1 }, 1: { name: 'R', facing: 'south', row: 1 }, 2: { name: 'Q', facing: 'south', row: 1 }, 3: { name: 'S', facing: 'south', row: 1 }, 4: { name: 'C', facing: 'north', row: 2 }, 5: { name: 'B', facing: 'north', row: 2 }, 6: { name: 'D', facing: 'north', row: 2 }, 7: { name: 'A', facing: 'north', row: 2 } },
+              highlight: [1, 3, 6]
+            }
+          ]
+        }
+      }
+    };
+
+    /* ==========================================================================
+       PRACTICE QUESTIONS: 12 Hand-Verified Multi-Constraint Reasoning Questions
+       ========================================================================== */
+    const PRACTICE_QUESTIONS = [
+      {
+        id: 'q1',
+        difficulty: 'Easy',
+        topic: 'Circular (Facing Centre)',
+        stem: 'Eight friends (A, B, C, D, E, F, G, and H) are seated around a circular table facing the center. A sits 3rd to the left of B. How many persons sit between A and B when counted clockwise starting from B towards A?',
+        options: [
+          'One',
+          'Two',
+          'Three',
+          'Four'
+        ],
+        correctIndex: 1, // 'Two'
+        solution: 'Facing the center, moving clockwise from B is moving to the left of B. Since A sits 3rd to the left of B, the intervening seats are the 1st and 2nd to the left. Thus, exactly 3 - 1 = 2 persons sit between them.',
+        trap: 'Selecting Three by confusing the 3rd ordinal position with the intervening count.'
+      },
+      {
+        id: 'q2',
+        difficulty: 'Easy',
+        topic: 'Linear Row (Facing North)',
+        stem: 'Seven students (P, Q, R, S, T, U, V) sit in a single row facing North. P sits at the extreme left end (Seat 1). R sits 3rd to the right of P. T sits to the immediate left of R. Which seat number from the left end does T occupy?',
+        options: [
+          'Seat 1',
+          'Seat 2',
+          'Seat 3',
+          'Seat 4'
+        ],
+        correctIndex: 2, // Seat 3
+        solution: 'Left end is Seat 1 (P). Facing North, moving right increases seat numbers. R sits 3rd to right of P -> Seat 1 + 3 = Seat 4. T sits immediate left of R -> Seat 4 - 1 = Seat 3.',
+        trap: 'Adding 1 instead of subtracting when moving to the left of R, incorrectly choosing Seat 5.'
+      },
+      {
+        id: 'q3',
+        difficulty: 'Easy',
+        topic: 'Circular (Opposite Invariant)',
+        stem: 'Eight executives sit in a circle facing the center. P sits 2nd to the right of Q. R sits directly opposite to Q. What is the spatial position of R with respect to P?',
+        options: [
+          '2nd to the left',
+          '2nd to the right',
+          '3rd to the right',
+          'Directly opposite'
+        ],
+        correctIndex: 1, // 2nd to the right
+        solution: 'Let Q be at Seat 0. Facing center, Right is anti-clockwise (CCW). P is 2nd to right of Q -> Seat (0 - 2 + 8) % 8 = 6. R is opposite Q -> Seat (0 + 4) % 8 = 4. Looking from P (Seat 6) to R (Seat 4) along CCW (to the right of P) takes 6 - 4 = 2 steps. Hence, R sits 2nd to the right of P.',
+        trap: 'Counting clockwise from P without orienting from P\'s perspective facing inward.'
+      },
+      {
+        id: 'q4',
+        difficulty: 'Easy',
+        topic: 'Linear Row (Facing South)',
+        stem: 'Six persons (A, B, C, D, E, F) sit in a straight row facing South. An observer standing in front of them notes that Person X is seated at the observer\'s extreme left end. From the perspective of Person X facing South, which end is this?',
+        options: [
+          'Extreme Left',
+          'Extreme Right',
+          'Exact Middle',
+          'Second from Left'
+        ],
+        correctIndex: 1, // Extreme Right
+        solution: 'When facing South, a person\'s right hand points towards the observer\'s left (West), and their left hand points towards the observer\'s right (East). Therefore, the left end of the row from the observer\'s view is the extreme right end from the seated person\'s perspective.',
+        trap: 'Assuming observer\'s left equals the seated person\'s left.'
+      },
+      {
+        id: 'q5',
+        difficulty: 'Medium',
+        topic: 'Circular Table Deduction',
+        stem: 'Eight persons (A through H) sit in a circle facing the center. A sits opposite D. B sits 2nd to the left of A. C sits 3rd to the right of D. What is the spatial relationship between B and C?',
+        options: [
+          'They sit directly opposite each other',
+          'They are immediate neighbors',
+          'There are two people between them',
+          'B sits 3rd to the left of C'
+        ],
+        correctIndex: 1, // They are immediate neighbors
+        solution: 'Fix A at Seat 0. Left is CW (+1), Right is CCW (-1). D is opposite A -> Seat 4. B sits 2nd to left of A -> Seat (0 + 2) = 2. C sits 3rd to right of D -> from Seat 4, CCW by 3 steps is Seat (4 - 3) = 1. Seats 1 and 2 are adjacent; hence B and C are immediate neighbors.',
+        trap: 'Moving clockwise for right turn from D instead of anti-clockwise.'
+      },
+      {
+        id: 'q6',
+        difficulty: 'Medium',
+        topic: 'Facing Outward Reversal',
+        stem: 'Eight colleagues sit in a circle, all facing OUTWARD (away from the center). M sits 3rd to the right of N. P sits 2nd to the left of M. What is the spatial relationship of P with respect to N?',
+        options: [
+          'P sits directly opposite to N',
+          'P sits to the immediate right of N',
+          'P sits to the immediate left of N',
+          'Two people sit between P and N'
+        ],
+        correctIndex: 1, // P sits to the immediate right of N
+        solution: 'For outward facing: Right is Clockwise (+1), Left is Anti-Clockwise (-1). Let N be at Seat 0. M is 3rd to right of N -> Seat (0 + 3) = 3. P is 2nd to left of M -> Seat (3 - 2) = 1. N is at Seat 0, P is at Seat 1. Moving from N to Seat 1 is Clockwise, which is to the RIGHT of N facing outward. Thus, P sits to the immediate right of N.',
+        trap: 'Using inward rules where clockwise would be left.'
+      },
+      {
+        id: 'q7',
+        difficulty: 'Medium',
+        topic: 'Linear Row with Ends Clue',
+        stem: 'Eight persons (P, Q, R, S, T, U, V, W) sit in a single row facing North (Seats 1 to 8). T sits at the extreme left end (Seat 1). Exactly three people sit between T and W. R sits 2nd to the right of W. V sits 3rd to the left of R. Which seat number does V occupy?',
+        options: [
+          'Seat 2',
+          'Seat 3',
+          'Seat 4',
+          'Seat 5'
+        ],
+        correctIndex: 2, // Seat 4
+        solution: 'T is at Seat 1. Three people between T and W places W at Seat 1 + 3 + 1 = Seat 5. R sits 2nd to right of W -> Seat 5 + 2 = Seat 7. V sits 3rd to left of R -> Seat 7 - 3 = Seat 4.',
+        trap: 'Placing W at Seat 1 + 3 = Seat 4 (forgetting that 3 people between means index difference of 4).'
+      },
+      {
+        id: 'q8',
+        difficulty: 'Medium',
+        topic: 'Circular Negative Exclusion',
+        stem: 'Eight persons sit in a circle facing center: A is at Seat 2, B is at Seat 0. Empty seats are 1, 5, and 6. Clue: F cannot sit next to A or B. G sits at Seat 5. Where must F sit?',
+        options: [
+          'Seat 1',
+          'Seat 5',
+          'Seat 6',
+          'Seat 7'
+        ],
+        correctIndex: 2, // Seat 6
+        solution: 'Neighbors of A(2) are 1 and 3. Neighbors of B(0) are 7 and 1. Seat 1 is a neighbor to both A and B, so F cannot sit at Seat 1. Seat 5 is occupied by G. Therefore, F must sit at Seat 6.',
+        trap: 'Placing F at Seat 1 thinking it is between A and B.'
+      },
+      {
+        id: 'q9',
+        difficulty: 'Hard',
+        topic: 'Mixed Facing Table',
+        stem: 'Eight persons sit in a circle with strictly alternating orientations (Inward, Outward, Inward, Outward...). A sits at Seat 0 facing Center. B sits 3rd to the left of A. C sits 2nd to the right of B. D sits opposite C. Which direction does D face, and who sits to the immediate left of D?',
+        options: [
+          'D faces Center, and B sits to immediate left',
+          'D faces Outward, and A sits to immediate left',
+          'D faces Outward, and C sits to immediate left',
+          'D faces Center, and A sits to immediate left'
+        ],
+        correctIndex: 1, // D faces Outward, and A sits to immediate left
+        solution: 'Seats 0, 2, 4, 6 face Inward. Seats 1, 3, 5, 7 face Outward. A is at 0 (Inward). B is 3rd to left of A (CW) -> Seat 3 (Outward). C is 2nd to right of B -> for Outward, Right is CW (+1) -> Seat (3 + 2) = 5. D is opposite C(5) -> Seat (5 + 4) % 8 = 1. Seat 1 faces OUTWARD. For D at Seat 1 facing outward, Left is Anti-Clockwise (-1) -> Seat (1 - 1) = 0, which is A. Thus, D faces Outward, and A sits to the immediate left of D.',
+        trap: 'Applying inward turning rules to Outward facers B and D.'
+      },
+      {
+        id: 'q10',
+        difficulty: 'Hard',
+        topic: 'Dual Parallel Rows',
+        stem: 'Eight persons sit in two parallel rows: Row 1 (P, Q, R, S) faces South (Seats 0 to 3 West to East); Row 2 (A, B, C, D) faces North (Seats 0 to 3 West to East). P sits at Seat 0 of Row 1. Q sits 2nd to the left of P. The person facing Q sits to the immediate right of B in Row 2. Which seat does B occupy in Row 2?',
+        options: [
+          'Seat 0',
+          'Seat 1',
+          'Seat 2',
+          'Seat 3'
+        ],
+        correctIndex: 1, // Seat 1
+        solution: 'P is at Seat 0 in Row 1. Facing South, Left is +1 (towards East). Q sits 2nd to left of P -> Seat 0 + 2 = Seat 2 in Row 1. The person facing Q is at Seat 2 of Row 2. In Row 2 (facing North), Right is +1. Seat 2 is to the immediate right of Seat 1. Therefore, B sits at Seat 1.',
+        trap: 'Thinking left in Row 1 facing South moves West instead of East.'
+      },
+      {
+        id: 'q11',
+        difficulty: 'Hard',
+        topic: 'Circular Symmetry Invariant',
+        stem: 'In an 8-person circular table, exactly three people sit between Person X and Person Y along the clockwise path. How many people sit between Person X and Person Y along the anti-clockwise path?',
+        options: [
+          'One',
+          'Two',
+          'Three',
+          'Four'
+        ],
+        correctIndex: 2, // Three
+        solution: 'Total seats = 8. With X and Y occupying 2 seats, remaining seats = 8 - 2 = 6. If 3 people sit between them on the clockwise arc, exactly 6 - 3 = 3 people must sit between them on the anti-clockwise arc. This proves X and Y are diametrically opposite.',
+        trap: 'Thinking the remaining count is 8 - 3 = 5.'
+      },
+      {
+        id: 'q12',
+        difficulty: 'Hard',
+        topic: 'Linear Row Interval Counting',
+        stem: 'In a single row of 8 people facing North (Seats 1 to 8): M is at Seat 2. N is 4th to the right of M. K sits 2nd to the left of N. How many people sit between M and K?',
+        options: [
+          'Zero (Immediate neighbors)',
+          'One person',
+          'Two people',
+          'Three people'
+        ],
+        correctIndex: 1, // One person
+        solution: 'M is at Seat 2. N is 4th to right of M -> Seat 2 + 4 = Seat 6. K is 2nd to left of N -> Seat 6 - 2 = Seat 4. The people between M (Seat 2) and K (Seat 4) are those at Seat 3. Thus, exactly |4 - 2| - 1 = 1 person sits between M and K.',
+        trap: 'Calculating 4 - 2 = 2 without subtracting 1 for the intervening count.'
+      }
+    ];
+
+    /* ==========================================================================
+       VIEW & CONTROLLER
+       ========================================================================== */
+    let currentPresetKey = 'circle_inward';
+    let currentStep = 1;
+    let userAnswers = {};
+
+    function init() {
+      renderPresetOptions();
+      loadStep(currentPresetKey, 1);
+      renderPracticeQuestions();
+      updateScoreDisplay();
+      populateQueryDropdowns();
+    }
+
+    function renderPresetOptions() {
+      const p = Model.presets[currentPresetKey];
+      const slider = document.getElementById('step-slider');
+      slider.max = p.steps.length;
+      slider.value = currentStep;
+      document.getElementById('step-label').textContent = `Step ${currentStep} of ${p.steps.length}`;
+    }
+
+    function handlePresetChange(key) {
+      currentPresetKey = key;
+      currentStep = 1;
+      renderPresetOptions();
+      loadStep(key, 1);
+      populateQueryDropdowns();
+    }
+
+    function handleStepInput(val) {
+      currentStep = val;
+      loadStep(currentPresetKey, currentStep);
+    }
+
+    function stepNext() {
+      const p = Model.presets[currentPresetKey];
+      if (currentStep < p.steps.length) {
+        currentStep++;
+        document.getElementById('step-slider').value = currentStep;
+        loadStep(currentPresetKey, currentStep);
+      }
+    }
+
+    function stepPrevious() {
+      if (currentStep > 1) {
+        currentStep--;
+        document.getElementById('step-slider').value = currentStep;
+        loadStep(currentPresetKey, currentStep);
+      }
+    }
+
+    function stepReset() {
+      currentStep = 1;
+      document.getElementById('step-slider').value = 1;
+      loadStep(currentPresetKey, 1);
+    }
+
+    function loadStep(presetKey, stepNum) {
+      const preset = Model.presets[presetKey];
+      const stepIdx = Math.max(0, Math.min(stepNum - 1, preset.steps.length - 1));
+      const stepData = preset.steps[stepIdx];
+
+      document.getElementById('step-label').textContent = `Step ${stepIdx + 1} of ${preset.steps.length}`;
+      document.getElementById('clue-text').textContent = stepData.clue;
+      document.getElementById('clue-deduction').textContent = stepData.deduction;
+
+      renderSeatingSVG(preset, stepData);
+    }
+
+    function renderSeatingSVG(preset, stepData) {
+      const svg = document.getElementById('seating-svg');
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+      if (preset.type === 'circular') {
+        renderCircularSVG(svg, preset, stepData);
+      } else if (preset.type === 'linear') {
+        renderLinearSVG(svg, preset, stepData);
+      } else if (preset.type === 'dual_row') {
+        renderDualRowSVG(svg, preset, stepData);
+      }
+    }
+
+    function renderCircularSVG(svg, preset, stepData) {
+      const cx = 270;
+      const cy = 210;
+      const rTable = 120;
+      const rChairs = 160;
+
+      // Central Table Circle
+      const table = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      table.setAttribute('cx', cx);
+      table.setAttribute('cy', cy);
+      table.setAttribute('r', rTable);
+      table.setAttribute('fill', 'var(--color-surface-subtle)');
+      table.setAttribute('stroke', 'var(--color-border)');
+      table.setAttribute('stroke-width', '2');
+      svg.appendChild(table);
+
+      // Table Center Text
+      const textTable = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      textTable.setAttribute('x', cx);
+      textTable.setAttribute('y', cy + 5);
+      textTable.setAttribute('text-anchor', 'middle');
+      textTable.setAttribute('font-size', '14');
+      textTable.setAttribute('font-weight', '600');
+      textTable.setAttribute('fill', 'var(--color-text-muted)');
+      textTable.textContent = 'ROUND TABLE';
+      svg.appendChild(textTable);
+
+      // 8 Chairs around table
+      for (let i = 0; i < preset.total; i++) {
+        // Clockwise: 0 at top (-90 deg), 1 at 45 deg, etc.
+        const angleDeg = -90 + (i * 360 / preset.total);
+        const angleRad = angleDeg * Math.PI / 180;
+        const chairX = cx + rChairs * Math.cos(angleRad);
+        const chairY = cy + rChairs * Math.sin(angleRad);
+
+        const seatInfo = stepData.seats[i];
+        const isHighlighted = stepData.highlight.includes(i);
+
+        // Chair Group
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+        // Chair Circle
+        const chairCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        chairCircle.setAttribute('cx', chairX);
+        chairCircle.setAttribute('cy', chairY);
+        chairCircle.setAttribute('r', '22');
+        chairCircle.setAttribute('fill', seatInfo ? (isHighlighted ? 'var(--color-primary)' : 'var(--color-surface)') : 'var(--color-surface-subtle)');
+        chairCircle.setAttribute('stroke', isHighlighted ? 'var(--color-primary)' : 'var(--color-border)');
+        chairCircle.setAttribute('stroke-width', isHighlighted ? '3' : '1.5');
+        g.appendChild(chairCircle);
+
+        // Seat Number Tag
+        const seatTag = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        seatTag.setAttribute('x', chairX);
+        seatTag.setAttribute('y', chairY - 26);
+        seatTag.setAttribute('text-anchor', 'middle');
+        seatTag.setAttribute('font-size', '11');
+        seatTag.setAttribute('font-weight', '600');
+        seatTag.setAttribute('fill', 'var(--color-text-muted)');
+        seatTag.textContent = `Seat ${i}`;
+        g.appendChild(seatTag);
+
+        // Person Name if seated
+        if (seatInfo) {
+          const personText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          personText.setAttribute('x', chairX);
+          personText.setAttribute('y', chairY + 6);
+          personText.setAttribute('text-anchor', 'middle');
+          personText.setAttribute('font-size', '16');
+          personText.setAttribute('font-weight', '700');
+          personText.setAttribute('fill', isHighlighted ? '#ffffff' : 'var(--color-text)');
+          personText.textContent = seatInfo.name;
+          g.appendChild(personText);
+
+          // Facing Indicator Arrow
+          const facing = seatInfo.facing || 'inward';
+          const arrowLength = 26;
+          // Inward points toward (cx, cy); Outward points away
+          const arrowDir = facing === 'inward' ? -1 : 1;
+          const arrowEndX = chairX + arrowDir * arrowLength * Math.cos(angleRad);
+          const arrowEndY = chairY + arrowDir * arrowLength * Math.sin(angleRad);
+
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', chairX);
+          line.setAttribute('y1', chairY);
+          line.setAttribute('x2', arrowEndX);
+          line.setAttribute('y2', arrowEndY);
+          line.setAttribute('stroke', '#d93025');
+          line.setAttribute('stroke-width', '2.5');
+          line.setAttribute('stroke-linecap', 'round');
+          g.appendChild(line);
+
+          const arrowHead = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          arrowHead.setAttribute('cx', arrowEndX);
+          arrowHead.setAttribute('cy', arrowEndY);
+          arrowHead.setAttribute('r', '3.5');
+          arrowHead.setAttribute('fill', '#d93025');
+          g.appendChild(arrowHead);
+        }
+
+        svg.appendChild(g);
+      }
+    }
+
+    function renderLinearSVG(svg, preset, stepData) {
+      const startX = 50;
+      const spacing = 58;
+      const yDesk = 210;
+
+      // Guide Line
+      const guideLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      guideLine.setAttribute('x1', startX - 20);
+      guideLine.setAttribute('y1', yDesk);
+      guideLine.setAttribute('x2', startX + spacing * 7 + 20);
+      guideLine.setAttribute('y2', yDesk);
+      guideLine.setAttribute('stroke', 'var(--color-border)');
+      guideLine.setAttribute('stroke-width', '3');
+      svg.appendChild(guideLine);
+
+      // Facing North Compass Arrow
+      const compassText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      compassText.setAttribute('x', 480);
+      compassText.setAttribute('y', 80);
+      compassText.setAttribute('text-anchor', 'middle');
+      compassText.setAttribute('font-size', '13');
+      compassText.setAttribute('font-weight', '700');
+      compassText.setAttribute('fill', 'var(--color-primary)');
+      compassText.textContent = '↑ NORTH';
+      svg.appendChild(compassText);
+
+      // 8 Desks
+      for (let i = 0; i < preset.total; i++) {
+        const x = startX + i * spacing;
+        const seatInfo = stepData.seats[i];
+        const isHighlighted = stepData.highlight.includes(i);
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+        // Desk Rect
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', x - 22);
+        rect.setAttribute('y', yDesk - 22);
+        rect.setAttribute('width', '44');
+        rect.setAttribute('height', '44');
+        rect.setAttribute('rx', '6');
+        rect.setAttribute('fill', seatInfo ? (isHighlighted ? 'var(--color-primary)' : 'var(--color-surface)') : 'var(--color-surface-subtle)');
+        rect.setAttribute('stroke', isHighlighted ? 'var(--color-primary)' : 'var(--color-border)');
+        rect.setAttribute('stroke-width', isHighlighted ? '3' : '1.5');
+        g.appendChild(rect);
+
+        // Seat Number
+        const seatLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        seatLabel.setAttribute('x', x);
+        seatLabel.setAttribute('y', yDesk + 38);
+        seatLabel.setAttribute('text-anchor', 'middle');
+        seatLabel.setAttribute('font-size', '11');
+        seatLabel.setAttribute('fill', 'var(--color-text-muted)');
+        seatLabel.textContent = `Seat ${i}`;
+        g.appendChild(seatLabel);
+
+        if (seatInfo) {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', x);
+          text.setAttribute('y', yDesk + 6);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('font-size', '16');
+          text.setAttribute('font-weight', '700');
+          text.setAttribute('fill', isHighlighted ? '#ffffff' : 'var(--color-text)');
+          text.textContent = seatInfo.name;
+          g.appendChild(text);
+
+          // Facing North Arrow
+          const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          arrow.setAttribute('x1', x);
+          arrow.setAttribute('y1', yDesk - 26);
+          arrow.setAttribute('x2', x);
+          arrow.setAttribute('y2', yDesk - 44);
+          arrow.setAttribute('stroke', '#d93025');
+          arrow.setAttribute('stroke-width', '2.5');
+          g.appendChild(arrow);
+        }
+
+        svg.appendChild(g);
+      }
+    }
+
+    function renderDualRowSVG(svg, preset, stepData) {
+      const startX = 130;
+      const spacing = 90;
+      const yRow1 = 130;
+      const yRow2 = 290;
+
+      // Labels
+      const lblRow1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      lblRow1.setAttribute('x', 50);
+      lblRow1.setAttribute('y', yRow1 + 5);
+      lblRow1.setAttribute('font-size', '12');
+      lblRow1.setAttribute('font-weight', '700');
+      lblRow1.setAttribute('fill', '#d93025');
+      lblRow1.textContent = 'Row 1 (South ↓)';
+      svg.appendChild(lblRow1);
+
+      const lblRow2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      lblRow2.setAttribute('x', 50);
+      lblRow2.setAttribute('y', yRow2 + 5);
+      lblRow2.setAttribute('font-size', '12');
+      lblRow2.setAttribute('font-weight', '700');
+      lblRow2.setAttribute('fill', 'var(--color-primary)');
+      lblRow2.textContent = 'Row 2 (North ↑)';
+      svg.appendChild(lblRow2);
+
+      // Desks for Row 1 (South)
+      for (let i = 0; i < 4; i++) {
+        const x = startX + i * spacing;
+        const seatInfo = stepData.seats[i];
+        const isHighlighted = stepData.highlight.includes(i);
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', x - 22);
+        rect.setAttribute('y', yRow1 - 22);
+        rect.setAttribute('width', '44');
+        rect.setAttribute('height', '44');
+        rect.setAttribute('rx', '6');
+        rect.setAttribute('fill', seatInfo ? (isHighlighted ? 'var(--color-primary)' : 'var(--color-surface)') : 'var(--color-surface-subtle)');
+        rect.setAttribute('stroke', isHighlighted ? 'var(--color-primary)' : 'var(--color-border)');
+        rect.setAttribute('stroke-width', isHighlighted ? '3' : '1.5');
+        g.appendChild(rect);
+
+        if (seatInfo) {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', x);
+          text.setAttribute('y', yRow1 + 6);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('font-size', '16');
+          text.setAttribute('font-weight', '700');
+          text.setAttribute('fill', isHighlighted ? '#ffffff' : 'var(--color-text)');
+          text.textContent = seatInfo.name;
+          g.appendChild(text);
+        }
+
+        svg.appendChild(g);
+      }
+
+      // Desks for Row 2 (North)
+      for (let i = 0; i < 4; i++) {
+        const indexInPreset = i + 4;
+        const x = startX + i * spacing;
+        const seatInfo = stepData.seats[indexInPreset];
+        const isHighlighted = stepData.highlight.includes(indexInPreset);
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', x - 22);
+        rect.setAttribute('y', yRow2 - 22);
+        rect.setAttribute('width', '44');
+        rect.setAttribute('height', '44');
+        rect.setAttribute('rx', '6');
+        rect.setAttribute('fill', seatInfo ? (isHighlighted ? 'var(--color-primary)' : 'var(--color-surface)') : 'var(--color-surface-subtle)');
+        rect.setAttribute('stroke', isHighlighted ? 'var(--color-primary)' : 'var(--color-border)');
+        rect.setAttribute('stroke-width', isHighlighted ? '3' : '1.5');
+        g.appendChild(rect);
+
+        if (seatInfo) {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', x);
+          text.setAttribute('y', yRow2 + 6);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('font-size', '16');
+          text.setAttribute('font-weight', '700');
+          text.setAttribute('fill', isHighlighted ? '#ffffff' : 'var(--color-text)');
+          text.textContent = seatInfo.name;
+          g.appendChild(text);
+        }
+
+        svg.appendChild(g);
+      }
+    }
+
+    /* Spatial Query Helper */
+    function populateQueryDropdowns() {
+      const preset = Model.presets[currentPresetKey];
+      const finalStep = preset.steps[preset.steps.length - 1];
+      const selA = document.getElementById('query-person-a');
+      const selB = document.getElementById('query-person-b');
+      selA.innerHTML = '';
+      selB.innerHTML = '';
+
+      const names = [];
+      for (const k in finalStep.seats) {
+        if (finalStep.seats[k].name) names.push(finalStep.seats[k].name);
+      }
+      names.sort();
+
+      names.forEach(n => {
+        const optA = document.createElement('option');
+        optA.value = n;
+        optA.textContent = `Person ${n}`;
+        selA.appendChild(optA);
+
+        const optB = document.createElement('option');
+        optB.value = n;
+        optB.textContent = `Person ${n}`;
+        selB.appendChild(optB);
+      });
+      if (names.length > 1) selB.selectedIndex = 1;
+      updateQueryParamVisibility();
+    }
+
+    function updateQueryParamVisibility() {
+      const qType = document.getElementById('query-type').value;
+      const kW = document.getElementById('query-param-k-wrapper');
+      const bW = document.getElementById('query-param-b-wrapper');
+      kW.style.display = (qType === 'k_left' || qType === 'k_right') ? 'inline-block' : 'none';
+      bW.style.display = (qType === 'between') ? 'inline-block' : 'none';
+    }
+
+    function runSpatialQuery() {
+      const personA = document.getElementById('query-person-a').value;
+      const qType = document.getElementById('query-type').value;
+      const preset = Model.presets[currentPresetKey];
+      const finalStep = preset.steps[preset.steps.length - 1];
+
+      // Find seat of A
+      let seatA = null;
+      let infoA = null;
+      for (const k in finalStep.seats) {
+        if (finalStep.seats[k].name === personA) {
+          seatA = parseInt(k);
+          infoA = finalStep.seats[k];
+          break;
+        }
+      }
+
+      if (seatA === null) return;
+      const resDiv = document.getElementById('query-result');
+      resDiv.style.display = 'block';
+
+      if (qType === 'opposite') {
+        if (preset.type !== 'circular') {
+          resDiv.innerHTML = `<strong>Opposite Query:</strong> Strict geometric opposite is valid for circular symmetry ($N=8$). In parallel rows, Person at seat ${seatA % 4} faces opposite seat in the other row.`;
+          return;
+        }
+        const oppSeat = Model.getOppositeSeat(seatA, preset.total);
+        const oppPerson = finalStep.seats[oppSeat] ? finalStep.seats[oppSeat].name : 'Vacant';
+        resDiv.innerHTML = `<strong>Opposite Query:</strong> Person ${personA} is at Seat ${seatA}. The opposite seat is (${seatA} + 4) % 8 = Seat ${oppSeat}, occupied by <strong>Person ${oppPerson}</strong>.`;
+      } else if (qType === 'k_left' || qType === 'k_right') {
+        const k = parseInt(document.getElementById('query-k').value) || 1;
+        if (preset.type === 'circular') {
+          const shift = qType === 'k_left' ? k : -k;
+          const targetSeat = Model.getCircularNext(seatA, shift, infoA.facing, preset.total);
+          const targetPerson = finalStep.seats[targetSeat] ? finalStep.seats[targetSeat].name : 'Vacant';
+          resDiv.innerHTML = `<strong>Turn Query:</strong> From Seat ${seatA} (facing ${infoA.facing}), moving ${k} steps to the ${qType === 'k_left' ? 'Left' : 'Right'} lands at Seat ${targetSeat}, occupied by <strong>Person ${targetPerson}</strong>.`;
+        } else {
+          const shift = qType === 'k_right' ? k : -k;
+          const targetSeat = Model.getLinearNext(seatA, shift, infoA.facing || 'north', preset.total);
+          if (targetSeat === null) {
+            resDiv.innerHTML = `<strong>Turn Query:</strong> Moving ${k} steps off the row ends (outside row bounds).`;
+          } else {
+            const targetPerson = finalStep.seats[targetSeat] ? finalStep.seats[targetSeat].name : 'Vacant';
+            resDiv.innerHTML = `<strong>Turn Query:</strong> From Seat ${seatA}, moving ${k} steps to the ${qType === 'k_left' ? 'Left' : 'Right'} lands at Seat ${targetSeat}, occupied by <strong>Person ${targetPerson}</strong>.`;
+          }
+        }
+      } else if (qType === 'between') {
+        const personB = document.getElementById('query-person-b').value;
+        let seatB = null;
+        for (const k in finalStep.seats) {
+          if (finalStep.seats[k].name === personB) {
+            seatB = parseInt(k);
+            break;
+          }
+        }
+        if (seatB === null) return;
+        const count = Model.getBetweenCount(seatA, seatB, preset.type === 'circular' ? 'circular' : 'linear', preset.total);
+        resDiv.innerHTML = `<strong>Between Count:</strong> Exactly <strong>${count}</strong> person(s) sit between ${personA} (Seat ${seatA}) and ${personB} (Seat ${seatB}).`;
+      }
+    }
+
+    /* Predict Check */
+    function checkPredict(ans) {
+      const fb = document.getElementById('predict-feedback');
+      fb.style.display = 'block';
+      if (ans === 'A') {
+        fb.className = 'callout callout-success';
+        fb.innerHTML = `
+          <strong>Correct! Person A sits 2nd to the right of Person D.</strong><br>
+          <em>Deduction Trace:</em> B is at Seat 0. A is 3rd to left of B (CW) -> Seat 3. C is 2nd to right of A (CCW) -> Seat 1. D is opposite C -> Seat 5.
+          Now look from D (Seat 5) facing center: Right is Anti-Clockwise (-1). Two steps CCW from Seat 5 is Seat 3 (Person A)!
+        `;
+      } else {
+        fb.className = 'callout callout-danger';
+        fb.innerHTML = `
+          <strong>Incorrect.</strong> Remember that facing center, Right is Anti-Clockwise (-1). From D at Seat 5, anti-clockwise movement by 2 steps leads directly to Seat 3 (Person A). Try verifying with Option A!
+        `;
+      }
+    }
+
+    /* Practice UI */
+    function renderPracticeQuestions() {
+      const container = document.getElementById('practice-container');
+      container.innerHTML = '';
+
+      PRACTICE_QUESTIONS.forEach((q, idx) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.margin = '0';
+        card.style.border = '1px solid var(--color-border)';
+
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-tag">Question ${idx + 1} • ${q.difficulty}</span>
+            <span class="badge badge-outline">${q.topic}</span>
+          </div>
+          <p style="font-weight: 600; margin-bottom: 1rem; font-size: 0.95rem;">${q.stem}</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; margin-bottom: 1rem;">
+            ${q.options.map((opt, oIdx) => `
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-${q.id}-${oIdx}" onclick="handleAnswer('${q.id}', ${oIdx})">
+                ${String.fromCharCode(65 + oIdx)}) ${opt}
+              </button>
+            `).join('')}
+          </div>
+          <div id="solution-${q.id}" style="display: none; padding: 0.75rem; background: var(--color-surface-subtle); border-radius: 4px; font-size: 0.85rem; border-left: 3px solid var(--color-primary);">
+            <div style="font-weight: 600; margin-bottom: 0.25rem;">Step-by-Step Spatial Deduction:</div>
+            <div style="margin-bottom: 0.35rem;">${q.solution}</div>
+            <div style="color: #c5221f;"><strong>Common Trap:</strong> ${q.trap}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function handleAnswer(qId, selectedIdx) {
+      const q = PRACTICE_QUESTIONS.find(item => item.id === qId);
+      if (!q) return;
+
+      userAnswers[qId] = selectedIdx;
+      q.options.forEach((_, idx) => {
+        const btn = document.getElementById(`btn-${qId}-${idx}`);
+        if (btn) {
+          btn.classList.remove('btn-primary', 'btn-secondary');
+          if (idx === q.correctIndex) {
+            btn.style.background = '#e6f4ea';
+            btn.style.borderColor = '#137333';
+            btn.style.color = '#137333';
+            btn.style.fontWeight = 'bold';
+          } else if (idx === selectedIdx) {
+            btn.style.background = '#fce8e6';
+            btn.style.borderColor = '#c5221f';
+            btn.style.color = '#c5221f';
+          } else {
+            btn.classList.add('btn-secondary');
+            btn.style.opacity = '0.5';
+          }
+          btn.disabled = true;
+        }
+      });
+
+      const sol = document.getElementById(`solution-${qId}`);
+      if (sol) sol.style.display = 'block';
+      updateScoreDisplay();
+    }
+
+    function updateScoreDisplay() {
+      let score = 0;
+      PRACTICE_QUESTIONS.forEach(q => {
+        if (userAnswers[q.id] === q.correctIndex) score++;
+      });
+      document.getElementById('score-display').textContent = `Score: ${score} / ${PRACTICE_QUESTIONS.length}`;
+    }
+
+    function resetPractice() {
+      userAnswers = {};
+      renderPracticeQuestions();
+      updateScoreDisplay();
+    }
+
+    /* Self-Test Suite */
+    window.runSelfTests = function() {
+      const results = [];
+      function assertTest(desc, cond) {
+        if (!cond) {
+          results.push({ name: desc, status: 'FAILED' });
+          console.error(`TEST FAILED: ${desc}`);
+        } else {
+          results.push({ name: desc, status: 'PASSED' });
+        }
+      }
+
+      // Test 1: Circular Inward Right & Left
+      assertTest("Circular Inward Left (CW) +3 from 0 is 3", Model.getCircularNext(0, 3, 'inward', 8) === 3);
+      assertTest("Circular Inward Right (CCW) 2 from 0 is 6", Model.getCircularNext(0, -2, 'inward', 8) === 6);
+
+      // Test 2: Circular Outward Inversion
+      assertTest("Circular Outward Left (CCW) +3 from 0 is 5", Model.getCircularNext(0, 3, 'outward', 8) === 5);
+      assertTest("Circular Outward Right (CW) 2 from 0 is 2", Model.getCircularNext(0, -2, 'outward', 8) === 2);
+
+      // Test 3: Opposite Seat Formula (N=8)
+      assertTest("Opposite seat of 0 is 4", Model.getOppositeSeat(0, 8) === 4);
+      assertTest("Opposite seat of 3 is 7", Model.getOppositeSeat(3, 8) === 7);
+
+      // Test 4: Linear Facing North
+      assertTest("Linear North Right by 3 from index 1 is 4", Model.getLinearNext(1, 3, 'north', 8) === 4);
+      assertTest("Linear North Left by 1 from index 4 is 3", Model.getLinearNext(4, -1, 'north', 8) === 3);
+
+      // Test 5: Linear Facing South Inversion
+      assertTest("Linear South Right by 1 from index 1 is 0", Model.getLinearNext(1, 1, 'south', 8) === 0);
+      assertTest("Linear South Left by 2 from index 1 is 3", Model.getLinearNext(1, -2, 'south', 8) === 3);
+
+      // Test 6: Between Count Linear
+      assertTest("Between count in linear row between 1 and 4 is 2", Model.getBetweenCount(1, 4, 'linear', 8) === 2);
+
+      // Test 7: Between Count Circular Opposite
+      assertTest("Between count in circular table between 0 and 4 is strictly 3", Model.getBetweenCount(0, 4, 'circular', 8, 'shorter') === 3);
+
+      // Test 8: Linear Bounds check
+      assertTest("Linear move beyond right end returns null", Model.getLinearNext(7, 1, 'north', 8) === null);
+
+      const passed = results.filter(r => r.status === 'PASSED').length;
+      const failed = results.filter(r => r.status === 'FAILED').length;
+      console.log(`SelfTests Complete: ${passed} passed, ${failed} failed.`);
+      return { total: results.length, passed, failed, results };
+    };
+
+    window.Model = Model;
+    window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
