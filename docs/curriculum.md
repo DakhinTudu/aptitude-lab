@@ -1,0 +1,56 @@
+# Curriculum & Topic Inventory
+
+> Working tracker for topics across Quantitative Aptitude, Logical Reasoning, and Data Interpretation.
+> Status values: `not-started` | `draft` | `needs-syllabus-verification` | `needs-review` | `reviewed` | `published`
+
+## Official Syllabus References
+
+Official notices checked for curriculum alignment:
+- **SEBI Grade A (General / IT Stream) Phase 1:** Quantitative Aptitude (Paper 1), Reasoning (Paper 1). SEBI Recruitment Notification 2024 (Paper 1 has 100 marks, composite timing of 60 mins). Standard topics include percentages, ratios, time & work, data interpretation, series, puzzles, coding-decoding.
+- **IBPS / Banking Standards:** Standard foundational quantitative aptitude and analytical reasoning patterns.
+- *Rule:* Verification date and notice version must be recorded. Do not assume or publish weightage numbers as official facts.
+
+---
+
+## 1. Quantitative Aptitude
+
+| Topic ID | Topic Name | File | Primary Exam Target | Status | Review Date | Notes |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `percentages` | Percentages & Percentage Change | `topics/percentages.html` | SEBI Gr A, Banking, SSC | **published** | 2026-10-29 | Milestone 1 complete. Proportional model, predict-first, 12 verified practice questions, full self-test suite. |
+| `time-and-work` | Time, Work & Efficiency | `topics/time-and-work.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Milestone 3 planned. Rate comparison, combined-work timeline. |
+| `trains-bridge` | Trains, Speed & Distance | `topics/trains-bridge.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Relative speed, bridge clearance visual. |
+| `profit-loss-discount` | Profit, Loss & Marked Price | `topics/profit-loss-discount.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Successive discount, cost-to-price breakdown. |
+| `ratio-proportion` | Ratio, Proportion & Variation | `topics/ratio-proportion.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Proportional bars, part-to-part vs part-to-whole. |
+| `averages-alligation` | Averages & Alligation | `topics/averages-alligation.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Weighted averages balance-beam model. |
+| `simple-compound-interest`| SI & CI Comparison | `topics/simple-compound-interest.html`| SEBI Gr A, Banking | `not-started` | — | Growth comparison, effective rate calculation. |
+| `permutations-combinations`| Basic Counting & Combinatorics | `topics/permutations-combinations.html` | SEBI Gr A (IT), Banking | `not-started` | — | Decision tree and fundamental counting principle. |
+| `probability` | Basic Probability | `topics/probability.html` | SEBI Gr A (IT), Banking | `not-started` | — | Sample space grid, mutually exclusive vs independent events. |
+
+---
+
+## 2. Logical & Analytical Reasoning
+
+| Topic ID | Topic Name | File | Primary Exam Target | Status | Review Date | Notes |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `number-series` | Number & Letter Series | `topics/number-series.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Milestone 3 planned. Multi-level differences, step trace. |
+| `direction-sense` | Direction & Distance Sense | `topics/direction-sense.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Coordinate grid, turn-by-turn orientation tracking. |
+| `blood-relations` | Blood Relations & Family Tree | `topics/blood-relations.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Node-edge relationship graph, gender deduction. |
+| `syllogisms` | Syllogisms & Set Logic | `topics/syllogisms.html` | SEBI Gr A, Banking | `not-started` | — | Definite vs possibility conclusions, Euler/Venn model. |
+| `order-ranking` | Order & Ranking | `topics/order-ranking.html` | SEBI Gr A, Banking, SSC | `not-started` | — | Overlap checks, total count formulas with boundary tests. |
+| `seating-arrangements` | Linear & Circular Seating | `topics/seating-arrangements.html` | SEBI Gr A, Banking | `not-started` | — | Multi-constraint satisfaction solver and human deduction trace. |
+
+---
+
+## 3. Data Interpretation (DI)
+
+| Topic ID | Topic Name | File | Primary Exam Target | Status | Review Date | Notes |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `di-tables` | Table DI & Percentage Comparison | `topics/di-tables.html` | SEBI Gr A, Banking | `not-started` | — | Tabular data queries, fast approximations, growth comparisons. |
+| `di-charts` | Bar, Line & Mixed Charts | `topics/di-charts.html` | SEBI Gr A, Banking | `not-started` | — | Derived from single dataset objects, dual-axis checks. |
+| `di-pie` | Single & Multiple Pie Charts | `topics/di-pie.html` | SEBI Gr A, Banking | `not-started` | — | Degree to percentage conversion, sector ratio calculations. |
+
+---
+
+## Review & Quality Gate Log
+
+- **2026-10-29:** Milestone 0 initialized (repository skeleton, `.nojekyll`, shared design system, test runner, central directory). Milestone 1 created (`topics/percentages.html`): 10 reference deterministic tests, 12 varied practice questions, SVG proportional bar, predict-first flow, full trap breakdown. Status: `published`.
