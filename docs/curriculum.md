@@ -45,7 +45,7 @@ Official notices checked for curriculum alignment:
 
 | Topic ID | Topic Name | File | Primary Exam Target | Status | Review Date | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `di-tables` | Table DI & Percentage Comparison | `topics/di-tables.html` | SEBI Gr A, Banking | `not-started` | — | Tabular data queries, fast approximations, growth comparisons. |
+| `di-tables` | Table DI & Percentage Comparison | `topics/di-tables.html` | SEBI Gr A, Banking | **published** | 2026-10-29 | Single-source-of-truth corporate revenue dataset (5 companies x 4 years), dynamic row/column aggregations, YoY growth, percentage more/less with 'than' anchor rule, 12 verified practice questions, 11 deterministic self-tests. |
 | `di-charts` | Bar, Line & Mixed Charts | `topics/di-charts.html` | SEBI Gr A, Banking | `not-started` | — | Derived from single dataset objects, dual-axis checks. |
 | `di-pie` | Single & Multiple Pie Charts | `topics/di-pie.html` | SEBI Gr A, Banking | `not-started` | — | Degree to percentage conversion, sector ratio calculations. |
 
@@ -64,3 +64,4 @@ Official notices checked for curriculum alignment:
 - **2026-10-29:** Milestone 5 topic added (`topics/ratio-proportion.html`): 11 reference deterministic self-tests, 12 verified practice questions, interactive proportional bar SVG model, classical proportion calculator (mean/third/fourth), coin denomination weighted solver, predict-first flow, LCM-bridge chaining trap. Status: `published`.
 - **2026-10-29:** Milestone 5 topic added (`topics/order-ranking.html`): 11 reference deterministic self-tests, 12 verified practice questions, interactive linear row SVG visualizer, overlapping between count cross-over solver, min/max bounds, position interchange simulator. Status: `published`.
 - **2026-10-29:** Milestone 5 topic added (`topics/averages-alligation.html`): 13 reference deterministic self-tests, 12 verified practice questions, interactive alligation seesaw SVG visualizer, repeated dilution solver, group inclusion/replacement shortcuts, CP-basis alligation trap breakdown. Status: `published`.
+- **2026-10-29:** Milestone 6 topic added (`topics/di-tables.html`): 11 reference deterministic self-tests, 12 verified practice questions, maiden Data Interpretation lesson, interactive corporate revenue table, comparative bar chart, YoY growth, percentage more/less anchor rule. Status: `published`.

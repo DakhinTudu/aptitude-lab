@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table Data Interpretation &amp; Percentage Comparisons — Aptitude &amp; Reasoning Lab</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .di-table-wrapper {
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+    }
+
+    .di-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      text-align: right;
+    }
+
+    .di-table th, .di-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--color-border-subtle);
+      transition: background 0.15s ease;
+    }
+
+    .di-table th {
+      background: var(--color-surface-subtle);
+      font-weight: 700;
+      color: var(--color-text-main);
+      text-align: right;
+    }
+
+    .di-table th:first-child, .di-table td:first-child {
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .di-table tr:hover td {
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .di-table td.cell-highlight {
+      background: rgba(59, 130, 246, 0.15) !important;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .di-table tr.total-row td {
+      font-weight: 800;
+      background: var(--color-surface-subtle);
+      border-top: 2px solid var(--color-border);
+    }
+
+    .di-chart-container {
+      background: var(--color-surface-subtle);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .di-svg {
+      width: 100%;
+      height: 220px;
+      overflow: visible;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--color-primary);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Navigation Hub -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand" aria-label="Aptitude and Reasoning Lab Home">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+          <path d="M2 12h20" />
+        </svg>
+        <span>Aptitude &amp; Reasoning Lab</span>
+      </a>
+      <nav class="nav-links" aria-label="Breadcrumb">
+        <a href="../index.html" class="nav-link">Hub</a>
+        <span style="color: var(--color-text-muted);">/</span>
+        <span style="color: var(--color-text-main); font-weight: 600;">Table Data Interpretation</span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Breadcrumb / Topic Metadata Header -->
+    <div style="margin-bottom: 1.5rem;">
+      <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
+        <span class="badge badge-tag">Data Interpretation (DI)</span>
+        <span class="badge badge-published">Module 12</span>
+        <span class="badge badge-outline">SEBI Grade A &bull; SBI PO &bull; RBI Grade B</span>
+      </div>
+      <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--color-text-main);">
+        Table Data Interpretation &amp; Percentage Comparisons
+      </h1>
+      <p style="font-size: 1.05rem; color: var(--color-text-muted); max-width: 820px;">
+        Master the foundation of banking Data Analysis. Learn to rapidly evaluate <strong>percentage growth</strong>, 
+        <strong>percentage more/less</strong>, <strong>ratio shortcuts</strong>, and <strong>mental base-split approximations</strong> on real-world tabular datasets.
+      </p>
+    </div>
+
+    <!-- Quality Gate Fail-Visibly Alert Container -->
+    <div id="quality-alert" class="callout callout-error hidden" role="alert" style="margin-bottom: 1.5rem;">
+      <strong>Quality Gate Alert:</strong> One or more deterministic logic invariants failed. Practice submissions are locked until solver integrity is restored.
+      <div id="quality-alert-details" style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.8125rem;"></div>
+    </div>
+
+    <!-- Section 1: Concept & Interactive Data Table Explorer -->
+    <section class="card" aria-labelledby="model-title">
+      <div class="card-header">
+        <div>
+          <h2 id="model-title" class="section-title">1. Interactive Tabular Dataset: Annual Corporate Revenue</h2>
+          <p class="section-subtitle">Annual revenue (in ₹ Crore) of 5 leading tech corporations across 4 fiscal years. Click any cell to inspect breakdown analytics.</p>
+        </div>
+      </div>
+
+      <!-- Controls: Filters / Year Comparison Selector -->
+      <div class="control-grid">
+        <div class="control-group">
+          <label class="control-label" for="select-focus-company">
+            <span>Focus Company</span>
+          </label>
+          <select id="select-focus-company" class="control-input" onchange="handleAnalyticsChange()">
+            <option value="Alpha">Alpha</option>
+            <option value="Beta">Beta</option>
+            <option value="Gamma">Gamma</option>
+            <option value="Delta" selected>Delta</option>
+            <option value="Epsilon">Epsilon</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="select-focus-year">
+            <span>Chart &amp; Metric Focus Year</span>
+          </label>
+          <select id="select-focus-year" class="control-input" onchange="handleAnalyticsChange()">
+            <option value="2021">FY 2021</option>
+            <option value="2022">FY 2022</option>
+            <option value="2023">FY 2023</option>
+            <option value="2024" selected>FY 2024</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="di-table-wrapper" aria-label="Corporate revenue table">
+        <table class="di-table" id="corporate-table">
+          <thead>
+            <tr>
+              <th>Company</th>
+              <th>FY 2021 (₹ Cr)</th>
+              <th>FY 2022 (₹ Cr)</th>
+              <th>FY 2023 (₹ Cr)</th>
+              <th>FY 2024 (₹ Cr)</th>
+              <th>4-Year Total</th>
+              <th>Annual Average</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <!-- Injected dynamically by renderer -->
+          </tbody>
+          <tfoot id="table-foot">
+            <!-- Injected dynamically -->
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Visual Comparative Bar Chart (SVG) -->
+      <div class="di-chart-container" aria-label="Visual comparative revenue bar chart">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <h3 style="font-size: 0.9375rem; font-weight: 700; color: var(--color-primary);" id="chart-title">
+            Comparative Revenue Breakdown (FY 2024)
+          </h3>
+          <span class="stat-pill" id="chart-year-pill">FY 2024</span>
+        </div>
+        <svg id="di-chart-svg" class="di-svg" viewBox="0 0 700 200" role="img" aria-labelledby="svg-desc">
+          <title id="svg-desc">Comparative revenue bar chart for selected fiscal year</title>
+          <!-- Injected dynamically -->
+        </svg>
+      </div>
+
+      <!-- Live Analytics Readout Stats -->
+      <div class="score-bar" id="model-readout" aria-live="polite">
+        <div class="score-stat">
+          <span class="score-stat-label" id="readout-label-rev">Delta Revenue (2024)</span>
+          <span class="score-stat-num" id="readout-val-rev">₹396 Cr</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Market Share (2024)</span>
+          <span class="score-stat-num" id="readout-share">26.77%</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">YoY Growth (23 → 24)</span>
+          <span class="score-stat-num" id="readout-growth" style="color: #047857;">+20.0%</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Peer Rank in Year</span>
+          <span class="score-stat-num" id="readout-rank">Rank 1 of 5</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Predict-First Worked Example -->
+    <section class="card" aria-labelledby="predict-title">
+      <div class="card-header">
+        <div>
+          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
+          <p class="section-subtitle">Avoid the #1 Table DI Trap: Confusing Absolute Increase with Percentage Increase.</p>
+        </div>
+      </div>
+
+      <div class="predict-box">
+        <div class="predict-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span style="font-weight: 700; font-size: 0.9375rem;">Challenge: Growth Rate Comparison</span>
+        </div>
+        <p style="margin-bottom: 0.75rem; font-size: 0.9375rem;">
+          From <strong>FY 2023 to FY 2024</strong>:<br>
+          &bull; <strong>Delta's</strong> revenue jumped from <strong>₹330 Cr to ₹396 Cr</strong> (an increase of <strong>₹66 Cr</strong>).<br>
+          &bull; <strong>Alpha's</strong> revenue jumped from <strong>₹180 Cr to ₹225 Cr</strong> (an increase of <strong>₹45 Cr</strong>).<br>
+          <em>Which company recorded the HIGHER percentage growth rate?</em>
+        </p>
+
+        <!-- Predict Radio Options -->
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;" role="radiogroup" aria-label="Predict answer">
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
+            <input type="radio" name="predict-radio" value="delta">
+            <strong>Delta</strong> — Because its absolute revenue increase (₹66 Cr) is larger than Alpha's (₹45 Cr).
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
+            <input type="radio" name="predict-radio" value="alpha">
+            <strong>Alpha</strong> — Because its percentage growth (45/180 = 25%) exceeds Delta's (66/330 = 20%).
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
+            <input type="radio" name="predict-radio" value="tied">
+            <strong>Both are equal</strong> (both grew around 20%).
+          </label>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-sm" id="btn-reveal-predict" onclick="handleRevealPredict()">
+          Reveal Mathematical Resolution
+        </button>
+
+        <!-- Revealed Solution Callout -->
+        <div id="predict-solution" class="callout callout-info hidden" style="margin-top: 1rem;">
+          <h4 style="font-size: 0.9375rem; margin-bottom: 0.5rem; color: #1e40af;">Mathematical Resolution:</h4>
+          <p style="font-size: 0.875rem; line-height: 1.5; margin-bottom: 0.5rem;">
+            <strong>Correct Answer: Alpha recorded higher percentage growth (25% vs 20%).</strong>
+          </p>
+          <p style="font-size: 0.875rem; line-height: 1.5; margin-bottom: 0.5rem;">
+            $$\text{Alpha's Growth} = \frac{225 - 180}{180} \times 100\% = \frac{45}{180} \times 100\% = \mathbf{25.0\%}$$
+            $$\text{Delta's Growth} = \frac{396 - 330}{330} \times 100\% = \frac{66}{330} \times 100\% = \mathbf{20.0\%}$$
+          </p>
+          <p style="font-size: 0.8125rem; color: #1e3a8a;">
+            <strong>The Exam Trap:</strong> Banking test writers constantly exploit candidates under time pressure who confuse <em>highest absolute addition</em> with <em>highest relative rate</em>. A smaller base makes a moderate addition represent a vastly larger percentage surge.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Comprehensive Rules & Trap Encyclopedia -->
+    <section class="card" aria-labelledby="rules-title">
+      <div class="card-header">
+        <div>
+          <h2 id="rules-title" class="section-title">3. Fast DI Calculation Shortcuts &amp; Axioms</h2>
+          <p class="section-subtitle">Techniques that cut tabular calculation time by 60%.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">1. The "Than" Anchor Rule</h3>
+          <p style="font-size: 0.875rem;">
+            In questions asking <em>"X is what % more/less than Y"</em>:
+          </p>
+          <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); text-align: center; margin: 0.5rem 0; font-size: 0.9375rem;">
+            % Change = (|X - Y| / Y) × 100%
+          </div>
+          <p style="font-size: 0.8125rem; color: var(--color-danger); font-weight: 600;">
+            The entity immediately following the word "than" is ALWAYS the denominator.
+          </p>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">2. Ratio of Averages Shortcut</h3>
+          <p style="font-size: 0.875rem;">
+            When asked for the ratio of the average of A to the average of B over $k$ years:
+          </p>
+          <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); text-align: center; margin: 0.5rem 0; font-size: 0.9375rem;">
+            (Total_A / k) : (Total_B / k) ≡ Total_A : Total_B
+          </div>
+          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
+            Never divide by $k$. Compute the ratio of the row/column totals directly.
+          </p>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">3. Base-Split Approximation</h3>
+          <p style="font-size: 0.875rem;">
+            To calculate complex fractions like $171 / 225$ without decimal division:
+          </p>
+          <ul style="font-size: 0.8125rem; margin-left: 1.25rem; margin-top: 0.35rem; color: var(--color-text-muted);">
+            <li>$100\% = 225$, so $50\% = 112.5$</li>
+            <li>$25\% = 56.25 \implies 75\% = 168.75$</li>
+            <li>Remaining $= 171 - 168.75 = 2.25$ ($1\% = 2.25$)</li>
+            <li>Result: $75\% + 1\% = 76.0\%$ exactly!</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
+          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">4. Unit &amp; Denomination Traps</h3>
+          <p style="font-size: 0.875rem;">
+            Always verify the table header scale (₹ Crore, Thousands, Millions).
+          </p>
+          <p style="font-size: 0.8125rem; color: var(--color-text-muted); margin-top: 0.35rem;">
+            In multi-table DI, one table is often given in Lakhs and another in Crores ($1\text{ Cr} = 100\text{ Lakhs}$). Never calculate cross-table sums without normalizing units.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Independent Practice Lab (12 Verified Questions) -->
+    <section class="card" aria-labelledby="practice-title" id="practice-section">
+      <div class="card-header">
+        <div>
+          <h2 id="practice-title" class="section-title">4. Independent Practice Lab (Dataset-Grounded)</h2>
+          <p class="section-subtitle">12 exam-grade questions testing total revenue, percentage shares, ratios, projections, and growth comparisons based on the table above.</p>
+        </div>
+      </div>
+
+      <!-- Practice Controls & Mode Toggles -->
+      <div class="practice-header">
+        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
+          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
+            Guided Mode
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
+            Try Without Hints
+          </button>
+          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
+            Timed Practice
+          </button>
+        </div>
+
+        <div id="timer-container" class="timer-badge hidden" aria-live="off">
+          <span>⏱️</span>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+
+      <!-- Score & Accuracy Progress Bar -->
+      <div class="score-bar" aria-label="Current Practice Statistics">
+        <div class="score-stat">
+          <span class="score-stat-label">Questions Attempted</span>
+          <span class="score-stat-num" id="stat-attempts">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Total Correct</span>
+          <span class="score-stat-num" id="stat-correct">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Independent Correct</span>
+          <span class="score-stat-num" id="stat-independent">0</span>
+        </div>
+        <div class="score-stat">
+          <span class="score-stat-label">Accuracy</span>
+          <span class="score-stat-num" id="stat-accuracy">0%</span>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
+          Reset Local Progress
+        </button>
+      </div>
+
+      <!-- Question Box -->
+      <div id="practice-question-card" style="margin-top: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
+            Question 1 of 12
+          </span>
+          <span class="badge" id="practice-q-difficulty">Easy</span>
+        </div>
+
+        <p class="question-stem" id="practice-q-stem">
+          Loading practice question...
+        </p>
+
+        <!-- Options container -->
+        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Practice Feedback Callout -->
+        <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+        <!-- Error Categorizer (appears on incorrect submission) -->
+        <div id="practice-error-categorizer" class="error-categorizer hidden">
+          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
+            Reflective Analysis: What was the primary root cause of this error?
+          </label>
+          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
+            <option value="base_denominator">Wrong Denominator Base (Used wrong entity following "than")</option>
+            <option value="absolute_vs_rate">Absolute vs. Percentage Rate (Confused highest increase with highest %)</option>
+            <option value="redundant_div">Redundant Divisor (Divided averages manually instead of canceling totals)</option>
+            <option value="misread_cell">Misread Cell / Year Header (Looked at wrong row or column in table)</option>
+            <option value="arithmetic_slip">Arithmetic Slip during approximation</option>
+            <option value="time_guess">Rushed / Guess under time pressure</option>
+          </select>
+        </div>
+
+        <!-- Practice Worked Solution Box (revealed upon answering) -->
+        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
+          <h4 style="font-size: 0.9375rem; margin-bottom: 0.5rem; color: #1e40af;">Mathematical Solution:</h4>
+          <div id="practice-solution-text" style="font-size: 0.875rem; line-height: 1.6;"></div>
+          <div id="practice-trap-analysis" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed rgba(30, 64, 175, 0.2); font-size: 0.8125rem; color: #1e3a8a;"></div>
+        </div>
+
+        <!-- Question Navigation Controls -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-prev-q" onclick="navigateQuestion(-1)">
+            ← Previous Question
+          </button>
+          <span style="font-size: 0.8125rem; color: var(--color-text-muted);" id="q-counter-text">
+            1 / 12
+          </span>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-next-q" onclick="navigateQuestion(1)">
+            Next Question →
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/common.js"></script>
+  <script>
+    /* ==========================================================================
+       1. DATASET & PURE DETERMINISTIC MODEL
+       ========================================================================== */
+    const DATASET = {
+      years: [2021, 2022, 2023, 2024],
+      companies: [
+        { name: "Alpha", values: [120, 150, 180, 225], color: "#3b82f6" },
+        { name: "Beta", values: [200, 240, 270, 324], color: "#10b981" },
+        { name: "Gamma", values: [160, 180, 216, 270], color: "#f59e0b" },
+        { name: "Delta", values: [250, 275, 330, 396], color: "#8b5cf6" },
+        { name: "Epsilon", values: [180, 200, 220, 264], color: "#ec4899" }
+      ]
+    };
+
+    const Model = (function () {
+      function getCompany(name) {
+        return DATASET.companies.find(c => c.name.toLowerCase() === name.toLowerCase());
+      }
+
+      function getCompanyTotal(name) {
+        const comp = getCompany(name);
+        if (!comp) return null;
+        return comp.values.reduce((a, b) => a + b, 0);
+      }
+
+      function getCompanyAverage(name) {
+        const total = getCompanyTotal(name);
+        if (total === null) return null;
+        return LabCommon.round(total / DATASET.years.length, 2);
+      }
+
+      function getYearTotal(year) {
+        const yIdx = DATASET.years.indexOf(Number(year));
+        if (yIdx === -1) return null;
+        return DATASET.companies.reduce((sum, c) => sum + c.values[yIdx], 0);
+      }
+
+      function getGrandTotal() {
+        return DATASET.companies.reduce((sum, c) => sum + c.values.reduce((a, b) => a + b, 0), 0);
+      }
+
+      function getPercentageShare(compName, year) {
+        const comp = getCompany(compName);
+        const yIdx = DATASET.years.indexOf(Number(year));
+        const yTotal = getYearTotal(year);
+        if (!comp || yIdx === -1 || !yTotal) return null;
+        return LabCommon.round((comp.values[yIdx] / yTotal) * 100, 2);
+      }
+
+      function getYoYGrowth(compName, startYear, endYear) {
+        const comp = getCompany(compName);
+        const sIdx = DATASET.years.indexOf(Number(startYear));
+        const eIdx = DATASET.years.indexOf(Number(endYear));
+        if (!comp || sIdx === -1 || eIdx === -1) return null;
+        const startVal = comp.values[sIdx];
+        const endVal = comp.values[eIdx];
+        return LabCommon.round(((endVal - startVal) / startVal) * 100, 2);
+      }
+
+      function getPercentageMoreLess(compA, compB, year) {
+        const cA = getCompany(compA);
+        const cB = getCompany(compB);
+        const yIdx = DATASET.years.indexOf(Number(year));
+        if (!cA || !cB || yIdx === -1) return null;
+        const valA = cA.values[yIdx];
+        const valB = cB.values[yIdx];
+        return LabCommon.round(((valA - valB) / valB) * 100, 2);
+      }
+
+      return {
+        DATASET,
+        getCompanyTotal,
+        getCompanyAverage,
+        getYearTotal,
+        getGrandTotal,
+        getPercentageShare,
+        getYoYGrowth,
+        getPercentageMoreLess
+      };
+    })();
+
+    if (typeof window !== "undefined") {
+      window.Model = Model;
+    }
+
+    /* ==========================================================================
+       2. DETERMINISTIC SELF-TEST SUITE (Quality Gate)
+       ========================================================================== */
+    function runSelfTests() {
+      const results = { passed: 0, failed: 0, failures: [] };
+
+      function assert(condition, testName) {
+        if (condition) {
+          results.passed++;
+        } else {
+          results.failed++;
+          results.failures.push(testName);
+        }
+      }
+
+      // Test 1: Alpha 4-year total is 675
+      assert(Model.getCompanyTotal("Alpha") === 675, "Test 1: Alpha total = 675");
+
+      // Test 2: Delta 4-year total is 1251
+      assert(Model.getCompanyTotal("Delta") === 1251, "Test 2: Delta total = 1251");
+
+      // Test 3: FY 2021 Year total = 910
+      assert(Model.getYearTotal(2021) === 910, "Test 3: FY 2021 total = 910");
+
+      // Test 4: FY 2024 Year total = 1479
+      assert(Model.getYearTotal(2024) === 1479, "Test 4: FY 2024 total = 1479");
+
+      // Test 5: Grand total across all 5 companies and 4 years = 4650
+      assert(Model.getGrandTotal() === 4650, "Test 5: Grand total = 4650");
+
+      // Test 6: Alpha YoY growth 2021 to 2022 = 25% (120 to 150)
+      assert(Model.getYoYGrowth("Alpha", 2021, 2022) === 25.0, "Test 6: Alpha YoY growth 2021-2022 = 25%");
+
+      // Test 7: Beta FY 2021 market share = 200 / 910 = 21.98%
+      assert(Model.getPercentageShare("Beta", 2021) === 21.98, "Test 7: Beta 2021 market share = 21.98%");
+
+      // Test 8: Delta 2024 revenue more than Alpha 2024 = (396 - 225)/225 = 76.0%
+      assert(Model.getPercentageMoreLess("Delta", "Alpha", 2024) === 76.0, "Test 8: Delta % more than Alpha in 2024 = 76.0%");
+
+      // Test 9: Epsilon average revenue = 864 / 4 = 216.0
+      assert(Model.getCompanyAverage("Epsilon") === 216.0, "Test 9: Epsilon average = 216.0");
+
+      // Test 10: Industry growth 2021 to 2024 = (1479 - 910)/910 = 62.53%
+      const indGrowth = LabCommon.round(((1479 - 910) / 910) * 100, 2);
+      assert(indGrowth === 62.53, "Test 10: Industry overall growth = 62.53%");
+
+      // Test 11: Delta vs Alpha total difference = 1251 - 675 = 576
+      assert(Model.getCompanyTotal("Delta") - Model.getCompanyTotal("Alpha") === 576, "Test 11: Delta - Alpha total diff = 576");
+
+      return results;
+    }
+
+    if (typeof window !== "undefined") {
+      window.runSelfTests = runSelfTests;
+    }
+
+    /* ==========================================================================
+       3. 12 VERIFIED PRACTICE QUESTIONS (Dataset-Grounded)
+       ========================================================================== */
+    const PRACTICE_QUESTIONS = [
+      {
+        id: "di_q1",
+        difficulty: "Easy",
+        stem: `What is the <strong>total revenue generated by Delta</strong> across all four fiscal years?`,
+        options: ["₹1251 Cr", "₹1240 Cr", "₹1265 Cr", "₹1220 Cr"],
+        correctIndex: 0,
+        solution: `Sum across all 4 years for Delta:<br>
+                   $$250 + 275 + 330 + 396 = \\mathbf{₹1251\\text{ Cr}}$$`,
+        trap: `<strong>Trap Avoidance:</strong> Ensure you read row Delta correctly across all 4 columns without skipping the ₹275 Cr cell in FY 2022.`
+      },
+      {
+        id: "di_q2",
+        difficulty: "Medium",
+        stem: `What is the <strong>percentage growth in total industry revenue</strong> from FY 2021 to FY 2024?`,
+        options: ["62.53%", "58.40%", "65.20%", "60.00%"],
+        correctIndex: 0,
+        solution: `1. Total Industry Revenue in FY 2021: $120 + 200 + 160 + 250 + 180 = 910\\text{ Cr}$.<br>
+                   2. Total Industry Revenue in FY 2024: $225 + 324 + 270 + 396 + 264 = 1479\\text{ Cr}$.<br>
+                   3. $$\\text{Percentage Growth} = \\frac{1479 - 910}{910} \\times 100\\% = \\frac{569}{910} \\times 100\\% \\approx \\mathbf{62.53\\%}$$`,
+        trap: `<strong>Trap Avoidance:</strong> Using 1479 as the denominator gives $569 / 1479 = 38.47\\%$. The starting year (FY 2021 = 910) must always serve as the denominator base.`
+      },
+      {
+        id: "di_q3",
+        difficulty: "Easy",
+        stem: `In FY 2023, what is the <strong>ratio of Gamma's revenue to Delta's revenue</strong>?`,
+        options: ["36 : 55", "18 : 25", "32 : 55", "6 : 11"],
+        correctIndex: 0,
+        solution: `In FY 2023:<br>
+                   Gamma's revenue $= ₹216\\text{ Cr}$.<br>
+                   Delta's revenue $= ₹330\\text{ Cr}$.<br>
+                   $$\\text{Ratio} = \\frac{216}{330} = \\frac{216 \\div 6}{330 \\div 6} = \\mathbf{36 : 55}$$`,
+        trap: `<strong>Trap Avoidance:</strong> Dividing by 3 yields 72 : 110, which must be simplified further by dividing by 2 to reach the irreducible ratio 36 : 55.`
+      },
+      {
+        id: "di_q4",
+        difficulty: "Medium",
+        stem: `By what percentage is <strong>Delta's revenue in FY 2024 MORE THAN Alpha's revenue</strong> in the same fiscal year?`,
+        options: ["76.0%", "72.5%", "43.18%", "80.0%"],
+        correctIndex: 0,
+        solution: `In FY 2024:<br>
+                   Delta $= ₹396\\text{ Cr}$, Alpha $= ₹225\\text{ Cr}$.<br>
+                   $$\\%\\text{ More Than Alpha} = \\frac{396 - 225}{225} \\times 100\\% = \\frac{171}{225} \\times 100\\% = \\mathbf{76.0\\%}$$`,
+        trap: `<strong>The Base Trap:</strong> 43.18% comes from using Delta as the base: $171 / 396 = 43.18\\%$. The phrase "more than Alpha" strictly requires Alpha ($225$) in the denominator!`
+      },
+      {
+        id: "di_q5",
+        difficulty: "Hard",
+        stem: `Which company recorded the <strong>LOWEST percentage growth rate</strong> from FY 2021 to FY 2022?`,
+        options: ["Delta", "Gamma", "Epsilon", "Beta"],
+        correctIndex: 0,
+        solution: `Evaluate YoY growth rates from 2021 to 2022:<br>
+                   &bull; Alpha: $(150 - 120)/120 = 30/120 = 25.0\\%$<br>
+                   &bull; Beta: $(240 - 200)/200 = 40/200 = 20.0\\%$<br>
+                   &bull; Gamma: $(180 - 160)/160 = 20/160 = 12.5\\%$<br>
+                   &bull; <strong>Delta:</strong> $(275 - 250)/250 = 25/250 = \\mathbf{10.0\\%}$<br>
+                   &bull; Epsilon: $(200 - 180)/180 = 20/180 = 11.11\\%$<br>
+                   Delta had the lowest percentage growth at exactly 10.0%.`,
+        trap: `<strong>Trap Avoidance:</strong> Delta grew by ₹25 Cr while Gamma and Epsilon grew by ₹20 Cr. In absolute terms Delta grew more, but in percentage rate (10%) it grew the least!`
+      },
+      {
+        id: "di_q6",
+        difficulty: "Easy",
+        stem: `What is the <strong>average annual revenue of Epsilon</strong> across the four years?`,
+        options: ["₹216 Cr", "₹220 Cr", "₹212 Cr", "₹218 Cr"],
+        correctIndex: 0,
+        solution: `Epsilon Total $= 180 + 200 + 220 + 264 = 864\\text{ Cr}$.<br>
+                   $$\\text{Average} = \\frac{864}{4} = \\mathbf{₹216\\text{ Cr}}$$`,
+        trap: `<strong>Trap Avoidance:</strong> Averaging only the first and last year gives $(180 + 264)/2 = 222$, which fails because annual revenue growth is not strictly linear.`
+      },
+      {
+        id: "di_q7",
+        difficulty: "Medium",
+        stem: `What was the <strong>percentage contribution of Beta</strong> to the total industry revenue in FY 2021?`,
+        options: ["21.98%", "24.50%", "19.80%", "23.10%"],
+        correctIndex: 0,
+        solution: `In FY 2021:<br>
+                   Beta Revenue $= ₹200\\text{ Cr}$.<br>
+                   Total Industry Revenue $= ₹910\\text{ Cr}$.<br>
+                   $$\\text{Market Share} = \\frac{200}{910} \\times 100\\% \\approx \\mathbf{21.98\\%}$$`,
+        trap: `<strong>Trap Avoidance:</strong> Dividing 200 by 5 companies ($200 / 5 = 40$) or dividing by 1000. Use the exact FY 2021 column sum of 910.`
+      },
+      {
+        id: "di_q8",
+        difficulty: "Easy",
+        stem: `What is the <strong>difference between the 4-year total revenue of Delta and Alpha</strong>?`,
+        options: ["₹576 Cr", "₹586 Cr", "₹566 Cr", "₹550 Cr"],
+        correctIndex: 0,
+        solution: `Delta 4-Year Total $= 1251\\text{ Cr}$.<br>
+                   Alpha 4-Year Total $= 675\\text{ Cr}$.<br>
+                   $$\\text{Difference} = 1251 - 675 = \\mathbf{₹576\\text{ Cr}}$$`,
+        trap: `<strong>Trap Avoidance:</strong> Summing the differences year-by-year: $(250-120) + (275-150) + (330-180) + (396-225) = 130 + 125 + 150 + 171 = 576$. Both methods agree.`
+      },
+      {
+        id: "di_q9",
+        difficulty: "Medium",
+        stem: `What is the <strong>ratio of the average annual revenue of Alpha to that of Beta</strong> across the four years?`,
+        options: ["675 : 1034", "135 : 206", "650 : 1020", "27 : 41"],
+        correctIndex: 0,
+        solution: `$$\\frac{\\text{Average of Alpha}}{\\text{Average of Beta}} = \\frac{\\text{Total of Alpha} / 4}{\\text{Total of Beta} / 4} = \\frac{\\text{Total of Alpha}}{\\text{Total of Beta}} = \\mathbf{675 : 1034}$$`,
+        trap: `<strong>Calculation Speed Trap:</strong> Dividing 675 by 4 (= 168.75) and 1034 by 4 (= 258.5) and then converting back to integers wastes 45 seconds. The common denominator $4$ cancels out immediately.`
+      },
+      {
+        id: "di_q10",
+        difficulty: "Hard",
+        stem: `If Gamma's revenue in FY 2025 grows at the <strong>same percentage rate as it did from FY 2023 to FY 2024</strong>, what will be Gamma's projected revenue in FY 2025?`,
+        options: ["₹337.5 Cr", "₹324.0 Cr", "₹340.0 Cr", "₹330.0 Cr"],
+        correctIndex: 0,
+        solution: `1. Calculate Gamma's growth rate from 2023 to 2024:<br>
+                   $$\\text{Growth} = \\frac{270 - 216}{216} = \\frac{54}{216} = \\frac{1}{4} = 25.0\\%$$
+                   2. Apply 25% growth to FY 2024 revenue ($270\\text{ Cr}$):<br>
+                   $$\\text{FY 2025 Revenue} = 270 \\times 1.25 = 270 + 67.5 = \\mathbf{₹337.5\\text{ Cr}}$$`,
+        trap: `<strong>Trap Avoidance:</strong> Adding the absolute increase ₹54 Cr instead of 25% gives $270 + 54 = ₹324\\text{ Cr}$. The question specifies the <em>percentage rate</em>, not absolute amount.`
+      },
+      {
+        id: "di_q11",
+        difficulty: "Hard",
+        stem: `In FY 2022, which company generated revenue that was <strong>CLOSEST to the average revenue per company</strong> in that year?`,
+        options: ["Epsilon", "Gamma", "Beta", "Alpha"],
+        correctIndex: 0,
+        solution: `1. Total Industry Revenue in FY 2022 $= 1045\\text{ Cr}$.<br>
+                   2. Average per company in FY 2022 $= 1045 / 5 = 209\\text{ Cr}$.<br>
+                   3. Check absolute deviations from $209$:<br>
+                   &bull; Alpha: $|150 - 209| = 59$<br>
+                   &bull; Beta: $|240 - 209| = 31$<br>
+                   &bull; Gamma: $|180 - 209| = 29$<br>
+                   &bull; Delta: $|275 - 209| = 66$<br>
+                   &bull; <strong>Epsilon:</strong> $|200 - 209| = \\mathbf{9}$<br>
+                   Epsilon has the smallest deviation ($9\\text{ Cr}$) and was closest to the average.`,
+        trap: `<strong>Trap Avoidance:</strong> Guessing Gamma (180) because it sits in the middle row. Epsilon's 200 is only 9 Cr away from the 209 Cr average.`
+      },
+      {
+        id: "di_q12",
+        difficulty: "Medium",
+        stem: `In FY 2024, Alpha's revenue is <strong>what percentage of Epsilon's revenue</strong>?`,
+        options: ["85.23%", "88.50%", "82.15%", "86.40%"],
+        correctIndex: 0,
+        solution: `In FY 2024:<br>
+                   Alpha $= ₹225\\text{ Cr}$, Epsilon $= ₹264\\text{ Cr}$.<br>
+                   $$\\text{Percentage} = \\frac{225}{264} \\times 100\\% = \\frac{75}{88} \\times 100\\% \\approx \\mathbf{85.23\\%}$$`,
+        trap: `<strong>Trap Avoidance:</strong> Calculating % difference ($100 - 85.23 = 14.77\\%$) instead of direct percentage. The question asks "is what percentage of", NOT "what percentage less than".`
+      }
+    ];
+
+    if (typeof window !== "undefined") {
+      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+    }
+
+    /* ==========================================================================
+       4. INTERACTIVE VIEW CONTROLLER & SVG RENDERER
+       ========================================================================== */
+    function populateTable() {
+      const tbody = document.getElementById('table-body');
+      const tfoot = document.getElementById('table-foot');
+
+      let bodyHtml = '';
+      DATASET.companies.forEach((comp) => {
+        const total = comp.values.reduce((a, b) => a + b, 0);
+        const avg = LabCommon.round(total / DATASET.years.length, 2);
+
+        bodyHtml += `
+          <tr id="row-${comp.name}">
+            <td><strong>${comp.name}</strong></td>
+            ${comp.values.map((v, i) => `<td id="cell-${comp.name}-${DATASET.years[i]}">${v}</td>`).join('')}
+            <td><strong>${total}</strong></td>
+            <td><strong>${avg}</strong></td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = bodyHtml;
+
+      // Footer: Year totals and average
+      const yearTotals = DATASET.years.map(y => Model.getYearTotal(y));
+      const grandTotal = Model.getGrandTotal();
+      const grandAvg = LabCommon.round(grandTotal / (DATASET.years.length * DATASET.companies.length), 2);
+
+      tfoot.innerHTML = `
+        <tr class="total-row">
+          <td>Industry Total</td>
+          ${yearTotals.map(t => `<td>${t}</td>`).join('')}
+          <td>${grandTotal}</td>
+          <td>${grandAvg}</td>
+        </tr>
+      `;
+    }
+
+    function handleAnalyticsChange() {
+      const focusComp = document.getElementById('select-focus-company').value;
+      const focusYear = document.getElementById('select-focus-year').value;
+
+      // Highlight selected cell
+      document.querySelectorAll('.cell-highlight').forEach(el => el.classList.remove('cell-highlight'));
+      const activeCell = document.getElementById(`cell-${focusComp}-${focusYear}`);
+      if (activeCell) activeCell.classList.add('cell-highlight');
+
+      // Update Readouts
+      const comp = Model.DATASET.companies.find(c => c.name === focusComp);
+      const yIdx = Model.DATASET.years.indexOf(Number(focusYear));
+      const val = comp ? comp.values[yIdx] : 0;
+
+      document.getElementById('readout-label-rev').textContent = `${focusComp} Revenue (${focusYear})`;
+      document.getElementById('readout-val-rev').textContent = `₹${val} Cr`;
+
+      const share = Model.getPercentageShare(focusComp, focusYear);
+      document.getElementById('readout-share').textContent = `${share}%`;
+
+      // YoY Growth
+      if (yIdx > 0) {
+        const prevYear = Model.DATASET.years[yIdx - 1];
+        const growth = Model.getYoYGrowth(focusComp, prevYear, focusYear);
+        document.getElementById('readout-growth').textContent = `${growth >= 0 ? '+' : ''}${growth}%`;
+        document.getElementById('readout-growth').style.color = growth >= 0 ? '#047857' : '#dc2626';
+      } else {
+        document.getElementById('readout-growth').textContent = `Baseline (N/A)`;
+        document.getElementById('readout-growth').style.color = 'var(--color-text-muted)';
+      }
+
+      // Rank in Year
+      const yearVals = Model.DATASET.companies.map(c => ({ name: c.name, val: c.values[yIdx] }))
+        .sort((a, b) => b.val - a.val);
+      const rank = yearVals.findIndex(c => c.name === focusComp) + 1;
+      document.getElementById('readout-rank').textContent = `Rank ${rank} of ${Model.DATASET.companies.length}`;
+
+      // Render Bar Chart
+      renderChart(focusYear, focusComp);
+    }
+
+    function renderChart(year, selectedComp) {
+      const svg = document.getElementById('di-chart-svg');
+      const yIdx = Model.DATASET.years.indexOf(Number(year));
+      document.getElementById('chart-title').textContent = `Comparative Revenue Breakdown (FY ${year})`;
+      document.getElementById('chart-year-pill').textContent = `FY ${year}`;
+
+      const companies = Model.DATASET.companies;
+      const maxVal = 420; // scale max
+      const chartWidth = 620;
+      const chartHeight = 140;
+      const startX = 60;
+      const barWidth = 65;
+      const gap = 45;
+
+      let svgHtml = `
+        <!-- Axis line -->
+        <line x1="${startX}" y1="${chartHeight + 20}" x2="${startX + companies.length * (barWidth + gap)}" y2="${chartHeight + 20}" stroke="var(--color-border)" stroke-width="2" />
+      `;
+
+      companies.forEach((c, i) => {
+        const val = c.values[yIdx];
+        const barH = (val / maxVal) * chartHeight;
+        const x = startX + i * (barWidth + gap);
+        const y = chartHeight + 20 - barH;
+        const isSelected = (c.name === selectedComp);
+
+        svgHtml += `
+          <!-- Bar -->
+          <rect x="${x}" y="${y}" width="${barWidth}" height="${barH}" rx="4"
+                fill="${isSelected ? 'var(--color-primary)' : c.color}"
+                opacity="${isSelected ? '1' : '0.8'}"
+                stroke="${isSelected ? '#1e3a8a' : 'none'}" stroke-width="2.5" />
+
+          <!-- Value Label -->
+          <text x="${x + barWidth / 2}" y="${y - 6}" font-size="12" font-weight="700" fill="var(--color-text-main)" text-anchor="middle">
+            ₹${val}
+          </text>
+
+          <!-- Company Label -->
+          <text x="${x + barWidth / 2}" y="${chartHeight + 38}" font-size="12" font-weight="${isSelected ? '800' : '600'}" fill="${isSelected ? 'var(--color-primary)' : 'var(--color-text-muted)'}" text-anchor="middle">
+            ${c.name}
+          </text>
+        `;
+      });
+
+      svg.innerHTML = svgHtml;
+    }
+
+    function handleRevealPredict() {
+      document.getElementById('predict-solution').classList.remove('hidden');
+      LabCommon.announce("Revealed resolution for growth rate comparison.");
+    }
+
+    /* ==========================================================================
+       5. PRACTICE LAB INTERACTION & PROGRESS LOGIC
+       ========================================================================== */
+    let currentQIndex = 0;
+    let practiceMode = 'hints';
+    let timerInstance = null;
+    let selectedOptionIndex = null;
+
+    const STORAGE_KEY = 'lab_di_tables_stats';
+
+    function getStoredStats() {
+      return LabCommon.safeStorage.getItem(STORAGE_KEY, {
+        attempts: 0,
+        correct: 0,
+        independentCorrect: 0,
+        history: {}
+      });
+    }
+
+    function saveStats(stats) {
+      LabCommon.safeStorage.setItem(STORAGE_KEY, stats);
+      updateStatsDisplay();
+    }
+
+    function updateStatsDisplay() {
+      const stats = getStoredStats();
+      document.getElementById('stat-attempts').textContent = stats.attempts;
+      document.getElementById('stat-correct').textContent = stats.correct;
+      document.getElementById('stat-independent').textContent = stats.independentCorrect;
+      const acc = stats.attempts > 0 ? Math.round((stats.correct / stats.attempts) * 100) : 0;
+      document.getElementById('stat-accuracy').textContent = `${acc}%`;
+    }
+
+    function handleResetStats() {
+      if (confirm("Reset all local practice statistics for this module?")) {
+        LabCommon.safeStorage.removeItem(STORAGE_KEY);
+        updateStatsDisplay();
+        renderQuestion(currentQIndex);
+      }
+    }
+
+    function setPracticeMode(mode) {
+      practiceMode = mode;
+      document.getElementById('btn-mode-hints').classList.toggle('active', mode === 'hints');
+      document.getElementById('btn-mode-independent').classList.toggle('active', mode === 'independent');
+      document.getElementById('btn-mode-timed').classList.toggle('active', mode === 'timed');
+
+      const timerContainer = document.getElementById('timer-container');
+      if (mode === 'timed') {
+        timerContainer.classList.remove('hidden');
+        if (!timerInstance) {
+          timerInstance = new LabCommon.PracticeTimer((seconds, formatted) => {
+            document.getElementById('timer-display').textContent = formatted;
+          });
+        }
+        timerInstance.start();
+      } else {
+        timerContainer.classList.add('hidden');
+        if (timerInstance) {
+          timerInstance.stop();
+        }
+      }
+
+      renderQuestion(currentQIndex);
+    }
+
+    function renderQuestion(idx) {
+      currentQIndex = idx;
+      const q = PRACTICE_QUESTIONS[idx];
+      selectedOptionIndex = null;
+
+      document.getElementById('practice-q-num').textContent = `Question ${idx + 1} of ${PRACTICE_QUESTIONS.length}`;
+      document.getElementById('q-counter-text').textContent = `${idx + 1} / ${PRACTICE_QUESTIONS.length}`;
+      document.getElementById('practice-q-difficulty').textContent = q.difficulty;
+      document.getElementById('practice-q-stem').innerHTML = q.stem;
+
+      const fb = document.getElementById('practice-feedback');
+      fb.className = 'callout hidden';
+      fb.innerHTML = '';
+
+      document.getElementById('practice-error-categorizer').classList.add('hidden');
+      document.getElementById('practice-solution-box').classList.add('hidden');
+
+      const optContainer = document.getElementById('practice-options-container');
+      optContainer.innerHTML = q.options.map((opt, i) => `
+        <button type="button" class="option-btn" id="opt-btn-${i}" onclick="handleOptionSelect(${i})">
+          <span style="font-weight: 700; margin-right: 0.5rem; color: var(--color-primary);">${String.fromCharCode(65 + i)}.</span>
+          <span>${opt}</span>
+        </button>
+      `).join('');
+
+      const stats = getStoredStats();
+      if (stats.history && stats.history[q.id]) {
+        const hist = stats.history[q.id];
+        revealQuestionOutcome(hist.chosenIndex, false);
+      }
+    }
+
+    function handleOptionSelect(optIdx) {
+      const q = PRACTICE_QUESTIONS[currentQIndex];
+      const stats = getStoredStats();
+
+      if (stats.history && stats.history[q.id]) return;
+
+      const isCorrect = (optIdx === q.correctIndex);
+
+      stats.attempts++;
+      if (isCorrect) {
+        stats.correct++;
+        if (practiceMode === 'independent' || practiceMode === 'timed') {
+          stats.independentCorrect++;
+        }
+      }
+
+      if (!stats.history) stats.history = {};
+      stats.history[q.id] = {
+        chosenIndex: optIdx,
+        correct: isCorrect,
+        timestamp: Date.now()
+      };
+
+      saveStats(stats);
+      revealQuestionOutcome(optIdx, true);
+    }
+
+    function revealQuestionOutcome(optIdx, isNewAnswer) {
+      const q = PRACTICE_QUESTIONS[currentQIndex];
+      const isCorrect = (optIdx === q.correctIndex);
+
+      q.options.forEach((_, i) => {
+        const btn = document.getElementById(`opt-btn-${i}`);
+        if (btn) {
+          btn.disabled = true;
+          if (i === q.correctIndex) {
+            btn.classList.add('correct');
+          } else if (i === optIdx) {
+            btn.classList.add('incorrect');
+          }
+        }
+      });
+
+      const fb = document.getElementById('practice-feedback');
+      fb.classList.remove('hidden');
+      if (isCorrect) {
+        fb.className = 'callout callout-success';
+        fb.innerHTML = `<strong>Correct!</strong> Exact deduction. You read and calculated from the dataset without falling for denominator traps.`;
+      } else {
+        fb.className = 'callout callout-error';
+        fb.innerHTML = `<strong>Incorrect.</strong> You chose (${String.fromCharCode(65 + optIdx)}). The correct answer is (${String.fromCharCode(65 + q.correctIndex)}). See the mathematical deduction below.`;
+        document.getElementById('practice-error-categorizer').classList.remove('hidden');
+      }
+
+      const solBox = document.getElementById('practice-solution-box');
+      solBox.classList.remove('hidden');
+      document.getElementById('practice-solution-text').innerHTML = q.solution;
+      document.getElementById('practice-trap-analysis').innerHTML = q.trap;
+
+      if (isNewAnswer) {
+        LabCommon.announce(isCorrect ? "Correct answer submitted." : "Incorrect answer. Solution revealed.");
+      }
+    }
+
+    function handleSaveErrorCategory(category) {
+      LabCommon.announce("Reflective error reason recorded.");
+    }
+
+    function navigateQuestion(step) {
+      const nextIdx = currentQIndex + step;
+      if (nextIdx >= 0 && nextIdx < PRACTICE_QUESTIONS.length) {
+        renderQuestion(nextIdx);
+      }
+    }
+
+    /* ==========================================================================
+       6. INITIALIZATION & SELF-TEST GATE ENFORCEMENT
+       ========================================================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      const testReport = LabCommon.runAndRenderSelfTests(runSelfTests, 'quality-alert', 'quality-alert-details');
+
+      if (testReport.failed > 0) {
+        console.error("Quality gate triggered! Practice disabled.");
+        const optContainer = document.getElementById('practice-options-container');
+        if (optContainer) {
+          optContainer.innerHTML = `<div class="callout callout-error">Practice locked due to logic invariant test failure. Check developer console.</div>`;
+        }
+        return;
+      }
+
+      populateTable();
+      handleAnalyticsChange();
+      updateStatsDisplay();
+      renderQuestion(0);
+    });
+  </script>
+</body>
+</html>
