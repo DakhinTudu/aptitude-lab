@@ -1,442 +1,1337 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aptitude & Reasoning Lab — Interactive Learning for Competitive Exams</title>
-  <meta name="description" content="A free, static interactive visual lab for quantitative aptitude, logical reasoning, and data interpretation for SEBI Grade A, Banking, and Indian competitive exams.">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="assets/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aptitude &amp; Reasoning Lab — Visual, interactive lessons for competitive exams</title>
+<meta name="description" content="A free, static, visually interactive library covering quantitative aptitude, logical reasoning, and data interpretation for SEBI Grade A, banking, and Indian competitive exams." />
+<meta name="theme-color" content="#0b1220" />
+<meta name="color-scheme" content="dark" />
+<meta property="og:title" content="Aptitude &amp; Reasoning Lab" />
+<meta property="og:description" content="Interactive aptitude &amp; reasoning lessons — understand, predict, practise. Free static lab for competitive exams." />
+<meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --font-sans: "Sora", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --transition: 220ms cubic-bezier(.22,1,.36,1);
+  --ease-out: cubic-bezier(.22,1,.36,1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: var(--font-sans);
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(900px 480px at 12% -10%, rgba(56,189,248,.14), transparent 55%),
+    radial-gradient(700px 420px at 92% 8%, rgba(34,197,94,.08), transparent 50%),
+    radial-gradient(1px 1px at 20% 30%, rgba(232,237,247,.18), transparent),
+    radial-gradient(1px 1px at 70% 60%, rgba(232,237,247,.12), transparent);
+  background-attachment: fixed;
+}
+img, svg, video { max-width: 100%; height: auto; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--primary); color: #001; padding: 12px 16px;
+  border-radius: 0 0 8px 0; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.15; }
+h2 { font-size: 1.2rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 0.75rem; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--surface-2); border: 1px solid var(--border);
+  padding: 0.15em 0.4em; border-radius: 4px;
+}
+.page-container { max-width: 1160px; margin: 0 auto; }
+
+/* Header */
+.site-header {
+  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
+  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
+  margin: 0 -16px 0; padding: 12px 16px;
+}
+.header-container {
+  max-width: 1160px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; font-size: 1rem; }
+.brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
+.nav-links {
+  display: flex; gap: 20px; list-style: none; margin: 0; padding: 0;
+  align-items: center; flex-wrap: wrap; justify-content: flex-end;
+}
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; transition: color var(--transition); }
+.nav-link:hover { color: var(--text); }
+.nav-link .nav-full { display: inline; }
+.nav-link .nav-short { display: none; }
+
+/* Hero composition */
+.hero-stage {
+  position: relative;
+  margin: 0 -16px 8px;
+  padding: 28px 16px 8px;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute; inset: -20% -10% auto;
+  height: 70%;
+  background:
+    radial-gradient(ellipse 50% 60% at 30% 40%, rgba(56,189,248,.18), transparent 70%),
+    radial-gradient(ellipse 40% 50% at 75% 30%, rgba(34,197,94,.1), transparent 70%);
+  pointer-events: none;
+  animation: heroGlow 10s var(--ease-out) infinite alternate;
+}
+@keyframes heroGlow {
+  from { transform: translate3d(-2%, 0, 0) scale(1); opacity: .85; }
+  to { transform: translate3d(3%, 2%, 0) scale(1.06); opacity: 1; }
+}
+.hero {
+  position: relative;
+  z-index: 1;
+  max-width: 1160px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 36px 40px;
+  align-items: center;
+  padding: 36px 8px 20px;
+  text-align: left;
+}
+.hero-copy { max-width: 34rem; }
+.hero-brand {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-bottom: 18px;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.hero-brand svg { width: 42px; height: 42px; }
+.hero-brand .mark-pulse {
+  transform-origin: 24px 24px;
+  animation: markPulse 3.2s var(--ease-out) infinite;
+}
+@keyframes markPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: .85; }
+}
+.hero h1 {
+  font-size: clamp(1.85rem, 4.2vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--primary);
+}
+.hero .sub {
+  font-size: 1.02rem;
+  color: var(--text-dim);
+  max-width: 36rem;
+  margin: 0 0 22px;
+  line-height: 1.55;
+}
+.hero-cta {
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+}
+.btn-hero {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: 10px;
+  font-family: inherit; font-weight: 700; font-size: 0.95rem;
+  text-decoration: none; border: 1px solid transparent;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition), border-color var(--transition);
+}
+.btn-hero-primary {
+  background: var(--primary); color: #001824;
+  box-shadow: 0 8px 24px rgba(56,189,248,.22);
+}
+.btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(56,189,248,.3); }
+.btn-hero-ghost {
+  background: rgba(22,33,60,.65); color: var(--text);
+  border-color: var(--border-strong); backdrop-filter: blur(8px);
+}
+.btn-hero-ghost:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+/* Live demo panel */
+.demo-panel {
+  position: relative;
+  background: linear-gradient(165deg, rgba(22,33,60,.92), rgba(17,26,46,.88));
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  padding: 18px 18px 16px;
+  box-shadow:
+    0 0 0 1px rgba(56,189,248,.06),
+    0 20px 50px rgba(0,0,0,.35);
+  overflow: hidden;
+}
+.demo-panel::before {
+  content: "";
+  position: absolute; inset: 0 auto auto 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), var(--success), transparent);
+  background-size: 200% 100%;
+  animation: demoSheen 4.5s linear infinite;
+}
+@keyframes demoSheen {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+.demo-kicker {
+  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.demo-kicker-label {
+  font-size: 0.72rem; font-weight: 800; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--primary);
+}
+.demo-live {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; font-weight: 700; color: var(--success);
+}
+.demo-live i {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--success);
+  display: block; animation: liveBlink 1.6s ease infinite;
+}
+@keyframes liveBlink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
+  50% { opacity: .55; box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+}
+.demo-title {
+  font-size: 1.05rem; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.02em;
+}
+.demo-sub {
+  font-size: 0.84rem; color: var(--text-dim); margin: 0 0 14px; line-height: 1.45;
+}
+.demo-control {
+  display: grid; gap: 6px; margin-bottom: 14px;
+}
+.demo-control label {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 0.78rem; font-weight: 600; color: var(--text-dim);
+}
+.demo-control label strong {
+  font-family: var(--font-mono); color: var(--primary); font-size: 0.9rem;
+}
+.demo-control input[type="range"] {
+  width: 100%; accent-color: var(--primary); height: 28px; cursor: pointer;
+}
+.demo-svg-wrap {
+  background: rgba(11,18,32,.55);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 6px 4px;
+  margin-bottom: 12px;
+}
+.demo-svg-wrap svg { display: block; width: 100%; height: auto; }
+.demo-bars rect, .demo-bars text { transition: all 320ms var(--ease-out); }
+.demo-readout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
+}
+.demo-stat {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.demo-stat-label {
+  display: block; font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.demo-stat-val {
+  font-family: var(--font-mono); font-weight: 600; font-size: 0.95rem;
+  color: var(--text); font-variant-numeric: tabular-nums;
+}
+.demo-stat-val.warn { color: var(--warn); }
+.demo-stat-val.ok { color: var(--success); }
+.demo-trap {
+  font-size: 0.8rem; color: var(--text-dim); line-height: 1.45;
+  margin: 0 0 12px; min-height: 2.6em;
+}
+.demo-trap strong { color: var(--warn); }
+.demo-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.84rem; font-weight: 700; color: var(--primary);
+  text-decoration: none;
+}
+.demo-link:hover { text-decoration: underline; }
+
+/* Motion helpers */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
+}
+.reveal.is-in { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: .08s; }
+.reveal-delay-2 { transition-delay: .16s; }
+.reveal-delay-3 { transition-delay: .24s; }
+.hero-enter .hero-brand,
+.hero-enter .hero h1,
+.hero-enter .hero .sub,
+.hero-enter .hero-cta,
+.hero-enter .demo-panel {
+  animation: riseIn .8s var(--ease-out) both;
+}
+.hero-enter .hero h1 { animation-delay: .08s; }
+.hero-enter .hero .sub { animation-delay: .16s; }
+.hero-enter .hero-cta { animation-delay: .24s; }
+.hero-enter .demo-panel { animation-delay: .18s; }
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Stats strip */
+.stats-strip {
+  display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
+  padding: 22px 0;
+  margin: 12px 0 8px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-size: 1.55rem; font-weight: 800;
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+  color: var(--primary);
+  display: block;
+}
+.stat-label {
+  font-size: 0.78rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+
+/* How-to path under hero */
+.howto-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin: 8px auto 8px;
+  max-width: 760px;
+  padding: 0 8px;
+}
+.howto-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(22,33,60,.75);
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: var(--text-dim);
+  transition: border-color var(--transition), color var(--transition), transform var(--transition);
+}
+.howto-pill:hover { color: var(--text); border-color: var(--primary); transform: translateY(-1px); }
+.howto-pill strong { color: var(--primary); font-weight: 800; }
+.howto-arrow { color: var(--text-muted); font-size: 0.85rem; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 24px; text-align: left; }
+  .hero-copy { max-width: none; }
+  .nav-links { gap: 12px; }
+}
+@media (max-width: 720px) {
+  body { padding: 0 12px 56px; background-attachment: scroll; }
+  .site-header { margin: 0 -12px; padding: 10px 12px; }
+  .header-container { gap: 10px; }
+  .brand-link span { font-size: 0.92rem; }
+  .nav-links {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .header-container { flex-wrap: wrap; }
+  .nav-link {
+    flex: 0 0 auto;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .nav-link .nav-full { display: none; }
+  .nav-link .nav-short { display: inline; }
+
+  .hero-stage { margin: 0 -12px 8px; padding: 12px 12px 4px; }
+  .hero { gap: 20px; padding: 12px 0 8px; }
+  .hero-brand { display: none; } /* brand already in sticky header */
+  .hero h1 { font-size: clamp(1.55rem, 7vw, 2rem); margin-bottom: 10px; }
+  .hero .sub { font-size: 0.92rem; margin-bottom: 16px; }
+  .hero-cta { width: 100%; }
+  .btn-hero {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-height: 46px;
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+
+  .demo-panel { padding: 14px 12px 12px; border-radius: 14px; }
+  .demo-title { font-size: 0.98rem; }
+  .demo-sub { font-size: 0.8rem; }
+  .demo-control input[type="range"] { min-height: 36px; }
+  .demo-readout { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .demo-trap { font-size: 0.76rem; min-height: 0; }
+  .demo-svg-wrap { padding: 6px 2px 2px; overflow-x: auto; }
+
+  .howto-strip { gap: 6px; margin: 4px auto 4px; }
+  .howto-pill { font-size: 0.7rem; padding: 7px 9px; }
+  .howto-arrow { display: none; }
+
+  .stats-strip {
+    gap: 10px 0;
+    padding: 16px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .stat-num { font-size: 1.3rem; }
+  .stat-label { font-size: 0.68rem; }
+
+  .start-strip { padding: 16px; margin: 20px 0; }
+  .start-cards { grid-template-columns: 1fr; }
+
+  .search-bar {
+    top: 52px;
+    position: sticky;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 0 10px;
+    margin-top: 16px;
+  }
+  .search-filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .search-filters::-webkit-scrollbar { display: none; }
+  .filter-btn { flex: 0 0 auto; min-height: 40px; }
+  .search-input { font-size: 16px; min-height: 44px; } /* prevent iOS zoom */
+
+  .topic-grid { grid-template-columns: 1fr; gap: 10px; }
+  .topic-card { padding: 14px; }
+  .section { margin: 24px 0; }
+  .section-title { font-size: 1.02rem; }
+  .how-to { padding: 16px; margin: 32px 0 24px; }
+  .how-to-steps { grid-template-columns: 1fr; gap: 14px; }
+
+  .lab-footer-row { flex-direction: column; gap: 10px; }
+  .site-footer { margin-top: 32px; }
+}
+@media (max-width: 400px) {
+  .demo-readout { grid-template-columns: 1fr; }
+  .btn-hero { flex: 1 1 100%; }
+}
+
+/* Start-here strip */
+.start-strip {
+  background: linear-gradient(135deg, var(--primary-soft), var(--indigo-soft));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 32px 0;
+}
+.start-strip h2 { font-size: 1.05rem; margin-bottom: 4px; }
+.start-strip p { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 16px; }
+.start-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.start-card {
+  background: rgba(11,18,32,0.6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  text-decoration: none;
+  color: var(--text);
+  display: flex; flex-direction: column; gap: 6px;
+  transition: transform var(--transition), border-color var(--transition);
+}
+.start-card:hover { transform: translateY(-2px); border-color: var(--primary); }
+.start-card-step {
+  font-size: 0.7rem; font-weight: 800;
+  color: var(--primary);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.start-card-title { font-size: 0.95rem; font-weight: 700; }
+.start-card-sub { font-size: 0.78rem; color: var(--text-dim); }
+
+/* Search */
+.search-bar {
+  position: sticky; top: 60px; z-index: 30;
+  background: var(--bg);
+  padding: 16px 0 12px;
+  margin: 24px 0 0;
+  border-bottom: 1px solid var(--border);
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+}
+.search-input-wrap { flex: 1; min-width: 240px; position: relative; }
+.search-input-wrap svg {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--text-muted); pointer-events: none;
+}
+.search-input {
+  width: 100%;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px 10px 40px;
+  font-family: var(--font-sans); font-size: 0.95rem;
+  color: var(--text);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.search-input::placeholder { color: var(--text-muted); }
+.filter-btn {
+  background: var(--bg-elev); border: 1px solid var(--border-strong);
+  color: var(--text-dim); padding: 8px 14px; border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.filter-btn:hover { color: var(--text); border-color: var(--border); }
+.filter-btn.active { background: var(--primary-soft); color: var(--primary); border-color: var(--primary); }
+
+/* Section */
+.section {
+  margin: 32px 0;
+}
+.section-header {
+  margin-bottom: 16px;
+  display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+}
+.section-title {
+  font-size: 1.15rem;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--primary-soft);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary);
+}
+.section-count {
+  font-size: 0.8rem; color: var(--text-muted); font-weight: 600;
+}
+
+/* Topic cards */
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.topic-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+  height: 100%;
+}
+.topic-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56,189,248,.55);
+  box-shadow: 0 14px 32px rgba(0,0,0,.28), 0 0 0 1px rgba(56,189,248,.12);
+}
+.topic-card .topic-meta-arrow {
+  transition: transform var(--transition);
+}
+.topic-card:hover .topic-meta-arrow { transform: translateX(4px); }
+.topic-card-top {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+}
+.topic-badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 8px; border-radius: 999px;
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.topic-badge-diff-easy { background: var(--success-soft); color: var(--success); }
+.topic-badge-diff-medium { background: var(--warn-soft); color: var(--warn); }
+.topic-badge-diff-hard { background: var(--danger-soft); color: var(--danger); }
+.topic-badge-cat { background: var(--indigo-soft); color: var(--indigo); text-transform: none; letter-spacing: 0; font-weight: 600; }
+.topic-title {
+  font-size: 0.98rem; font-weight: 700; line-height: 1.3;
+  color: var(--text);
+  margin: 0;
+}
+.topic-preview {
+  font-size: 0.82rem; color: var(--text-dim); line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+.topic-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.75rem; color: var(--text-muted);
+  padding-top: 10px; border-top: 1px solid var(--border);
+}
+.topic-meta-arrow { color: var(--primary); font-weight: 700; }
+
+/* Hidden state */
+.topic-card.hidden, .section.hidden { display: none; }
+
+/* How to use */
+.how-to {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 48px 0 32px;
+}
+.how-to h2 { font-size: 1.1rem; margin-bottom: 4px; }
+.how-to > p { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 20px; }
+.how-to-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+.how-to-step {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.how-to-step-num {
+  width: 28px; height: 28px;
+  background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.85rem;
+}
+.how-to-step-title { font-size: 0.9rem; font-weight: 700; }
+.how-to-step-body { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; margin: 0; }
+
+/* Footer */
+.site-footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+.footer-container { max-width: 1160px; margin: 0 auto; }
+.disclaimer-box {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
+  font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;
+}
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
+</style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="header-container">
-      <a href="index.html" class="brand-link" aria-label="Aptitude and Reasoning Lab Home">
-        <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-          <rect width="64" height="64" rx="14" fill="#0f172a" />
-          <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3" />
-          <circle cx="24" cy="24" r="4" fill="#38bdf8" />
-          <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4" />
-          <circle cx="40" cy="40" r="4" fill="#34d399" />
-          <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
-        </svg>
-        <span>Aptitude & Reasoning Lab</span>
+<header class="site-header">
+  <div class="header-container">
+    <a href="index.html" class="brand-link">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f172a"/>
+        <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+        <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+        <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+        <circle cx="40" cy="40" r="4" fill="#34d399"/>
+        <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span>Aptitude Lab</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <ul class="nav-links">
+        <li><a href="#quant" class="nav-link"><span class="nav-full">Quantitative</span><span class="nav-short">Quant</span></a></li>
+        <li><a href="#reasoning" class="nav-link"><span class="nav-full">Reasoning</span><span class="nav-short">Reasoning</span></a></li>
+        <li><a href="#di" class="nav-link"><span class="nav-full">Data Interpretation</span><span class="nav-short">DI</span></a></li>
+        <li><a href="#how-to" class="nav-link"><span class="nav-full">How to Use</span><span class="nav-short">How to</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-container">
+
+  <!-- ===== HERO + LIVE DEMO ===== -->
+  <div class="hero-stage hero-enter">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <section class="hero" aria-label="Welcome">
+      <div class="hero-copy">
+        <div class="hero-brand">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="#0f172a"/>
+            <circle class="mark-pulse" cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+            <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+            <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+            <circle cx="40" cy="40" r="4" fill="#34d399"/>
+            <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          Aptitude Lab
+        </div>
+        <h1>See the idea.<br>Then make it <em>fast</em>.</h1>
+        <p class="sub">
+          Interactive aptitude &amp; reasoning for SEBI / banking / SSC — change a value, watch the diagram, predict, then practise against the clock.
+        </p>
+        <div class="hero-cta">
+          <a href="#start-here" class="btn-hero btn-hero-primary">Start learning →</a>
+          <a href="#demo" class="btn-hero btn-hero-ghost">Try the demo</a>
+        </div>
+      </div>
+
+      <aside class="demo-panel" id="demo" aria-label="Live percentage demo">
+        <div class="demo-kicker">
+          <span class="demo-kicker-label">Live demo</span>
+          <span class="demo-live"><i aria-hidden="true"></i> Drag to play</span>
+        </div>
+        <h2 class="demo-title">+x% then −x% — what’s the net?</h2>
+        <p class="demo-sub">Most aspirants say “zero”. Move the slider and watch the bars — the lab way.</p>
+
+        <div class="demo-control">
+          <label for="demo-pct">
+            <span>Change each step</span>
+            <strong id="demo-pct-label">20%</strong>
+          </label>
+          <input type="range" id="demo-pct" min="5" max="40" step="1" value="20" aria-valuetext="20 percent" />
+        </div>
+
+        <div class="demo-svg-wrap">
+          <svg id="demo-svg" class="demo-bars" viewBox="0 0 520 168" role="img" aria-label="Bars showing original, after rise, and after fall">
+            <title>Percentage rise then fall</title>
+          </svg>
+        </div>
+
+        <div class="demo-readout">
+          <div class="demo-stat">
+            <span class="demo-stat-label">Trap guess</span>
+            <span class="demo-stat-val warn" id="demo-trap-val">0% net</span>
+          </div>
+          <div class="demo-stat">
+            <span class="demo-stat-label">Actual net</span>
+            <span class="demo-stat-val ok" id="demo-net-val">−4%</span>
+          </div>
+        </div>
+        <p class="demo-trap" id="demo-explain">
+          <strong>Trap:</strong> adding +20 and −20. <strong>Truth:</strong> 1.20 × 0.80 = 0.96 → down 4%.
+        </p>
+        <a class="demo-link" href="topics/percentages.html">Open full Percentages lab →</a>
+      </aside>
+    </section>
+  </div>
+
+  <div class="howto-strip reveal" aria-label="How each topic works">
+    <span class="howto-pill"><strong>1</strong> Understand</span>
+    <span class="howto-arrow" aria-hidden="true">→</span>
+    <span class="howto-pill"><strong>2</strong> Play</span>
+    <span class="howto-arrow" aria-hidden="true">→</span>
+    <span class="howto-pill"><strong>3</strong> Predict</span>
+    <span class="howto-arrow" aria-hidden="true">→</span>
+    <span class="howto-pill"><strong>4</strong> Practice</span>
+    <span class="howto-arrow" aria-hidden="true">→</span>
+    <span class="howto-pill"><strong>5</strong> Shortcuts</span>
+  </div>
+
+  <!-- ===== STATS STRIP ===== -->
+  <div class="stats-strip reveal">
+    <div class="stat-item">
+      <span class="stat-num" data-count-to="17">0</span>
+      <span class="stat-label">Topics</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-count-to="230" data-count-suffix="+">0</span>
+      <span class="stat-label">Verified questions</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-count-to="3">0</span>
+      <span class="stat-label">Streams</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">0</span>
+      <span class="stat-label">Accounts / tracking</span>
+    </div>
+  </div>
+
+  <!-- ===== START HERE ===== -->
+  <div class="start-strip reveal" id="start-here">
+    <h2>New here? Start with these.</h2>
+    <p>On each topic page: follow the path bar — Understand → Play → Predict → Practice. About 20 minutes each.</p>
+    <div class="start-cards">
+      <a class="start-card" href="topics/percentages.html">
+        <span class="start-card-step">Step 1</span>
+        <span class="start-card-title">Percentages & Percentage Change</span>
+        <span class="start-card-sub">Base-100, multiplier, and the base-shift trap.</span>
+      </a>
+      <a class="start-card" href="topics/ratio-proportion.html">
+        <span class="start-card-step">Step 2</span>
+        <span class="start-card-title">Ratio, Proportion & Variation</span>
+        <span class="start-card-sub">Unit-tile bars, chained ratios, coin weighting.</span>
+      </a>
+      <a class="start-card" href="topics/number-series.html">
+        <span class="start-card-step">Step 3</span>
+        <span class="start-card-title">Number & Letter Series</span>
+        <span class="start-card-sub">Difference pyramid, pattern signatures, track splits.</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== SEARCH ===== -->
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search-input" class="search-input" placeholder="Search topics by name or concept…" aria-label="Search topics" enterkeyhint="search">
+    </div>
+    <div class="search-filters" role="group" aria-label="Difficulty filter">
+      <button type="button" class="filter-btn active" data-filter="all">All</button>
+      <button type="button" class="filter-btn" data-filter="easy">Easy</button>
+      <button type="button" class="filter-btn" data-filter="medium">Medium</button>
+      <button type="button" class="filter-btn" data-filter="hard">Hard</button>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: QUANT ===== -->
+  <section class="section reveal" id="quant" data-section="quant">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span class="section-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        </span>
+        Quantitative Aptitude
+      </h2>
+      <span class="section-count" data-count="quant">8 topics</span>
+    </div>
+    <div class="topic-grid" id="quant-grid">
+
+      <a class="topic-card" href="topics/percentages.html" data-difficulty="easy" data-keywords="percentages change multiplier fraction base shift">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-easy">Easy</span>
+          <span class="topic-badge topic-badge-cat">Foundational</span>
+        </div>
+        <h3 class="topic-title">Percentages &amp; Percentage Change</h3>
+        <p class="topic-preview">Base-100 bars, the multiplier method, and the base-shift trap that catches most candidates.</p>
+        <div class="topic-meta">
+          <span>15 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
       </a>
 
-      <nav aria-label="Main navigation">
-        <ul class="nav-links">
-          <li><a href="#quant-section" class="nav-link">Quantitative</a></li>
-          <li><a href="#reasoning-section" class="nav-link">Reasoning</a></li>
-          <li><a href="#di-section" class="nav-link">Data Interpretation</a></li>
-          <li><a href="docs/curriculum.md" class="nav-link">Curriculum</a></li>
-        </ul>
+      <a class="topic-card" href="topics/ratio-proportion.html" data-difficulty="easy" data-keywords="ratio proportion variation chained ratios mean third fourth proportional coins">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-easy">Easy</span>
+          <span class="topic-badge topic-badge-cat">Foundational</span>
+        </div>
+        <h3 class="topic-title">Ratio, Proportion &amp; Variation</h3>
+        <p class="topic-preview">Unit-tile proportional division, chained ratios, and the coin-denomination weighting trap.</p>
+        <div class="topic-meta">
+          <span>12 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/averages-alligation.html" data-difficulty="medium" data-keywords="averages alligation mixtures balance beam weighted average dilution">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-medium">Medium</span>
+          <span class="topic-badge topic-badge-cat">Arithmetic</span>
+        </div>
+        <h3 class="topic-title">Averages, Mixtures &amp; Alligation</h3>
+        <p class="topic-preview">A physical balance beam for alligation ratios, plus weighted-average and dilution labs.</p>
+        <div class="topic-meta">
+          <span>12 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/profit-loss-discount.html" data-difficulty="medium" data-keywords="profit loss discount marked price selling cost price commercial markup false weights">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-medium">Medium</span>
+          <span class="topic-badge topic-badge-cat">Commercial</span>
+        </div>
+        <h3 class="topic-title">Profit, Loss &amp; Marked Price</h3>
+        <p class="topic-preview">Price waterfall from CP to MP to SP, with successive discounts and equal-SP traps.</p>
+        <div class="topic-meta">
+          <span>12 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/time-and-work.html" data-difficulty="medium" data-keywords="time and work pipes cisterns efficiency timeline rate wages">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-medium">Medium</span>
+          <span class="topic-badge topic-badge-cat">Arithmetic</span>
+        </div>
+        <h3 class="topic-title">Time, Work &amp; Efficiency</h3>
+        <p class="topic-preview">Shared work timelines, unit-work bars, wage-sharing mini-lab. Why rates add but times never do.</p>
+        <div class="topic-meta">
+          <span>15 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/trains-bridge.html" data-difficulty="medium" data-keywords="trains speed distance relative speed bridges platforms overtaking">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-medium">Medium</span>
+          <span class="topic-badge topic-badge-cat">Speed &amp; Distance</span>
+        </div>
+        <h3 class="topic-title">Trains, Bridges &amp; Relative Speed</h3>
+        <p class="topic-preview">Two-snapshot crossing diagram, 5/18 conversion lab, and relative-speed mini-lab.</p>
+        <div class="topic-meta">
+          <span>12 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/simple-compound-interest.html" data-difficulty="medium" data-keywords="simple interest compound interest principal difference ci si compounding effective rate">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-medium">Medium</span>
+          <span class="topic-badge topic-badge-cat">Financial</span>
+        </div>
+        <h3 class="topic-title">Simple &amp; Compound Interest</h3>
+        <p class="topic-preview">Linear vs. exponential growth curves, interest-on-interest bars, and CI−SI difference formulas.</p>
+        <div class="topic-meta">
+          <span>12 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/permutations-combinations.html" data-difficulty="hard" data-keywords="permutations combinations counting principle npr ncr factorials block method gap method">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-hard">Hard</span>
+          <span class="topic-badge topic-badge-cat">Combinatorics</span>
+        </div>
+        <h3 class="topic-title">Permutations, Combinations &amp; Counting</h3>
+        <p class="topic-preview">Side-by-side slot lab showing ÷r! collapse, animated word tiles, and polygon diagonals that sweep in.</p>
+        <div class="topic-meta">
+          <span>12 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== SECTION: REASONING ===== -->
+  <section class="section reveal" id="reasoning" data-section="reasoning">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span class="section-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </span>
+        Logical &amp; Analytical Reasoning
+      </h2>
+      <span class="section-count" data-count="reasoning">8 topics</span>
+    </div>
+    <div class="topic-grid" id="reasoning-grid">
+
+      <a class="topic-card" href="topics/number-series.html" data-difficulty="easy" data-keywords="number series differences double differences pattern sequences primes letters">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-easy">Easy</span>
+          <span class="topic-badge topic-badge-cat">Patterns</span>
+        </div>
+        <h3 class="topic-title">Number &amp; Letter Series</h3>
+        <p class="topic-preview">Difference pyramid, pattern-shape band, and a track-split view for interleaved sequences.</p>
+        <div class="topic-meta">
+          <span>12 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/direction-sense.html" data-difficulty="easy" data-keywords="direction sense turns north south east west coordinates distance pythagoras displacement">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-easy">Easy</span>
+          <span class="topic-badge topic-badge-cat">Spatial</span>
+        </div>
+        <h3 class="topic-title">Direction Sense &amp; Distance</h3>
+        <p class="topic-preview">Coordinate-grid path tracer with a rotating facing arrow that makes the turn visible.</p>
+        <div class="topic-meta">
+          <span>12 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/blood-relations.html" data-difficulty="medium" data-keywords="blood relations family tree maternal paternal uncle aunt grandfather coded">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-medium">Medium</span>
+          <span class="topic-badge topic-badge-cat">Relational</span>
+        </div>
+        <h3 class="topic-title">Blood Relations &amp; Family Tree</h3>
+        <p class="topic-preview">Generational family-tree graph with distinct gendered shapes and an explicit "unknown gender" node.</p>
+        <div class="topic-meta">
+          <span>15 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/syllogisms.html" data-difficulty="hard" data-keywords="syllogisms venn diagrams logic statements conclusions only a few possibility either or">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-hard">Hard</span>
+          <span class="topic-badge topic-badge-cat">Formal logic</span>
+        </div>
+        <h3 class="topic-title">Syllogisms &amp; Set Logic</h3>
+        <p class="topic-preview">Every valid model shown side-by-side as thumbnails. Definite = true in all; possible = true in some.</p>
+        <div class="topic-meta">
+          <span>17 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/order-ranking.html" data-difficulty="medium" data-keywords="order ranking linear row positions left right overlap swap interchange min max">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-medium">Medium</span>
+          <span class="topic-badge topic-badge-cat">Positional</span>
+        </div>
+        <h3 class="topic-title">Order &amp; Ranking</h3>
+        <p class="topic-preview">Row visualiser that animates the overlap crossing and highlights the double-counted persons.</p>
+        <div class="topic-meta">
+          <span>16 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/seating-arrangements.html" data-difficulty="hard" data-keywords="seating arrangements circular table linear row facing center facing outward parallel rows between count">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-hard">Hard</span>
+          <span class="topic-badge topic-badge-cat">Spatial</span>
+        </div>
+        <h3 class="topic-title">Linear &amp; Circular Seating</h3>
+        <p class="topic-preview">Live facing-direction flip that shows left/right swapping in real time, plus a step-by-step puzzle walker.</p>
+        <div class="topic-meta">
+          <span>16 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/coding-decoding.html" data-difficulty="medium" data-keywords="coding decoding letter shift alphabet mirror opposite chinese coding word code">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-medium">Medium</span>
+          <span class="topic-badge topic-badge-cat">Patterns</span>
+        </div>
+        <h3 class="topic-title">Coding &amp; Decoding</h3>
+        <p class="topic-preview">Letter shifts as sliding on the alphabet, A↔Z mirror pairs, and Chinese coding as a map built from shared words.</p>
+        <div class="topic-meta">
+          <span>14 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+      <a class="topic-card" href="topics/inequalities.html" data-difficulty="hard" data-keywords="inequalities coded inequality number line either or conclusions greater less">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-hard">Hard</span>
+          <span class="topic-badge topic-badge-cat">Formal logic</span>
+        </div>
+        <h3 class="topic-title">Inequalities (Coded &amp; Direct)</h3>
+        <p class="topic-preview">P ≥ Q &gt; R as a chain on a number line — see which conclusions are forced, doubtful, or either-or.</p>
+        <div class="topic-meta">
+          <span>14 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== SECTION: DI ===== -->
+  <section class="section reveal" id="di" data-section="di">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span class="section-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+        </span>
+        Data Interpretation
+      </h2>
+      <span class="section-count" data-count="di">1 topic</span>
+    </div>
+    <div class="topic-grid" id="di-grid">
+
+      <a class="topic-card" href="topics/di-tables.html" data-difficulty="medium" data-keywords="data interpretation tables percentage growth ratios di annual revenue market share">
+        <div class="topic-card-top">
+          <span class="topic-badge topic-badge-diff-medium">Medium</span>
+          <span class="topic-badge topic-badge-cat">Tables</span>
+        </div>
+        <h3 class="topic-title">Table Data Interpretation</h3>
+        <p class="topic-preview">Toggle between absolute values, percentage shares, and YoY growth — the same numbers become three different charts.</p>
+        <div class="topic-meta">
+          <span>17 questions</span>
+          <span class="topic-meta-arrow">Open →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== HOW TO USE ===== -->
+  <section class="how-to" id="how-to">
+    <h2>How to use this library</h2>
+    <p>Three loops. Do them in order, once per topic, before you consider it practised.</p>
+    <div class="how-to-steps">
+      <div class="how-to-step">
+        <div class="how-to-step-num">1</div>
+        <div class="how-to-step-title">Explore</div>
+        <p class="how-to-step-body">Drag sliders, click cells, watch the diagram respond. The visual is the teaching; the text is backup.</p>
+      </div>
+      <div class="how-to-step">
+        <div class="how-to-step-num">2</div>
+        <div class="how-to-step-title">Predict</div>
+        <p class="how-to-step-body">Every lesson forces a prediction before the answer. If you're wrong, you'll see exactly which trap you walked into.</p>
+      </div>
+      <div class="how-to-step">
+        <div class="how-to-step-num">3</div>
+        <div class="how-to-step-title">Practise</div>
+        <p class="how-to-step-body">Switch to Independent or Timed mode. No hints, no peeking. Reset stats, retry the ones you missed.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <strong>Aptitude &amp; Reasoning Lab</strong>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
+      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="#quant">Quant</a>
+        <a href="#reasoning">Reasoning</a>
+        <a href="#di">DI</a>
       </nav>
     </div>
-  </header>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification. No accounts, no tracking.</p>
+  </div>
+</footer>
 
-  <!-- Main Content -->
-  <main id="main-content" class="page-container">
-    
-    <!-- Hero & Purpose Statement -->
-    <section class="card" style="margin-bottom: 2rem; background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-subtle) 100%);">
-      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
-        <span class="badge badge-published">Practice-First Edition</span>
-        <span class="badge badge-tag">SEBI Grade A (IT / Gen)</span>
-        <span class="badge badge-tag">RBI • Banking • SSC</span>
-      </div>
-      <h1>Master the Relationship, Not Just the Formula</h1>
-      <p style="font-size: 1.05rem; color: var(--color-text-muted); max-width: 780px; margin-bottom: 1rem;">
-        A free, static interactive lab designed to build genuine conceptual clarity. Change values, predict consequences, inspect step-by-step mathematical reasoning, and practise independently under exam conditions.
-      </p>
+<script>
+/* ---- Topic search / filters ---- */
+const searchInput = document.getElementById("search-input");
+const filterBtns = document.querySelectorAll(".filter-btn");
+let currentFilter = "all";
 
-      <!-- Important Pedagogical Notice -->
-      <div class="callout callout-info" style="margin: 0; font-size: 0.875rem;">
-        <strong>Important Study Guideline:</strong> These visual models are learning aids to build initial conceptual intuition. They do not replace timed sectional tests, full mock exams, or official previous-year question papers. Practice independently without hints before considering a topic mastered.
-      </div>
-    </section>
+function applyFilters() {
+  const q = searchInput.value.trim().toLowerCase();
+  document.querySelectorAll(".topic-card").forEach(card => {
+    const text = (card.textContent + " " + (card.dataset.keywords || "")).toLowerCase();
+    const matchesQuery = !q || text.includes(q);
+    const matchesDifficulty = currentFilter === "all" || card.dataset.difficulty === currentFilter;
+    card.classList.toggle("hidden", !(matchesQuery && matchesDifficulty));
+  });
+  document.querySelectorAll(".section[data-section]").forEach(section => {
+    const visibleCards = section.querySelectorAll(".topic-card:not(.hidden)").length;
+    section.classList.toggle("hidden", visibleCards === 0);
+    const countEl = section.querySelector("[data-count]");
+    if (countEl) countEl.textContent = `${visibleCards} topic${visibleCards === 1 ? "" : "s"}`;
+  });
+}
+searchInput.addEventListener("input", applyFilters);
+filterBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    filterBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    applyFilters();
+  });
+});
 
-    <!-- Search & Filter Controls -->
-    <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-      <div style="flex: 1; min-width: 240px;">
-        <label for="topic-search" class="sr-only">Search topics</label>
-        <input type="text" id="topic-search" placeholder="🔍 Search topics by concept or exam tag..." oninput="handleSearch(this.value)">
-      </div>
-      <div style="display: flex; gap: 0.5rem;">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="filterStatus('all')">All</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="filterStatus('published')">Published Only</button>
-      </div>
-    </div>
+/* ---- Live percentage demo ---- */
+(function demoLab() {
+  const range = document.getElementById("demo-pct");
+  const svg = document.getElementById("demo-svg");
+  const label = document.getElementById("demo-pct-label");
+  const trapEl = document.getElementById("demo-trap-val");
+  const netEl = document.getElementById("demo-net-val");
+  const explain = document.getElementById("demo-explain");
+  if (!range || !svg) return;
 
-    <!-- Section 1: Quantitative Aptitude -->
-    <section class="card" id="quant-section" aria-labelledby="quant-title">
-      <div class="card-header">
-        <div>
-          <h2 id="quant-title" class="section-title">1. Quantitative Aptitude</h2>
-          <p class="section-subtitle">Arithmetic, algebra, and counting principles with interactive dynamic diagrams.</p>
-        </div>
-      </div>
+  const BASE = 100;
 
-      <div class="control-grid" id="quant-grid">
-        <!-- Topic 1: Percentages (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="percentages change multiplier fraction base shift profit" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Foundational</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/percentages.html" style="color: var(--color-primary); text-decoration: none;">Percentages & Percentage Change →</a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Understand base 100 relationships, multiplier methods, successive changes, and the notorious base-shift trap with an interactive proportional bar.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem; font-size: 0.8125rem;">
-            <span>12 Verified Questions</span>
-            <a href="topics/percentages.html" class="btn btn-primary btn-sm">Launch Lesson</a>
-          </div>
-        </div>
+  function render() {
+    const p = Number(range.value);
+    const up = BASE * (1 + p / 100);
+    const down = up * (1 - p / 100);
+    const netPct = Math.round((down / BASE - 1) * 10000) / 100;
+    const narrow = window.matchMedia("(max-width: 520px)").matches;
+    const vbW = narrow ? 360 : 520;
+    const x0 = narrow ? 52 : 70;
+    const maxBar = narrow ? 250 : 420;
+    const fs = narrow ? 10 : 11;
+    const note = narrow
+      ? "Baseline — final bar shorter when x ≠ 0"
+      : "Original baseline — final bar is shorter when x ≠ 0";
 
-        <!-- Topic 2: Time and Work (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="time and work pipes cisterns efficiency timeline rate wages" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Core Arithmetic</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/time-and-work.html" style="color: var(--color-primary); text-decoration: none;">Time, Work & Efficiency →</a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Visualize work rates, unit-work breakdown, wage ratios, and combined completion times with an interactive SVG rate timeline.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem; font-size: 0.8125rem;">
-            <span>12 Verified Questions</span>
-            <a href="topics/time-and-work.html" class="btn btn-primary btn-sm">Launch Lesson</a>
-          </div>
-        </div>
+    label.textContent = p + "%";
+    range.setAttribute("aria-valuetext", p + " percent");
+    trapEl.textContent = "0% net";
+    netEl.textContent = (netPct > 0 ? "+" : "") + netPct + "%";
+    netEl.className = "demo-stat-val " + (netPct === 0 ? "ok" : "warn");
+    explain.innerHTML =
+      `<strong>Trap:</strong> +${p} and −${p} cancel. <strong>Truth:</strong> ${(1 + p / 100).toFixed(2)} × ${(1 - p / 100).toFixed(2)} = ${(down / BASE).toFixed(2)} → net <strong>${netPct}%</strong>.`;
 
-        <!-- Topic 3: Trains & Bridges (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="trains speed distance relative speed bridges platforms overtaking" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Speed & Distance</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/trains-bridge.html" style="color: var(--color-primary); text-decoration: none;">Trains, Bridges & Relative Speed →</a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Clearance distance models, km/h to m/s unit conversions (5/18), and relative speeds for same vs. opposite directions.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem; font-size: 0.8125rem;">
-            <span>12 Verified Questions</span>
-            <a href="topics/trains-bridge.html" class="btn btn-primary btn-sm">Launch Lesson</a>
-          </div>
-        </div>
+    const w0 = (BASE / 160) * maxBar;
+    const w1 = (up / 160) * maxBar;
+    const w2 = (down / 160) * maxBar;
 
-        <!-- Topic 4: Profit, Loss & Discount (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="profit loss discount marked price selling cost price commercial math markup false weights" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Commercial Math</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/profit-loss-discount.html" style="color: var(--color-primary); text-decoration: none;">
-              Profit, Loss & Marked Price
-            </a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Disentangling CP, MP, SP, markup percentages, successive discounts, equal selling price invariants, and false weights.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem;">
-            <span class="badge badge-outline">12 Verified Questions</span>
-            <a href="topics/profit-loss-discount.html" class="btn btn-primary btn-sm">Launch Lesson →</a>
-          </div>
-        </div>
+    svg.setAttribute("viewBox", `0 0 ${vbW} 168`);
+    svg.innerHTML = `
+      <text x="6" y="28" fill="#94a3b8" font-size="${fs}" font-weight="600">Start</text>
+      <rect x="${x0}" y="12" width="${w0}" height="22" rx="5" fill="#38bdf8"/>
+      <text x="${x0 + w0 + 6}" y="28" fill="#e8edf7" font-size="${fs + 1}" font-family="IBM Plex Mono, monospace" font-weight="600">${BASE}</text>
 
-        <!-- Topic 5: Ratio, Proportion & Variation (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="ratio proportion variation chained ratios mean third fourth proportional coins denominations direct inverse" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Foundational</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/ratio-proportion.html" style="color: var(--color-primary); text-decoration: none;">
-              Ratio, Proportion &amp; Variation
-            </a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Unit-scale proportional division, chained ratio unification, mean/third/fourth proportionals, coin denominations, and direct vs. inverse variation.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem;">
-            <span class="badge badge-outline">12 Verified Questions</span>
-            <a href="topics/ratio-proportion.html" class="btn btn-primary btn-sm">Launch Lesson →</a>
-          </div>
-        </div>
+      <text x="6" y="72" fill="#94a3b8" font-size="${fs}" font-weight="600">+${p}%</text>
+      <rect x="${x0}" y="56" width="${w1}" height="22" rx="5" fill="#22c55e"/>
+      <text x="${x0 + w1 + 6}" y="72" fill="#e8edf7" font-size="${fs + 1}" font-family="IBM Plex Mono, monospace" font-weight="600">${up.toFixed(0)}</text>
 
-        <!-- Topic 6: Averages, Mixtures & Alligation (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="averages alligation mixtures balance beam weighted average dilution replacements bowling" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Arithmetic Core</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/averages-alligation.html" style="color: var(--color-primary); text-decoration: none;">
-              Averages, Mixtures &amp; Alligation
-            </a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Physical balance-beam model, weighted averages, alligation cross-rule, repeated dilution formulas, and bowling averages.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem;">
-            <span class="badge badge-outline">12 Verified Questions</span>
-            <a href="topics/averages-alligation.html" class="btn btn-primary btn-sm">Launch Lesson →</a>
-          </div>
-        </div>
+      <text x="6" y="116" fill="#94a3b8" font-size="${fs}" font-weight="600">−${p}%</text>
+      <rect x="${x0}" y="100" width="${w2}" height="22" rx="5" fill="#f59e0b"/>
+      <text x="${x0 + w2 + 6}" y="116" fill="#e8edf7" font-size="${fs + 1}" font-family="IBM Plex Mono, monospace" font-weight="600">${down.toFixed(1)}</text>
 
-        <!-- Topic 7: Simple & Compound Interest (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="simple interest compound interest principal difference ci si annual compounding half-yearly effective rate" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Financial Math</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/simple-compound-interest.html" style="color: var(--color-primary); text-decoration: none;">
-              Simple &amp; Compound Interest Comparison
-            </a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Linear vs. exponential growth trajectories, annual year-by-year interest-on-interest breakdown, 2-year and 3-year CI-SI difference formulas, and compounding frequencies.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem;">
-            <span class="badge badge-outline">12 Verified Questions</span>
-            <a href="topics/simple-compound-interest.html" class="btn btn-primary btn-sm">Launch Lesson →</a>
-          </div>
-        </div>
+      <line x1="${x0}" y1="140" x2="${x0 + w0}" y2="140" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3"/>
+      <text x="${x0}" y="158" fill="#64748b" font-size="${fs}">${note}</text>
+    `;
+  }
 
-        <!-- Topic 8: Permutations & Combinations (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="permutations combinations counting principle npr ncr factorials words block method gap method diagonals handshakes" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Combinatorics</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/permutations-combinations.html" style="color: var(--color-primary); text-decoration: none;">
-              Permutations, Combinations &amp; Counting
-            </a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Slot-filling multiplier models ($^n P_r$), selection sets ($^n C_r$), repeated-letter anagrams, vowels together block method vs. gap method, and geometric combinatorics.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem;">
-            <span class="badge badge-outline">12 Verified Questions</span>
-            <a href="topics/permutations-combinations.html" class="btn btn-primary btn-sm">Launch Lesson →</a>
-          </div>
-        </div>
-      </div>
-    </section>
+  range.addEventListener("input", render);
+  window.addEventListener("resize", render);
+  render();
+})();
 
-    <!-- Section 2: Logical & Analytical Reasoning -->
-    <section class="card" id="reasoning-section" aria-labelledby="reasoning-title">
-      <div class="card-header">
-        <div>
-          <h2 id="reasoning-title" class="section-title">2. Logical & Analytical Reasoning</h2>
-          <p class="section-subtitle">Formal deductions, spatial reasoning, patterns, and constraint logic.</p>
-        </div>
-      </div>
+/* ---- Scroll reveal + count-up ---- */
+(function motion() {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      <div class="control-grid" id="reasoning-grid">
-        <!-- Topic 5: Number Series (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="number series differences double differences pattern sequences primes letters" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Patterns & Logic</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/number-series.html" style="color: var(--color-primary); text-decoration: none;">Number & Letter Series →</a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Interactive multi-tier difference trees, half-step multipliers, prime number increments, and letter shift deductions.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem; font-size: 0.8125rem;">
-            <span>12 Verified Questions</span>
-            <a href="topics/number-series.html" class="btn btn-primary btn-sm">Launch Lesson</a>
-          </div>
-        </div>
+  document.querySelectorAll(".reveal").forEach((el, i) => {
+    if (reduce) { el.classList.add("is-in"); return; }
+    el.style.transitionDelay = Math.min(i * 0.06, 0.3) + "s";
+  });
 
-        <!-- Topic 6: Direction Sense (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="direction sense turns north south east west coordinates distance pythagoras displacement" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Spatial Logic</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/direction-sense.html" style="color: var(--color-primary); text-decoration: none;">Direction Sense & Distance →</a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Interactive coordinate grid path tracer, facing-south left/right turns, shortest displacement via Pythagoras, and shadow rules.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem; font-size: 0.8125rem;">
-            <span>12 Verified Questions</span>
-            <a href="topics/direction-sense.html" class="btn btn-primary btn-sm">Launch Lesson</a>
-          </div>
-        </div>
-
-        <!-- Topic 7: Blood Relations (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="blood relations family tree relations maternal paternal uncle aunt grandfather coded" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Relational Graphs</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/blood-relations.html" style="color: var(--color-primary); text-decoration: none;">Blood Relations & Family Tree →</a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Generational family tree graph generator, coded relation chains, maternal/paternal distinctions, and gender deduction rules.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem; font-size: 0.8125rem;">
-            <span>12 Verified Questions</span>
-            <a href="topics/blood-relations.html" class="btn btn-primary btn-sm">Launch Lesson</a>
-          </div>
-        </div>
-
-        <!-- Topic 8: Syllogisms (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="syllogisms venn diagrams logic statements conclusions only a few possibility either or" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Formal Logic</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/syllogisms.html" style="color: var(--color-primary); text-decoration: none;">
-              Syllogisms & Set Logic
-            </a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Definite versus possibility conclusions, Euler set relationships, &ldquo;Only a few&rdquo; composite rules, and Either-Or complementary pair conditions.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem;">
-            <span class="badge badge-outline">12 Verified Questions</span>
-            <a href="topics/syllogisms.html" class="btn btn-primary btn-sm">Launch Lesson →</a>
-          </div>
-        </div>
-
-        <!-- Topic 9: Order & Ranking (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="order ranking linear row positions left right overlap swap interchange min max" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Positional Logic</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/order-ranking.html" style="color: var(--color-primary); text-decoration: none;">
-              Order &amp; Ranking
-            </a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Linear row positioning, total calculation (L + R - 1), overlapping cross-over between count, minimum capacity bounds, and seat swaps.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem;">
-            <span class="badge badge-outline">12 Verified Questions</span>
-            <a href="topics/order-ranking.html" class="btn btn-primary btn-sm">Launch Lesson →</a>
-          </div>
-        </div>
-
-        <!-- Topic 10: Seating Arrangements (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="seating arrangements circular table linear row facing center facing outward parallel rows between count" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Spatial Logic</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/seating-arrangements.html" style="color: var(--color-primary); text-decoration: none;">
-              Linear &amp; Circular Seating Arrangements
-            </a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Circular table geometry, facing center vs. outward clockwise inversion, linear row perspectives (North vs. South), dual parallel rows, and step-by-step constraint elimination.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem;">
-            <span class="badge badge-outline">12 Verified Questions</span>
-            <a href="topics/seating-arrangements.html" class="btn btn-primary btn-sm">Launch Lesson →</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 3: Data Interpretation -->
-    <section class="card" id="di-section" aria-labelledby="di-title">
-      <div class="card-header">
-        <div>
-          <h2 id="di-title" class="section-title">3. Data Interpretation (DI)</h2>
-          <p class="section-subtitle">Tabular, bar, and pie datasets with single-source-of-truth calculations.</p>
-        </div>
-      </div>
-
-      <div class="control-grid" id="di-grid">
-        <!-- Topic 12: Table DI (Published) -->
-        <div class="card topic-card" data-status="published" data-keywords="data interpretation tables percentage growth ratios di annual revenue market share" style="margin-bottom: 0; background: var(--color-surface); border: 2px solid var(--color-primary); display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-            <span class="badge badge-published">Published</span>
-            <span class="badge badge-tag">Tables</span>
-          </div>
-          <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">
-            <a href="topics/di-tables.html" style="color: var(--color-primary); text-decoration: none;">
-              Table DI &amp; Growth Comparisons
-            </a>
-          </h3>
-          <p style="font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1rem;">
-            Interactive annual revenue table, row/column aggregations, YoY percentage growth rates, market shares, and base-split mental approximations.
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem;">
-            <span class="badge badge-outline">12 Verified Questions</span>
-            <a href="topics/di-tables.html" class="btn btn-primary btn-sm">Launch Lesson →</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <strong>Aptitude & Reasoning Lab</strong> — Practice-first competitive exam learning.
-          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
-            Static GitHub Pages Architecture • Pure HTML5, CSS & Vanilla JS • Zero tracking or backend
-          </div>
-        </div>
-        <div style="font-size: 0.8125rem; display: flex; gap: 1rem;">
-          <a href="PROJECT.md" style="color: var(--color-primary); text-decoration: none;">Product Specification</a>
-          <a href="docs/curriculum.md" style="color: var(--color-primary); text-decoration: none;">Curriculum Tracker</a>
-          <a href="docs/authoring-guide.md" style="color: var(--color-primary); text-decoration: none;">Authoring Guide</a>
-        </div>
-      </div>
-
-      <div class="disclaimer-box">
-        <strong>Educational Disclaimer:</strong> Educational tool. Check the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority. All models and practice questions are original or based on standard public mathematical logic.
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    function handleSearch(query) {
-      const q = query.trim().toLowerCase();
-      document.querySelectorAll(".topic-card").forEach(card => {
-        const text = (card.textContent + " " + (card.dataset.keywords || "")).toLowerCase();
-        card.style.display = text.includes(q) ? "flex" : "none";
+  if (!reduce && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("is-in");
+        io.unobserve(e.target);
       });
-    }
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  } else {
+    document.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-in"));
+  }
 
-    function filterStatus(status) {
-      document.querySelectorAll(".topic-card").forEach(card => {
-        if (status === "all") {
-          card.style.display = "flex";
-        } else {
-          card.style.display = card.dataset.status === status ? "flex" : "none";
-        }
-      });
+  function animateCount(el) {
+    const to = Number(el.dataset.countTo);
+    if (!Number.isFinite(to)) return;
+    const suffix = el.dataset.countSuffix || "";
+    if (reduce) { el.textContent = to + suffix; return; }
+    const start = performance.now();
+    const dur = 900;
+    function tick(now) {
+      const t = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(to * eased) + suffix;
+      if (t < 1) requestAnimationFrame(tick);
     }
-  </script>
+    requestAnimationFrame(tick);
+  }
+
+  const stats = document.querySelector(".stats-strip");
+  if (stats) {
+    const run = () => stats.querySelectorAll("[data-count-to]").forEach(animateCount);
+    if (reduce) run();
+    else if ("IntersectionObserver" in window) {
+      const io2 = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) { run(); io2.disconnect(); }
+      }, { threshold: 0.4 });
+      io2.observe(stats);
+    } else run();
+  }
+})();
+</script>
 </body>
 </html>

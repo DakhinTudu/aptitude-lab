@@ -6,6 +6,7 @@
 <title>Number &amp; Letter Series — Aptitude Lab</title>
 <meta name="description" content="Three complementary views: chain, difference shape, and track split. See the pattern signature, not just the number." />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
 :root {
   --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
@@ -257,6 +258,95 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
   border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
 }
+
+/* ---------- Discovery mini-lab ---------- */
+.disc-scroll { overflow-x: auto; padding: 4px 0 8px; }
+.disc-grid { display: grid; column-gap: 4px; row-gap: 6px; align-items: center; justify-items: center; }
+.disc-tile {
+  width: 100%; min-width: 0; max-width: 64px; height: 40px; text-align: center; padding: 0 4px;
+  font-family: var(--font-mono); font-size: 1rem; font-weight: 800; color: #93c5fd;
+  background: #1e3a8a; border: 2px solid #3b82f6; border-radius: 8px;
+}
+.disc-tile:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+.disc-tile.ghost {
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border-style: dashed; color: var(--warn); border-color: var(--warn);
+}
+.disc-tile.ghost.found { background: var(--success-soft); color: #86efac; border-color: var(--success); box-shadow: 0 0 12px rgba(34,197,94,.35); }
+.disc-tile.ghost.wrong { background: var(--danger-soft); color: #fca5a5; border-color: var(--danger); opacity: .9; }
+.disc-tile.ghost.wrong span { text-decoration: line-through; text-decoration-thickness: 3px; }
+.disc-chip {
+  min-width: 34px; padding: 4px 8px; text-align: center; border-radius: 999px;
+  font-family: var(--font-mono); font-size: .85rem; font-weight: 800;
+  background: var(--bg); border: 1.5px solid var(--border-strong); color: var(--text-dim);
+  white-space: nowrap;
+}
+.disc-chip.up { color: #86efac; border-color: rgba(34,197,94,.55); }
+.disc-chip.down { color: #fca5a5; border-color: rgba(239,68,68,.55); }
+.disc-chip.d2 { color: #c4b5fd; border-color: rgba(167,139,250,.6); }
+.disc-chip.ratio { color: #fcd34d; border-color: rgba(245,158,11,.6); }
+.disc-chip.ghost { border-style: dashed; opacity: .85; }
+.disc-chip.hl { background: var(--success-soft); color: #86efac; border-color: var(--success); box-shadow: 0 0 10px rgba(34,197,94,.45); }
+.disc-rowlabel { font-size: .7rem; font-weight: 800; color: var(--text-muted); letter-spacing: .04em; justify-self: end; padding-right: 4px; }
+.disc-or { font-size: .75rem; color: var(--text-muted); font-weight: 700; }
+.disc-wrong-label { font-size: .7rem; font-weight: 700; color: #fca5a5; white-space: nowrap; }
+.disc-enter { animation: disc-pop 420ms cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d, 0ms); }
+@keyframes disc-pop { from { opacity: 0; transform: translateY(-8px) scale(.8); } to { opacity: 1; transform: none; } }
+.disc-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
+.disc-progress { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--text-dim); font-weight: 600; }
+.disc-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--border-strong); }
+.disc-dot.on { background: var(--primary); }
+.disc-opts { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; font-size: .82rem; color: var(--text-dim); }
+.disc-opts label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.disc-opts input[type=checkbox] { accent-color: var(--primary); width: 16px; height: 16px; }
+.disc-opts input[type=checkbox]:disabled + span { opacity: .5; }
+.disc-caption { font-size: .95rem; min-height: 3.2em; }
+.disc-note { font-size: .78rem; color: var(--text-muted); min-height: 1.2em; }
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
 </style>
 </head>
 <body>
@@ -278,8 +368,7 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        <li><span class="badge badge-published">Published</span></li>
-      </ul>
+        </ul>
     </nav>
   </div>
 </header>
@@ -300,8 +389,51 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
     </p>
   </header>
 
+  <!-- ===== SECTION 0 — DISCOVERY MINI-LAB ===== -->
+  <section class="card" aria-labelledby="s0" data-guided-only>
+    <div class="card-header">
+      <h2 id="s0" class="section-title">Understand: discover the pattern — don't guess the formula</h2>
+      <p class="section-subtitle">Don't memorise a formula. Start with just the numbers, reveal one layer of differences at a time, and watch the pattern appear. Edit any tile to try your own numbers.</p>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <span style="font-size:.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:.5rem;">Try a classic:</span>
+      <div style="display:flex; gap:.4rem; flex-wrap:wrap;">
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="5,8,11,14,17">Steady jumps (AP)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="2,4,8,14,22">Growing jumps</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="2,6,18,54,162">Multiplying (GP)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="1,2,4,7,12">No clean layer</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="disc-use-above">Use series from section below</button>
+      </div>
+    </div>
+
+    <div class="vis-container">
+      <div class="disc-scroll">
+        <div id="disc-grid" class="disc-grid" role="group" aria-label="Number tiles with difference layers. Edit a tile to change a number."></div>
+      </div>
+    </div>
+
+    <div id="disc-caption" class="callout callout-info disc-caption" aria-live="polite"></div>
+
+    <div class="disc-controls">
+      <button type="button" id="disc-reveal" class="btn btn-primary">Reveal next layer ▸</button>
+      <button type="button" id="disc-reset" class="btn btn-secondary">↺ Reset</button>
+      <span class="disc-progress" aria-hidden="true"><span id="disc-dots" style="display:inline-flex; gap:5px;"></span><span id="disc-step-label">Step 0</span></span>
+      <span style="flex:1;"></span>
+      <button type="button" id="disc-term-minus" class="btn btn-ghost btn-sm" aria-label="Remove last term">− term</button>
+      <button type="button" id="disc-term-plus" class="btn btn-ghost btn-sm" aria-label="Add a term">+ term</button>
+    </div>
+
+    <div class="disc-opts">
+      <label><input type="checkbox" id="disc-reset-on-edit" checked><span>Restart at step 0 when I change a number</span></label>
+      <label><input type="checkbox" id="disc-show-wrong"><span>Show the tempting wrong answer</span></label>
+      <button type="button" id="disc-send" class="btn btn-ghost btn-sm">Send to chart below ↓</button>
+    </div>
+    <p id="disc-note" class="disc-note" aria-live="polite"></p>
+  </section>
+
   <!-- ===== SECTION 1 — INTERACTIVE ===== -->
-  <section class="card" aria-labelledby="s1">
+  <section class="card" aria-labelledby="s1" data-guided-only>
     <div class="card-header">
       <h2 id="s1" class="section-title">Chain, difference shape, track split</h2>
       <p class="section-subtitle">Type a series and see three complementary views. The shape of the differences is the pattern signature.</p>
@@ -405,7 +537,7 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
   </section>
 
   <!-- ===== SECTION 3 — SIGNATURES ===== -->
-  <section class="card" aria-labelledby="s3">
+  <section class="card" aria-labelledby="s3" data-guided-only>
     <div class="card-header">
       <h2 id="s3" class="section-title">Pattern signatures — what the shape tells you</h2>
       <p class="section-subtitle">Read the shape of the D₁ / D₂ bands like a diagnostic chart.</p>
@@ -492,25 +624,51 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
       </div>
     </div>
   </section>
+
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">Diff pyramid first</p>
+        <p class="lab-shortcuts-body">Write 1st differences; if not constant, 2nd. Alternating / ×k+c next.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Prime vs odd</p>
+        <p class="lab-shortcuts-body">Don't force +2,+2 when the pattern is primes or ×n+1.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Two tracks</p>
+        <p class="lab-shortcuts-body">Odd/even positions often independent — split before combining.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">Letter series</p>
+        <p class="lab-shortcuts-body">Position in alphabet (A=1). ±k or reverse (A↔Z) are the usual two.</p>
+      </li>
+    </ul>
+  </section>
 </main>
 
 <footer class="site-footer">
   <div class="footer-container">
-    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
-      <div>
-        <strong>Aptitude &amp; Reasoning Lab</strong> — Reasoning stream
-        <div style="font-size:.8rem; margin-top:.25rem;">
-          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
-        </div>
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
       </div>
-      <div style="font-size:.8rem;">
-        <a href="../docs/reviews/number-series.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
-      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
     </div>
-    <div class="disclaimer-box">
-      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
-      Always check the latest official exam notification.
-    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
   </div>
 </footer>
 
@@ -753,6 +911,134 @@ const Model = (() => {
 window.Model = Model;
 
 /* =====================================================================
+   1b. DISCOVERY MODEL (pure — no DOM). Builds a step-by-step "reveal"
+   plan: numbers → D1 → D2 → (ratios) → highlight + ghost next term.
+   ===================================================================== */
+const DiscoveryModel = (() => {
+  const round = (x, d = 3) => Math.round(x * 10 ** d) / 10 ** d;
+  const sg = (x) => (x >= 0 ? "+" : "−") + Math.abs(x);
+  const addStr = (a, d) => d >= 0 ? `${a} + ${d}` : `${a} − ${Math.abs(d)}`;
+  const list = (arr, f) => arr.map(f).join(", ");
+  const allEq = (a) => a.length > 0 && a.every(v => v === a[0]);
+  const MIN_TERMS = 4;
+
+  // raw: array of strings/numbers (e.g. tile inputs)
+  function parse(raw) {
+    if (!Array.isArray(raw) || raw.length < MIN_TERMS) {
+      return { ok: false, error: `Need at least ${MIN_TERMS} numbers to spot a pattern.` };
+    }
+    const nums = [];
+    for (const r of raw) {
+      const s = String(r).trim();
+      if (s === "" || !isFinite(Number(s))) {
+        return { ok: false, error: "Type a number in every tile (digits only, e.g. 12 or -3)." };
+      }
+      nums.push(round(Number(s)));
+    }
+    return { ok: true, nums };
+  }
+
+  function build(nums) {
+    const n = Array.isArray(nums) ? nums.length : 0;
+    if (n < MIN_TERMS) return { valid: false, error: "Need at least 4 numbers." };
+    const last = nums[n - 1];
+    const d1 = [], d2 = [];
+    for (let i = 0; i < n - 1; i++) d1.push(round(nums[i + 1] - nums[i]));
+    for (let i = 0; i < d1.length - 1; i++) d2.push(round(d1[i + 1] - d1[i]));
+    const ratios = nums.every(v => v !== 0)
+      ? nums.slice(0, -1).map((v, i) => round(nums[i + 1] / v)) : null;
+    const lastD1 = d1[d1.length - 1];
+
+    let kind = "NONE";
+    if (allEq(d1)) kind = "AP";
+    else if (d2.length >= 2 && allEq(d2)) kind = "QUAD";
+    else if (ratios && allEq(ratios)) kind = "GP";
+
+    const lists = {
+      d1: list(d1, sg), d2: list(d2, sg), ratio: ratios ? list(ratios, r => "×" + r) : ""
+    };
+    const notEqual = "They are not all the same, so this is not a plain AP. Look one layer deeper…";
+    const seqCap = `Numbers only: ${nums.join(", ")}. Don't invent a formula yet. Ask: how far does each jump to the next? Press “Reveal next layer” and let the pattern appear.`;
+
+    let stages, next = null, ghostD2 = null, ghostRatio = null, highlight = null, wrong = null, family = "";
+    if (kind === "AP") {
+      const d = d1[0];
+      next = round(last + d); highlight = "d1"; family = "Arithmetic (AP)";
+      stages = [
+        { id: "seq", caption: seqCap },
+        { id: "d1", caption: `Gaps between neighbours (D₁): ${lists.d1}. Look — every gap is the same.` },
+        { id: "final", caption: `Differences are all ${sg(d)} → arithmetic (AP). Next term = ${addStr(last, d)} = ${next}.` }
+      ];
+    } else if (kind === "QUAD") {
+      const c = d2[0];
+      const nextD1 = round(lastD1 + c);
+      next = round(last + nextD1); highlight = "d2"; ghostD2 = c; family = "Growing jumps (quadratic)";
+      const wv = round(last + lastD1);
+      if (wv !== next) {
+        wrong = { value: wv, label: "AP guess",
+          why: `Treating it as an AP just repeats the last jump: ${addStr(last, lastD1)} = ${wv}. ✗ The jumps are changing by ${sg(c)} each time, so the next jump is ${nextD1}, not ${lastD1}.` };
+      }
+      stages = [
+        { id: "seq", caption: seqCap },
+        { id: "d1", caption: `Gaps between neighbours (D₁): ${lists.d1}. ${notEqual}` },
+        { id: "d2", caption: `Gaps of the gaps (D₂): ${lists.d2}. All equal — a constant! That is the hidden pattern.` },
+        { id: "final", caption: `D₂ is always ${sg(c)} → the jumps change by ${sg(c)} each time (quadratic). Next jump = ${addStr(lastD1, c)} = ${nextD1}, so next term = ${addStr(last, nextD1)} = ${next}.` }
+      ];
+    } else if (kind === "GP") {
+      const r = ratios[0];
+      next = round(last * r); highlight = "ratio"; ghostRatio = r; family = "Geometric (GP)";
+      const wv = round(last + lastD1);
+      if (wv !== next) {
+        wrong = { value: wv, label: "AP guess",
+          why: `Repeating the last jump (${sg(lastD1)}) gives ${wv}. ✗ Here the jumps themselves keep multiplying, because each term is ×${r} the one before.` };
+      }
+      stages = [
+        { id: "seq", caption: seqCap },
+        { id: "d1", caption: `Gaps between neighbours (D₁): ${lists.d1}. ${notEqual}` },
+        { id: "d2", caption: `Gaps of the gaps (D₂): ${lists.d2}. Still changing — subtracting won't crack this one. Try dividing each term by the one before.` },
+        { id: "ratio", caption: `Ratios (next ÷ previous): ${lists.ratio}. All equal — a constant multiplier!` },
+        { id: "final", caption: `Every term is ×${r} the one before → geometric (GP). Next term = ${last} × ${r} = ${next}.` }
+      ];
+    } else {
+      family = "No clean layer";
+      stages = [
+        { id: "seq", caption: seqCap },
+        { id: "d1", caption: `Gaps between neighbours (D₁): ${lists.d1}. ${notEqual}` },
+        { id: "d2", caption: `Gaps of the gaps (D₂): ${lists.d2}. Still not constant.` },
+        { id: "final", caption: "No constant gap layer and no constant ratio showed up. Try other ideas: two interleaved tracks, primes, squares/cubes, or “×n ± k” rules. (See the sections below.)" }
+      ];
+    }
+
+    return {
+      valid: true, kind, family, terms: nums, d1, d2, ratios,
+      next, nextD1: next === null ? null : round(next - last), ghostD2, ghostRatio,
+      highlight, wrong, stages,
+      layers: stages.map(s => s.id).filter(id => id !== "seq" && id !== "final"),
+      max: stages.length - 1
+    };
+  }
+
+  // What is visible at a given step (clamped). Layers are cumulative.
+  function visible(plan, step) {
+    if (!plan || !plan.valid) return null;
+    const s = Math.max(0, Math.min(plan.max, Math.floor(step) || 0));
+    const seen = plan.stages.slice(0, s + 1).map(x => x.id);
+    const final = plan.stages[s].id === "final";
+    return {
+      step: s, max: plan.max, id: plan.stages[s].id, caption: plan.stages[s].caption,
+      showD1: seen.includes("d1"), showD2: seen.includes("d2"), showRatio: seen.includes("ratio"),
+      showGhost: s >= 1, final,
+      highlight: final ? plan.highlight : null,
+      ghostValue: final ? plan.next : null,
+      wrong: final ? plan.wrong : null
+    };
+  }
+
+  return { parse, build, visible, MIN_TERMS };
+})();
+window.DiscoveryModel = DiscoveryModel;
+
+/* =====================================================================
    2. SELF-TESTS
    ===================================================================== */
 function runSelfTests() {
@@ -782,6 +1068,31 @@ function runSelfTests() {
     assert(t9.valid && t9.next === 50 && t9.family === "Arithmetic", "String parse + arithmetic");
     const t10 = Model.analyze([3,7,13,21,31]);
     assert(t10.trap && t10.trap.value === 41, "Trap for quadratic = 41");
+
+    // --- Discovery model ---
+    const D = DiscoveryModel;
+    const pAP = D.build([5,8,11,14,17]);
+    assert(pAP.valid && pAP.kind === "AP" && pAP.next === 20 && pAP.max === 2 && pAP.wrong === null, "Discovery AP → 20, 2 steps, no trap", JSON.stringify(pAP));
+    const pQ = D.build([2,4,8,14,22]);
+    assert(pQ.kind === "QUAD" && pQ.next === 32 && pQ.max === 3 && pQ.wrong && pQ.wrong.value === 30 && pQ.highlight === "d2", "Discovery QUAD → 32, AP-trap 30", JSON.stringify(pQ));
+    const pG = D.build([2,6,18,54,162]);
+    assert(pG.kind === "GP" && pG.next === 486 && pG.max === 4 && pG.ghostRatio === 3 && pG.highlight === "ratio", "Discovery GP → 486", JSON.stringify(pG));
+    const pG2 = D.build([1,2,4,8,16]);
+    assert(pG2.kind === "GP" && pG2.next === 32, "Discovery GP 1,2,4,8,16 → 32");
+    const pN = D.build([1,2,4,7,12]);
+    assert(pN.kind === "NONE" && pN.next === null && pN.highlight === null, "Discovery unclassified → no ghost");
+    const pNeg = D.build([20,17,14,11]);
+    assert(pNeg.kind === "AP" && pNeg.next === 8, "Discovery decreasing AP → 8");
+    const v0 = D.visible(pQ, 0), v1 = D.visible(pQ, 1), v2 = D.visible(pQ, 2), v3 = D.visible(pQ, 3), v9 = D.visible(pQ, 99);
+    assert(!v0.showD1 && !v0.showD2 && !v0.showGhost && !v0.final, "Discovery step 0 = numbers only");
+    assert(v1.showD1 && !v1.showD2 && v1.showGhost && v1.ghostValue === null, "Discovery step 1 = D1 only");
+    assert(v2.showD1 && v2.showD2 && !v2.final, "Discovery step 2 = D1 + D2");
+    assert(v3.final && v3.highlight === "d2" && v3.ghostValue === 32 && v3.wrong.value === 30, "Discovery final = highlight + ghost");
+    assert(v9.step === 3 && D.visible(pQ, -4).step === 0, "Discovery step clamped");
+    assert(D.visible({ valid: false }, 0) === null, "Discovery visible(invalid) = null");
+    assert(!D.parse(["1","x","3","4"]).ok && !D.parse(["1","2"]).ok && !D.parse(["1","","3","4"]).ok, "Discovery parse rejects bad input");
+    const pp = D.parse(["1"," 2.5","-3","4"]);
+    assert(pp.ok && pp.nums.join() === "1,2.5,-3,4", "Discovery parse numbers");
   } catch (err) {
     results.failed++;
     results.failures.push({ name: "Uncaught", detail: err.message });
@@ -1288,10 +1599,8 @@ function setPracticeMode(mode) {
   if (mode === "timed") startTimer();
   else stopTimer();
 
-  document.querySelectorAll("main > section").forEach((el, idx) => {
-    if (idx === 0 || idx === 2) {
-      el.style.display = (mode === "hints") ? "" : "none";
-    }
+  document.querySelectorAll("main > section[data-guided-only]").forEach((el) => {
+    el.style.display = (mode === "hints") ? "" : "none";
   });
 }
 document.querySelectorAll(".mode-btn").forEach(b => {
@@ -1435,6 +1744,212 @@ function handleResetStats() {
 window.handleResetStats = handleResetStats;
 
 /* =====================================================================
+   8b. DISCOVERY MINI-LAB (view + wiring; all logic lives in DiscoveryModel)
+   Reduced motion: the global prefers-reduced-motion rule disables the
+   .disc-enter animation, so layers simply appear instantly.
+   ===================================================================== */
+const Lab = { raw: ["2", "4", "8", "14", "22"], step: 0, showWrong: false, resetOnEdit: true, enter: null };
+const LAB_MAX_TERMS = 8;
+const labSigned = (x) => (x >= 0 ? "+" : "−") + Math.abs(x);
+const labEsc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+const labNote = (msg) => { $("disc-note").textContent = msg || ""; };
+const labPlan = () => {
+  const p = DiscoveryModel.parse(Lab.raw);
+  return p.ok ? { parsed: p, plan: DiscoveryModel.build(p.nums) } : { parsed: p, plan: null };
+};
+
+function renderLab() {
+  const grid = $("disc-grid");
+  const a = document.activeElement;
+  let focus = null;
+  if (a && grid.contains(a) && a.classList.contains("disc-tile") && a.dataset.idx !== undefined) {
+    focus = { idx: a.dataset.idx, s: a.selectionStart, e: a.selectionEnd };
+  }
+
+  const n = Lab.raw.length;
+  const { parsed, plan } = labPlan();
+  Lab.step = plan ? Math.max(0, Math.min(plan.max, Lab.step)) : 0;
+  const view = plan ? DiscoveryModel.visible(plan, Lab.step) : null;
+  const wrongOn = !!(view && Lab.showWrong && view.wrong);
+
+  const cols = 2 * n + 1 + (wrongOn ? 2 : 0);
+  const rowOf = {};
+  (plan ? plan.layers : []).forEach((id, i) => { rowOf[id] = i + 2; });
+  const rows = 1 + (plan ? plan.layers.length : 0);
+  grid.style.gridTemplateColumns = `repeat(${cols}, minmax(44px, 1fr))`;
+  grid.style.gridTemplateRows = `repeat(${rows}, minmax(40px, auto))`;
+
+  const attr = (col, row, cls, enterId, i = 0) => {
+    const en = enterId && Lab.enter === enterId;
+    return `class="${cls}${en ? " disc-enter" : ""}" style="grid-column:${col};grid-row:${row};${en ? `--d:${i * 90}ms;` : ""}"`;
+  };
+  const signCls = (d) => (d > 0 ? "up" : d < 0 ? "down" : "");
+  const hl = (id) => (view && view.highlight === id ? " hl" : "");
+
+  let h = "";
+  Lab.raw.forEach((v, i) => {
+    h += `<input type="text" autocomplete="off" data-idx="${i}" aria-label="Term ${i + 1}" value="${labEsc(v)}" ${attr(2 * i + 1, 1, "disc-tile")}>`;
+  });
+
+  if (view) {
+    if (view.showD1) {
+      h += `<span ${attr(1, rowOf.d1, "disc-rowlabel")} title="First differences">D₁</span>`;
+      plan.d1.forEach((d, i) => {
+        h += `<span ${attr(2 * i + 2, rowOf.d1, "disc-chip " + signCls(d) + hl("d1"), "d1", i)}>${labSigned(d)}</span>`;
+      });
+    }
+    if (view.showD2) {
+      h += `<span ${attr("1 / span 2", rowOf.d2, "disc-rowlabel")} title="Second differences">D₂</span>`;
+      plan.d2.forEach((d, i) => {
+        h += `<span ${attr(2 * i + 3, rowOf.d2, "disc-chip d2" + hl("d2"), "d2", i)}>${labSigned(d)}</span>`;
+      });
+    }
+    if (view.showRatio) {
+      h += `<span ${attr(1, rowOf.ratio, "disc-rowlabel")} title="Ratios">×</span>`;
+      plan.ratios.forEach((r, i) => {
+        h += `<span ${attr(2 * i + 2, rowOf.ratio, "disc-chip ratio" + hl("ratio"), "ratio", i)}>×${r}</span>`;
+      });
+    }
+    if (view.showGhost) {
+      const found = view.final && plan.next !== null;
+      h += `<div ${attr(2 * n + 1, 1, "disc-tile ghost" + (found ? " found" : ""), found ? "final" : (view.step === 1 ? "d1" : null))}`
+        + ` aria-label="${found ? "Predicted next term " + plan.next : "Next term, not yet known"}">${found ? plan.next : "?"}</div>`;
+      if (found) {
+        if (rowOf.d1) h += `<span ${attr(2 * n, rowOf.d1, "disc-chip ghost " + signCls(plan.nextD1), "final")}>${labSigned(plan.nextD1)}</span>`;
+        if (plan.ghostD2 !== null && rowOf.d2) h += `<span ${attr(2 * n - 1, rowOf.d2, "disc-chip d2 ghost", "final")}>${labSigned(plan.ghostD2)}</span>`;
+        if (plan.ghostRatio !== null && rowOf.ratio) h += `<span ${attr(2 * n, rowOf.ratio, "disc-chip ratio ghost", "final")}>×${plan.ghostRatio}</span>`;
+      }
+    }
+    if (wrongOn) {
+      h += `<span ${attr(2 * n + 2, 1, "disc-or")}>or</span>`;
+      h += `<div ${attr(2 * n + 3, 1, "disc-tile ghost wrong", "wrong")} aria-label="Tempting wrong answer ${view.wrong.value}, crossed out"><span>${view.wrong.value}</span></div>`;
+      h += `<span ${attr(2 * n + 3, rowOf.d1 || 2, "disc-wrong-label")}>${view.wrong.label} ✗</span>`;
+    }
+  }
+  grid.innerHTML = h;
+
+  if (focus) {
+    const el = grid.querySelector(`.disc-tile[data-idx="${focus.idx}"]`);
+    if (el) { el.focus(); try { el.setSelectionRange(focus.s, focus.e); } catch (_) {} }
+  }
+
+  // Caption
+  const cap = $("disc-caption");
+  if (!plan) {
+    cap.className = "callout callout-danger disc-caption";
+    cap.textContent = parsed.error;
+  } else {
+    cap.className = "callout disc-caption " + (view.final ? (plan.next !== null ? "callout-success" : "callout-warning") : "callout-info");
+    cap.textContent = view.caption + (wrongOn ? `  ⚠️ Tempting trap: ${view.wrong.why}` : "");
+  }
+
+  // Controls
+  const atEnd = !plan || Lab.step >= plan.max;
+  const reveal = $("disc-reveal");
+  reveal.disabled = atEnd;
+  reveal.textContent = plan && atEnd ? "All layers revealed ✓" : "Reveal next layer ▸";
+  $("disc-reset").disabled = Lab.step === 0;
+  const max = plan ? plan.max : 0;
+  $("disc-dots").innerHTML = plan
+    ? Array.from({ length: max + 1 }, (_, i) => `<span class="disc-dot${i <= Lab.step ? " on" : ""}"></span>`).join("")
+    : "";
+  $("disc-step-label").textContent = plan ? `Step ${Lab.step} of ${max}` : "—";
+  $("disc-term-minus").disabled = n <= DiscoveryModel.MIN_TERMS;
+  $("disc-term-plus").disabled = n >= LAB_MAX_TERMS;
+  const wrongBox = $("disc-show-wrong");
+  wrongBox.disabled = !(plan && plan.wrong);
+  wrongBox.title = plan && !plan.wrong ? "This series has no common trap — try “Growing jumps”." : "";
+  wrongBox.checked = Lab.showWrong;
+
+  Lab.enter = null; // animations play once per user action
+}
+
+function labEdited() {
+  Lab.enter = null;
+  if (Lab.resetOnEdit) Lab.step = 0;
+}
+
+function labReveal() {
+  const { plan } = labPlan();
+  if (!plan || Lab.step >= plan.max) return;
+  Lab.step++;
+  Lab.enter = plan.stages[Lab.step].id;
+  labNote("");
+  renderLab();
+}
+
+$("disc-reveal").addEventListener("click", labReveal);
+$("disc-reset").addEventListener("click", () => { Lab.step = 0; Lab.enter = null; labNote(""); renderLab(); });
+
+$("disc-grid").addEventListener("input", (e) => {
+  const t = e.target;
+  if (!t.classList || !t.classList.contains("disc-tile")) return;
+  Lab.raw[Number(t.dataset.idx)] = t.value;
+  labEdited();
+  labNote("");
+  renderLab();
+});
+$("disc-grid").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && e.target.classList && e.target.classList.contains("disc-tile")) {
+    e.preventDefault();
+    labReveal();
+  }
+});
+
+document.querySelectorAll("[data-disc-preset]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    Lab.raw = btn.dataset.discPreset.split(",");
+    Lab.step = 0; Lab.enter = null;
+    labNote("");
+    renderLab();
+  });
+});
+
+$("disc-term-plus").addEventListener("click", () => {
+  if (Lab.raw.length >= LAB_MAX_TERMS) return;
+  const { plan } = labPlan();
+  const last = Lab.raw[Lab.raw.length - 1];
+  Lab.raw.push(plan && plan.next !== null ? String(plan.next) : (String(last).trim() || "0"));
+  labEdited();
+  renderLab();
+});
+$("disc-term-minus").addEventListener("click", () => {
+  if (Lab.raw.length <= DiscoveryModel.MIN_TERMS) return;
+  Lab.raw.pop();
+  labEdited();
+  renderLab();
+});
+
+$("disc-reset-on-edit").addEventListener("change", (e) => { Lab.resetOnEdit = e.target.checked; });
+$("disc-show-wrong").addEventListener("change", (e) => {
+  Lab.showWrong = e.target.checked;
+  Lab.enter = Lab.showWrong ? "wrong" : null;
+  renderLab();
+});
+
+$("disc-use-above").addEventListener("click", () => {
+  const parts = String(state.sequenceText).split(",").map(s => s.trim()).filter(Boolean);
+  if (parts.length < DiscoveryModel.MIN_TERMS || !parts.every(p => isFinite(Number(p)))) {
+    labNote("The chart below needs 4+ plain numbers (letters aren't supported in this lab).");
+    return;
+  }
+  Lab.raw = parts.slice(0, LAB_MAX_TERMS);
+  Lab.step = 0; Lab.enter = null;
+  labNote(parts.length > LAB_MAX_TERMS ? `Using the first ${LAB_MAX_TERMS} terms.` : "Loaded the series from the chart below.");
+  renderLab();
+});
+
+$("disc-send").addEventListener("click", () => {
+  const { parsed } = labPlan();
+  if (!parsed.ok) { labNote(parsed.error); return; }
+  if (state.predictLocked) { labNote("The chart below is locked after a prediction — press 🎲 New series there first."); return; }
+  state.sequenceText = parsed.nums.join(", ");
+  $("input-sequence").value = state.sequenceText;
+  renderMain();
+  labNote("Sent ✓ — the chart below now shows this series.");
+});
+
+/* =====================================================================
    9. INIT
    ===================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
@@ -1453,10 +1968,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $("input-sequence").value = state.sequenceText;
   renderMain();
+  renderLab();
   renderQuestion();
   renderStats();
   setPracticeMode("hints");
 });
 </script>
+<script src="../assets/lab-ux.js" defer></script>
 </body>
 </html>

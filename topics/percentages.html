@@ -6,6 +6,7 @@
 <title>Percentages &amp; Percentage Change — Aptitude Lab</title>
 <meta name="description" content="See percentages, not just calculate them. Interactive base model, real predict gate, ghost bar traps, and unified number line." />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
 /* =====================================================================
    DESIGN TOKENS
@@ -466,6 +467,51 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
   font-size: 0.9rem;
   width: 100%;
 }
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
 </style>
 </head>
 <body>
@@ -487,8 +533,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        <li><span class="badge badge-published">Published</span></li>
-      </ul>
+        </ul>
     </nav>
   </div>
 </header>
@@ -652,6 +697,33 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </p>
   </section>
 
+  <!-- ===== SUCCESSIVE % PLAY ===== -->
+  <section class="card" aria-labelledby="s-succ">
+    <div class="card-header">
+      <h2 id="s-succ" class="section-title">Understand: successive % — second cut on leftover</h2>
+      <p class="section-subtitle">Don't memorise “don't add percentages”. See the cake shrink twice. When that clicks, the multiplier trick becomes obvious — and fast in your head.</p>
+    </div>
+    <div class="control-grid">
+      <div class="control-group">
+        <label for="succ-p1" class="control-label"><span>First cut %</span><span id="succ-p1-b" class="badge badge-tag">20</span></label>
+        <input type="range" id="succ-p1" min="5" max="50" value="20">
+      </div>
+      <div class="control-group">
+        <label for="succ-p2" class="control-label"><span>Second cut %</span><span id="succ-p2-b" class="badge badge-tag">10</span></label>
+        <input type="range" id="succ-p2" min="5" max="50" value="10">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+      <button type="button" id="succ-step" class="btn btn-primary btn-sm">Next step →</button>
+      <button type="button" id="succ-reset" class="btn btn-secondary btn-sm">Reset</button>
+      <span id="succ-badge" class="badge badge-tag">Step 0</span>
+    </div>
+    <div class="vis-container">
+      <svg id="succ-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="Successive percentage bars"></svg>
+    </div>
+    <p id="succ-cap" style="margin-top:10px;font-size:.92rem;color:var(--text-dim);"></p>
+  </section>
+
   <!-- ===== SECTION 4 ===== -->
   <section class="card" aria-labelledby="s4">
     <div class="card-header">
@@ -711,25 +783,51 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       </div>
     </div>
   </section>
+
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">Multiplier, not ±%</p>
+        <p class="lab-shortcuts-body">+20% → ×1.20 · −20% → ×0.80 · successive: multiply the multipliers.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Base-shift</p>
+        <p class="lab-shortcuts-body">"50% more than B" ≠ "B is 50% less than A". Less = gap ÷ <em>new</em> base (50/150 = ⅓).</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Net of +x then −x</p>
+        <p class="lab-shortcuts-body">1.x × (1−x/100) = 1 − (x/100)² — never zero unless x=0.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">x% of N from N% of x</p>
+        <p class="lab-shortcuts-body">Same product. Pick whichever is easier mentally.</p>
+      </li>
+    </ul>
+  </section>
 </main>
 
 <footer class="site-footer">
   <div class="footer-container">
-    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
-      <div>
-        <strong>Aptitude &amp; Reasoning Lab</strong> — Quant stream
-        <div style="font-size:.8rem; margin-top:.25rem;">
-          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
-        </div>
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
       </div>
-      <div style="font-size:.8rem;">
-        <a href="../docs/reviews/percentages.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
-      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
     </div>
-    <div class="disclaimer-box">
-      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
-      Always check the latest official exam notification.
-    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
   </div>
 </footer>
 
@@ -899,7 +997,22 @@ const PRACTICE_QUESTIONS = [
     stem: "Sugar price falls 20%. A customer can buy 4 kg more for ₹320. Reduced price/kg?",
     options: ["₹16", "₹20", "₹18", "₹24"], correctIndex: 0,
     trapOptionIndex: 1, trapExplanation: "₹20 is the ORIGINAL price/kg. The question asks for the reduced price.",
-    solution: "20% of 320 = 64 saved buys 4 kg → reduced price = 64/4 = ₹16/kg." }
+    solution: "20% of 320 = 64 saved buys 4 kg → reduced price = 64/4 = ₹16/kg." },
+  { id: "P13", difficulty: "Medium",
+    stem: "A number is first increased by 25%, then decreased by 20%. Net change?",
+    options: ["No change", "+5%", "−5%", "+10%"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "+5% adds the percentages. Multipliers: 1.25 × 0.80 = 1.00.",
+    solution: "1.25 × 0.80 = 1 → net change 0%." },
+  { id: "P14", difficulty: "Exam-Style",
+    stem: "In an election, A gets 55% of valid votes and B the rest. Invalid votes are 20% of total polled. A's majority over B is 2,000 (valid votes). Total votes polled?",
+    options: ["25,000", "20,000", "22,000", "18,000"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "20,000 is the valid count, not total. Invalid are 20% of total, so total = valid / 0.8.",
+    solution: "Majority = 55% − 45% = 10% of valid = 2,000 → valid = 20,000. Total = 20,000 / 0.8 = 25,000." },
+  { id: "P15", difficulty: "Hard",
+    stem: "Salary rises 20% then 10%. Equivalent single rise?",
+    options: ["32%", "30%", "31%", "28%"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "30% adds the rises. Compound: 1.20 × 1.10 = 1.32 → 32%.",
+    solution: "1.20 × 1.10 = 1.32 → 32% rise." }
 ];
 window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
 
@@ -1462,10 +1575,54 @@ function handleResetStats() {
 }
 window.handleResetStats = handleResetStats;
 
+/* ---- Successive %: understand cake shrink, then mind formula ---- */
+const succ = { step: 0, p1: 20, p2: 10, base: 100 };
+function renderSucc() {
+  const { step, p1, p2, base } = succ;
+  const after1 = base * (1 - p1 / 100), after2 = after1 * (1 - p2 / 100);
+  const naive = base * (1 - (p1 + p2) / 100);
+  const eq = (1 - after2 / base) * 100;
+  const y = 70, maxW = 560, x0 = 80;
+  const w1 = maxW * after1 / base, w2 = maxW * after2 / base, wn = maxW * naive / base;
+  let bars = `
+    <text x="${x0}" y="28" font-size="13" fill="#94a3b8">Think of the amount as a cake. Each % cut eats from what's LEFT.</text>
+    <rect x="${x0}" y="${y}" width="${maxW}" height="30" fill="#334155" rx="4"/>
+    <text x="${x0 + 8}" y="${y + 20}" font-size="12" fill="#94a3b8">100% cake</text>`;
+  if (step >= 1) bars += `
+    <rect x="${x0}" y="${y}" width="${w1}" height="30" fill="#38bdf8" rx="4"/>
+    <rect x="${x0 + w1}" y="${y}" width="${maxW - w1}" height="30" fill="#ef4444" opacity="0.35"/>
+    <text x="${x0 + 8}" y="${y + 20}" font-size="12" font-weight="700" fill="#001824">left ${after1.toFixed(0)} after −${p1}%</text>`;
+  if (step >= 2) bars += `
+    <rect x="${x0}" y="${y + 50}" width="${w2}" height="30" fill="#22c55e" rx="4"/>
+    <text x="${x0 + 8}" y="${y + 70}" font-size="12" font-weight="700" fill="#001824">true left ${after2.toFixed(1)}</text>
+    <rect x="${x0}" y="${y + 100}" width="${wn}" height="24" fill="#ef4444" opacity="0.5" rx="4"/>
+    <text x="${x0 + 8}" y="${y + 116}" font-size="11" fill="#fca5a5">trap if you ADD % → ${naive.toFixed(1)} (looks bigger — wrong)</text>
+    <text x="${x0}" y="${y + 155}" font-size="14" font-weight="700" fill="#e8edf7">Mind shortcut after you see it: multiplier (1−${p1}/100)(1−${p2}/100) = ${(after2 / base).toFixed(3)} → equivalent −${eq.toFixed(1)}% (not −${p1 + p2}%)</text>`;
+  $("succ-svg").innerHTML = bars;
+  const caps = [
+    "Start with the whole cake. Don't reach for a formula yet — press Next and watch the first cut.",
+    `First cut removes ${p1}% of the ORIGINAL. What's left (${after1.toFixed(0)}) is the new cake. The second % must eat from THIS — that is the whole idea.`,
+    `True answer ${after2.toFixed(1)}. Trap ${naive.toFixed(1)} comes from adding ${p1}+${p2}=${p1 + p2}. Once you see “second % on leftover”, you can do it in your head with multipliers — practice locks the speed.`
+  ];
+  $("succ-cap").textContent = caps[step];
+  $("succ-badge").textContent = `Step ${step} / 2`;
+  $("succ-p1-b").textContent = p1; $("succ-p2-b").textContent = p2;
+}
+function wireSucc() {
+  ["succ-p1", "succ-p2"].forEach(id => $(id).addEventListener("input", e => {
+    if (id === "succ-p1") succ.p1 = +e.target.value; else succ.p2 = +e.target.value;
+    succ.step = 0; renderSucc();
+  }));
+  $("succ-step").addEventListener("click", () => { succ.step = Math.min(2, succ.step + 1); renderSucc(); });
+  $("succ-reset").addEventListener("click", () => { succ.step = 0; renderSucc(); });
+  renderSucc();
+}
+
 /* =====================================================================
    11. INIT
    ===================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
+  wireSucc();
   const results = runSelfTests();
   state.testsPassed = results.failed === 0;
   const banner = $("test-status-banner");
@@ -1487,5 +1644,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setPracticeMode("hints");
 });
 </script>
+<script src="../assets/lab-ux.js" defer></script>
 </body>
 </html>

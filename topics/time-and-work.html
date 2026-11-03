@@ -6,6 +6,7 @@
 <title>Time, Work &amp; Efficiency — Aptitude Lab</title>
 <meta name="description" content="See why rates add while times never do. Shared work timeline, unit-work day tiles, ghost-bar traps, wage-sharing mini-lab, and predict-first practice." />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
 :root {
   --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
@@ -263,6 +264,51 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
   border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
 }
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
 </style>
 </head>
 <body>
@@ -284,8 +330,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        <li><span class="badge badge-published">Published</span></li>
-      </ul>
+        </ul>
     </nav>
   </div>
 </header>
@@ -447,6 +492,37 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
   </section>
 
+  <!-- ===== PARTIAL WORK PLAY ===== -->
+  <section class="card" aria-labelledby="s-part">
+    <div class="card-header">
+      <h2 id="s-part" class="section-title">Understand: leftover work — rates, not days</h2>
+      <p class="section-subtitle">Hard questions look scary until you see: finish some work alone → shorter job left → both attack the leftover with rates. Never add “A's days + B's days”.</p>
+    </div>
+    <div class="control-grid">
+      <div class="control-group">
+        <label for="pw-a" class="control-label"><span>A alone (days)</span><span id="pw-a-b" class="badge badge-tag">12</span></label>
+        <input type="range" id="pw-a" min="4" max="30" value="12">
+      </div>
+      <div class="control-group">
+        <label for="pw-b" class="control-label"><span>B alone (days)</span><span id="pw-b-b" class="badge badge-tag">18</span></label>
+        <input type="range" id="pw-b" min="4" max="30" value="18">
+      </div>
+      <div class="control-group">
+        <label for="pw-t" class="control-label"><span>A works alone first (days)</span><span id="pw-t-b" class="badge badge-tag">4</span></label>
+        <input type="range" id="pw-t" min="1" max="10" value="4">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+      <button type="button" id="pw-next" class="btn btn-primary btn-sm">Next step →</button>
+      <button type="button" id="pw-reset" class="btn btn-secondary btn-sm">Reset</button>
+      <span id="pw-badge" class="badge badge-tag">Step 0</span>
+    </div>
+    <div class="vis-container">
+      <svg id="pw-svg" viewBox="0 0 760 240" width="100%" role="img" aria-label="Partial work fill bar"></svg>
+    </div>
+    <p id="pw-cap" style="margin-top:10px;font-size:.92rem;color:var(--text-dim);"></p>
+  </section>
+
   <!-- ===== SECTION 5 — PRACTICE ===== -->
   <section class="card" aria-labelledby="s5">
     <div class="card-header">
@@ -505,25 +581,51 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       </div>
     </div>
   </section>
+
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">Rates add</p>
+        <p class="lab-shortcuts-body">1/A + 1/B = 1/together. LCM of days = total work units.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Never average days</p>
+        <p class="lab-shortcuts-body">(12+18)/2 is not together-time. Harmonic: 2/(1/12+1/18) if equal share only for two.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Pipes</p>
+        <p class="lab-shortcuts-body">Fill positive, empty negative. Net rate → time = 1/|net|.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">Efficiency ratio</p>
+        <p class="lab-shortcuts-body">If A:B = 2:1 and together = 12d, A alone = 18d (A does ⅔ per day-block).</p>
+      </li>
+    </ul>
+  </section>
 </main>
 
 <footer class="site-footer">
   <div class="footer-container">
-    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
-      <div>
-        <strong>Aptitude &amp; Reasoning Lab</strong> — Quant stream
-        <div style="font-size:.8rem; margin-top:.25rem;">
-          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
-        </div>
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
       </div>
-      <div style="font-size:.8rem;">
-        <a href="../docs/reviews/time-and-work.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
-      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
     </div>
-    <div class="disclaimer-box">
-      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
-      Always check the latest official exam notification.
-    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
   </div>
 </footer>
 
@@ -687,7 +789,22 @@ const PRACTICE_QUESTIONS = [
     stem: "A in 16d, B in 24d. Work together 4 days. Fraction LEFT?",
     options: ["7/12", "5/12", "3/8", "1/2"], correctIndex: 0,
     trapOptionIndex: 1, trapExplanation: "5/12 is the work DONE. Question asks for work LEFT = 1 − 5/12.",
-    solution: "LCM 48. Rates 3+2=5. In 4 days: 20 units. Done = 5/12. Left = 7/12." }
+    solution: "LCM 48. Rates 3+2=5. In 4 days: 20 units. Done = 5/12. Left = 7/12." },
+  { id: "TW13", difficulty: "Exam-Style",
+    stem: "Pipe A fills in 12h, Pipe B empties in 18h. Tank empty; both open. Time to fill?",
+    options: ["36 h", "30 h", "24 h", "7.2 h"], correctIndex: 0,
+    trapOptionIndex: 3, trapExplanation: "7.2 h wrongly uses harmonic mean of 12 and 18. Net rate = 1/12 − 1/18 = 1/36.",
+    solution: "Net = 1/12 − 1/18 = 1/36 per hour → 36 hours." },
+  { id: "TW14", difficulty: "Medium",
+    stem: "A is twice as efficient as B. Together they finish in 12 days. A alone?",
+    options: ["18 days", "24 days", "16 days", "36 days"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "24 days treats them as equal (2 × 12). Rates 2:1 → A does 2/3 of work in 12 days → alone 18.",
+    solution: "Rates A:B = 2:1. Combined 3 parts in 12 days → 1 part = 4 days of combined = A's 2 parts take 8… Work = 12×3k = 36k. A rate 2k → 36k/2k = 18 days." },
+  { id: "TW15", difficulty: "Exam-Style",
+    stem: "A, B, C rates 3:2:1. Together finish in 10 days. B and C alone would take?",
+    options: ["20 days", "30 days", "15 days", "60 days"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "30 days uses only C+B incorrectly as half. Total work = 10×6 = 60 units. B+C rate = 3 → 20 days.",
+    solution: "Rates 3+2+1=6. Work=60. B+C=3 → 60/3=20 days." }
 ];
 window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
 
@@ -1250,10 +1367,38 @@ function handleResetStats() {
 }
 window.handleResetStats = handleResetStats;
 
-/* =====================================================================
-   10. INIT
-   ===================================================================== */
+/* ---- Partial work play ---- */
+const pw = { step: 0, a: 12, b: 18, t: 4 };
+function renderPw() {
+  const { step, a, b, t } = pw;
+  const done = Math.min(1, t / a), left = 1 - done;
+  const rate = 1 / a + 1 / b, daysLeft = left / rate;
+  const W = 760, x0 = 80, maxW = 560, y = 70;
+  let html = `<text x="${x0}" y="36" font-size="13" fill="#94a3b8">Whole job = 1</text>
+    <rect x="${x0}" y="${y}" width="${maxW}" height="32" fill="#1e293b" stroke="#475569" rx="4"/>`;
+  if (step >= 1) html += `<rect x="${x0}" y="${y}" width="${maxW * done}" height="32" fill="#38bdf8" rx="4"/>
+    <text x="${x0 + 8}" y="${y + 22}" font-size="12" font-weight="700" fill="#001824">A alone ${t}d → ${(done * 100).toFixed(0)}%</text>`;
+  if (step >= 2) html += `<rect x="${x0 + maxW * done}" y="${y}" width="${maxW * left}" height="32" fill="#f59e0b" opacity="0.85" rx="4"/>
+    <text x="${x0 + maxW * done + 8}" y="${y + 22}" font-size="12" font-weight="700" fill="#001824">left ${(left * 100).toFixed(0)}%</text>
+    <text x="${x0}" y="${y + 70}" font-size="13" fill="#e8edf7">A+B rate = 1/${a}+1/${b}. Time for leftover ≈ ${daysLeft.toFixed(2)} days.</text>`;
+  $("pw-svg").innerHTML = html;
+  const caps = [
+    "Whole job = 1 (the full bar). Forget formulas. Press Next and watch A eat part of the bar alone.",
+    `A alone ${t} days → finished ${(done * 100).toFixed(0)}% (blue). Amber is leftover = ${(left).toFixed(2)} of the job. Mind picture: the question just got smaller.`,
+    `Now A and B together. Their days (${a}, ${b}) never add. Their rates do: 1/${a}+1/${b}. Time for leftover ≈ ${daysLeft.toFixed(2)} days. Once you “see leftover”, hard questions become two short steps in your head.`
+  ];
+  $("pw-cap").textContent = caps[step];
+  $("pw-badge").textContent = `Step ${step}`;
+  $("pw-a-b").textContent = a; $("pw-b-b").textContent = b; $("pw-t-b").textContent = t;
+}
+function wirePw() {
+  [["pw-a","a"],["pw-b","b"],["pw-t","t"]].forEach(([id,k]) => $(id).addEventListener("input", e => { pw[k] = +e.target.value; pw.step = 0; renderPw(); }));
+  $("pw-next").addEventListener("click", () => { pw.step = Math.min(2, pw.step + 1); renderPw(); });
+  $("pw-reset").addEventListener("click", () => { pw.step = 0; renderPw(); });
+  renderPw();
+}
 document.addEventListener("DOMContentLoaded", () => {
+  wirePw();
   const results = runSelfTests();
   state.testsPassed = results.failed === 0;
   const banner = $("test-status-banner");
@@ -1278,5 +1423,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setPracticeMode("hints");
 });
 </script>
+<script src="../assets/lab-ux.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,10 @@
+# Local helper scripts / experiments (not part of the published lab)
+scratch/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+PROJECT.md

@@ -1,1042 +1,1396 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Permutations &amp; Combinations | Aptitude &amp; Reasoning Lab</title>
-  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../assets/style.css">
-  <style>
-    .pnc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-    .viz-canvas-container {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 8px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 380px;
-    }
-    .calc-breakdown-card {
-      background: var(--color-surface-subtle);
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      padding: 1rem;
-      margin-top: 1rem;
-      width: 100%;
-      font-size: 0.9rem;
-    }
-    .slot-box {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: var(--color-surface);
-      border: 2px solid var(--color-primary);
-      border-radius: 6px;
-      width: 60px;
-      height: 60px;
-      font-weight: 700;
-      font-size: 1.15rem;
-      color: var(--color-primary);
-    }
-    .slot-label {
-      font-size: 0.7rem;
-      color: var(--color-text-muted);
-      margin-top: 4px;
-    }
-    .toggle-group {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Permutations &amp; Combinations — Aptitude Lab</title>
+<meta name="description" content="See the ÷r! factor live. Side-by-side perm vs comb slots, animated word tiles, sweeping polygon diagonals, repeated-letter collapse lab." />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
+<style>
+:root {
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --purple: #a78bfa; --purple-soft: rgba(167,139,250,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: var(--font-sans);
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+}
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--primary); color: #001; padding: 12px 16px;
+  border-radius: 0 0 8px 0; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 0.75rem; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--surface-2); border: 1px solid var(--border);
+  padding: 0.15em 0.4em; border-radius: 4px;
+}
+.page-container { max-width: 1080px; margin: 0 auto; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 22px 22px 24px;
+  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+@media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
+.card-header { margin-bottom: 18px; }
+.section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.section-title::before {
+  content: counter(section-num); counter-increment: section-num;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%; font-size: 0.8rem; font-weight: 800;
+}
+main { counter-reset: section-num; }
+.section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
+.site-header {
+  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
+  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
+  margin: 0 -16px 24px; padding: 12px 16px;
+}
+.header-container {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
+.brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+.nav-link:hover { color: var(--text); }
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
+}
+.badge-published { background: var(--success-soft); color: var(--success); }
+.badge-draft { background: var(--warn-soft); color: var(--warn); }
+.badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #001824; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
+.btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
+.btn-secondary:hover:not(:disabled) { background: var(--border); }
+.btn-ghost { background: transparent; color: var(--text-dim); }
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
+.btn-sm { padding: 6px 11px; font-size: 0.8rem; }
+.btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.control-grid {
+  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
+}
+@media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .control-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; } }
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 0.85rem; font-weight: 600; color: var(--text);
+}
+select, input[type=number], input[type=text] {
+  background: var(--bg-elev); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-size: 0.9rem; font-family: var(--font-sans);
+  transition: border-color var(--transition);
+}
+select:focus, input:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.vis-container {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
+}
+.vis-container svg { display: block; width: 100%; height: auto; }
+.score-bar {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
+}
+@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
+.score-stat {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.score-stat-label {
+  font-size: 0.72rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.score-stat-num {
+  font-size: 1.05rem; font-weight: 700;
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
+}
+.callout {
+  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
+  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
+}
+.callout.hidden { display: none; }
+.callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
+.callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
+.callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
+.callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.test-banner {
+  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
+  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
+}
+.test-banner.hidden { display: none; }
+.test-banner ul { margin: 8px 0 0 20px; padding: 0; }
+.predict-box {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md); padding: 18px 20px;
+}
+.predict-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
+}
+.predict-header svg { flex-shrink: 0; }
+.options-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.option-btn {
+  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; transition: all var(--transition); text-align: center;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
+.option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
+.option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
+.option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.steps-container { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.step-item {
+  background: var(--bg-elev); border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+}
+.step-num {
+  font-size: 0.72rem; color: var(--primary); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
+}
+.step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+.practice-header {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.mode-toggle-group {
+  display: inline-flex; background: var(--bg-elev);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 3px; gap: 2px;
+}
+.mode-btn {
+  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
+  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active { background: var(--primary-soft); color: var(--primary); }
+.mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.timer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
+}
+.timer-badge.hidden { display: none; }
+.question-stem {
+  font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500;
+}
+.site-footer {
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.85rem;
+}
+.footer-container { max-width: 1080px; margin: 0 auto; }
+.disclaimer-box {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+}
+.error-categorizer {
+  margin-top: 12px; padding: 12px;
+  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.error-categorizer.hidden { display: none; }
+.error-categorizer label {
+  font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;
+}
+.error-categorizer select {
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
+}
+/* Slot lab */
+.slot-row {
+  display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap;
+  margin: 10px 0;
+}
+.slot-box {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 60px; height: 60px;
+  border-radius: 8px; font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800;
+}
+.slot-box.perm { background: var(--primary-soft); color: var(--primary); border: 2px solid var(--primary); }
+.slot-box.comb { background: var(--success-soft); color: var(--success); border: 2px solid var(--success); }
+.slot-lbl { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+.slot-op { font-size: 1.4rem; font-weight: 700; color: var(--text-muted); }
+/* Word lab */
+.word-tiles { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.word-tile {
+  width: 44px; height: 44px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 1.15rem; font-weight: 800;
+  transition: all 400ms cubic-bezier(.4,0,.2,1);
+}
+.word-tile.vowel { background: var(--primary-soft); color: var(--primary); border: 2px solid var(--primary); }
+.word-tile.consonant { background: var(--surface-2); color: var(--text); border: 2px solid var(--border-strong); }
+.word-tile.block-vowel { box-shadow: 0 0 0 4px rgba(56,189,248,.25); }
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
+</style>
 </head>
 <body>
-  <!-- Site Header -->
-  <header class="site-header">
-    <div class="header-container">
-      <div style="display: flex; align-items: center; gap: 1rem;">
-        <a href="../index.html" class="nav-back-link">← All Modules</a>
-        <div class="brand">
-          <span class="brand-title">Aptitude &amp; Reasoning Lab</span>
-          <span class="brand-subtitle">SEBI Grade A • Banking • SSC</span>
-        </div>
-      </div>
-      <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <span class="badge badge-published">Published</span>
-        <button id="theme-toggle" class="btn btn-secondary btn-sm" aria-label="Toggle dark mode">🌙</button>
-      </div>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-container">
+    <a href="../index.html" class="brand-link">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f172a"/>
+        <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+        <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+        <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+        <circle cx="40" cy="40" r="4" fill="#34d399"/>
+        <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span>Aptitude Lab</span>
+    </a>
+    <nav aria-label="Topic navigation">
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+        </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-container">
+
+  <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+  <header class="card">
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.75rem;">
+      <span class="badge badge-tag">Quantitative Aptitude</span>
+      <span class="badge badge-tag">SEBI Gr A</span>
+      <span class="badge badge-tag">Banking &amp; SSC</span>
     </div>
+    <h1>Permutations &amp; Combinations</h1>
+    <p class="section-subtitle" style="margin-top:8px;">
+      <strong>The whole chapter reduces to one question: does order matter?</strong> This page draws both answers side by side, shows the ÷r! collapse visually, and animates the block/gap constraints so words physically form and break apart.
+    </p>
   </header>
 
-  <!-- Page Container -->
-  <main class="page-container">
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="../index.html">Home</a>
-      <span>/</span>
-      <a href="../index.html#quant-section">Quantitative Aptitude</a>
-      <span>/</span>
-      <span aria-current="page">Permutations &amp; Combinations</span>
-    </nav>
+  <!-- ===== SECTION 1 — SLOT LAB ===== -->
+  <section class="card" aria-labelledby="s1">
+    <div class="card-header">
+      <h2 id="s1" class="section-title">Understand: order matters vs doesn't — see the slots collapse</h2>
+      <p class="section-subtitle">Same n, same r. Left column counts every ordering (permutation). Right column collapses duplicates (combination). The ratio is exactly r!.</p>
+    </div>
 
-    <!-- Header Section -->
-    <section class="card" style="margin-bottom: 2rem;">
-      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
-        <span class="badge badge-tag">Counting Principles</span>
-        <span class="badge badge-tag">SEBI Gr A (IT/Gen)</span>
-        <span class="badge badge-tag">Combinatorics</span>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="slot-n" class="control-label">
+          <span>Total items n</span>
+          <span id="slot-n-badge" class="badge badge-tag">5</span>
+        </label>
+        <input type="range" id="slot-n" min="2" max="10" value="5">
       </div>
-      <h1>Permutations, Combinations &amp; Counting Principles</h1>
-      <p style="color: var(--color-text-muted); font-size: 1.05rem; max-width: 800px; margin-bottom: 1rem;">
-        Explore fundamental counting principles, order-dependent arrangements ($^n P_r$), unordered group selections ($^n C_r$), repeated-letter word permutations, string/block vs. gap methods, and geometric combinatorics.
-      </p>
-
-      <div class="callout callout-info" style="margin: 0; font-size: 0.875rem;">
-        <strong>The Golden Decision Rule:</strong> Ask yourself: <em>Does the order matter?</em> If yes (arranging letters, podium finishes, secret PIN codes), use <strong>Permutations ($^n P_r$)</strong>. If no (selecting committees, choosing pizza toppings, shaking hands), use <strong>Combinations ($^n C_r$)</strong>.
+      <div class="control-group">
+        <label for="slot-r" class="control-label">
+          <span>Chosen r</span>
+          <span id="slot-r-badge" class="badge badge-tag">3</span>
+        </label>
+        <input type="range" id="slot-r" min="1" max="10" value="3">
       </div>
-    </section>
-
-    <!-- Formula Reference Grid -->
-    <section class="card" style="margin-bottom: 2rem;">
-      <h2 style="font-size: 1.3rem; margin-bottom: 1rem;">Foundational Combinatorial Invariants</h2>
-      <div class="control-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-        
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border);">
-          <strong style="color: var(--color-primary); display: block; margin-bottom: 0.5rem;">1. Arrangements vs. Selections</strong>
-          <ul style="font-size: 0.85rem; padding-left: 1.2rem; margin: 0; line-height: 1.6;">
-            <li><strong>Permutation ($^n P_r$):</strong> $\frac{n!}{(n - r)!}$ (Order matters).</li>
-            <li><strong>Combination ($^n C_r$):</strong> $\frac{n!}{r!(n - r)!} = \frac{^n P_r}{r!}$ (Divide by $r!$ to remove order).</li>
-            <li><strong>Symmetry:</strong> $^n C_r = ^n C_{n-r}$ and $^n C_0 = ^n C_n = 1$.</li>
-            <li><strong>Pascal's Identity:</strong> $^n C_r + ^n C_{r-1} = ^{n+1} C_r$.</li>
-          </ul>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border);">
-          <strong style="color: var(--color-primary); display: block; margin-bottom: 0.5rem;">2. Restricted Arrangements</strong>
-          <ul style="font-size: 0.85rem; padding-left: 1.2rem; margin: 0; line-height: 1.6;">
-            <li><strong>Repeated Items:</strong> $\frac{n!}{p_1! \cdot p_2! \cdots p_k!}$ for identical duplicates.</li>
-            <li><strong>Block Method ("Always Together"):</strong> Treat constrained items as 1 composite unit. Multiply by internal permutations.</li>
-            <li><strong>Gap Method ("Never Together"):</strong> Arrange unconstrained items ($k!$), then place constrained items in $(k+1)$ gaps.</li>
-            <li><strong>Circular Table:</strong> $(n - 1)!$. <strong>Necklace / Garland:</strong> $\frac{(n - 1)!}{2}$.</li>
-          </ul>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border);">
-          <strong style="color: var(--color-primary); display: block; margin-bottom: 0.5rem;">3. Geometric Combinatorics</strong>
-          <ul style="font-size: 0.85rem; padding-left: 1.2rem; margin: 0; line-height: 1.6;">
-            <li><strong>Handshakes among $n$ people:</strong> $^n C_2 = \frac{n(n - 1)}{2}$.</li>
-            <li><strong>Diagonals of $n$-sided polygon:</strong> $^n C_2 - n = \frac{n(n - 3)}{2}$.</li>
-            <li><strong>Triangles from $n$ points ($m$ collinear):</strong> $^n C_3 - ^m C_3$.</li>
-            <li><strong>At least 1 item chosen from $n$:</strong> $2^n - 1$.</li>
-          </ul>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Interactive Permutation & Combination Lab -->
-    <section class="card" style="margin-bottom: 2rem;">
-      <div class="card-header">
-        <div>
-          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">Interactive Combinatorics Laboratory</h2>
-          <p style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">
-            Explore slot-filling multiplication, compare $^n P_r$ vs $^n C_r$, or solve repeated-letter word anagrams with block and gap constraints.
-          </p>
-        </div>
-      </div>
-
-      <!-- Mode Toggle -->
-      <div class="toggle-group">
-        <button type="button" class="btn btn-primary btn-sm" id="tab-slots" onclick="switchLabMode('slots')">1. Slot-Filling Model ($^n P_r$ vs $^n C_r$)</button>
-        <button type="button" class="btn btn-secondary btn-sm" id="tab-words" onclick="switchLabMode('words')">2. Word Permutations (Repeats, Blocks &amp; Gaps)</button>
-        <button type="button" class="btn btn-secondary btn-sm" id="tab-geom" onclick="switchLabMode('geom')">3. Geometric Combinatorics (Diagonals &amp; Handshakes)</button>
-      </div>
-
-      <!-- Mode 1: Slot-Filling Multiplier -->
-      <div id="mode-slots">
-        <div class="pnc-grid">
-          <div>
-            <label for="input-n" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Total Items ($n$):</label>
-            <input type="number" id="input-n" class="form-control" min="1" max="10" value="5" oninput="updateSlotLab()">
+      <div class="control-group">
+        <label class="control-label">
+          <span>The ÷r! collapse</span>
+        </label>
+        <div class="score-bar" style="grid-template-columns: 1fr; margin:0;">
+          <div class="score-stat" style="padding:6px 10px;">
+            <span class="score-stat-label">P ÷ C</span>
+            <span class="score-stat-num" id="slot-ratio" style="color:var(--primary)">= 3!</span>
           </div>
-          <div>
-            <label for="input-r" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Positions / Selection ($r$):</label>
-            <input type="number" id="input-r" class="form-control" min="1" max="10" value="3" oninput="updateSlotLab()">
-          </div>
-          <div>
-            <label for="select-type" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Operation Type:</label>
-            <select id="select-type" class="form-control" onchange="updateSlotLab()">
-              <option value="perm">Permutation: Order Matters ($^n P_r$)</option>
-              <option value="comb">Combination: Order Irrelevant ($^n C_r$)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="viz-canvas-container">
-          <div id="slots-visual-display" style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap;"></div>
-          <div id="slots-calc-text" class="calc-breakdown-card"></div>
-        </div>
-      </div>
-
-      <!-- Mode 2: Word Permutations -->
-      <div id="mode-words" style="display: none;">
-        <div class="pnc-grid">
-          <div style="grid-column: span 2;">
-            <label for="word-input" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Enter Word (or pick preset):</label>
-            <div style="display: flex; gap: 0.5rem;">
-              <input type="text" id="word-input" class="form-control" value="ARRANGE" style="text-transform: uppercase;" oninput="updateWordLab()">
-              <select id="word-preset" class="form-control" style="width: auto;" onchange="applyWordPreset(this.value)">
-                <option value="ARRANGE">Preset: ARRANGE</option>
-                <option value="LEADER">Preset: LEADER</option>
-                <option value="SUCCESS">Preset: SUCCESS</option>
-                <option value="CORPORATION">Preset: CORPORATION</option>
-                <option value="STATISTICS">Preset: STATISTICS</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label for="constraint-select" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Condition / Rule:</label>
-            <select id="constraint-select" class="form-control" onchange="updateWordLab()">
-              <option value="all">All Permutations (Unrestricted)</option>
-              <option value="together">Vowels Always Together (Block Method)</option>
-              <option value="never">Vowels Never Together (Gap Method)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="viz-canvas-container">
-          <div id="word-chips-container" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; justify-content: center;"></div>
-          <div id="word-calc-text" class="calc-breakdown-card"></div>
-        </div>
-      </div>
-
-      <!-- Mode 3: Geometric Combinatorics -->
-      <div id="mode-geom" style="display: none;">
-        <div class="pnc-grid">
-          <div>
-            <label for="polygon-sides" style="font-weight: 600; font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Polygon Vertices / People ($n$):</label>
-            <input type="number" id="polygon-sides" class="form-control" min="3" max="15" value="8" oninput="updateGeomLab()">
-          </div>
-        </div>
-
-        <div class="viz-canvas-container">
-          <svg id="geom-svg" viewBox="0 0 400 320" width="100%" height="300" style="max-width: 400px;" aria-label="Polygon diagonal graph"></svg>
-          <div id="geom-calc-text" class="calc-breakdown-card"></div>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Predict-First Conceptual Challenge -->
-    <section class="card" style="margin-bottom: 2rem;">
-      <div class="card-header">
-        <div>
-          <span class="badge badge-tag" style="margin-bottom: 0.25rem;">Conceptual Checkpoint</span>
-          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">Predict-First: The Odd Positions Constraint</h2>
-          <p style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">
-            Apply slot constraints and independent sub-multiplications before inspecting the solution.
-          </p>
-        </div>
-      </div>
-
-      <div style="background: var(--color-surface-subtle); padding: 1.25rem; border-radius: 6px; border: 1px solid var(--color-border); margin-bottom: 1rem;">
-        <p style="font-weight: 600; margin-bottom: 0.75rem;">
-          In how many different ways can the letters of the word <strong>"DETAIL"</strong> be arranged such that all the vowels occupy only the odd-numbered positions?
-        </p>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: 1rem;">
-          <em>Hint:</em> Word length = 6. Odd positions are 1, 3, 5. Vowels are E, A, I (3 vowels). Consonants are D, T, L (3 consonants).
-        </p>
-
-        <div id="predict-options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
-          <button type="button" class="btn btn-secondary" onclick="checkPredict(18)">A) 18</button>
-          <button type="button" class="btn btn-secondary" onclick="checkPredict(36)">B) 36</button>
-          <button type="button" class="btn btn-secondary" onclick="checkPredict(72)">C) 72</button>
-          <button type="button" class="btn btn-secondary" onclick="checkPredict(120)">D) 120</button>
-        </div>
-
-        <div id="predict-feedback" style="margin-top: 1rem; display: none;"></div>
-      </div>
-    </section>
-
-    <!-- 12 Verified Practice Questions -->
-    <section class="card" style="margin-bottom: 2rem;">
-      <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <h2 style="font-size: 1.3rem; margin-bottom: 0.25rem;">12 Verified Exam Practice Questions</h2>
-          <p style="color: var(--color-text-muted); font-size: 0.875rem; margin: 0;">
-            Graded difficulty (Easy, Medium, Hard) matching SEBI Grade A, IBPS PO, and SSC CGL patterns.
-          </p>
-        </div>
-        <div style="text-align: right;">
-          <span id="score-display" class="badge badge-published" style="font-size: 0.9rem;">Score: 0 / 12</span>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="resetPractice()" style="margin-left: 0.5rem;">↺ Reset</button>
-        </div>
-      </div>
-
-      <div id="practice-container" style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.25rem;">
-        <!-- Injected via JavaScript -->
-      </div>
-    </section>
-
-    <!-- Module Completion Checklist -->
-    <section class="card" style="margin-bottom: 2rem;">
-      <h2 style="font-size: 1.2rem; margin-bottom: 0.75rem;">Mastery Checklist: Permutations &amp; Combinations</h2>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; font-size: 0.875rem;">
-        <div>
-          <input type="checkbox" id="chk1" checked disabled>
-          <label for="chk1">Multiplication principle ($m \times n$) vs Addition ($m + n$)</label>
-        </div>
-        <div>
-          <input type="checkbox" id="chk2" checked disabled>
-          <label for="chk2">Order-dependence: $^n P_r = n! / (n-r)!$</label>
-        </div>
-        <div>
-          <input type="checkbox" id="chk3" checked disabled>
-          <label for="chk3">Group-selection: $^n C_r = n! / (r!(n-r)!)$</label>
-        </div>
-        <div>
-          <input type="checkbox" id="chk4" checked disabled>
-          <label for="chk4">Block method vs Gap method disambiguation</label>
-        </div>
-        <div>
-          <input type="checkbox" id="chk5" checked disabled>
-          <label for="chk5">Geometric formulas: diagonals $\frac{n(n-3)}{2}$, handshakes $\frac{n(n-1)}{2}$</label>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Site Footer -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <strong>Aptitude &amp; Reasoning Lab</strong> — Practice-First Competitive Exam Learning
-          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
-            Zero runtime dependencies • Pure HTML5, CSS &amp; Vanilla ES6 JS
-          </div>
-        </div>
-        <div style="font-size: 0.8125rem; display: flex; gap: 1rem;">
-          <a href="../PROJECT.md" style="color: var(--color-primary); text-decoration: none;">Specification</a>
-          <a href="../docs/curriculum.md" style="color: var(--color-primary); text-decoration: none;">Curriculum</a>
-          <a href="../docs/authoring-guide.md" style="color: var(--color-primary); text-decoration: none;">Authoring Guide</a>
         </div>
       </div>
     </div>
-  </footer>
 
-  <script src="../assets/common.js"></script>
-  <script>
-    /* ==========================================================================
-       MODEL: Pure Deterministic Permutations & Combinations Engine
-       ========================================================================== */
-    const Model = {
-      factorial(n) {
-        if (n < 0) return 0;
-        if (n === 0 || n === 1) return 1;
-        let res = 1;
-        for (let i = 2; i <= n; i++) res *= i;
-        return res;
-      },
+    <div class="vis-container">
+      <svg id="slot-svg" viewBox="0 0 760 380" width="100%" role="img" aria-label="Permutation vs combination slot comparison">
+        <title>Same slots, two interpretations</title>
+      </svg>
+    </div>
 
-      nPr(n, r) {
-        if (n < 0 || r < 0 || r > n) return 0;
-        return this.factorial(n) / this.factorial(n - r);
-      },
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Permutations (order matters)</span><span class="score-stat-num" id="slot-perm">nPr = 60</span></div>
+      <div class="score-stat"><span class="score-stat-label">Combinations (order doesn't)</span><span class="score-stat-num" id="slot-comb">nCr = 10</span></div>
+      <div class="score-stat"><span class="score-stat-label">Orderings collapsed per group</span><span class="score-stat-num" id="slot-rfact">r! = 6</span></div>
+      <div class="score-stat"><span class="score-stat-label">Check: P ÷ C</span><span class="score-stat-num" id="slot-ratio2">= 6</span></div>
+    </div>
+  </section>
 
-      nCr(n, r) {
-        if (n < 0 || r < 0 || r > n) return 0;
-        return this.factorial(n) / (this.factorial(r) * this.factorial(n - r));
-      },
+  <!-- ===== SECTION 2 — WORD LAB ===== -->
+  <section class="card" aria-labelledby="s2">
+    <div class="card-header">
+      <h2 id="s2" class="section-title">Words: tiles that move to satisfy constraints</h2>
+      <p class="section-subtitle">Flip between All / Vowels Together / Vowels Never Together. Watch the vowel tiles physically cluster, scatter, and lock.</p>
+    </div>
 
-      solveWordPermutations(word) {
-        const clean = word.toUpperCase().replace(/[^A-Z]/g, '');
-        if (!clean) return { valid: false, error: "Empty word" };
-        const freq = {};
-        for (const ch of clean) freq[ch] = (freq[ch] || 0) + 1;
+    <div class="control-grid" style="grid-template-columns:1fr;">
+      <div class="control-group">
+        <label for="word-input" class="control-label">Word</label>
+        <div style="display:flex; gap:.5rem;">
+          <input type="text" id="word-input" value="ARRANGE" style="text-transform:uppercase; flex:1;">
+          <select id="word-preset">
+            <option value="ARRANGE">ARRANGE</option>
+            <option value="LEADER">LEADER</option>
+            <option value="SUCCESS">SUCCESS</option>
+            <option value="CORPORATION">CORPORATION</option>
+            <option value="STATISTICS">STATISTICS</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
-        let denom = 1;
-        const duplicateTerms = [];
-        for (const ch in freq) {
-          if (freq[ch] > 1) {
-            denom *= this.factorial(freq[ch]);
-            duplicateTerms.push(`${ch}: ${freq[ch]}! (${this.factorial(freq[ch])})`);
-          }
-        }
-        const total = this.factorial(clean.length) / denom;
-        return {
-          valid: true,
-          word: clean,
-          length: clean.length,
-          freq,
-          denom,
-          duplicateTerms,
-          total
-        };
-      },
+    <div class="mode-toggle-group" style="margin-bottom:14px; width:fit-content;">
+      <button type="button" class="mode-btn active" data-word-mode="all" role="tab" aria-selected="true">All</button>
+      <button type="button" class="mode-btn" data-word-mode="together" role="tab" aria-selected="false">Vowels together</button>
+      <button type="button" class="mode-btn" data-word-mode="never" role="tab" aria-selected="false">Vowels never together</button>
+    </div>
 
-      solveVowelsTogether(word) {
-        const clean = word.toUpperCase().replace(/[^A-Z]/g, '');
-        const isVowel = ch => 'AEIOU'.includes(ch);
-        const vowels = [];
-        const consonants = [];
-        for (const ch of clean) {
-          if (isVowel(ch)) vowels.push(ch);
-          else consonants.push(ch);
-        }
+    <div class="vis-container" style="min-height:180px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+      <div id="word-tiles" class="word-tiles"></div>
+      <div id="word-note" class="callout callout-info" style="margin-top:14px; width:100%;"></div>
+    </div>
+  </section>
 
-        if (vowels.length === 0) return this.solveWordPermutations(clean);
+  <!-- ===== SECTION 3 — POLYGON LAB ===== -->
+  <section class="card" aria-labelledby="s3">
+    <div class="card-header">
+      <h2 id="s3" class="section-title">Polygon diagonals — count them, don't memorise</h2>
+      <p class="section-subtitle">Each diagonal sweeps in one at a time. You see exactly which n(n−3)/2 lines are being added.</p>
+    </div>
 
-        // Vowel frequencies
-        const vFreq = {};
-        for (const ch of vowels) vFreq[ch] = (vFreq[ch] || 0) + 1;
-        let vDenom = 1;
-        for (const ch in vFreq) {
-          if (vFreq[ch] > 1) vDenom *= this.factorial(vFreq[ch]);
-        }
-        const internalVowelWays = this.factorial(vowels.length) / vDenom;
+    <div class="control-grid" style="grid-template-columns:1fr; max-width:400px;">
+      <div class="control-group">
+        <label for="poly-n" class="control-label">
+          <span>Vertices n</span>
+          <span id="poly-n-badge" class="badge badge-tag">8</span>
+        </label>
+        <input type="range" id="poly-n" min="3" max="15" value="8">
+      </div>
+    </div>
 
-        // Consonant frequencies
-        const cFreq = {};
-        for (const ch of consonants) cFreq[ch] = (cFreq[ch] || 0) + 1;
-        let cDenom = 1;
-        for (const ch in cFreq) {
-          if (cFreq[ch] > 1) cDenom *= this.factorial(cFreq[ch]);
-        }
+    <div class="vis-container">
+      <svg id="poly-svg" viewBox="0 0 760 320" width="100%" role="img" aria-label="Polygon with diagonals drawn progressively">
+        <title>Polygon with diagonals drawn one at a time</title>
+      </svg>
+    </div>
 
-        // Composite block + consonants
-        const compositeUnits = 1 + consonants.length;
-        const outerWays = this.factorial(compositeUnits) / cDenom;
-        const total = outerWays * internalVowelWays;
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Total pairs (nC2)</span><span class="score-stat-num" id="poly-pairs">28</span></div>
+      <div class="score-stat"><span class="score-stat-label">Perimeter sides</span><span class="score-stat-num" id="poly-sides">8</span></div>
+      <div class="score-stat"><span class="score-stat-label">Diagonals drawn</span><span class="score-stat-num" id="poly-diag" style="color:var(--primary)">0 / 20</span></div>
+      <div class="score-stat"><span class="score-stat-label">Formula n(n−3)/2</span><span class="score-stat-num" id="poly-formula">= 20</span></div>
+    </div>
+  </section>
 
-        return {
-          valid: true,
-          word: clean,
-          vowels,
-          consonants,
-          compositeUnits,
-          internalVowelWays,
-          outerWays,
-          total
-        };
-      },
+  <!-- ===== SECTION 4 — REPEATED LETTERS COLLAPSE ===== -->
+  <section class="card" aria-labelledby="s4">
+    <div class="card-header">
+      <h2 id="s4" class="section-title">Repeated letters — watch n! collapse</h2>
+      <p class="section-subtitle">For a word with duplicate letters, n! overcounts. The ÷(p₁!·p₂!·…) factor deduplicates. Drag the slider to see the collapse.</p>
+    </div>
 
-      solveVowelsNeverTogether(word) {
-        const clean = word.toUpperCase().replace(/[^A-Z]/g, '');
-        const isVowel = ch => 'AEIOU'.includes(ch);
-        const vowels = [];
-        const consonants = [];
-        for (const ch of clean) {
-          if (isVowel(ch)) vowels.push(ch);
-          else consonants.push(ch);
-        }
+    <div class="control-grid" style="grid-template-columns:1fr; max-width:520px;">
+      <div class="control-group">
+        <label for="dup-word" class="control-label">
+          <span>Word</span>
+          <span id="dup-badge" class="badge badge-tag">SUCCESS</span>
+        </label>
+        <select id="dup-word">
+          <option>SUCCESS</option>
+          <option>ARRANGE</option>
+          <option>BANANA</option>
+          <option>MISSISSIPPI</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="dup-slider" class="control-label">
+          <span>Show collapse progress</span>
+          <span id="dup-progress-badge" class="badge badge-tag">0%</span>
+        </label>
+        <input type="range" id="dup-slider" min="0" max="100" value="0">
+      </div>
+    </div>
 
-        const cFreq = {};
-        for (const ch of consonants) cFreq[ch] = (cFreq[ch] || 0) + 1;
-        let cDenom = 1;
-        for (const ch in cFreq) {
-          if (cFreq[ch] > 1) cDenom *= this.factorial(cFreq[ch]);
-        }
-        const consonantWays = this.factorial(consonants.length) / cDenom;
+    <div class="vis-container">
+      <svg id="dup-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="Repeated letters collapse">
+        <title>Collapse from n! to distinct arrangements</title>
+      </svg>
+    </div>
 
-        const gaps = consonants.length + 1;
-        if (vowels.length > gaps) {
-          return { valid: true, total: 0, reason: "More vowels than available gaps" };
-        }
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">n!</span><span class="score-stat-num" id="dup-nfact">5040</span></div>
+      <div class="score-stat"><span class="score-stat-label">Denominator</span><span class="score-stat-num" id="dup-denom">2!·2! = 4</span></div>
+      <div class="score-stat"><span class="score-stat-label">Distinct (at 100%)</span><span class="score-stat-num" id="dup-final" style="color:var(--success)">1260</span></div>
+      <div class="score-stat"><span class="score-stat-label">Currently shown</span><span class="score-stat-num" id="dup-current">5040</span></div>
+    </div>
+  </section>
 
-        const vFreq = {};
-        for (const ch of vowels) vFreq[ch] = (vFreq[ch] || 0) + 1;
-        let vDenom = 1;
-        for (const ch in vFreq) {
-          if (vFreq[ch] > 1) vDenom *= this.factorial(vFreq[ch]);
-        }
+  <!-- ===== SECTION 5 — PREDICT ===== -->
+  <section class="card" aria-labelledby="s5">
+    <div class="card-header">
+      <h2 id="s5" class="section-title">Predict first — vowels in odd positions</h2>
+      <p class="section-subtitle">Two independent sub-tasks multiplied. Which answer?</p>
+    </div>
 
-        const gapPickWays = this.nCr(gaps, vowels.length);
-        const vowelArrangeWays = this.factorial(vowels.length) / vDenom;
-        const total = consonantWays * gapPickWays * vowelArrangeWays;
+    <div class="predict-box">
+      <div class="predict-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>DETAIL — vowels in odd positions?</span>
+      </div>
+      <p style="font-size:1.05rem; margin-bottom:1rem;">
+        <strong>DETAIL</strong> (6 letters). Vowels E, A, I must occupy odd positions (1, 3, 5). Consonants D, T, L occupy even positions (2, 4, 6). How many valid arrangements?
+      </p>
+      <div class="options-grid" id="predict-options" role="radiogroup" aria-label="Prediction options"></div>
+      <div id="predict-feedback" class="callout hidden" role="alert"></div>
+    </div>
 
-        return {
-          valid: true,
-          word: clean,
-          consonants,
-          vowels,
-          consonantWays,
-          gaps,
-          gapPickWays,
-          vowelArrangeWays,
-          total
-        };
-      },
+    <div id="worked-solution" class="hidden" style="margin-top:20px;">
+      <h3 style="margin-bottom:10px;">Step-by-step</h3>
+      <div class="steps-container" id="solution-steps"></div>
+    </div>
+  </section>
 
-      solvePolygonDiagonals(n) {
-        if (n < 3) return 0;
-        return (n * (n - 3)) / 2;
-      },
+  <!-- ===== SECTION 6 — PRACTICE ===== -->
+  <section class="card" aria-labelledby="s-circ">
+    <div class="card-header">
+      <h2 id="s-circ" class="section-title">Understand: circular — why we fix one person</h2>
+      <p class="section-subtitle">A round table has no “first seat”. Rotating everyone looks the same. Fix one person to kill rotations — then arrange the rest. (n−1)! is that idea, not a trick to memorise.</p>
+    </div>
+    <div class="control-group" style="max-width:420px;margin-bottom:12px;">
+      <label for="circ-n" class="control-label"><span>People n</span><span id="circ-n-b" class="badge badge-tag">5</span></label>
+      <input type="range" id="circ-n" min="3" max="8" value="5">
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+      <button type="button" id="circ-fix" class="btn btn-primary btn-sm">Fix one seat ▶</button>
+      <button type="button" id="circ-reset" class="btn btn-secondary btn-sm">Show all rotations</button>
+    </div>
+    <div class="vis-container">
+      <svg id="circ-svg" viewBox="0 0 760 280" width="100%" role="img" aria-label="Circular permutation lab"></svg>
+    </div>
+    <p id="circ-cap" style="margin-top:10px;font-size:.92rem;color:var(--text-dim);"></p>
+  </section>
 
-      solveHandshakes(n) {
-        if (n < 2) return 0;
-        return (n * (n - 1)) / 2;
-      }
-    };
+  <section class="card" aria-labelledby="s6">
+    <div class="card-header">
+      <h2 id="s6" class="section-title">Practice</h2>
+      <p class="section-subtitle">Shuffled each session. Traps are genuine.</p>
+    </div>
 
-    /* ==========================================================================
-       PRACTICE QUESTIONS: 12 Hand-Verified Combinatorics Questions
-       ========================================================================== */
-    const PRACTICE_QUESTIONS = [
-      {
-        id: 'pnc_q1',
-        difficulty: 'Easy',
-        topic: 'Fundamental Counting Principle',
-        stem: 'A dining hall offers 4 appetizers, 5 main courses, and 3 desserts. In how many different ways can a student choose a 3-course meal consisting of exactly one appetizer, one main course, and one dessert?',
-        options: [
-          '12 ways',
-          '45 ways',
-          '60 ways',
-          '120 ways'
-        ],
-        correctIndex: 2, // 60 ways
-        solution: 'By the Fundamental Multiplication Principle, if independent events occur in sequence, the total number of combined ways is the product of their individual choices: 4 × 5 × 3 = 60.',
-        trap: 'Adding the options (4 + 5 + 3 = 12) instead of multiplying them.'
-      },
-      {
-        id: 'pnc_q2',
-        difficulty: 'Easy',
-        topic: 'Word Permutations with Duplicates',
-        stem: 'In how many distinct ways can all the letters of the word <strong>"ARRANGE"</strong> be arranged?',
-        options: [
-          '5040 ways',
-          '2520 ways',
-          '1260 ways',
-          '630 ways'
-        ],
-        correctIndex: 2, // 1260 ways
-        solution: 'Total letters = 7. Frequencies: A appears 2 times, R appears 2 times, N appears 1, G appears 1, E appears 1. Total distinct permutations = 7! / (2! × 2!) = 5040 / 4 = 1260.',
-        trap: 'Dividing by only one 2! instead of both duplicates, giving 2520.'
-      },
-      {
-        id: 'pnc_q3',
-        difficulty: 'Easy',
-        topic: 'Polygon Diagonals',
-        stem: 'How many straight diagonal lines can be drawn inside a regular <strong>octagon</strong> (8-sided polygon)?',
-        options: [
-          '16 diagonals',
-          '20 diagonals',
-          '24 diagonals',
-          '28 diagonals'
-        ],
-        correctIndex: 1, // 20 diagonals
-        solution: 'A polygon of n sides has n(n - 3) / 2 diagonals. For an octagon (n = 8): 8 × (8 - 3) / 2 = 8 × 5 / 2 = 20 diagonals. Alternatively: 8C2 - 8 = 28 - 8 = 20.',
-        trap: 'Selecting 28 (8C2) without subtracting the 8 perimeter sides.'
-      },
-      {
-        id: 'pnc_q4',
-        difficulty: 'Medium',
-        topic: 'Block Method (Always Together)',
-        stem: 'In how many different ways can the letters of the word <strong>"CORPORATION"</strong> be arranged so that all the vowels always come together?',
-        options: [
-          '25,200 ways',
-          '50,400 ways',
-          '72,000 ways',
-          '100,800 ways'
-        ],
-        correctIndex: 1, // 50,400 ways
-        solution: 'Total letters = 11. Vowels = O, O, A, I, O (5 vowels: O occurs 3 times). Consonants = C, R, P, R, T, N (6 consonants: R occurs 2 times).<br>1. Group the 5 vowels into 1 super-item: Units to arrange = 1 block + 6 consonants = 7 units. Ways = 7! / 2! = 5040 / 2 = 2520.<br>2. Internal arrangements of the vowel block: 5! / 3! = 120 / 6 = 20.<br>Total ways = 2520 × 20 = 50,400.',
-        trap: 'Forgetting to account for the duplicate R (2!) in the outer arrangement or duplicate O (3!) in the vowel block.'
-      },
-      {
-        id: 'pnc_q5',
-        difficulty: 'Medium',
-        topic: 'Gap Method (Never Together)',
-        stem: 'In how many ways can 5 boys and 4 girls be seated in a straight row such that <strong>no two girls sit together</strong>?',
-        options: [
-          '2,880 ways',
-          '14,400 ways',
-          '43,200 ways',
-          '362,880 ways'
-        ],
-        correctIndex: 2, // 43,200 ways
-        solution: '1. First arrange the 5 boys in 5! = 120 ways.<br>2. This creates (5 + 1) = 6 gaps (including ends): _ B1 _ B2 _ B3 _ B4 _ B5 _.<br>3. To ensure no two girls sit together, the 4 girls must occupy 4 distinct gaps out of the 6. Ways = 6P4 = 6 × 5 × 4 × 3 = 360.<br>Total ways = 120 × 360 = 43,200.',
-        trap: 'Attempting to subtract "all girls together" from the total 9!, which fails because pairs of adjacent girls would still be present.'
-      },
-      {
-        id: 'pnc_q6',
-        difficulty: 'Medium',
-        topic: 'Committee Selection ("At Least One")',
-        stem: 'A committee of 5 persons is to be formed from a group of 6 men and 4 women. In how many ways can this committee be formed such that it contains <strong>at least one woman</strong>?',
-        options: [
-          '186 ways',
-          '210 ways',
-          '246 ways',
-          '252 ways'
-        ],
-        correctIndex: 2, // 246 ways
-        solution: 'Total people = 6 + 4 = 10. Total unrestricted committees of 5 = 10C5 = 252.<br>Committees with NO women (all 5 men chosen from 6 men) = 6C5 = 6.<br>Committees with at least one woman = Total - (No women) = 252 - 6 = 246.',
-        trap: 'Attempting 4C1 × 9C4 = 4 × 126 = 504, which massively overcounts duplicate committees.'
-      },
-      {
-        id: 'pnc_q7',
-        difficulty: 'Medium',
-        topic: 'Digit Formation with Zero',
-        stem: 'How many 4-digit numbers can be formed using the digits {0, 1, 2, 4, 6, 8} without repetition?',
-        options: [
-          '240 numbers',
-          '300 numbers',
-          '360 numbers',
-          '480 numbers'
-        ],
-        correctIndex: 1, // 300 numbers
-        solution: 'Available digits: {0, 1, 2, 4, 6, 8} (6 digits).<br>1. Thousands place: Cannot be 0 (otherwise it becomes a 3-digit number). Choices = 5 (1, 2, 4, 6, 8).<br>2. Hundreds place: Any of the remaining 5 digits (0 is now eligible) = 5 choices.<br>3. Tens place: Remaining 4 digits = 4 choices.<br>4. Units place: Remaining 3 digits = 3 choices.<br>Total 4-digit numbers = 5 × 5 × 4 × 3 = 300.',
-        trap: 'Using 6P4 = 360, which includes invalid numbers starting with 0.'
-      },
-      {
-        id: 'pnc_q8',
-        difficulty: 'Medium',
-        topic: 'Circular Necklace / Garland',
-        stem: 'In how many different ways can 7 distinct coloured beads be strung together to form a necklace?',
-        options: [
-          '120 ways',
-          '360 ways',
-          '720 ways',
-          '5,040 ways'
-        ],
-        correctIndex: 1, // 360 ways
-        solution: 'For beads on a necklace or garland, flipping the ring upside down makes clockwise and anti-clockwise rotations indistinguishable. Thus, the formula is (n - 1)! / 2. For n = 7: (7 - 1)! / 2 = 6! / 2 = 720 / 2 = 360 ways.',
-        trap: 'Applying the standard circular table formula (n - 1)! = 720 without dividing by 2 for mirror symmetry.'
-      },
-      {
-        id: 'pnc_q9',
-        difficulty: 'Hard',
-        topic: 'Positional Sub-Multiplication',
-        stem: 'In how many ways can the letters of the word <strong>"DETAIL"</strong> be arranged such that all the vowels occupy only the odd positions?',
-        options: [
-          '18 ways',
-          '36 ways',
-          '72 ways',
-          '120 ways'
-        ],
-        correctIndex: 1, // 36 ways
-        solution: 'Word length = 6. Vowels = E, A, I (3 vowels). Consonants = D, T, L (3 consonants).<br>Odd positions: 1, 3, 5 (exactly 3 spots). The 3 vowels can be arranged in these 3 spots in 3! = 6 ways.<br>Remaining spots: 2, 4, 6 (even positions, 3 spots). The 3 consonants can be arranged in these 3 spots in 3! = 6 ways.<br>Total valid arrangements = 6 × 6 = 36.',
-        trap: 'Permuting only the vowels (6) or adding (6 + 6 = 12) instead of multiplying independent sub-tasks.'
-      },
-      {
-        id: 'pnc_q10',
-        difficulty: 'Hard',
-        topic: 'Handshakes with Exclusions',
-        stem: 'At a formal board meeting of 15 directors, every director shakes hands with every other director exactly once, except that Director X and Director Y refuse to shake hands with each other. How many handshakes occur in total?',
-        options: [
-          '98 handshakes',
-          '104 handshakes',
-          '105 handshakes',
-          '210 handshakes'
-        ],
-        correctIndex: 1, // 104 handshakes
-        solution: 'Total unrestricted handshakes among 15 people = 15C2 = (15 × 14) / 2 = 105. Since Director X and Director Y do not shake hands with each other, exactly 1 handshake is omitted: 105 - 1 = 104.',
-        trap: 'Subtracting 2 handshakes thinking of X and Y as separate events, or using 15P2.'
-      },
-      {
-        id: 'pnc_q11',
-        difficulty: 'Hard',
-        topic: 'Triangles & Collinear Points',
-        stem: 'There are 12 points marked on a plane, out of which exactly 5 points are collinear (lie on the same straight line). How many distinct triangles can be formed with these points as vertices?',
-        options: [
-          '185 triangles',
-          '200 triangles',
-          '210 triangles',
-          '220 triangles'
-        ],
-        correctIndex: 2, // 210 triangles
-        solution: 'Any 3 non-collinear points form a triangle. Total selections of 3 points from 12 = 12C3 = (12 × 11 × 10) / (3 × 2 × 1) = 220.<br>Triplets chosen from the 5 collinear points cannot form triangles (they lie on a straight line): 5C3 = (5 × 4) / 2 = 10.<br>Valid triangles = 220 - 10 = 210.',
-        trap: 'Selecting 220 by failing to subtract the degenerate collinear triplets.'
-      },
-      {
-        id: 'pnc_q12',
-        difficulty: 'Hard',
-        topic: 'Multi-Block Subject Arrangements',
-        stem: 'In how many ways can 4 mathematics books, 3 physics books, and 2 chemistry books be arranged on a shelf such that all books of the same subject are kept together?',
-        options: [
-          '576 ways',
-          '864 ways',
-          '1,728 ways',
-          '3,456 ways'
-        ],
-        correctIndex: 2, // 1,728 ways
-        solution: '1. Group books by subject: 3 blocks (Math block, Physics block, Chemistry block). The 3 blocks can be arranged on the shelf in 3! = 6 ways.<br>2. Internal arrangements within each block:<br>- 4 Math books = 4! = 24 ways.<br>- 3 Physics books = 3! = 6 ways.<br>- 2 Chemistry books = 2! = 2 ways.<br>Total arrangements = 3! × 4! × 3! × 2! = 6 × 24 × 6 × 2 = 1,728.',
-        trap: 'Multiplying only the internal arrangements (4! × 3! × 2! = 288) without permuting the 3 subject blocks (3!).'
-      }
-    ];
+    <div class="practice-header">
+      <div class="mode-toggle-group" role="tablist" aria-label="Practice mode">
+        <button type="button" class="mode-btn active" data-mode="hints" role="tab" aria-selected="true">Guided</button>
+        <button type="button" class="mode-btn" data-mode="independent" role="tab" aria-selected="false">Independent</button>
+        <button type="button" class="mode-btn" data-mode="timed" role="tab" aria-selected="false">Timed (90s)</button>
+      </div>
+      <div id="timer-container" class="timer-badge hidden" aria-live="off">
+        <span>⏱️</span><span id="timer-display">90</span><span>s</span>
+      </div>
+    </div>
 
-    /* ==========================================================================
-       VIEW & INTERACTIVE LAB CONTROLLER
-       ========================================================================== */
-    let activeLabMode = 'slots';
-    let userAnswers = {};
+    <div class="score-bar" aria-label="Practice statistics">
+      <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Independent</span><span class="score-stat-num" id="stat-independent">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Accuracy</span><span class="score-stat-num" id="stat-accuracy">0%</span></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
+    </div>
 
-    function init() {
-      updateSlotLab();
-      updateWordLab();
-      updateGeomLab();
-      renderPracticeQuestions();
-      updateScoreDisplay();
-    }
+    <div id="practice-question-card" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span class="badge" id="practice-q-difficulty">Easy</span>
+      </div>
+      <p class="question-stem" id="practice-q-stem">Loading…</p>
+      <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
+      <div id="practice-feedback" class="callout hidden" role="alert"></div>
+      <div id="practice-error-categorizer" class="error-categorizer hidden">
+        <label for="select-error-category">What tripped you up? (optional)</label>
+        <select id="select-error-category">
+          <option value="order">Order mattered but I treated it unordered</option>
+          <option value="dup">Forgot to divide by duplicate factorials</option>
+          <option value="block">Block internal ordering missed</option>
+          <option value="gap">Gap count wrong (should be k+1)</option>
+          <option value="zero">Forgot zero restriction (e.g. digit formation)</option>
+          <option value="arithmetic">Arithmetic slip</option>
+          <option value="time_guess">Time-pressure guess</option>
+        </select>
+      </div>
+      <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:12px;">
+        <h4 style="margin-bottom:6px; font-size:.95rem;">Solution</h4>
+        <p id="practice-solution-text" style="font-size:.9rem; line-height:1.55; margin:0;"></p>
+      </div>
+      <div style="margin-top:18px; display:flex; gap:.75rem; justify-content:flex-end;">
+        <button type="button" id="btn-next-question" class="btn btn-primary" disabled>Next question →</button>
+      </div>
+    </div>
+  </section>
 
-    function switchLabMode(mode) {
-      activeLabMode = mode;
-      document.getElementById('mode-slots').style.display = mode === 'slots' ? 'block' : 'none';
-      document.getElementById('mode-words').style.display = mode === 'words' ? 'block' : 'none';
-      document.getElementById('mode-geom').style.display = mode === 'geom' ? 'block' : 'none';
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">nPr vs nCr</p>
+        <p class="lab-shortcuts-body">Order matters → P. Order doesn't → C = P/r!.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Repeated letters</p>
+        <p class="lab-shortcuts-body">Word arrangements: n! / (f₁! f₂! …). Forgetting repeats overcounts.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Together / not together</p>
+        <p class="lab-shortcuts-body">Block: treat as 1 unit. Gap method for "not together" / "separated".</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">Diagonals</p>
+        <p class="lab-shortcuts-body">n-gon: n(n−3)/2. Handshakes: nC2.</p>
+      </li>
+    </ul>
+  </section>
+</main>
 
-      ['slots', 'words', 'geom'].forEach(m => {
-        const btn = document.getElementById(`tab-${m}`);
-        if (m === mode) {
-          btn.className = 'btn btn-primary btn-sm';
-        } else {
-          btn.className = 'btn btn-secondary btn-sm';
-        }
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
+      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
+    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   1. PURE MODEL
+   ===================================================================== */
+const Model = (() => {
+  function factorial(n) {
+    if (n < 0) return 0;
+    if (n === 0 || n === 1) return 1;
+    let r = 1;
+    for (let i = 2; i <= n; i++) r *= i;
+    return r;
+  }
+  function nPr(n, r) {
+    if (n < 0 || r < 0 || r > n) return 0;
+    return factorial(n) / factorial(n - r);
+  }
+  function nCr(n, r) {
+    if (n < 0 || r < 0 || r > n) return 0;
+    return factorial(n) / (factorial(r) * factorial(n - r));
+  }
+  function wordPerms(word) {
+    const w = word.toUpperCase().replace(/[^A-Z]/g, '');
+    if (!w) return { valid: false };
+    const freq = {};
+    for (const ch of w) freq[ch] = (freq[ch] || 0) + 1;
+    let denom = 1;
+    for (const ch in freq) if (freq[ch] > 1) denom *= factorial(freq[ch]);
+    return { valid: true, word: w, length: w.length, freq, denom, total: factorial(w.length) / denom };
+  }
+  function vowelsTogether(word) {
+    const w = word.toUpperCase().replace(/[^A-Z]/g, '');
+    const vowels = [...w].filter(c => "AEIOU".includes(c));
+    const cons = [...w].filter(c => !"AEIOU".includes(c));
+    if (vowels.length === 0) return wordPerms(w);
+    const vFreq = {}; vowels.forEach(c => vFreq[c] = (vFreq[c]||0)+1);
+    let vDenom = 1; for (const c in vFreq) if (vFreq[c]>1) vDenom *= factorial(vFreq[c]);
+    const internalVowel = factorial(vowels.length) / vDenom;
+
+    const cFreq = {}; cons.forEach(c => cFreq[c] = (cFreq[c]||0)+1);
+    let cDenom = 1; for (const c in cFreq) if (cFreq[c]>1) cDenom *= factorial(cFreq[c]);
+    const units = 1 + cons.length;
+    const outer = factorial(units) / cDenom;
+    return { valid: true, vowels, cons, internalVowel, outer, total: outer * internalVowel };
+  }
+  function vowelsNeverTogether(word) {
+    const w = word.toUpperCase().replace(/[^A-Z]/g, '');
+    const vowels = [...w].filter(c => "AEIOU".includes(c));
+    const cons = [...w].filter(c => !"AEIOU".includes(c));
+    if (vowels.length > cons.length + 1) return { valid: true, total: 0, reason: "Too many vowels" };
+
+    const cFreq = {}; cons.forEach(c => cFreq[c] = (cFreq[c]||0)+1);
+    let cDenom = 1; for (const c in cFreq) if (cFreq[c]>1) cDenom *= factorial(cFreq[c]);
+    const consWays = factorial(cons.length) / cDenom;
+
+    const gaps = cons.length + 1;
+    const vFreq = {}; vowels.forEach(c => vFreq[c] = (vFreq[c]||0)+1);
+    let vDenom = 1; for (const c in vFreq) if (vFreq[c]>1) vDenom *= factorial(vFreq[c]);
+
+    const pick = nCr(gaps, vowels.length);
+    const arrange = factorial(vowels.length) / vDenom;
+    return { valid: true, cons, vowels, consWays, gaps, pick, arrange, total: consWays * pick * arrange };
+  }
+  function polygonDiagonals(n) {
+    return n < 3 ? 0 : (n * (n - 3)) / 2;
+  }
+  function handshakes(n) {
+    return n < 2 ? 0 : (n * (n - 1)) / 2;
+  }
+  return { factorial, nPr, nCr, wordPerms, vowelsTogether, vowelsNeverTogether, polygonDiagonals, handshakes };
+})();
+window.Model = Model;
+
+/* =====================================================================
+   2. SELF-TESTS
+   ===================================================================== */
+function runSelfTests() {
+  const results = { passed: 0, failed: 0, failures: [] };
+  const assert = (c, n, d = "") => { if (c) results.passed++; else { results.failed++; results.failures.push({ n, d }); } };
+  try {
+    assert(Model.factorial(5) === 120, "5! = 120");
+    assert(Model.nPr(5, 2) === 20, "5P2 = 20");
+    assert(Model.nCr(5, 2) === 10, "5C2 = 10");
+    assert(Model.nCr(10, 3) === 120, "10C3 = 120");
+    assert(Model.wordPerms("ARRANGE").total === 1260, "ARRANGE = 1260", `${Model.wordPerms("ARRANGE").total}`);
+    assert(Model.vowelsTogether("LEADER").total === 72, "LEADER together = 72", `${Model.vowelsTogether("LEADER").total}`);
+    assert(Model.vowelsNeverTogether("LEADER").total === 72, "LEADER never = 72", `${Model.vowelsNeverTogether("LEADER").total}`);
+    assert(Model.polygonDiagonals(8) === 20, "Octagon diag = 20");
+    assert(Model.handshakes(15) === 105, "15 handshakes = 105");
+    assert(Model.nCr(5, 2) + Model.nCr(5, 1) === Model.nCr(6, 2), "Pascal identity");
+  } catch (err) {
+    results.failed++;
+    results.failures.push({ n: "Uncaught", d: err.message });
+  }
+  return results;
+}
+window.runSelfTests = runSelfTests;
+
+/* =====================================================================
+   3. PRACTICE BANK
+   ===================================================================== */
+const PRACTICE_QUESTIONS = [
+  { id: "p1", difficulty: "Easy",
+    stem: "Dining hall: 4 appetizers, 5 mains, 3 desserts. Ways to pick one of each?",
+    options: ["12", "45", "60", "120"], correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "12 is 4+5+3 — added instead of multiplying. Independent events multiply.",
+    solution: "4 × 5 × 3 = 60." },
+  { id: "p2", difficulty: "Easy",
+    stem: "Distinct arrangements of ARRANGE?",
+    options: ["5040", "2520", "1260", "630"], correctIndex: 2,
+    trapOptionIndex: 1, trapExplanation: "2520 divides by only one 2!. ARRANGE has two R's and two A's — divide by 2!·2!.",
+    solution: "7!/(2!·2!) = 5040/4 = 1260." },
+  { id: "p3", difficulty: "Easy",
+    stem: "Diagonals in a regular octagon?",
+    options: ["16", "20", "24", "28"], correctIndex: 1,
+    trapOptionIndex: 3, trapExplanation: "28 = 8C2. Must subtract the 8 perimeter sides: 28 − 8 = 20.",
+    solution: "8(8−3)/2 = 20." },
+  { id: "p4", difficulty: "Medium",
+    stem: "CORPORATION — vowels always together?",
+    options: ["25200", "50400", "72000", "100800"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "25200 forgets the internal vowel block arrangements (5!/3! = 20).",
+    solution: "7!/2! outer units × 5!/3! internal vowel = 2520 × 20 = 50400." },
+  { id: "p5", difficulty: "Medium",
+    stem: "5 boys + 4 girls in a row, no two girls adjacent?",
+    options: ["2880", "14400", "43200", "362880"], correctIndex: 2,
+    trapOptionIndex: 3, trapExplanation: "9! is unrestricted. Must use gap method: arrange boys, then place girls in gaps.",
+    solution: "5! × 6P4 = 120 × 360 = 43200." },
+  { id: "p6", difficulty: "Medium",
+    stem: "5-person committee from 6 men, 4 women — at least one woman?",
+    options: ["186", "210", "246", "252"], correctIndex: 2,
+    trapOptionIndex: 3, trapExplanation: "252 is unrestricted (10C5). Must subtract all-men committees (6C5 = 6).",
+    solution: "10C5 − 6C5 = 252 − 6 = 246." },
+  { id: "p7", difficulty: "Medium",
+    stem: "4-digit numbers from {0,1,2,4,6,8} without repetition?",
+    options: ["240", "300", "360", "480"], correctIndex: 1,
+    trapOptionIndex: 2, trapExplanation: "360 = 6P4 includes numbers starting with 0 (invalid 3-digit numbers).",
+    solution: "Thousands: 5 choices (not 0). Then 5, 4, 3: 5×5×4×3 = 300." },
+  { id: "p8", difficulty: "Medium",
+    stem: "Ways to string 7 distinct beads into a necklace?",
+    options: ["120", "360", "720", "5040"], correctIndex: 1,
+    trapOptionIndex: 2, trapExplanation: "720 = 6! is circular table formula. Necklaces allow flipping, so ÷2.",
+    solution: "(7−1)!/2 = 720/2 = 360." },
+  { id: "p9", difficulty: "Hard",
+    stem: "DETAIL — vowels in odd positions only?",
+    options: ["18", "36", "72", "120"], correctIndex: 1,
+    trapOptionIndex: 2, trapExplanation: "72 counts one sub-task (6×12 or similar). Must be 3!×3! = 6×6 = 36.",
+    solution: "3! vowels × 3! consonants = 36." },
+  { id: "p10", difficulty: "Hard",
+    stem: "15 directors shake hands except X and Y who refuse. Total handshakes?",
+    options: ["98", "104", "105", "210"], correctIndex: 1,
+    trapOptionIndex: 2, trapExplanation: "105 is unrestricted 15C2. Must subtract the 1 missing handshake.",
+    solution: "15C2 − 1 = 105 − 1 = 104." },
+  { id: "p11", difficulty: "Hard",
+    stem: "12 points, 5 collinear. How many distinct triangles?",
+    options: ["185", "200", "210", "220"], correctIndex: 2,
+    trapOptionIndex: 3, trapExplanation: "220 = 12C3 ignores the 5C3 = 10 collinear triplets that don't form triangles.",
+    solution: "12C3 − 5C3 = 220 − 10 = 210." },
+  { id: "p12", difficulty: "Hard",
+    stem: "4 Math + 3 Physics + 2 Chemistry books on a shelf; same subject together?",
+    options: ["576", "864", "1728", "3456"], correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "576 forgets block order (3!) — must multiply by 3! for arranging the 3 subject-blocks.",
+    solution: "3! × 4! × 3! × 2! = 6 × 24 × 6 × 2 = 1728." }
+];
+window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+
+/* =====================================================================
+   4. STATE
+   ===================================================================== */
+const state = {
+  slotN: 5, slotR: 3,
+  wordText: "ARRANGE",
+  wordMode: "all",
+  polyN: 8, polyProgress: 0,
+  dupWord: "SUCCESS",
+  dupProgress: 0,
+  predictLocked: false,
+  practiceMode: "hints",
+  currentQIndex: 0,
+  shuffled: [],
+  answered: false,
+  timer: { interval: null, remaining: 90 },
+  testsPassed: false,
+  stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
+};
+const TOPIC_ID = "permutations-combinations";
+const $ = (id) => document.getElementById(id);
+
+/* =====================================================================
+   5. RENDERERS
+   ===================================================================== */
+
+// Slot lab — side by side permutations vs combinations
+function renderSlotLab() {
+  const n = state.slotN, r = state.slotR;
+  if (r > n) {
+    $("slot-svg").innerHTML = `<text x="380" y="180" text-anchor="middle" font-size="14" fill="#ef4444">r must be ≤ n</text>`;
+    return;
+  }
+
+  const nPr = Model.nPr(n, r);
+  const nCr = Model.nCr(n, r);
+  const rFact = Model.factorial(r);
+
+  $("slot-n-badge").textContent = n;
+  $("slot-r-badge").textContent = r;
+  $("slot-ratio").textContent = "= " + r + "!";
+  $("slot-perm").textContent = `nPr = ${nPr}`;
+  $("slot-comb").textContent = `nCr = ${nCr}`;
+  $("slot-rfact").textContent = `r! = ${rFact}`;
+  $("slot-ratio2").textContent = `= ${rFact}`;
+
+  const svg = $("slot-svg");
+  const W = 760, H = 380;
+
+  // Left column: permutation slots (descending counts)
+  let perm = "";
+  for (let i = 0; i < r; i++) {
+    const x = 60 + i * 80;
+    const y = 80;
+    const choices = n - i;
+    perm += `
+      <rect x="${x}" y="${y}" width="60" height="60" rx="8"
+        fill="#0ea5e9" fill-opacity="0.15" stroke="#38bdf8" stroke-width="2"/>
+      <text x="${x + 30}" y="${y + 38}" text-anchor="middle" font-size="20" font-weight="800" fill="#38bdf8">${choices}</text>
+      <text x="${x + 30}" y="${y + 78}" text-anchor="middle" font-size="10" fill="#64748b">slot ${i+1}</text>
+    `;
+    if (i < r - 1) perm += `<text x="${x + 70}" y="${y + 38}" text-anchor="middle" font-size="20" font-weight="800" fill="#475569">×</text>`;
+  }
+  perm += `
+    <text x="60" y="40" font-size="13" font-weight="700" fill="#38bdf8">Order matters → P(n,r) = n·(n−1)·…·(n−r+1)</text>
+    <text x="${60 + r * 80 + 10}" y="120" font-size="14" font-weight="800" fill="#38bdf8">= ${nPr}</text>
+  `;
+
+  // Right column: combination — show r! identical orderings collapsing to 1
+  let comb = "";
+  const collapseX = 60, collapseY = 240;
+  comb += `<text x="${collapseX}" y="${collapseY - 20}" font-size="13" font-weight="700" fill="#22c55e">Order doesn't matter → divide by r! = ${rFact}</text>`;
+
+  // Draw r! grouped "permutation groups" that collapse
+  const groupW = 40;
+  for (let g = 0; g < rFact; g++) {
+    const gx = collapseX + (g % 8) * (groupW + 8);
+    const gy = collapseY + Math.floor(g / 8) * (groupW + 12);
+    comb += `
+      <rect x="${gx}" y="${gy}" width="${groupW}" height="${groupW}" rx="4"
+        fill="#22c55e" fill-opacity="0.15" stroke="#22c55e" stroke-width="1.5"/>
+      <text x="${gx + groupW/2}" y="${gy + groupW/2 + 5}" text-anchor="middle" font-size="10" fill="#86efac">#${g+1}</text>
+    `;
+  }
+  comb += `
+    <text x="${collapseX}" y="${collapseY + Math.ceil(rFact/8) * (groupW + 12) + 30}" font-size="12" fill="#94a3b8">
+      ↑ ${rFact} orderings collapse into 1 combination
+    </text>
+    <text x="${collapseX + 400}" y="${collapseY + 20}" font-size="14" font-weight="800" fill="#22c55e">= ${nCr}</text>
+  `;
+
+  svg.innerHTML = perm + comb;
+}
+
+// Word lab
+function renderWordLab() {
+  const tiles = $("word-tiles");
+  const note = $("word-note");
+  const word = state.wordText.toUpperCase().replace(/[^A-Z]/g, '');
+  if (!word) { tiles.innerHTML = ""; note.textContent = "Enter a word."; return; }
+
+  const isVowel = c => "AEIOU".includes(c);
+  const chars = [...word];
+
+  if (state.wordMode === "all") {
+    const r = Model.wordPerms(word);
+    tiles.innerHTML = chars.map(c => `<div class="word-tile ${isVowel(c) ? 'vowel' : 'consonant'}">${c}</div>`).join("");
+    note.innerHTML = `<strong>Unrestricted:</strong> ${word.length}! / ${r.denom} = <strong>${r.total.toLocaleString()}</strong> distinct arrangements.<br><small>Duplicate frequencies: ${Object.entries(r.freq).filter(([k,v])=>v>1).map(([k,v])=>`${k}×${v}`).join(", ") || "none"}</small>`;
+  } else if (state.wordMode === "together") {
+    const r = Model.vowelsTogether(word);
+    // Reorder tiles: consonants + vowels as block at end
+    const cons = chars.filter(c => !isVowel(c));
+    const vows = chars.filter(c => isVowel(c));
+    tiles.innerHTML = [...cons, "|", ...vows].map(c => {
+      if (c === "|") return `<div style="width:4px; background:var(--primary); align-self:stretch; border-radius:2px;"></div>`;
+      return `<div class="word-tile ${isVowel(c) ? 'vowel block-vowel' : 'consonant'}">${c}</div>`;
+    }).join("");
+    note.innerHTML = `<strong>Block method:</strong> ${cons.length} consonants + 1 vowel block = ${cons.length + 1} units.<br>Outer ways × internal vowel ways = <strong>${r.total.toLocaleString()}</strong>.`;
+  } else {
+    const r = Model.vowelsNeverTogether(word);
+    if (r.total === 0) {
+      tiles.innerHTML = chars.map(c => `<div class="word-tile ${isVowel(c) ? 'vowel' : 'consonant'}">${c}</div>`).join("");
+      note.innerHTML = `<strong>Impossible:</strong> ${r.vowels.length} vowels > ${r.gaps} gaps.`;
+    } else {
+      // Show consonants with gaps
+      const cons = chars.filter(c => !isVowel(c));
+      const vows = chars.filter(c => isVowel(c));
+      let html = "";
+      cons.forEach(c => {
+        html += `<div class="word-tile consonant">${c}</div>`;
+        html += `<div style="width:8px; background:var(--success-soft); align-self:stretch; border-radius:2px;" title="gap"></div>`;
       });
+      tiles.innerHTML = html;
+      note.innerHTML = `<strong>Gap method:</strong> ${r.cons.length} consonants create ${r.gaps} gaps. Choose ${r.vowels.length} of ${r.gaps} for vowels: <strong>${r.total.toLocaleString()}</strong> ways.`;
     }
+  }
+}
 
-    function updateSlotLab() {
-      const n = parseInt(document.getElementById('input-n').value) || 1;
-      const r = parseInt(document.getElementById('input-r').value) || 1;
-      const type = document.getElementById('select-type').value;
+// Polygon lab — animate diagonals
+function renderPolyLab() {
+  const n = state.polyN;
+  const svg = $("poly-svg");
+  const W = 760, H = 320;
+  const cx = W / 2, cy = H / 2, R = 120;
 
-      const container = document.getElementById('slots-visual-display');
-      const calcDiv = document.getElementById('slots-calc-text');
-      container.innerHTML = '';
+  const points = [];
+  for (let i = 0; i < n; i++) {
+    const a = (-90 + i * 360 / n) * Math.PI / 180;
+    points.push({ x: cx + R * Math.cos(a), y: cy + R * Math.sin(a) });
+  }
 
-      if (r > n) {
-        container.innerHTML = '<span style="color: #c5221f; font-weight: 600;">Error: r cannot exceed n.</span>';
-        calcDiv.innerHTML = '<strong>Invalid Selection:</strong> You cannot select or arrange more items than exist.';
-        return;
-      }
+  const totalPairs = Model.nCr(n, 2);
+  const diagonals = Model.polygonDiagonals(n);
+  $("poly-pairs").textContent = totalPairs;
+  $("poly-sides").textContent = n;
+  $("poly-formula").textContent = "= " + diagonals;
 
-      // Render r slots
-      for (let i = 0; i < r; i++) {
-        const choices = n - i;
-        const box = document.createElement('div');
-        box.className = 'slot-box';
-        box.innerHTML = `<span>${choices}</span><span class="slot-label">Slot ${i + 1}</span>`;
-        container.appendChild(box);
+  // All possible line pairs. Perimeter = n. Diagonals = total − n.
+  const lines = [];
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const isAdj = (j - i === 1) || (i === 0 && j === n - 1);
+      lines.push({ i, j, isAdj });
+    }
+  }
 
-        if (i < r - 1) {
-          const mult = document.createElement('span');
-          mult.style.fontSize = '1.3rem';
-          mult.style.fontWeight = 'bold';
-          mult.style.color = 'var(--color-text-muted)';
-          mult.textContent = '×';
-          container.appendChild(mult);
-        }
-      }
+  // Sort: perimeter first (draw immediately), diagonals next (progressively)
+  const perim = lines.filter(l => l.isAdj);
+  const diags = lines.filter(l => !l.isAdj);
 
-      const npr = Model.nPr(n, r);
-      const ncr = Model.nCr(n, r);
-      const rFact = Model.factorial(r);
+  // Progress applies to diagonals only
+  const shownDiags = Math.round(state.polyProgress * diags.length);
 
-      if (type === 'perm') {
-        calcDiv.innerHTML = `
-          <strong>Permutation Calculation ($^${n} P_{${r}}$):</strong><br>
-          Formula: $\\frac{${n}!}{( ${n} - ${r} )!} = \\frac{${n}!}{${n - r}!}$<br>
-          Multiplication trace: ${Array.from({ length: r }, (_, i) => n - i).join(' × ')} = <strong>${npr.toLocaleString()}</strong> distinct arrangements.
-        `;
-      } else {
-        calcDiv.innerHTML = `
-          <strong>Combination Calculation ($^${n} C_{${r}}$):</strong><br>
-          Formula: $\\frac{^${n} P_{${r}}}{${r}!} = \\frac{${npr.toLocaleString()}}{${rFact}} = $ <strong>${ncr.toLocaleString()}</strong> unique selections.<br>
-          <em>Why divide by ${r}! (${rFact})?</em> Because any group of ${r} items can be arranged internally in ${r}! ways. Dividing removes duplicate permutations so only unordered sets remain.
-        `;
+  let content = "";
+  // Perimeter
+  perim.forEach(l => {
+    content += `<line x1="${points[l.i].x}" y1="${points[l.i].y}" x2="${points[l.j].x}" y2="${points[l.j].y}" stroke="#475569" stroke-width="2"/>`;
+  });
+  // Diagonals up to progress
+  diags.forEach((l, idx) => {
+    if (idx < shownDiags) {
+      content += `<line x1="${points[l.i].x}" y1="${points[l.i].y}" x2="${points[l.j].x}" y2="${points[l.j].y}" stroke="#38bdf8" stroke-width="1.5" opacity="0.7"/>`;
+    }
+  });
+  // Vertices on top
+  points.forEach(p => {
+    content += `<circle cx="${p.x}" cy="${p.y}" r="6" fill="#e8edf7"/>`;
+  });
+
+  svg.innerHTML = content;
+  $("poly-diag").textContent = `${shownDiags} / ${diagonals}`;
+}
+
+// Repeated letters collapse
+function renderDupLab() {
+  const svg = $("dup-svg");
+  const word = state.dupWord.toUpperCase();
+  const r = Model.wordPerms(word);
+  if (!r.valid) return;
+
+  $("dup-badge").textContent = word;
+  $("dup-nfact").textContent = Model.factorial(word.length).toLocaleString();
+  $("dup-denom").textContent = Object.entries(r.freq).filter(([k,v])=>v>1).map(([k,v])=>`${v}!`).join("·") + " = " + r.denom;
+  $("dup-final").textContent = r.total.toLocaleString();
+
+  // Progressively interpolate from n! to r.total
+  const from = Model.factorial(word.length);
+  const to = r.total;
+  const t = state.dupProgress / 100;
+  const current = Math.round(from + (to - from) * t);
+  $("dup-current").textContent = current.toLocaleString();
+  $("dup-progress-badge").textContent = Math.round(t * 100) + "%";
+
+  // SVG: two bars (n! and total) with a moving collapse indicator
+  const W = 760, H = 220;
+  const padL = 80, padR = 80;
+  const plotW = W - padL - padR;
+  const max = from;
+
+  const barW = plotW;
+  const y1 = 60, y2 = 150, barH = 30;
+
+  const wFrom = barW;
+  const wTo = (to / max) * barW;
+  const wCur = (current / max) * barW;
+
+  svg.innerHTML = `
+    <text x="${padL}" y="${y1 - 12}" font-size="12" font-weight="700" fill="#94a3b8">n! — raw permutations</text>
+    <rect x="${padL}" y="${y1}" width="${wFrom}" height="${barH}" rx="3" fill="#475569" opacity="0.4"/>
+    <text x="${padL + wFrom + 8}" y="${y1 + barH/2 + 4}" font-size="12" font-weight="800" fill="#94a3b8">${from.toLocaleString()}</text>
+
+    <text x="${padL}" y="${y2 - 12}" font-size="12" font-weight="700" fill="#22c55e">Distinct after deduplication</text>
+    <rect x="${padL}" y="${y2}" width="${wCur}" height="${barH}" rx="3" fill="#22c55e" opacity="0.8"/>
+    <text x="${padL + wCur + 8}" y="${y2 + barH/2 + 4}" font-size="12" font-weight="800" fill="#22c55e">${current.toLocaleString()}</text>
+  `;
+}
+
+// =====================================================================
+// 6. WIRING
+// =====================================================================
+// Slot lab
+["slot-n", "slot-r"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    if (id === "slot-n") state.slotN = Math.max(2, parseInt(e.target.value));
+    else state.slotR = Math.max(1, parseInt(e.target.value));
+    if (state.slotR > state.slotN) state.slotR = state.slotN;
+    $("slot-r").value = Math.min(10, state.slotR);
+    renderSlotLab();
+  });
+});
+
+// Word lab
+$("word-input").addEventListener("input", (e) => {
+  state.wordText = e.target.value.toUpperCase().replace(/[^A-Z]/g, '');
+  renderWordLab();
+});
+$("word-preset").addEventListener("change", (e) => {
+  state.wordText = e.target.value;
+  $("word-input").value = state.wordText;
+  renderWordLab();
+});
+document.querySelectorAll(".mode-btn[data-word-mode]").forEach(b => {
+  b.addEventListener("click", () => {
+    state.wordMode = b.dataset.wordMode;
+    document.querySelectorAll(".mode-btn[data-word-mode]").forEach(x => {
+      x.classList.toggle("active", x === b);
+      x.setAttribute("aria-selected", x === b ? "true" : "false");
+    });
+    renderWordLab();
+  });
+});
+
+// Polygon lab — animate
+$("poly-n").addEventListener("input", (e) => {
+  state.polyN = Math.max(3, parseInt(e.target.value));
+  state.polyProgress = 0;
+  $("poly-n-badge").textContent = state.polyN;
+  renderPolyLab();
+  animateDiagonals();
+});
+
+function animateDiagonals() {
+  state.polyProgress = 0;
+  const duration = 1600;
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    state.polyProgress = t;
+    renderPolyLab();
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// Duplicate lab
+$("dup-word").addEventListener("change", (e) => {
+  state.dupWord = e.target.value;
+  state.dupProgress = 0;
+  $("dup-slider").value = 0;
+  renderDupLab();
+});
+$("dup-slider").addEventListener("input", (e) => {
+  state.dupProgress = parseInt(e.target.value);
+  renderDupLab();
+});
+
+// Predict
+function preparePredict() {
+  if (state.predictLocked) return;
+  const container = $("predict-options");
+  const opts = [
+    { value: "18", kind: "trap", label: "18" },
+    { value: "36", kind: "correct", label: "36" },
+    { value: "72", kind: "trap", label: "72" },
+    { value: "120", kind: "trap", label: "120" }
+  ];
+  container.innerHTML = "";
+  opts.forEach(o => {
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "option-btn"; btn.textContent = o.label;
+    btn.dataset.kind = o.kind; btn.dataset.value = o.value;
+    btn.addEventListener("click", () => commitPredict(o));
+    container.appendChild(btn);
+  });
+  $("predict-feedback").className = "callout hidden";
+  $("worked-solution").classList.add("hidden");
+}
+
+function commitPredict(o) {
+  if (state.predictLocked) return;
+  state.predictLocked = true;
+  document.querySelectorAll("#predict-options .option-btn").forEach(b => {
+    const kind = b.dataset.kind, chosen = b.dataset.value === o.value;
+    if (kind === "correct") b.classList.add("correct");
+    else if (kind === "trap") b.classList.add("trap");
+    if (chosen && kind !== "correct") b.classList.add("incorrect");
+    b.disabled = true;
+  });
+  const fb = $("predict-feedback");
+  fb.classList.remove("hidden");
+  if (o.kind === "correct") {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong> 3! vowels × 3! consonants = 6 × 6 = 36.`;
+  } else {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Trap:</strong> two independent sub-tasks MULTIPLY: 3! × 3! = 36.`;
+  }
+  $("worked-solution").classList.remove("hidden");
+  $("solution-steps").innerHTML = [
+    { title: "Odd slots for vowels", body: "Odd positions = 1, 3, 5 → 3 slots for 3 vowels = 3! = 6 ways." },
+    { title: "Even slots for consonants", body: "Even positions = 2, 4, 6 → 3 slots for 3 consonants = 3! = 6 ways." },
+    { title: "Total", body: "6 × 6 = 36." }
+  ].map((s, i) => `
+    <div class="step-item">
+      <div class="step-num">Step ${i + 1}</div>
+      <div class="step-title">${s.title}</div>
+      <div>${s.body}</div>
+    </div>`).join("");
+}
+
+/* =====================================================================
+   7. PRACTICE
+   ===================================================================== */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function setPracticeMode(mode) {
+  state.practiceMode = mode;
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+    if (["absolute","share","growth"].includes(b.dataset.mode)) return;
+    const on = b.dataset.mode === mode;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  $("timer-container").classList.toggle("hidden", mode !== "timed");
+  if (mode === "timed") startTimer();
+  else stopTimer();
+}
+document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+  if (["absolute","share","growth"].includes(b.dataset.mode)) return;
+  b.addEventListener("click", () => setPracticeMode(b.dataset.mode));
+});
+function startTimer() {
+  stopTimer();
+  state.timer.remaining = 90;
+  $("timer-display").textContent = state.timer.remaining;
+  state.timer.interval = setInterval(() => {
+    state.timer.remaining--;
+    $("timer-display").textContent = Math.max(0, state.timer.remaining);
+    if (state.timer.remaining <= 0) {
+      stopTimer();
+      if (!state.answered) {
+        const q = state.shuffled[state.currentQIndex];
+        markAnswer(-1, q);
       }
     }
+  }, 1000);
+}
+function stopTimer() {
+  if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; }
+}
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
+    if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw));
+  } catch {}
+}
+function saveProgress() {
+  try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch {}
+}
+function renderStats() {
+  $("stat-attempts").textContent = state.stats.attempts;
+  $("stat-correct").textContent = state.stats.correct;
+  $("stat-independent").textContent = state.stats.independentCorrect;
+  const acc = state.stats.attempts ? Math.round(state.stats.correct / state.stats.attempts * 100) : 0;
+  $("stat-accuracy").textContent = acc + "%";
+}
+function renderQuestion() {
+  if (!state.testsPassed) {
+    $("practice-q-stem").textContent = "Practice is disabled because self-tests failed.";
+    return;
+  }
+  const q = state.shuffled[state.currentQIndex];
+  state.answered = false;
+  $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
+  const d = $("practice-q-difficulty");
+  d.textContent = q.difficulty;
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published" : q.difficulty === "Medium" ? "badge-draft" : "badge-tag");
+  $("practice-q-stem").textContent = q.stem;
+  $("practice-feedback").className = "callout hidden";
+  $("practice-error-categorizer").classList.add("hidden");
+  $("practice-solution-box").classList.add("hidden");
+  $("btn-next-question").disabled = true;
+  const c = $("practice-options-container");
+  c.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = String.fromCharCode(65 + i) + ". " + opt;
+    btn.addEventListener("click", () => markAnswer(i, q));
+    c.appendChild(btn);
+  });
+  if (state.practiceMode === "timed") startTimer();
+}
+function markAnswer(chosen, q) {
+  if (state.answered) return;
+  state.answered = true;
+  stopTimer();
+  const isCorrect = chosen === q.correctIndex;
+  const isTrap = chosen === q.trapOptionIndex;
+  document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.correctIndex) b.classList.add("correct");
+    else if (i === chosen) b.classList.add(isTrap ? "trap" : "incorrect");
+  });
+  const fb = $("practice-feedback");
+  fb.classList.remove("hidden");
+  if (isCorrect) { fb.className = "callout callout-success"; fb.innerHTML = `<strong>✓ Correct.</strong>`; }
+  else if (isTrap) { fb.className = "callout callout-trap"; fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`; $("practice-error-categorizer").classList.remove("hidden"); }
+  else { fb.className = "callout callout-danger"; fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`; $("practice-error-categorizer").classList.remove("hidden"); }
+  $("practice-solution-box").classList.remove("hidden");
+  $("practice-solution-text").textContent = q.solution;
+  state.stats.attempts++;
+  if (isCorrect) { state.stats.correct++; if (state.practiceMode !== "hints") state.stats.independentCorrect++; }
+  saveProgress();
+  renderStats();
+  $("btn-next-question").disabled = false;
+}
+$("btn-next-question").addEventListener("click", () => {
+  state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
+  renderQuestion();
+});
+$("select-error-category").addEventListener("change", (e) => {
+  state.stats.errorsByCat[e.target.value] = (state.stats.errorsByCat[e.target.value] || 0) + 1;
+  saveProgress();
+});
+function handleResetStats() {
+  if (!confirm("Reset local practice stats?")) return;
+  state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
+  saveProgress();
+  renderStats();
+}
+window.handleResetStats = handleResetStats;
 
-    function applyWordPreset(w) {
-      document.getElementById('word-input').value = w;
-      updateWordLab();
-    }
+/* ---- Circular (n-1)! ---- */
+const circ = { n: 5, fixed: false };
+function fact(n) { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; }
+function renderCirc() {
+  const n = circ.n, cx = 380, cy = 140, R = 90;
+  let nodes = "";
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + (2 * Math.PI * i) / n;
+    const x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
+    const lab = String.fromCharCode(65 + i);
+    const hi = circ.fixed && i === 0;
+    nodes += `<circle cx="${x}" cy="${y}" r="18" fill="${hi ? '#f59e0b' : '#38bdf8'}"/><text x="${x}" y="${y + 5}" text-anchor="middle" font-size="13" font-weight="800" fill="#001824">${lab}</text>`;
+  }
+  const ghost = !circ.fixed ? `<text x="80" y="50" font-size="12" fill="#f59e0b">Same seating if everyone rotates one seat → counted ${n} times in n!</text>` : "";
+  $("circ-svg").innerHTML = `${ghost}<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#475569" stroke-width="2" stroke-dasharray="4 4"/>${nodes}
+    <text x="${cx}" y="268" text-anchor="middle" font-size="14" font-weight="700" fill="#e8edf7">${circ.fixed ? `A fixed → arrange ${n - 1} others → (n−1)! = ${fact(n - 1)}` : `If you count like a line: n! = ${fact(n)} (overcount)`}</text>`;
+  $("circ-cap").textContent = circ.fixed
+    ? `Mind rule: nail one person to a seat (amber). Now the table has a reference. Remaining ${n - 1} can sit in ${fact(n - 1)} ways. That is why circular = (n−1)!.`
+    : `Press “Fix one seat”. Until you do, every distinct circle is counted once for each rotation — ${n} copies of the same arrangement inside n!.`;
+  $("circ-n-b").textContent = n;
+}
+function wireCirc() {
+  $("circ-n").addEventListener("input", e => { circ.n = +e.target.value; renderCirc(); });
+  $("circ-fix").addEventListener("click", () => { circ.fixed = true; renderCirc(); });
+  $("circ-reset").addEventListener("click", () => { circ.fixed = false; renderCirc(); });
+  renderCirc();
+}
+document.addEventListener("DOMContentLoaded", () => {
+  wireCirc();
+  const results = runSelfTests();
+  state.testsPassed = results.failed === 0;
+  const banner = $("test-status-banner");
+  if (!state.testsPassed) {
+    banner.className = "test-banner";
+    banner.innerHTML = `<strong>⚠️ Self-tests failing — practice disabled.</strong>
+      <ul>${results.failures.map(f => `<li>${f.n}: ${f.d}</li>`).join("")}</ul>`;
+    $("practice-options-container").innerHTML = "";
+  }
 
-    function updateWordLab() {
-      const rawWord = document.getElementById('word-input').value || 'ARRANGE';
-      const clean = rawWord.toUpperCase().replace(/[^A-Z]/g, '');
-      const rule = document.getElementById('constraint-select').value;
+  loadProgress();
+  state.shuffled = shuffle(PRACTICE_QUESTIONS);
 
-      const chipsContainer = document.getElementById('word-chips-container');
-      const calcDiv = document.getElementById('word-calc-text');
-      chipsContainer.innerHTML = '';
+  // Set initial values
+  $("slot-n").value = state.slotN;
+  $("slot-r").value = state.slotR;
 
-      if (!clean) {
-        calcDiv.innerHTML = 'Please enter a valid word.';
-        return;
-      }
+  renderSlotLab();
+  renderWordLab();
+  renderPolyLab();
+  renderDupLab();
+  preparePredict();
+  renderQuestion();
+  renderStats();
+  setPracticeMode("hints");
 
-      // Display chips
-      for (const ch of clean) {
-        const isVowel = 'AEIOU'.includes(ch);
-        const chip = document.createElement('span');
-        chip.style.display = 'inline-block';
-        chip.style.padding = '0.3rem 0.6rem';
-        chip.style.borderRadius = '4px';
-        chip.style.fontWeight = '700';
-        chip.style.fontSize = '1.1rem';
-        chip.style.border = '1px solid var(--color-border)';
-        chip.style.background = isVowel ? '#e8f0fe' : 'var(--color-surface)';
-        chip.style.color = isVowel ? '#1a73e8' : 'var(--color-text)';
-        chip.textContent = ch;
-        chipsContainer.appendChild(chip);
-      }
-
-      if (rule === 'all') {
-        const res = Model.solveWordPermutations(clean);
-        const dupStr = res.duplicateTerms.length > 0 ? res.duplicateTerms.join(', ') : 'None (all letters distinct)';
-        calcDiv.innerHTML = `
-          <strong>Unrestricted Word Permutations:</strong><br>
-          Word: <strong>${clean}</strong> (Total length: ${clean.length})<br>
-          Duplicate frequencies: ${dupStr}<br>
-          Formula: $\\frac{n!}{p_1! \\cdot p_2! \\cdots} = \\frac{${clean.length}!}{${res.denom}} = $ <strong>${res.total.toLocaleString()}</strong> distinct words.
-        `;
-      } else if (rule === 'together') {
-        const res = Model.solveVowelsTogether(clean);
-        calcDiv.innerHTML = `
-          <strong>Block Method (Vowels Always Together):</strong><br>
-          Vowels identified: [${res.vowels.join(', ')}] (${res.vowels.length} vowels). Consonants: [${res.consonants.join(', ')}] (${res.consonants.length} consonants).<br>
-          1. Treat the vowels as 1 composite unit: Total units = 1 + ${res.consonants.length} = ${res.compositeUnits} units.<br>
-          Outer arrangements of units: <strong>${res.outerWays}</strong>.<br>
-          2. Internal arrangements of vowel block: <strong>${res.internalVowelWays}</strong>.<br>
-          Total ways = ${res.outerWays} × ${res.internalVowelWays} = <strong>${res.total.toLocaleString()}</strong>.
-        `;
-      } else if (rule === 'never') {
-        const res = Model.solveVowelsNeverTogether(clean);
-        if (res.total === 0) {
-          calcDiv.innerHTML = `<strong style="color:#c5221f;">Impossible:</strong> Number of vowels (${res.vowels.length}) exceeds available gaps between consonants (${res.gaps}).`;
-        } else {
-          calcDiv.innerHTML = `
-            <strong>Gap Method (No Two Vowels Together):</strong><br>
-            1. Arrange ${res.consonants.length} consonants first: <strong>${res.consonantWays}</strong> ways.<br>
-            2. This creates ${res.consonants.length} + 1 = <strong>${res.gaps} gaps</strong>.<br>
-            3. Choose ${res.vowels.length} gaps from ${res.gaps} and arrange vowels: ${res.gapPickWays} × ${res.vowelArrangeWays} = <strong>${res.gapPickWays * res.vowelArrangeWays}</strong> ways.<br>
-            Total ways = ${res.consonantWays} × ${res.gapPickWays * res.vowelArrangeWays} = <strong>${res.total.toLocaleString()}</strong>.
-          `;
-        }
-      }
-    }
-
-    function updateGeomLab() {
-      const n = parseInt(document.getElementById('polygon-sides').value) || 8;
-      const svg = document.getElementById('geom-svg');
-      const calcDiv = document.getElementById('geom-calc-text');
-      while (svg.firstChild) svg.removeChild(svg.firstChild);
-
-      const cx = 200;
-      const cy = 150;
-      const r = 110;
-
-      // Calculate vertices
-      const points = [];
-      for (let i = 0; i < n; i++) {
-        const angle = (-90 + (i * 360 / n)) * Math.PI / 180;
-        points.push({ x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) });
-      }
-
-      // Draw diagonals (all non-adjacent chords)
-      for (let i = 0; i < n; i++) {
-        for (let j = i + 1; j < n; j++) {
-          const isAdjacent = Math.abs(i - j) === 1 || (i === 0 && j === n - 1);
-          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-          line.setAttribute('x1', points[i].x);
-          line.setAttribute('y1', points[i].y);
-          line.setAttribute('x2', points[j].x);
-          line.setAttribute('y2', points[j].y);
-          if (isAdjacent) {
-            line.setAttribute('stroke', 'var(--color-primary)');
-            line.setAttribute('stroke-width', '2.5');
-          } else {
-            line.setAttribute('stroke', 'var(--color-border)');
-            line.setAttribute('stroke-width', '1');
-            line.setAttribute('stroke-dasharray', '3,3');
-          }
-          svg.appendChild(line);
-        }
-      }
-
-      // Draw vertices
-      for (let i = 0; i < n; i++) {
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('cx', points[i].x);
-        circle.setAttribute('cy', points[i].y);
-        circle.setAttribute('r', '6');
-        circle.setAttribute('fill', 'var(--color-primary)');
-        svg.appendChild(circle);
-      }
-
-      const totalSegments = Model.nCr(n, 2);
-      const diagCount = Model.solvePolygonDiagonals(n);
-      const handshakeCount = Model.solveHandshakes(n);
-
-      calcDiv.innerHTML = `
-        <strong>Geometric Combinatorics for $n = ${n}$:</strong><br>
-        - Total connections between any 2 vertices ($^${n} C_2$): <strong>${totalSegments}</strong> lines.<br>
-        - Perimeter sides: <strong>${n}</strong>.<br>
-        - Interior Diagonals: $^${n} C_2 - ${n} = \\frac{${n}(${n} - 3)}{2} = $ <strong>${diagCount}</strong> diagonals.<br>
-        - Handshakes among ${n} people: $^${n} C_2 = \\frac{${n} \\times ${n - 1}}{2} = $ <strong>${handshakeCount}</strong> handshakes.
-      `;
-    }
-
-    /* Predict-First Check */
-    function checkPredict(val) {
-      const fb = document.getElementById('predict-feedback');
-      fb.style.display = 'block';
-      if (val === 36) {
-        fb.className = 'callout callout-success';
-        fb.innerHTML = `
-          <strong>Correct! Exactly 36 arrangements.</strong><br>
-          <em>Deduction:</em> In DETAIL (6 letters), the 3 odd positions (1, 3, 5) must be occupied by the 3 vowels (E, A, I) in $3! = 6$ ways.
-          The remaining 3 even positions (2, 4, 6) must be occupied by the 3 consonants (D, T, L) in $3! = 6$ ways.
-          By the Multiplication Principle: $6 \\times 6 = 36$ total ways.
-        `;
-      } else {
-        fb.className = 'callout callout-danger';
-        fb.innerHTML = `
-          <strong>Incorrect.</strong> Remember that both sub-tasks occur in sequence:
-          first place 3 vowels into 3 odd slots ($3! = 6$), then place 3 consonants into 3 remaining slots ($3! = 6$).
-          Multiply the two results: $6 \\times 6 = 36$.
-        `;
-      }
-    }
-
-    /* Practice UI */
-    function renderPracticeQuestions() {
-      const container = document.getElementById('practice-container');
-      container.innerHTML = '';
-
-      PRACTICE_QUESTIONS.forEach((q, idx) => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.style.margin = '0';
-        card.style.border = '1px solid var(--color-border)';
-
-        card.innerHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-            <span class="badge badge-tag">Question ${idx + 1} • ${q.difficulty}</span>
-            <span class="badge badge-outline">${q.topic}</span>
-          </div>
-          <p style="font-weight: 600; margin-bottom: 1rem; font-size: 0.95rem;">${q.stem}</p>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; margin-bottom: 1rem;">
-            ${q.options.map((opt, oIdx) => `
-              <button type="button" class="btn btn-secondary btn-sm" id="btn-${q.id}-${oIdx}" onclick="handleAnswer('${q.id}', ${oIdx})">
-                ${String.fromCharCode(65 + oIdx)}) ${opt}
-              </button>
-            `).join('')}
-          </div>
-          <div id="solution-${q.id}" style="display: none; padding: 0.75rem; background: var(--color-surface-subtle); border-radius: 4px; font-size: 0.85rem; border-left: 3px solid var(--color-primary);">
-            <div style="font-weight: 600; margin-bottom: 0.25rem;">Step-by-Step Combinatorial Solution:</div>
-            <div style="margin-bottom: 0.35rem;">${q.solution}</div>
-            <div style="color: #c5221f;"><strong>Common Trap:</strong> ${q.trap}</div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function handleAnswer(qId, selectedIdx) {
-      const q = PRACTICE_QUESTIONS.find(item => item.id === qId);
-      if (!q) return;
-
-      userAnswers[qId] = selectedIdx;
-      q.options.forEach((_, idx) => {
-        const btn = document.getElementById(`btn-${qId}-${idx}`);
-        if (btn) {
-          btn.classList.remove('btn-primary', 'btn-secondary');
-          if (idx === q.correctIndex) {
-            btn.style.background = '#e6f4ea';
-            btn.style.borderColor = '#137333';
-            btn.style.color = '#137333';
-            btn.style.fontWeight = 'bold';
-          } else if (idx === selectedIdx) {
-            btn.style.background = '#fce8e6';
-            btn.style.borderColor = '#c5221f';
-            btn.style.color = '#c5221f';
-          } else {
-            btn.classList.add('btn-secondary');
-            btn.style.opacity = '0.5';
-          }
-          btn.disabled = true;
-        }
-      });
-
-      const sol = document.getElementById(`solution-${qId}`);
-      if (sol) sol.style.display = 'block';
-      updateScoreDisplay();
-    }
-
-    function updateScoreDisplay() {
-      let score = 0;
-      PRACTICE_QUESTIONS.forEach(q => {
-        if (userAnswers[q.id] === q.correctIndex) score++;
-      });
-      document.getElementById('score-display').textContent = `Score: ${score} / ${PRACTICE_QUESTIONS.length}`;
-    }
-
-    function resetPractice() {
-      userAnswers = {};
-      renderPracticeQuestions();
-      updateScoreDisplay();
-    }
-
-    /* Self-Test Suite */
-    window.runSelfTests = function() {
-      const results = [];
-      function assertTest(desc, cond) {
-        if (!cond) {
-          results.push({ name: desc, status: 'FAILED' });
-          console.error(`TEST FAILED: ${desc}`);
-        } else {
-          results.push({ name: desc, status: 'PASSED' });
-        }
-      }
-
-      assertTest("Factorial 5 is 120", Model.factorial(5) === 120);
-      assertTest("Factorial 0 is 1", Model.factorial(0) === 1);
-      assertTest("5P2 is 20", Model.nPr(5, 2) === 20);
-      assertTest("5C2 is 10", Model.nCr(5, 2) === 10);
-      assertTest("10C3 is 120", Model.nCr(10, 3) === 120);
-
-      // Word permutations
-      const arr = Model.solveWordPermutations("ARRANGE");
-      assertTest("ARRANGE total permutations is 1260", arr.valid && arr.total === 1260);
-
-      const ldrTog = Model.solveVowelsTogether("LEADER");
-      assertTest("LEADER vowels together is 72", ldrTog.valid && ldrTog.total === 72);
-
-      const ldrNev = Model.solveVowelsNeverTogether("LEADER");
-      assertTest("LEADER vowels never together is 72", ldrNev.valid && ldrNev.total === 72);
-
-      // Octagon diagonals
-      assertTest("Octagon diagonals is 20", Model.solvePolygonDiagonals(8) === 20);
-
-      // Handshakes
-      assertTest("15 people handshakes is 105", Model.solveHandshakes(15) === 105);
-
-      // Pascal's identity: 5C2 + 5C1 == 6C2 (10 + 5 == 15)
-      assertTest("Pascal identity 5C2 + 5C1 === 6C2", Model.nCr(5, 2) + Model.nCr(5, 1) === Model.nCr(6, 2));
-
-      const passed = results.filter(r => r.status === 'PASSED').length;
-      const failed = results.filter(r => r.status === 'FAILED').length;
-      console.log(`SelfTests Complete: ${passed} passed, ${failed} failed.`);
-      return { total: results.length, passed, failed, results };
-    };
-
-    window.Model = Model;
-    window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
-
-    document.addEventListener('DOMContentLoaded', init);
-  </script>
+  // Kick off polygon animation
+  setTimeout(animateDiagonals, 200);
+});
+</script>
+<script src="../assets/lab-ux.js" defer></script>
 </body>
 </html>

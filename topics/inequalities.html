@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Inequalities (Coded &amp; Direct) — Aptitude Lab</title>
+<meta name="description" content="See P ≥ Q > R = S as a chain on a number line. Judge conclusions as true, false, either-or or cannot-be-determined by seeing which positions are still possible." />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
+<style>
+:root {
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --purple: #a78bfa; --purple-soft: rgba(167,139,250,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: var(--font-sans);
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+}
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--primary); color: #001; padding: 12px 16px;
+  border-radius: 0 0 8px 0; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 0.75rem; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--surface-2); border: 1px solid var(--border);
+  padding: 0.15em 0.4em; border-radius: 4px;
+}
+.hidden { display: none !important; }
+.page-container { max-width: 1080px; margin: 0 auto; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 22px 22px 24px;
+  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+@media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
+.card-header { margin-bottom: 18px; }
+.section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.section-title::before {
+  content: counter(section-num); counter-increment: section-num;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%; font-size: 0.8rem; font-weight: 800; flex-shrink: 0;
+}
+main { counter-reset: section-num; }
+.section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
+.site-header {
+  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
+  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
+  margin: 0 -16px 24px; padding: 12px 16px;
+}
+.header-container {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
+.brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+.nav-link:hover { color: var(--text); }
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
+}
+.badge-published { background: var(--success-soft); color: var(--success); }
+.badge-draft { background: var(--warn-soft); color: var(--warn); }
+.badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #001824; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
+.btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
+.btn-secondary:hover:not(:disabled) { background: var(--border); }
+.btn-ghost { background: transparent; color: var(--text-dim); }
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
+.btn-sm { padding: 6px 11px; font-size: 0.8rem; }
+.btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.vis-container {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
+}
+.vis-container svg { display: block; width: 100%; height: auto; }
+.score-bar {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
+}
+@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
+.score-stat {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.score-stat-label {
+  font-size: 0.72rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.score-stat-num {
+  font-size: 1.05rem; font-weight: 700;
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
+}
+.callout {
+  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
+  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
+}
+.callout.hidden { display: none; }
+.callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
+.callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
+.callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
+.callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.test-banner {
+  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
+  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
+}
+.test-banner.hidden { display: none; }
+.test-banner ul { margin: 8px 0 0 20px; padding: 0; }
+.predict-box {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md); padding: 18px 20px;
+}
+.predict-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
+}
+.predict-header svg { flex-shrink: 0; }
+.options-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.option-btn {
+  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 0.92rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition); text-align: center;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
+.option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
+.option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
+.option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.practice-header {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.mode-toggle-group {
+  display: inline-flex; flex-wrap: wrap; background: var(--bg-elev);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 3px; gap: 2px;
+}
+.mode-btn {
+  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
+  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active { background: var(--primary-soft); color: var(--primary); }
+.mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.timer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
+}
+.timer-badge.hidden { display: none; }
+.site-footer {
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.85rem;
+}
+.footer-container { max-width: 1080px; margin: 0 auto; }
+.disclaimer-box {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+}
+.error-categorizer {
+  margin-top: 12px; padding: 12px;
+  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.error-categorizer.hidden { display: none; }
+.error-categorizer label { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px; }
+
+/* ---- selects (shared) ---- */
+select {
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 7px 9px; font-family: var(--font-mono); font-size: 0.95rem;
+}
+select:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+.error-categorizer select { font-family: inherit; font-size: 0.9rem; width: 100%; }
+select.sel-op { font-weight: 800; min-width: 56px; text-align: center; }
+select.sel-wide { font-family: var(--font-sans); font-size: 0.9rem; max-width: 100%; }
+
+/* ---- page-specific ---- */
+.legend-row { display: flex; flex-wrap: wrap; gap: 14px; font-size: .8rem; color: var(--text-dim); margin: 0 0 8px; align-items: center; }
+.legend-row .lg { display: inline-flex; align-items: center; gap: 6px; }
+.lg-swatch { display: inline-block; width: 26px; height: 0; border-top: 3px solid #94a3b8; }
+.lg-swatch.dashed { border-top-style: dashed; }
+.lg-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 2px solid; }
+.chain-text {
+  font-family: var(--font-mono); font-size: 1.05rem; background: var(--bg-elev);
+  border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px;
+  display: inline-block; margin: 0 8px 8px 0; color: var(--text);
+}
+.caption { margin-top: 10px; font-size: .92rem; color: var(--text-dim); line-height: 1.55; }
+.caption strong { color: var(--text); }
+.focus-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; font-size: .85rem; color: var(--text-dim); }
+.readout-list { margin: 0; padding-left: 18px; font-size: .88rem; }
+.readout-list li { margin: 2px 0; }
+.lab-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.lab-row {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 8px 10px;
+}
+.lab-row .idx { font-size: .72rem; color: var(--text-muted); font-weight: 800; min-width: 26px; text-transform: uppercase; }
+.lab-row .rm { margin-left: auto; }
+.lab-row.concl-row { align-items: flex-start; }
+.concl-main { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.mark {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  font-weight: 800; font-size: .85rem; border-radius: 6px; padding: 4px 10px; min-width: 34px;
+  border: 1px solid transparent; white-space: nowrap;
+}
+.mark-true { background: var(--success-soft); color: #86efac; border-color: rgba(34,197,94,.4); }
+.mark-false { background: var(--danger-soft); color: #fca5a5; border-color: rgba(239,68,68,.4); }
+.mark-cannot { background: var(--warn-soft); color: #fcd34d; border-color: rgba(245,158,11,.4); }
+.mark-either { background: var(--indigo-soft); color: #c7d2fe; border-color: rgba(129,140,248,.45); }
+.concl-why { flex-basis: 100%; font-size: .82rem; color: var(--text-dim); line-height: 1.45; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 10px; }
+.rule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.rule-card { background: var(--bg-elev); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border); }
+.rule-card h3 { margin-bottom: .4rem; font-size: .95rem; }
+.rule-card p.small { font-size: .82rem; color: var(--text-dim); margin: .4rem 0 0; }
+.q-block { margin: 10px 0 14px; display: flex; flex-direction: column; gap: 8px; }
+.q-line { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 1rem; }
+.q-lbl { font-size: .7rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); min-width: 84px; }
+.q-line code { font-size: 1rem; padding: .25em .55em; }
+.q-ask { margin: 4px 0 0; font-weight: 600; }
+.pair-mini { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; font-size: .85rem; color: var(--text-dim); }
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-container">
+    <a href="../index.html" class="brand-link">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f172a"/>
+        <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+        <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+        <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+        <circle cx="40" cy="40" r="4" fill="#34d399"/>
+        <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span>Aptitude Lab</span>
+    </a>
+    <nav aria-label="Topic navigation">
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+        </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-container">
+
+  <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+  <header class="card">
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.75rem;">
+      <span class="badge badge-tag">Logical Reasoning</span>
+      <span class="badge badge-tag">SEBI Gr A</span>
+      <span class="badge badge-tag">Banking &amp; SSC</span>
+    </div>
+    <h1>Inequalities (Coded &amp; Direct)</h1>
+    <p class="section-subtitle" style="margin-top:8px;">
+      <strong>Don’t memorise sign tables — see the chain.</strong> Every statement like <code>P ≥ Q &gt; R = S</code> places letters on a number line. A conclusion is judged by asking one question: <em>in which positions can these two letters still end up?</em> If every possibility agrees, it follows; if none agrees, it is false; otherwise it is doubtful.
+    </p>
+  </header>
+
+  <!-- ===== SECTION 1 — CHAIN ON A NUMBER LINE ===== -->
+  <section class="card" aria-labelledby="s1">
+    <div class="card-header">
+      <h2 id="s1" class="section-title">See the chain on a number line</h2>
+      <p class="section-subtitle">Bigger sits to the right. “=” means two letters share one slot. Pick a letter to see who is bigger, smaller, equal — or unrelated to it.</p>
+    </div>
+
+    <div class="mode-toggle-group" role="tablist" aria-label="Chain examples" style="margin-bottom:12px;" id="s1-presets"></div>
+    <div id="s1-statements" style="margin-bottom:4px;"></div>
+
+    <div class="focus-bar">
+      <label for="s1-focus"><strong>Compare everything with:</strong></label>
+      <select id="s1-focus" aria-label="Letter to compare against"></select>
+    </div>
+
+    <div class="legend-row" aria-hidden="true">
+      <span class="lg"><span class="lg-swatch"></span> solid link: strictly smaller (gap &gt; 0)</span>
+      <span class="lg"><span class="lg-swatch dashed"></span> dashed link: smaller <em>or equal</em> (gap may be 0)</span>
+      <span class="lg"><span class="lg-dot" style="border-color:#22c55e"></span> bigger</span>
+      <span class="lg"><span class="lg-dot" style="border-color:#a78bfa"></span> smaller</span>
+      <span class="lg"><span class="lg-dot" style="border-color:#f59e0b"></span> same slot</span>
+      <span class="lg"><span class="lg-dot" style="border-color:#475569"></span> no known order</span>
+    </div>
+
+    <div class="vis-container">
+      <svg id="s1-svg" viewBox="0 0 760 260" role="img" aria-label="Chain of letters on a number line"><title>Chain on a number line</title></svg>
+    </div>
+    <div id="s1-readout" class="callout callout-info"></div>
+    <p class="caption" id="s1-caption"></p>
+  </section>
+
+  <!-- ===== SECTION 2 — STEP THROUGH ≥ vs > ===== -->
+  <section class="card" aria-labelledby="s2">
+    <div class="card-header">
+      <h2 id="s2" class="section-title">Step through: how ≥ and &gt; combine</h2>
+      <p class="section-subtitle">Add one link at a time. Watch what happens to “can P and S still be equal?”</p>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center;">
+      <button type="button" id="step-prev" class="btn btn-secondary btn-sm">← Prev</button>
+      <button type="button" id="step-next" class="btn btn-primary btn-sm">Next step →</button>
+      <span id="step-badge" class="badge badge-tag">Step 1 / 5</span>
+    </div>
+    <div class="vis-container">
+      <svg id="step-svg" viewBox="0 0 760 260" role="img" aria-label="Step-through chain"></svg>
+    </div>
+    <p class="caption" id="step-caption" style="color:var(--text)"></p>
+    <div id="step-check" class="callout callout-info hidden"></div>
+  </section>
+
+  <!-- ===== SECTION 3 — PREDICT ===== -->
+  <section class="card" aria-labelledby="s3">
+    <div class="card-header">
+      <h2 id="s3" class="section-title">Predict first — which sign survives?</h2>
+      <p class="section-subtitle">Decide before the chain is drawn. Then check your picture against it.</p>
+    </div>
+    <div class="predict-box">
+      <div class="predict-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>Statement: <code>P ≥ Q &gt; R = S</code></span>
+      </div>
+      <p style="font-size:1.05rem; margin-bottom:1rem;">How do <strong>P</strong> and <strong>S</strong> compare?</p>
+      <div class="options-grid" id="predict-options" role="radiogroup" aria-label="Prediction options"></div>
+      <div id="predict-feedback" class="callout hidden" role="alert"></div>
+    </div>
+    <div id="predict-reveal" class="hidden" style="margin-top:20px;">
+      <div class="vis-container">
+        <svg id="predict-svg" viewBox="0 0 760 260" role="img" aria-label="Chain for the prediction question"></svg>
+      </div>
+      <div class="callout callout-info">
+        <strong>Walk it left to right:</strong> P ≥ Q (gap may be 0) → Q &gt; R (gap is real, &gt; 0) → R = S (gap is 0). Total gap = 0 + (something positive) + 0 = positive. So <strong>P &gt; S</strong>, and “P = S” is impossible.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4 — PLAY LAB ===== -->
+  <section class="card" aria-labelledby="s4">
+    <div class="card-header">
+      <h2 id="s4" class="section-title">Play: build your own chain</h2>
+      <p class="section-subtitle">Change any letter or sign. The number line redraws, and every conclusion below is re-judged against what is still possible.</p>
+    </div>
+
+    <h3 style="margin-bottom:8px;">Statements</h3>
+    <div id="lab-rels" class="lab-rows"></div>
+    <div class="btn-row">
+      <button type="button" id="lab-add-rel" class="btn btn-secondary btn-sm">+ Add statement</button>
+      <button type="button" id="lab-soften" class="btn btn-secondary btn-sm" title="Turn every &gt; into ≥ and every &lt; into ≤">Soften all: &gt; → ≥</button>
+      <button type="button" id="lab-harden" class="btn btn-secondary btn-sm" title="Turn every ≥ into &gt; and every ≤ into &lt;">Harden all: ≥ → &gt;</button>
+      <button type="button" id="lab-reset" class="btn btn-ghost btn-sm">Reset</button>
+    </div>
+
+    <div class="vis-container">
+      <svg id="lab-svg" viewBox="0 0 760 260" role="img" aria-label="Live chain from your statements"></svg>
+    </div>
+    <div id="lab-status" class="callout callout-info" style="margin-top:0;"></div>
+
+    <h3 style="margin:18px 0 8px;">Conclusions — does each one follow?</h3>
+    <p class="section-subtitle" style="margin-bottom:8px;">✓ follows · ✗ can never be true · ? cannot be determined · ⇄ either-or (two doubtful conclusions that cover every case). Click a row to ring its two letters on the line.</p>
+    <div id="lab-concls" class="lab-rows"></div>
+    <div class="btn-row">
+      <button type="button" id="lab-add-concl" class="btn btn-secondary btn-sm">+ Add conclusion</button>
+    </div>
+    <p class="caption">Try it: soften every sign and watch ✓ marks turn into ?. Then harden them and watch the opposite. Make a statement point the other way (a “valley” like <code>P &gt; Q ≤ R</code>) and watch the line split into unrelated branches.</p>
+  </section>
+
+  <!-- ===== SECTION 5 — EITHER / OR ===== -->
+  <section class="card" aria-labelledby="s5">
+    <div class="card-header">
+      <h2 id="s5" class="section-title">Either / Or — when two doubts add up to a certainty</h2>
+      <p class="section-subtitle">Two letters can be in only three relations: <code>&lt;</code>, <code>=</code>, <code>&gt;</code>. See which ones each conclusion covers.</p>
+    </div>
+
+    <div class="pair-mini">
+      <label for="eo-stmt"><strong>Statement:</strong></label>
+      <select id="eo-stmt" class="sel-wide" aria-label="Statement"></select>
+    </div>
+    <div class="pair-mini">
+      <label for="eo-pair"><strong>Conclusions about P and S:</strong></label>
+      <select id="eo-pair" class="sel-wide" aria-label="Conclusion pair"></select>
+    </div>
+
+    <div class="vis-container">
+      <svg id="eo-svg" viewBox="0 0 760 250" role="img" aria-label="Three possible worlds and which conclusion covers each"></svg>
+    </div>
+    <div id="eo-verdict" class="callout callout-info" style="margin-top:0;"></div>
+    <p class="caption">Blue = only conclusion I is true there. Purple = only II. Amber = both. <span style="color:#fca5a5;">Red dashed = possible, but neither conclusion covers it</span> — so “Neither follows”. Grey = the statement already rules that picture out.</p>
+  </section>
+
+  <!-- ===== SECTION 6 — RULES ===== -->
+  <section class="card" aria-labelledby="s6">
+    <div class="card-header">
+      <h2 id="s6" class="section-title">Rules that fall out of the chain</h2>
+      <p class="section-subtitle">Each rule is just what you already saw on the line — now written down.</p>
+    </div>
+    <div class="rule-grid">
+      <div class="rule-card">
+        <h3 style="color:var(--primary)">Gaps add up</h3>
+        <code>≥ ≥ ≥ → ≥</code> &nbsp; <code>≥ &gt; ≥ → &gt;</code>
+        <p class="small">In an unbroken one-direction chain, one strict link makes the whole relation strict. All ≥ gives only ≥ (equality stays possible). “=” adds nothing.</p>
+      </div>
+      <div class="rule-card">
+        <h3 style="color:var(--warn)">Direction must not turn</h3>
+        <code>P &gt; Q ≤ R → no P–R link</code>
+        <p class="small">A valley (&gt; then ≤) or a peak (&lt; then ≥) breaks the chain. The two ends are on different branches — every position is still possible.</p>
+      </div>
+      <div class="rule-card">
+        <h3 style="color:var(--success)">A loop of ≥ means =</h3>
+        <code>H ≥ J ≥ K ≥ H → H = J = K</code>
+        <p class="small">If you can walk from H down to K and from K back up to H without a strict link, they must share one slot.</p>
+      </div>
+      <div class="rule-card">
+        <h3 style="color:var(--primary)">Judging one conclusion</h3>
+        <code>true · false · doubtful</code>
+        <p class="small">List the relations still possible for the two letters. All fit → <strong>follows</strong>. None fit → <strong>false</strong>. Some fit → <strong>cannot be determined</strong>.</p>
+      </div>
+      <div class="rule-card">
+        <h3 style="color:var(--indigo)">Either / Or</h3>
+        <code>≥ with &lt; · &gt; with ≤ · = with ≠</code>
+        <p class="small">Same two letters, both individually doubtful, and together they cover <code>&lt;</code>, <code>=</code> and <code>&gt;</code>. Then “Either I or II”. If they leave out “=” (like &gt; and &lt;), it is “Neither”.</p>
+      </div>
+      <div class="rule-card">
+        <h3 style="color:var(--purple)">Coded symbols</h3>
+        <code>@ © $ % # → decode first</code>
+        <p class="small">Translate every symbol using <em>this question’s</em> legend, then draw the chain. Legends change between questions — never carry one over.</p>
+      </div>
+    </div>
+    <div class="callout callout-info" style="margin-top:16px;">
+      <strong>Opposites:</strong> “not P &gt; Q” is <code>P ≤ Q</code>; “not P ≥ Q” is <code>P &lt; Q</code>. That is why <code>P ≥ Q</code> and <code>P &lt; Q</code> are complementary.
+    </div>
+  </section>
+
+  <!-- ===== SECTION 7 — PRACTICE ===== -->
+  <section class="card" aria-labelledby="s7">
+    <div class="card-header">
+      <h2 id="s7" class="section-title">Practice</h2>
+      <p class="section-subtitle">Shuffled each session. Traps are genuine — including changing code legends and either-or look-alikes.</p>
+    </div>
+
+    <div class="practice-header">
+      <div class="mode-toggle-group" role="tablist" aria-label="Practice mode">
+        <button type="button" class="mode-btn active" data-mode="hints" role="tab" aria-selected="true">Guided</button>
+        <button type="button" class="mode-btn" data-mode="independent" role="tab" aria-selected="false">Independent</button>
+        <button type="button" class="mode-btn" data-mode="timed" role="tab" aria-selected="false">Timed (90s)</button>
+      </div>
+      <div id="timer-container" class="timer-badge hidden" aria-live="off">
+        <span>⏱️</span><span id="timer-display">90</span><span>s</span>
+      </div>
+    </div>
+
+    <div class="score-bar" aria-label="Practice statistics">
+      <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Independent</span><span class="score-stat-num" id="stat-independent">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Accuracy</span><span class="score-stat-num" id="stat-accuracy">0%</span></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
+    </div>
+
+    <div id="practice-question-card" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 14</span>
+        <span class="badge" id="practice-q-difficulty">Easy</span>
+      </div>
+      <div id="practice-q-stem" class="question-stem">Loading…</div>
+
+      <div id="practice-vis" class="hidden">
+        <p class="caption" id="practice-vis-note" style="margin:0 0 4px;"></p>
+        <div class="vis-container">
+          <svg id="practice-svg" viewBox="0 0 760 260" role="img" aria-label="Chain for this question"></svg>
+        </div>
+      </div>
+
+      <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
+      <div id="practice-feedback" class="callout hidden" role="alert"></div>
+      <div id="practice-error-categorizer" class="error-categorizer hidden">
+        <label for="select-error-category">What tripped you up? (optional)</label>
+        <select id="select-error-category">
+          <option value="ge_vs_gt">Treated ≥ as if it were &gt;</option>
+          <option value="direction">Chain direction turned (valley / peak)</option>
+          <option value="either_or">Either-or vs neither mix-up</option>
+          <option value="equality">Missed that equality is still possible</option>
+          <option value="coded_legend">Mis-decoded the symbols</option>
+          <option value="loop">Missed a loop forcing equality</option>
+          <option value="time_guess">Time-pressure guess</option>
+        </select>
+      </div>
+      <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:12px;">
+        <h4 style="margin-bottom:6px; font-size:.95rem;">Solution</h4>
+        <p id="practice-solution-text" style="font-size:.9rem; line-height:1.55; margin:0;"></p>
+      </div>
+      <div style="margin-top:18px; display:flex; gap:.75rem; justify-content:flex-end;">
+        <button type="button" id="btn-next-question" class="btn btn-primary" disabled>Next question →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">Draw the chain</p>
+        <p class="lab-shortcuts-body">P &gt; Q ≥ R = S → one line. Conclusions need a path of links.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Valley / peak</p>
+        <p class="lab-shortcuts-body">Opposite signs from a middle term → unordered ends → cannot say / either-or.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Either-Or</p>
+        <p class="lab-shortcuts-body">Complementary pair covering &lt;, =, &gt; with no leftover case.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">Coded symbols</p>
+        <p class="lab-shortcuts-body">Decode the legend first on paper — then treat as normal inequalities.</p>
+      </li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
+      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
+    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   1. PURE MODEL  (no DOM)
+   Every statement becomes "bigger ≥/> smaller" edges. A closure over those
+   edges tells us, for any two letters, which of  <  =  >  are still possible.
+   ===================================================================== */
+const Model = (() => {
+  const ALLOWED = { ">": [">"], "≥": [">", "="], "=": ["="], "≤": ["<", "="], "<": ["<"] };
+  const FLIP = { ">": "<", "<": ">", "≥": "≤", "≤": "≥", "=": "=" };
+
+  function normOp(s) { return s === ">=" ? "≥" : s === "<=" ? "≤" : s; }
+
+  /* "P > Q ≥ R = S < T" -> { ok, vars:[P,Q,R,S,T], ops:[>,≥,=,<], rels:[{a,op,b}...] } */
+  function parseStatement(text) {
+    const s = String(text == null ? "" : text).trim();
+    if (!s) return { ok: false, error: "Empty statement." };
+    const tokens = [];
+    let i = 0;
+    while (i < s.length) {
+      const ch = s[i];
+      if (/\s/.test(ch)) { i++; continue; }
+      const two = s.slice(i, i + 2);
+      if (two === ">=" || two === "<=") { tokens.push({ t: "op", v: normOp(two) }); i += 2; continue; }
+      if (ch === ">" || ch === "<" || ch === "=" || ch === "≥" || ch === "≤") { tokens.push({ t: "op", v: ch }); i++; continue; }
+      const m = /^[A-Za-z][A-Za-z0-9]*/.exec(s.slice(i));
+      if (m) { tokens.push({ t: "var", v: m[0] }); i += m[0].length; continue; }
+      return { ok: false, error: "Unknown symbol “" + ch + "”." };
+    }
+    if (tokens.length < 3) return { ok: false, error: "Need at least two letters and a sign." };
+    if (tokens.length % 2 === 0) return { ok: false, error: "A statement must start and end with a letter." };
+    const vars = [], ops = [], rels = [];
+    for (let k = 0; k < tokens.length; k++) {
+      const want = k % 2 === 0 ? "var" : "op";
+      if (tokens[k].t !== want) return { ok: false, error: "Letters and signs must alternate." };
+      (want === "var" ? vars : ops).push(tokens[k].v);
+    }
+    for (let k = 0; k < ops.length; k++) rels.push({ a: vars[k], op: ops[k], b: vars[k + 1] });
+    return { ok: true, vars, ops, rels };
+  }
+
+  function parseConclusion(text) {
+    const p = parseStatement(text);
+    if (!p.ok) return p;
+    if (p.rels.length !== 1) return { ok: false, error: "A conclusion compares exactly two letters." };
+    return { ok: true, x: p.rels[0].a, op: p.rels[0].op, y: p.rels[0].b };
+  }
+
+  /* Replace code symbols (e.g. "@" -> ">") using a question-specific legend. */
+  function decode(text, code) {
+    let out = "";
+    for (const ch of String(text)) out += code && Object.prototype.hasOwnProperty.call(code, ch) ? " " + code[ch] + " " : ch;
+    return out.replace(/\s+/g, " ").trim();
+  }
+
+  /* Build the graph. m[i][j]: 0 none, 1 "i ≥ j" is forced, 2 "i > j" is forced. */
+  function build(statements) {
+    const list = Array.isArray(statements)
+      ? statements
+      : String(statements).split(/[;\n,]+/).map(s => s.trim()).filter(Boolean);
+    const vars = [], rels = [];
+    for (const st of list) {
+      const p = parseStatement(st);
+      if (!p.ok) return { ok: false, error: p.error + " (in “" + st + "”)" };
+      p.vars.forEach(v => { if (!vars.includes(v)) vars.push(v); });
+      rels.push(...p.rels);
+    }
+    if (!rels.length) return { ok: false, error: "No statements yet." };
+    const n = vars.length, idx = {};
+    vars.forEach((v, i) => { idx[v] = i; });
+    const m = Array.from({ length: n }, () => new Array(n).fill(0));
+    const edges = [];
+    const add = (hi, lo, strict, eq) => {
+      const w = strict ? 2 : 1;
+      if (w > m[idx[hi]][idx[lo]]) m[idx[hi]][idx[lo]] = w;
+      edges.push({ hi, lo, strict, eq: !!eq });
+    };
+    rels.forEach(r => {
+      if (r.op === ">") add(r.a, r.b, true);
+      else if (r.op === "<") add(r.b, r.a, true);
+      else if (r.op === "≥") add(r.a, r.b, false);
+      else if (r.op === "≤") add(r.b, r.a, false);
+      else { add(r.a, r.b, false, true); add(r.b, r.a, false, true); }
+    });
+    for (let k = 0; k < n; k++) for (let i = 0; i < n; i++) {
+      if (!m[i][k]) continue;
+      for (let j = 0; j < n; j++) {
+        if (!m[k][j]) continue;
+        const v = Math.max(m[i][k], m[k][j]);
+        if (v > m[i][j]) m[i][j] = v;
+      }
+    }
+    let inconsistent = false;
+    for (let i = 0; i < n; i++) if (m[i][i] === 2) inconsistent = true;
+
+    // slots: letters forced equal share a class
+    const classOf = new Array(n).fill(-1), classes = [];
+    for (let i = 0; i < n; i++) {
+      if (classOf[i] >= 0) continue;
+      const c = classes.length;
+      classes.push([]);
+      for (let j = i; j < n; j++) {
+        if (classOf[j] < 0 && (j === i || (m[i][j] >= 1 && m[j][i] >= 1))) { classOf[j] = c; classes[c].push(vars[j]); }
+      }
+    }
+    const ce = {};
+    edges.forEach(e => {
+      const big = classOf[idx[e.hi]], small = classOf[idx[e.lo]];
+      if (big === small) return;
+      const key = big + ">" + small;
+      if (!ce[key]) ce[key] = { big, small, strict: e.strict };
+      else ce[key].strict = ce[key].strict || e.strict;
+    });
+    return { ok: true, vars, idx, rels, edges, m, inconsistent, classes, classOf, classEdges: Object.values(ce) };
+  }
+
+  /* Which of < = > are still possible for x vs y, and what is definitely known. */
+  function relBetween(g, x, y) {
+    if (x === y) return { possible: ["="], known: "=" };
+    if (!g.ok || g.inconsistent) return { possible: [], known: null };
+    if (!(x in g.idx) || !(y in g.idx)) return { possible: ["<", "=", ">"], known: null };
+    const xy = g.m[g.idx[x]][g.idx[y]], yx = g.m[g.idx[y]][g.idx[x]];
+    const possible = [];
+    if (xy === 0) possible.push("<");
+    if (xy !== 2 && yx !== 2) possible.push("=");
+    if (yx === 0) possible.push(">");
+    let known = null;
+    if (xy === 2) known = ">";
+    else if (yx === 2) known = "<";
+    else if (xy === 1 && yx === 1) known = "=";
+    else if (xy === 1) known = "≥";
+    else if (yx === 1) known = "≤";
+    return { possible, known };
+  }
+
+  /* Shortest chain of links from "hi" down to "lo" (strict=true demands at least one strict link). */
+  function findPath(g, hi, lo, needStrict) {
+    const key = (v, s) => v + "|" + s;
+    const start = key(hi, 0), prev = {}, seen = { [start]: true }, q = [[hi, 0]];
+    while (q.length) {
+      const [v, s] = q.shift();
+      if (v === lo && (!needStrict || s === 1)) {
+        const path = [];
+        let k = key(v, s);
+        while (prev[k]) { path.unshift(prev[k].edge); k = prev[k].from; }
+        return path;
+      }
+      for (const e of g.edges) {
+        if (e.hi !== v) continue;
+        const ns = s || e.strict ? 1 : 0, nk = key(e.lo, ns);
+        if (seen[nk]) continue;
+        seen[nk] = true;
+        prev[nk] = { from: key(v, s), edge: e };
+        q.push([e.lo, ns]);
+      }
+    }
+    return null;
+  }
+  function pathString(path) {
+    if (!path || !path.length) return "";
+    let s = path[0].hi;
+    path.forEach(e => { s += " " + (e.eq ? "=" : e.strict ? ">" : "≥") + " " + e.lo; });
+    return s;
+  }
+  function chainText(g, x, y) {
+    const i = g.idx[x], j = g.idx[y];
+    if (g.m[i][j] >= 1 && g.m[j][i] >= 1) {
+      const a = findPath(g, x, y, false), b = findPath(g, y, x, false);
+      if (a && a.length === 1 && a[0].eq) return pathString(a);
+      return pathString(a) + "  and  " + pathString(b);
+    }
+    if (g.m[i][j] >= 1) return pathString(findPath(g, x, y, g.m[i][j] === 2));
+    if (g.m[j][i] >= 1) return pathString(findPath(g, y, x, g.m[j][i] === 2));
+    return "";
+  }
+
+  function explain(g, c, status, possible, known, partnerNote) {
+    const poss = possible.map(p => c.x + " " + p + " " + c.y).join("   or   ");
+    const need = ALLOWED[c.op].map(p => c.x + " " + p + " " + c.y).join(" / ");
+    if (status === "true") {
+      const kn = known && known !== c.op ? " (even stronger: " + c.x + " " + known + " " + c.y + ")" : "";
+      return "Follows. The chain reads " + chainText(g, c.x, c.y) + kn + ", so every possible picture has " + c.x + " " + c.op + " " + c.y + ".";
+    }
+    if (status === "false") {
+      return "Can never be true. The chain forces " + c.x + " " + known + " " + c.y + " (" + chainText(g, c.x, c.y) + "), which rules out " + c.x + " " + c.op + " " + c.y + ".";
+    }
+    if (status === "either") return partnerNote;
+    if (!known) {
+      return "No unbroken one-direction chain joins " + c.x + " and " + c.y + " (they sit on different branches), so every position is possible: " + poss + ". Needs " + need + " — holds in only some.";
+    }
+    return "The chain only gives " + c.x + " " + known + " " + c.y + " (" + chainText(g, c.x, c.y) + "). Still possible: " + poss + ". Your conclusion needs " + need + " — it holds in only some of these.";
+  }
+
+  function getGraph(statements) {
+    return statements && typeof statements === "object" && !Array.isArray(statements) && statements.m ? statements : build(statements);
+  }
+
+  /* evaluateConclusion(statements, conclusion[, partner]) -> { status: 'true'|'false'|'either'|'cannot', ... } */
+  function evaluateConclusion(statements, conclusion, partner) {
+    const g = getGraph(statements);
+    if (!g.ok) return { status: "cannot", error: g.error, possible: [], known: null, reason: g.error };
+    const c = parseConclusion(conclusion);
+    if (!c.ok) return { status: "cannot", error: c.error, possible: [], known: null, reason: c.error };
+    if (g.inconsistent) return { status: "cannot", inconsistent: true, possible: [], known: null, x: c.x, y: c.y, op: c.op, reason: "These statements contradict each other, so no picture exists." };
+    const { possible, known } = relBetween(g, c.x, c.y);
+    const allowed = ALLOWED[c.op];
+    const inside = possible.filter(p => allowed.includes(p));
+    let status = inside.length === possible.length ? "true" : inside.length === 0 ? "false" : "cannot";
+    let note = "";
+    if (status === "cannot" && partner) {
+      const pc = parseConclusion(partner);
+      if (pc.ok) {
+        let pop = null;
+        if (pc.x === c.x && pc.y === c.y) pop = pc.op;
+        else if (pc.x === c.y && pc.y === c.x) pop = FLIP[pc.op];
+        if (pop) {
+          const pin = possible.filter(p => ALLOWED[pop].includes(p));
+          const pstatus = pin.length === possible.length ? "true" : pin.length === 0 ? "false" : "cannot";
+          const covered = possible.every(p => allowed.includes(p) || ALLOWED[pop].includes(p));
+          if (pstatus === "cannot" && covered) {
+            status = "either";
+            note = "Each is doubtful alone, but “" + c.x + " " + c.op + " " + c.y + "” and “" + partner.trim() + "” together cover every possible picture (" + possible.join(", ") + "). One of them must hold — Either/Or.";
+          }
+        }
+      }
+    }
+    return { status, possible, known, x: c.x, y: c.y, op: c.op, reason: explain(g, c, status, possible, known, note) };
+  }
+
+  /* Two conclusions at once -> 'first' | 'second' | 'both' | 'either' | 'neither' */
+  function pairVerdict(statements, c1, c2) {
+    const g = getGraph(statements);
+    const a = evaluateConclusion(g, c1, c2), b = evaluateConclusion(g, c2, c1);
+    let verdict = "neither";
+    if (a.status === "true" && b.status === "true") verdict = "both";
+    else if (a.status === "true") verdict = "first";
+    else if (b.status === "true") verdict = "second";
+    else if (a.status === "either" && b.status === "either") verdict = "either";
+    return { verdict, first: a, second: b };
+  }
+
+  /* Number-line layout: smaller on the left. Letters forced equal share one slot.
+     Two slots in the same column have no known order between them. */
+  function layout(g) {
+    const nC = g.classes.length, level = new Array(nC).fill(-1);
+    const smallerOf = Array.from({ length: nC }, () => []);
+    g.classEdges.forEach(e => smallerOf[e.big].push(e.small));
+    const visit = c => {
+      if (level[c] >= 0) return level[c];
+      level[c] = 0;
+      let l = 0;
+      smallerOf[c].forEach(s => { l = Math.max(l, visit(s) + 1); });
+      level[c] = l;
+      return l;
+    };
+    for (let c = 0; c < nC; c++) visit(c);
+    const maxL = Math.max(...level);
+    const columns = Array.from({ length: maxL + 1 }, () => []);
+    for (let c = 0; c < nC; c++) columns[level[c]].push(c);
+    return { columns, level };
+  }
+
+  return { ALLOWED, FLIP, parseStatement, parseConclusion, decode, build, relBetween, findPath, chainText, evaluateConclusion, pairVerdict, layout };
+})();
+window.Model = Model;
+
+/* =====================================================================
+   2. PRACTICE BANK
+   kind 'pair'   : conclusions I, II  -> 5 standard options
+   kind 'status' : one conclusion     -> true / false / cannot
+   kind 'pick'   : options are conclusions; exactly one follows
+   ===================================================================== */
+const PAIR_OPTIONS = ["Only I follows", "Only II follows", "Either I or II follows", "Neither I nor II follows", "Both I and II follow"];
+const STATUS_OPTIONS = ["Definitely true", "Definitely false", "Cannot be determined"];
+
+const PRACTICE_QUESTIONS = [
+  { id: "i1", difficulty: "Easy", kind: "pick",
+    statements: ["P > Q ≥ R = S"],
+    options: ["Q > S", "P > S", "S ≥ P", "P = R"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "Q ≥ R = S gives only Q ≥ S. That link is dashed — the gap may be 0 — so Q > S is not guaranteed. The strict link is P > Q, which sits <em>above</em> Q.",
+    solution: "Line: R = S share a slot; Q is at or right of it; P is strictly right of Q. So P > S is forced. Q > S needs a strict link below Q — there is none. S ≥ P and P = R contradict P > Q." },
+  { id: "i2", difficulty: "Easy", kind: "status",
+    statements: ["A ≥ B > C"], conclusions: ["A > C"],
+    options: STATUS_OPTIONS, correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "The ≥ looks like it lets A = B, but B > C is a real gap, and it survives whatever the gap A–B turns out to be.",
+    solution: "A ≥ B (gap 0 or more) then B > C (gap more than 0): total gap is more than 0, so A > C." },
+  { id: "i3", difficulty: "Easy", kind: "status",
+    statements: ["P > Q ≤ R"], conclusions: ["P > R"],
+    options: STATUS_OPTIONS, correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "Both signs point <em>away</em> from Q — Q is a valley. P and R are each above Q but nothing orders them.",
+    solution: "P > Q means Q is left of P; Q ≤ R means Q is left of (or at) R. P and R sit on different branches, so P < R, P = R and P > R are all still possible." },
+  { id: "i4", difficulty: "Medium", kind: "pair",
+    statements: ["A > B ≥ C ≤ D"], conclusions: ["A ≥ D", "A < D"],
+    options: PAIR_OPTIONS, correctIndex: 2,
+    trapOptionIndex: 3, trapExplanation: "Both look doubtful on their own — true — but A ≥ D and A < D together cover every case, so one of them must hold.",
+    solution: "C is a valley, so A and D are unrelated: any of <, =, > is possible. “A ≥ D” covers > and =; “A < D” covers <. Together: all three. Either I or II." },
+  { id: "i5", difficulty: "Medium", kind: "pair",
+    statements: ["K ≥ L ≤ M"], conclusions: ["K > M", "K < M"],
+    options: PAIR_OPTIONS, correctIndex: 3,
+    trapOptionIndex: 2, trapExplanation: "Opposite signs look complementary, but “=” falls in the gap: K = M is possible and neither conclusion covers it.",
+    solution: "L is a valley, so K vs M is open: <, =, > all possible. “K > M” covers >; “K < M” covers <. The equal case is left out, so neither is certain and they are not complementary. Neither follows." },
+  { id: "i6", difficulty: "Medium", kind: "pair",
+    statements: ["F > G = H ≥ J"], conclusions: ["F > J", "G ≥ J"],
+    options: PAIR_OPTIONS, correctIndex: 4,
+    trapOptionIndex: 0, trapExplanation: "G = H ≥ J gives G ≥ J exactly — equality allowed is what “≥” says. Don’t demand a strict sign when ≥ is the conclusion.",
+    solution: "F > G = H ≥ J: F is strictly right of the G=H slot, J is at or left of it, so F > J. And G = H ≥ J gives G ≥ J. Both follow." },
+  { id: "i7", difficulty: "Medium", kind: "pick",
+    statements: ["W ≥ X = Y > Z ≥ V"],
+    options: ["X ≥ W", "W > V", "Y ≤ V", "W = Z"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "W ≥ X allows W = X, and then X ≥ W is true — but W > X is also possible, so X ≥ W is not certain.",
+    solution: "Y > Z is the strict link, and Z ≥ V is below it, so Y > V; W is at or right of Y, so W > V. “Y ≤ V” and “W = Z” contradict the strict link; “X ≥ W” is only possible when W = X." },
+  { id: "i8", difficulty: "Hard", kind: "status",
+    statements: ["R ≤ S < T = U"], conclusions: ["U = R"],
+    options: STATUS_OPTIONS, correctIndex: 1,
+    trapOptionIndex: 2, trapExplanation: "R ≤ S allows equality, but S < T is strict, so U is strictly right of R — “=” is impossible, not merely doubtful.",
+    solution: "T = U share a slot. S < T puts that slot strictly right of S, and R is at or left of S. So U > R always; U = R can never be true. Definitely false." },
+  { id: "i9", difficulty: "Hard", kind: "pair",
+    statements: ["P ≥ Q", "R < Q", "R ≥ S"], conclusions: ["P > S", "P = S"],
+    options: PAIR_OPTIONS, correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "P > S is not doubtful: the strict link R < Q is inside the chain P ≥ Q > R ≥ S, so P = S is impossible, not just doubtful.",
+    solution: "Rewrite R < Q as Q > R. Chain: P ≥ Q > R ≥ S. One strict link makes P > S. So I follows, and II (P = S) is false. Only I." },
+  { id: "i10", difficulty: "Hard", kind: "pair",
+    statements: ["E = F", "G ≥ F", "G ≤ H"], conclusions: ["E ≤ H", "E < H"],
+    options: PAIR_OPTIONS, correctIndex: 0,
+    trapOptionIndex: 4, trapExplanation: "Every link is ≥/≤/= — equality survives all the way, so “<” is not guaranteed. Only the ≤ conclusion is.",
+    solution: "E = F ≤ G ≤ H: no strict link anywhere, so E ≤ H is certain but E < H is not (they could all share one slot). Only I follows." },
+  { id: "i11", difficulty: "Medium", kind: "status", code: { "@": ">", "©": "≥", "$": "=", "%": "<", "#": "≤" },
+    statements: ["P @ Q © R $ S"], conclusions: ["P > S"],
+    options: STATUS_OPTIONS, correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "© is only ≥, but @ is strict (>), and one strict link is enough.",
+    solution: "Decode: P > Q ≥ R = S. P is strictly right of Q, Q is at or right of the R=S slot, so P > S. Definitely true." },
+  { id: "i12", difficulty: "Hard", kind: "pair", code: { "@": "<", "©": "≤", "$": "=", "%": ">", "#": "≥" },
+    statements: ["M @ N © O # P"], conclusions: ["M < P", "M ≥ P"],
+    options: PAIR_OPTIONS, correctIndex: 2,
+    trapOptionIndex: 3, trapExplanation: "Decoded, O is the peak: M and P are both below it and unordered. Each conclusion is doubtful, yet they are complementary (< vs ≥).",
+    solution: "Decode with THIS legend: M < N ≤ O ≥ P. O is a peak, so M and P are unrelated. “M < P” covers <; “M ≥ P” covers = and >. Together all cases: Either I or II." },
+  { id: "i13", difficulty: "Hard", kind: "pick", code: { "@": ">", "©": "≥", "$": "<", "%": "≤", "#": "=" },
+    statements: ["T $ U # V", "W © V"],
+    options: ["U < W", "T < W", "W ≤ T", "T = V"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "U = V ≤ W: the last link is ≤, so U = W is possible and U < W is not certain. The strict link is T < U, which is further left.",
+    solution: "Decode: T < U = V and W ≥ V, so T < U = V ≤ W. T is strictly left of the U=V slot, W is at or right of it: T < W always. “U < W” misses U = W; “W ≤ T” and “T = V” contradict T < U." },
+  { id: "i14", difficulty: "Medium", kind: "status",
+    statements: ["H ≥ J", "J ≥ K", "K ≥ H"], conclusions: ["H = K"],
+    options: STATUS_OPTIONS, correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "Three ≥ signs look weak, but they form a loop: H ≥ J ≥ K ≥ H. A loop with no strict link forces everything equal.",
+    solution: "H ≥ J ≥ K and K ≥ H: H can’t be bigger than K, and K can’t be bigger than H, so H = K (and J too). Definitely true." }
+];
+window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+
+const PAIR_VERDICT_INDEX = { first: 0, second: 1, either: 2, neither: 3, both: 4 };
+function questionStatements(q) { return q.statements.map(s => Model.decode(s, q.code)); }
+function questionGraph(q) { return Model.build(questionStatements(q)); }
+/* The answer the Model derives, independent of the stored correctIndex. */
+function computeAnswer(q) {
+  const g = questionGraph(q);
+  if (q.kind === "pair") return PAIR_VERDICT_INDEX[Model.pairVerdict(g, Model.decode(q.conclusions[0], q.code), Model.decode(q.conclusions[1], q.code)).verdict];
+  if (q.kind === "status") {
+    const st = Model.evaluateConclusion(g, Model.decode(q.conclusions[0], q.code)).status;
+    return st === "true" ? 0 : st === "false" ? 1 : 2;
+  }
+  const hits = q.options.map((o, i) => Model.evaluateConclusion(g, Model.decode(o, q.code)).status === "true" ? i : -1).filter(i => i >= 0);
+  return hits.length === 1 ? hits[0] : -1;
+}
+window.computeAnswer = computeAnswer;
+
+/* =====================================================================
+   3. SELF-TESTS
+   ===================================================================== */
+function runSelfTests() {
+  const results = { passed: 0, failed: 0, failures: [] };
+  const assert = (c, n, d = "") => { if (c) results.passed++; else { results.failed++; results.failures.push({ n, d }); } };
+  const ev = (st, c, p) => Model.evaluateConclusion(st, c, p).status;
+  try {
+    // parsing / normalising
+    const p = Model.parseStatement("P > Q ≥ R = S < T");
+    assert(p.ok && p.vars.join("") === "PQRST" && p.ops.join("") === ">≥=<", "parse long chain");
+    assert(p.rels.length === 4, "chain gives 4 pairwise relations");
+    assert(Model.parseStatement("P >= Q <= R").ops.join("") === "≥≤", "ASCII >= and <= normalised");
+    assert(!Model.parseStatement("P > > Q").ok, "double sign rejected");
+    assert(!Model.parseStatement("P >").ok, "dangling sign rejected");
+    assert(Model.decode("P @ Q © R", { "@": ">", "©": "≥" }) === "P > Q ≥ R", "decode symbols");
+
+    // definite true / false / cannot
+    const chain = "P > Q ≥ R = S < T";
+    assert(ev(chain, "P > S") === "true", "P > Q ≥ R = S  ⇒  P > S");
+    assert(ev(chain, "Q > S") === "cannot", "Q ≥ R = S only gives Q ≥ S");
+    assert(ev(chain, "Q ≥ S") === "true", "Q ≥ S follows");
+    assert(ev(chain, "R = S") === "true" && ev(chain, "S = R") === "true", "R = S and S = R");
+    assert(ev(chain, "S > P") === "false", "S > P contradicts P > S");
+    assert(ev(chain, "S < P") === "true", "reversed orientation S < P");
+    assert(ev(chain, "T > R") === "true", "S < T and R = S ⇒ T > R");
+    assert(ev(chain, "P > T") === "cannot", "P and T on different branches");
+
+    // combining ≥ and >
+    assert(ev("A ≥ B > C", "A > C") === "true", "one strict link makes chain strict");
+    assert(ev("A ≥ B ≥ C", "A > C") === "cannot", "all ≥ keeps equality possible");
+    assert(ev("A ≥ B ≥ C", "A ≥ C") === "true", "all ≥ gives ≥");
+    assert(ev("A ≥ B ≥ C", "A = C") === "cannot", "= not excluded under all ≥");
+    assert(ev("A = B = C", "A = C") === "true", "equals chain");
+    assert(ev("A > B ≥ C", "A ≤ C") === "false", "strict chain refutes ≤");
+
+    // valley / peak
+    assert(ev("P > Q ≤ R", "P > R") === "cannot", "valley leaves ends unrelated");
+    assert(ev("P < Q ≥ R", "P < R") === "cannot", "peak leaves ends unrelated");
+
+    // either-or
+    const eo = "A > B ≥ C ≤ D";
+    assert(ev(eo, "A ≥ D", "A < D") === "either", "≥ with < is complementary");
+    assert(ev(eo, "A > D", "A ≤ D") === "either", "> with ≤ is complementary");
+    assert(ev(eo, "A > D", "A < D") === "cannot", "> with < leaves = uncovered");
+    assert(Model.pairVerdict(eo, "A > D", "A < D").verdict === "neither", "neither for > and <");
+    assert(Model.pairVerdict(eo, "A ≥ D", "D > A").verdict === "either", "partner written in reverse orientation");
+    assert(Model.pairVerdict("P ≥ Q > R ≥ S", "P > S", "P = S").verdict === "first", "only first follows");
+    assert(Model.pairVerdict("F > G = H ≥ J", "F > J", "G ≥ J").verdict === "both", "both follow");
+    assert(ev("P ≥ Q > R", "P > R", "P ≤ R") === "true", "true conclusion never becomes either");
+
+    // loops, contradictions, unknown letters
+    assert(ev("H ≥ J ≥ K ≥ H", "H = K") === "true", "loop of ≥ forces equality");
+    assert(Model.build("A > B > A").inconsistent === true, "strict loop flagged inconsistent");
+    assert(ev("A > B", "C > D") === "cannot", "unknown letters cannot be determined");
+
+    // path text and layout
+    const g = Model.build("P > Q ≥ R = S < T");
+    assert(Model.chainText(g, "P", "S") === "P > Q ≥ R = S", "chainText walks the chain", Model.chainText(g, "P", "S"));
+    const lay = Model.layout(g);
+    assert(g.classes.length === 4 && g.classes.some(c => c.length === 2), "R and S share one slot");
+    assert(lay.columns.length === 3 && lay.columns[1].length === 2, "Q and T stack in same column (unordered)");
+    assert(Model.relBetween(g, "Q", "S").known === "≥", "relBetween known ≥");
+    assert(Model.relBetween(g, "P", "S").possible.join("") === ">", "only > possible for P vs S");
+    assert(Model.relBetween(g, "Q", "S").possible.join(",") === "=,>", "> and = possible for Q vs S");
+
+    // practice bank agrees with the model
+    assert(PRACTICE_QUESTIONS.length >= 12, "at least 12 practice questions", String(PRACTICE_QUESTIONS.length));
+    PRACTICE_QUESTIONS.forEach(q => {
+      assert(computeAnswer(q) === q.correctIndex, "answer key " + q.id, "model says " + computeAnswer(q) + ", key says " + q.correctIndex);
+      assert(q.trapOptionIndex !== q.correctIndex && q.trapOptionIndex >= 0 && q.trapOptionIndex < q.options.length, "trap index valid " + q.id);
+      assert(questionGraph(q).ok, "question parses " + q.id);
+    });
+  } catch (err) {
+    results.failed++;
+    results.failures.push({ n: "Uncaught", d: err.message });
+  }
+  return results;
+}
+window.runSelfTests = runSelfTests;
+
+/* @@DOM-BELOW@@ */
+
+/* =====================================================================
+   4. STATE
+   ===================================================================== */
+const TOPIC_ID = "inequalities";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+const CHAIN_PRESETS = {
+  chain: {
+    label: "One chain", statements: ["P > Q ≥ R = S < T"],
+    caption: "<strong>Read it as positions.</strong> “R = S” means one shared slot. “Q ≥ R” puts Q in that slot or to its right (dashed link: the gap may be 0). “P > Q” puts P strictly to the right of Q (solid link). Q and T are stacked: both are right of the R=S slot, but nothing says which is further. Rule after the picture: a long chain just means “walk the links from one letter to the other.”"
+  },
+  valley: {
+    label: "Valley (breaks)", statements: ["P > Q ≤ R"],
+    caption: "<strong>Q is the valley.</strong> Both P and R are to the right of Q (or on it), but nothing says which is further right — they are stacked. So P vs R can be <, = or > : no conclusion. Rule after the picture: a chain only links two letters if you can walk from one to the other in <em>one</em> direction."
+  },
+  peak: {
+    label: "Peak (breaks)", statements: ["P < Q ≥ R"],
+    caption: "<strong>Q is the peak.</strong> P and R are both to the left of Q (R may touch it). They are stacked — no order between them. Same lesson as the valley, mirrored."
+  },
+  join: {
+    label: "Two statements join", statements: ["P ≥ Q > R", "R ≥ S"],
+    caption: "<strong>Statements share letters.</strong> “P ≥ Q > R” and “R ≥ S” both mention R, so they stitch into one line: S ≤ R &lt; Q ≤ P. Rule after the picture: always combine statements through their common letter before judging a conclusion."
+  }
+};
+
+const STEPS = [
+  { stmts: ["P ≥ Q"], mark: null, check: null,
+    cap: "One link. “P ≥ Q” means P is <em>not smaller</em> than Q: it sits to the right of Q or exactly on it. The dashed link says: the gap may be 0." },
+  { stmts: ["P ≥ Q", "Q > R"], mark: null, check: null,
+    cap: "Add “Q > R”. Now there is a solid link: Q is strictly right of R. This is the strict link everything else will lean on." },
+  { stmts: ["P ≥ Q", "Q > R", "R = S"], mark: null, check: ["P > S", "P ≥ S"],
+    cap: "Add “R = S”: they now share one slot. Nothing else moves. Ask: can P and S ever be the same?" },
+  { stmts: ["P ≥ Q", "Q > R", "R = S"], mark: ["P", "S"], check: ["P > S", "P = S"],
+    cap: "Add the gaps from P down to S: 0 or more (P ≥ Q) + more than 0 (Q > R) + exactly 0 (R = S). Anything plus a positive gap is positive, so P is strictly right of S." },
+  { stmts: ["P ≥ Q", "Q ≥ R", "R = S"], mark: ["P", "S"], check: ["P > S", "P ≥ S"],
+    cap: "Now soften the strict link to “Q ≥ R”. Every gap may be 0, so all four letters could pile onto one slot. P ≥ S is all you can say — P > S is no longer guaranteed." }
+];
+
+const state = {
+  s1Preset: "chain", s1Focus: "",
+  step: 0,
+  predictLocked: false,
+  lab: { rels: [], concls: [], mark: null },
+  eo: { stmt: 0, pair: 0 },
+  practiceMode: "hints", currentQIndex: 0, shuffled: [], answered: false,
+  timer: { interval: null, remaining: 90 },
+  testsPassed: false,
+  stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
+};
+
+const MARK_META = {
+  true: { cls: "mark-true", sym: "✓", word: "Follows" },
+  false: { cls: "mark-false", sym: "✗", word: "Can't be true" },
+  cannot: { cls: "mark-cannot", sym: "?", word: "Cannot be determined" },
+  either: { cls: "mark-either", sym: "⇄", word: "Either / Or" }
+};
+
+/* =====================================================================
+   5. RENDERERS — chain on a number line
+   ===================================================================== */
+function drawChain(svg, g, opts = {}) {
+  const W = 760, id = svg.id || "svg";
+  if (!g.ok) {
+    svg.setAttribute("viewBox", "0 0 " + W + " 120");
+    svg.innerHTML = `<text x="${W / 2}" y="64" text-anchor="middle" font-size="14" fill="#fca5a5">${esc(g.error)}</text>`;
+    return;
+  }
+  if (g.inconsistent) {
+    svg.setAttribute("viewBox", "0 0 " + W + " 120");
+    svg.innerHTML = `<text x="${W / 2}" y="56" text-anchor="middle" font-size="15" font-weight="700" fill="#fca5a5">These statements contradict each other</text>
+      <text x="${W / 2}" y="82" text-anchor="middle" font-size="12" fill="#94a3b8">A strict link loops back on itself, so no number-line picture exists.</text>`;
+    return;
+  }
+  const lay = Model.layout(g), cols = lay.columns;
+  const nCols = cols.length, maxRows = Math.max(...cols.map(c => c.length));
+  const rowH = 74, top = 84, boxH = 46, R = 14, STEP = 40;
+  const H = top + maxRows * rowH + 74, axisY = H - 30;
+  const xAt = c => nCols === 1 ? W / 2 : 90 + c * (W - 180) / (nCols - 1);
+  const center = top + (maxRows * rowH) / 2 - 8;
+  const pos = {};
+  cols.forEach((col, ci) => col.forEach((cls, ri) => {
+    const n = g.classes[cls].length;
+    pos[cls] = { x: xAt(ci), y: center + (ri - (col.length - 1) / 2) * rowH, w: n * STEP + 14, n, col: ci };
+  }));
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+
+  let out = `<defs><marker id="${id}-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94a3b8"/></marker></defs>`;
+  let labels = "";
+
+  // links
+  g.classEdges.forEach(e => {
+    const a = pos[e.small], b = pos[e.big], span = b.col - a.col;
+    const dash = e.strict ? "" : ' stroke-dasharray="6 5"';
+    let path, lx, ly;
+    if (span === 1) {
+      const x1 = a.x + a.w / 2 + 2, y1 = a.y, x2 = b.x - b.w / 2 - 7, y2 = b.y;
+      path = `M${x1} ${y1} L${x2} ${y2}`; lx = (x1 + x2) / 2; ly = (y1 + y2) / 2;
+    } else {
+      const x1 = a.x, y1 = a.y - boxH / 2, x2 = b.x, y2 = b.y - boxH / 2 - 5;
+      const cy = Math.min(y1, y2) - 26 - 22 * (span - 1);
+      path = `M${x1} ${y1} Q${(x1 + x2) / 2} ${cy} ${x2} ${y2}`;
+      lx = (x1 + x2) / 2; ly = 0.25 * y1 + 0.5 * cy + 0.25 * y2;
+    }
+    out += `<path d="${path}" fill="none" stroke="${e.strict ? "#cbd5e1" : "#94a3b8"}" stroke-width="2.2"${dash} marker-end="url(#${id}-arr)"/>`;
+    labels += `<rect x="${lx - 12}" y="${ly - 11}" width="24" height="21" rx="5" fill="#0b1220" stroke="#2a3758"/>
+      <text x="${lx}" y="${ly + 5}" text-anchor="middle" font-size="14" font-weight="800" fill="${e.strict ? "#e8edf7" : "#94a3b8"}">${e.strict ? "&lt;" : "≤"}</text>`;
+  });
+
+  // axis
+  out += `<line x1="30" y1="${axisY}" x2="${W - 34}" y2="${axisY}" stroke="#475569" stroke-width="2.5" marker-end="url(#${id}-arr)"/>
+    <text x="30" y="${axisY + 20}" font-size="11" fill="#64748b">smaller</text>
+    <text x="${W - 34}" y="${axisY + 20}" text-anchor="end" font-size="11" fill="#64748b">bigger</text>`;
+
+  // role colouring
+  const focus = opts.focus && g.idx[opts.focus] !== undefined ? opts.focus : "";
+  const marks = opts.mark || [];
+  const roleStyle = {
+    focus: { fill: "#f59e0b", stroke: "#fbbf24", text: "#1c1100", dash: "" },
+    gt: { fill: "rgba(34,197,94,.22)", stroke: "#22c55e", text: "#e8edf7", dash: "" },
+    ge: { fill: "rgba(34,197,94,.12)", stroke: "#22c55e", text: "#e8edf7", dash: ' stroke-dasharray="4 3"' },
+    eq: { fill: "rgba(245,158,11,.28)", stroke: "#f59e0b", text: "#e8edf7", dash: "" },
+    lt: { fill: "rgba(167,139,250,.22)", stroke: "#a78bfa", text: "#e8edf7", dash: "" },
+    le: { fill: "rgba(167,139,250,.12)", stroke: "#a78bfa", text: "#e8edf7", dash: ' stroke-dasharray="4 3"' },
+    none: { fill: "#1c2848", stroke: "#475569", text: "#94a3b8", dash: "" },
+    plain: { fill: "rgba(56,189,248,.18)", stroke: "#38bdf8", text: "#e8edf7", dash: "" }
+  };
+  const roleOf = v => {
+    if (!focus) return "plain";
+    if (v === focus) return "focus";
+    const k = Model.relBetween(g, v, focus).known;
+    return { ">": "gt", "≥": "ge", "=": "eq", "<": "lt", "≤": "le" }[k] || "none";
+  };
+
+  let anyStack = false;
+  cols.forEach(col => { if (col.length > 1) anyStack = true; });
+
+  cols.forEach(col => col.forEach(cls => {
+    const p = pos[cls], vars = g.classes[cls];
+    // drop line to axis + tick
+    out += `<line x1="${p.x}" y1="${p.y + boxH / 2}" x2="${p.x}" y2="${axisY}" stroke="#334155" stroke-width="1.5" stroke-dasharray="2 4"/>
+      <circle cx="${p.x}" cy="${axisY}" r="3.5" fill="#64748b"/>`;
+    // slot box
+    if (p.n > 1) {
+      out += `<rect x="${p.x - p.w / 2}" y="${p.y - boxH / 2}" width="${p.w}" height="${boxH}" rx="14" fill="rgba(245,158,11,.07)" stroke="#f59e0b" stroke-width="1.6"/>
+        <text x="${p.x}" y="${p.y - boxH / 2 - 6}" text-anchor="middle" font-size="10" font-weight="700" fill="#f59e0b">same slot (=)</text>`;
+    }
+    vars.forEach((v, k) => {
+      const cx = p.x - ((p.n - 1) * STEP) / 2 + k * STEP, cy = p.y;
+      const st = roleStyle[roleOf(v)];
+      if (marks.includes(v)) out += `<circle cx="${cx}" cy="${cy}" r="${R + 6}" fill="none" stroke="#f472b6" stroke-width="2.5"/>`;
+      out += `<circle cx="${cx}" cy="${cy}" r="${R}" fill="${st.fill}" stroke="${st.stroke}" stroke-width="2.4"${st.dash}/>
+        <text x="${cx}" y="${cy + 5}" text-anchor="middle" font-size="14" font-weight="800" fill="${st.text}" font-family="ui-monospace,Menlo,Consolas,monospace">${esc(v)}</text>`;
+      if (focus && v !== focus) {
+        const k2 = Model.relBetween(g, v, focus).known;
+        out += `<text x="${cx}" y="${cy + R + 20}" text-anchor="middle" font-size="10" fill="#94a3b8">${k2 ? esc(k2 + " " + focus) : "no link"}</text>`;
+      }
+    });
+  }));
+
+  out += labels;
+  if (anyStack) out += `<text x="14" y="20" font-size="11" fill="#64748b">Boxes stacked in one column = no known order between them.</text>`;
+  svg.innerHTML = out;
+}
+
+/* ---- Section 1 ---- */
+function renderS1() {
+  const preset = CHAIN_PRESETS[state.s1Preset];
+  const g = Model.build(preset.statements);
+  if (state.s1Focus && !(state.s1Focus in g.idx)) state.s1Focus = "";
+  $("s1-presets").querySelectorAll("button").forEach(b => {
+    const on = b.dataset.preset === state.s1Preset;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  $("s1-statements").innerHTML = preset.statements.map(s => `<span class="chain-text">${esc(s)}</span>`).join("");
+  const sel = $("s1-focus");
+  sel.innerHTML = `<option value="">— none —</option>` + g.vars.map(v => `<option value="${esc(v)}"${v === state.s1Focus ? " selected" : ""}>${esc(v)}</option>`).join("");
+  drawChain($("s1-svg"), g, { focus: state.s1Focus });
+  $("s1-caption").innerHTML = preset.caption;
+
+  const box = $("s1-readout");
+  if (!state.s1Focus) {
+    box.innerHTML = "Pick a letter above to colour every other letter by how it compares with it.";
+    return;
+  }
+  const f = state.s1Focus, grp = { ">": [], "≥": [], "=": [], "<": [], "≤": [], none: [] };
+  g.vars.forEach(v => { if (v === f) return; const k = Model.relBetween(g, v, f).known; grp[k || "none"].push(v); });
+  const L = a => a.length ? "<strong>" + a.map(esc).join(", ") + "</strong>" : "<em>nobody</em>";
+  box.innerHTML = `<ul class="readout-list">
+    <li>Definitely <strong>bigger</strong> than ${esc(f)}: ${L(grp[">"])}</li>
+    <li>Bigger <em>or equal</em> (could tie): ${L(grp["≥"])}</li>
+    <li><strong>Same slot</strong> as ${esc(f)}: ${L(grp["="])}</li>
+    <li>Definitely <strong>smaller</strong>: ${L(grp["<"])}</li>
+    <li>Smaller <em>or equal</em> (could tie): ${L(grp["≤"])}</li>
+    <li><strong>No known order</strong> with ${esc(f)}: ${L(grp.none)}</li></ul>`;
+}
+
+/* ---- Section 2 (step-through) ---- */
+function renderStep() {
+  const s = STEPS[state.step], g = Model.build(s.stmts);
+  drawChain($("step-svg"), g, { mark: s.mark || [] });
+  $("step-caption").innerHTML = s.cap;
+  $("step-badge").textContent = `Step ${state.step + 1} / ${STEPS.length}`;
+  $("step-prev").disabled = state.step === 0;
+  $("step-next").disabled = state.step === STEPS.length - 1;
+  $("step-next").textContent = state.step === STEPS.length - 1 ? "Done ✓" : "Next step →";
+  const chk = $("step-check");
+  if (!s.check) { chk.className = "callout callout-info hidden"; return; }
+  chk.className = "callout callout-info";
+  chk.innerHTML = "<strong>Statements so far:</strong> " + s.stmts.map(x => `<code>${esc(x)}</code>`).join(" ") + "<br>" +
+    s.check.map(c => {
+      const r = Model.evaluateConclusion(g, c);
+      const m = MARK_META[r.status];
+      return `<div style="margin-top:6px;"><span class="mark ${m.cls}">${m.sym}</span> <code>${esc(c)}</code> — ${m.word}. <span style="color:var(--text-dim)">Possible for ${esc(r.x)} vs ${esc(r.y)}: ${r.possible.map(esc).join(" ")}</span></div>`;
+    }).join("");
+}
+
+/* ---- Section 3 (predict) ---- */
+function preparePredict() {
+  if (state.predictLocked) return;
+  const c = $("predict-options");
+  c.innerHTML = "";
+  [
+    { kind: "trap", value: "ge", label: "P ≥ S — they might be equal" },
+    { kind: "correct", value: "gt", label: "P > S — definitely bigger" },
+    { kind: "wrong", value: "eq", label: "P = S" },
+    { kind: "trap", value: "cannot", label: "Cannot be compared" }
+  ].forEach(o => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "option-btn"; b.textContent = o.label;
+    b.dataset.kind = o.kind; b.dataset.value = o.value;
+    b.addEventListener("click", () => commitPredict(o));
+    c.appendChild(b);
+  });
+  $("predict-feedback").className = "callout hidden";
+  $("predict-reveal").classList.add("hidden");
+}
+function commitPredict(o) {
+  if (state.predictLocked) return;
+  state.predictLocked = true;
+  document.querySelectorAll("#predict-options .option-btn").forEach(b => {
+    const chosen = b.dataset.value === o.value;
+    if (b.dataset.kind === "correct") b.classList.add("correct");
+    else if (b.dataset.kind === "trap") b.classList.add("trap");
+    if (chosen && b.dataset.kind !== "correct") b.classList.add("incorrect");
+    b.disabled = true;
+  });
+  const fb = $("predict-feedback");
+  fb.classList.remove("hidden");
+  if (o.kind === "correct") { fb.className = "callout callout-success"; fb.innerHTML = "<strong>✓ Correct.</strong> One strict link in the chain is enough to separate the two ends."; }
+  else if (o.value === "ge") { fb.className = "callout callout-trap"; fb.innerHTML = "<strong>⚠️ Trap:</strong> P ≥ S is true but weak. It leaves room for P = S, and that room doesn’t exist: Q &gt; R is a real gap."; }
+  else if (o.value === "cannot") { fb.className = "callout callout-trap"; fb.innerHTML = "<strong>⚠️ Trap:</strong> The first ≥ makes the chain feel loose, but it points the same way as the rest — you can walk from P all the way to S."; }
+  else { fb.className = "callout callout-danger"; fb.innerHTML = "<strong>Not quite.</strong> P = S would need every gap to be 0, but Q &gt; R is strictly positive."; }
+  drawChain($("predict-svg"), Model.build(["P ≥ Q > R = S"]), { mark: ["P", "S"] });
+  $("predict-reveal").classList.remove("hidden");
+}
+
+/* ---- Section 4 (play lab) ---- */
+const LAB_VARS = ["P", "Q", "R", "S", "T", "U"];
+const LAB_OPS = [">", "≥", "=", "≤", "<"];
+const LAB_DEFAULT = {
+  rels: [{ a: "P", op: ">", b: "Q" }, { a: "Q", op: "≥", b: "R" }, { a: "R", op: "=", b: "S" }, { a: "S", op: "<", b: "T" }],
+  concls: [{ x: "P", op: ">", y: "S" }, { x: "Q", op: ">", y: "S" }, { x: "P", op: "≥", y: "T" }, { x: "P", op: "<", y: "T" }]
+};
+
+function makeSelect(options, value, cls, label, onChange) {
+  const s = document.createElement("select");
+  if (cls) s.className = cls;
+  s.setAttribute("aria-label", label);
+  options.forEach(o => {
+    const op = document.createElement("option");
+    op.value = o; op.textContent = o; if (o === value) op.selected = true;
+    s.appendChild(op);
+  });
+  s.addEventListener("change", () => onChange(s.value));
+  return s;
+}
+function labStatements() { return state.lab.rels.map(r => `${r.a} ${r.op} ${r.b}`); }
+function labText(c) { return `${c.x} ${c.op} ${c.y}`; }
+
+function buildLabRows() {
+  const rels = $("lab-rels");
+  rels.innerHTML = "";
+  state.lab.rels.forEach((r, i) => {
+    const row = document.createElement("div");
+    row.className = "lab-row";
+    row.innerHTML = `<span class="idx">St ${i + 1}</span>`;
+    row.appendChild(makeSelect(LAB_VARS, r.a, "", "Statement " + (i + 1) + " left letter", v => { r.a = v; refreshLab(); }));
+    row.appendChild(makeSelect(LAB_OPS, r.op, "sel-op", "Statement " + (i + 1) + " sign", v => { r.op = v; refreshLab(); }));
+    row.appendChild(makeSelect(LAB_VARS, r.b, "", "Statement " + (i + 1) + " right letter", v => { r.b = v; refreshLab(); }));
+    const rm = document.createElement("button");
+    rm.type = "button"; rm.className = "btn btn-ghost btn-sm rm"; rm.textContent = "Remove";
+    rm.disabled = state.lab.rels.length <= 1;
+    rm.addEventListener("click", () => { state.lab.rels.splice(i, 1); buildLabRows(); refreshLab(); });
+    row.appendChild(rm);
+    rels.appendChild(row);
+  });
+  $("lab-add-rel").disabled = state.lab.rels.length >= 8;
+
+  const cs = $("lab-concls");
+  cs.innerHTML = "";
+  state.lab.concls.forEach((c, i) => {
+    const row = document.createElement("div");
+    row.className = "lab-row concl-row";
+    row.dataset.index = i;
+    const main = document.createElement("div");
+    main.className = "concl-main";
+    main.innerHTML = `<span class="idx">Concl ${i + 1}</span>`;
+    main.appendChild(makeSelect(LAB_VARS, c.x, "", "Conclusion " + (i + 1) + " left letter", v => { c.x = v; state.lab.mark = [c.x, c.y]; refreshLab(); }));
+    main.appendChild(makeSelect(LAB_OPS, c.op, "sel-op", "Conclusion " + (i + 1) + " sign", v => { c.op = v; state.lab.mark = [c.x, c.y]; refreshLab(); }));
+    main.appendChild(makeSelect(LAB_VARS, c.y, "", "Conclusion " + (i + 1) + " right letter", v => { c.y = v; state.lab.mark = [c.x, c.y]; refreshLab(); }));
+    const mk = document.createElement("span");
+    mk.className = "mark"; mk.id = "lab-mark-" + i; mk.setAttribute("role", "status");
+    main.appendChild(mk);
+    const rm = document.createElement("button");
+    rm.type = "button"; rm.className = "btn btn-ghost btn-sm rm"; rm.textContent = "Remove";
+    rm.disabled = state.lab.concls.length <= 1;
+    rm.addEventListener("click", (e) => { e.stopPropagation(); state.lab.concls.splice(i, 1); state.lab.mark = null; buildLabRows(); refreshLab(); });
+    main.appendChild(rm);
+    row.appendChild(main);
+    const why = document.createElement("div");
+    why.className = "concl-why"; why.id = "lab-why-" + i;
+    row.appendChild(why);
+    row.addEventListener("click", () => { state.lab.mark = [c.x, c.y]; refreshLab(); });
+    cs.appendChild(row);
+  });
+  $("lab-add-concl").disabled = state.lab.concls.length >= 6;
+}
+
+function refreshLab() {
+  const g = Model.build(labStatements());
+  drawChain($("lab-svg"), g, { mark: state.lab.mark || [] });
+  const st = $("lab-status");
+  if (!g.ok) { st.className = "callout callout-danger"; st.textContent = g.error; }
+  else if (g.inconsistent) { st.className = "callout callout-danger"; st.innerHTML = "<strong>Contradiction.</strong> These statements can’t all be true together (a strict link loops back). Change a sign."; }
+  else {
+    const joint = g.classes.filter(c => c.length > 1).map(c => c.join(" = "));
+    const hasStack = Model.layout(g).columns.some(c => c.length > 1);
+    st.className = "callout callout-info";
+    st.innerHTML = `<strong>${g.vars.length} letters, ${g.classes.length} slots.</strong> ` +
+      (joint.length ? `Shared slot${joint.length > 1 ? "s" : ""}: ${joint.map(j => "<code>" + esc(j) + "</code>").join(" ")}. ` : "No two letters are forced equal. ") +
+      (hasStack ? "Stacked boxes have no known order between them." : "Every pair of slots is ordered — one clean line.");
+  }
+  state.lab.concls.forEach((c, i) => {
+    const text = labText(c);
+    let r = Model.evaluateConclusion(g, text);
+    let partnerIdx = -1;
+    if (r.status === "cannot" && g.ok && !g.inconsistent) {
+      for (let j = 0; j < state.lab.concls.length; j++) {
+        if (j === i) continue;
+        const r2 = Model.evaluateConclusion(g, text, labText(state.lab.concls[j]));
+        if (r2.status === "either") { r = r2; partnerIdx = j; break; }
+      }
+    }
+    const m = MARK_META[r.status];
+    const mk = $("lab-mark-" + i), why = $("lab-why-" + i);
+    if (!mk) return;
+    mk.className = "mark " + m.cls;
+    mk.textContent = m.sym + " " + (r.status === "either" ? "Either/Or" : m.word);
+    let reason = r.reason || "";
+    if (partnerIdx >= 0) reason = `Pairs with conclusion ${partnerIdx + 1} (${labText(state.lab.concls[partnerIdx])}): ` + reason;
+    why.textContent = reason;
+  });
+  document.querySelectorAll("#lab-concls .lab-row").forEach(row => {
+    const c = state.lab.concls[+row.dataset.index];
+    const on = state.lab.mark && c && state.lab.mark[0] === c.x && state.lab.mark[1] === c.y;
+    row.style.borderColor = on ? "#f472b6" : "";
+  });
+}
+
+function labMap(fn) { state.lab.rels.forEach(r => { r.op = fn(r.op); }); buildLabRows(); refreshLab(); }
+function resetLab() {
+  state.lab.rels = LAB_DEFAULT.rels.map(r => ({ ...r }));
+  state.lab.concls = LAB_DEFAULT.concls.map(c => ({ ...c }));
+  state.lab.mark = null;
+  buildLabRows(); refreshLab();
+}
+
+/* ---- Section 5 (either / or) ---- */
+const EO_STATEMENTS = [
+  { text: "P > Q ≥ R ≤ S", note: "R is a valley: P and S are on different branches." },
+  { text: "P ≥ Q = S", note: "P is at or right of S." },
+  { text: "P > Q ≥ S", note: "P is strictly right of S." }
+];
+const EO_PAIRS = [
+  { a: "P ≥ S", b: "P < S" }, { a: "P > S", b: "P < S" }, { a: "P > S", b: "P ≤ S" },
+  { a: "P = S", b: "P > S" }, { a: "P ≥ S", b: "P ≤ S" }
+];
+const VERDICT_TEXT = {
+  both: ["callout-success", "Both I and II follow."],
+  first: ["callout-success", "Only I follows."],
+  second: ["callout-success", "Only II follows."],
+  either: ["callout-info", "Either I or II follows."],
+  neither: ["callout-trap", "Neither follows."]
+};
+function renderEither() {
+  const st = EO_STATEMENTS[state.eo.stmt], pr = EO_PAIRS[state.eo.pair];
+  const g = Model.build([st.text]);
+  const { possible } = Model.relBetween(g, "P", "S");
+  const pv = Model.pairVerdict(g, pr.a, pr.b);
+  const c1 = Model.parseConclusion(pr.a), c2 = Model.parseConclusion(pr.b);
+  const pw = 228, gap = 24, x0 = 26;
+  const worlds = [["<", "P < S"], ["=", "P = S"], [">", "P > S"]];
+  let out = "";
+  worlds.forEach(([sym, title], k) => {
+    const x = x0 + k * (pw + gap), poss = possible.includes(sym);
+    const inI = Model.ALLOWED[c1.op].includes(sym), inII = Model.ALLOWED[c2.op].includes(sym);
+    let stroke = "#475569", fill = "rgba(71,85,105,.08)", dash = "", tag = "ruled out by the statement";
+    if (poss) {
+      if (inI && inII) { stroke = "#f59e0b"; fill = "rgba(245,158,11,.14)"; tag = "I and II both true here"; }
+      else if (inI) { stroke = "#38bdf8"; fill = "rgba(56,189,248,.14)"; tag = "only I true here"; }
+      else if (inII) { stroke = "#a78bfa"; fill = "rgba(167,139,250,.14)"; tag = "only II true here"; }
+      else { stroke = "#ef4444"; fill = "rgba(239,68,68,.10)"; dash = ' stroke-dasharray="6 4"'; tag = "neither is true here!"; }
+    }
+    const op = poss ? 1 : 0.5;
+    const lineY = 108, cx = x + pw / 2;
+    let pX, sX;
+    if (sym === "<") { pX = cx - 50; sX = cx + 50; } else if (sym === ">") { pX = cx + 50; sX = cx - 50; } else { pX = cx - 17; sX = cx + 17; }
+    out += `<g opacity="${op}"><rect x="${x}" y="8" width="${pw}" height="232" rx="14" fill="${fill}" stroke="${stroke}" stroke-width="2"${dash}/>
+      <text x="${cx}" y="36" text-anchor="middle" font-size="15" font-weight="800" fill="#e8edf7" font-family="ui-monospace,Menlo,Consolas,monospace">${esc(title)}</text>
+      <line x1="${x + 24}" y1="${lineY + 24}" x2="${x + pw - 24}" y2="${lineY + 24}" stroke="#475569" stroke-width="2"/>
+      ${sym === "=" ? `<rect x="${cx - 36}" y="${lineY - 24}" width="72" height="44" rx="14" fill="rgba(245,158,11,.08)" stroke="#f59e0b" stroke-width="1.5"/>` : ""}
+      <circle cx="${pX}" cy="${lineY}" r="14" fill="rgba(56,189,248,.25)" stroke="#38bdf8" stroke-width="2.4"/>
+      <text x="${pX}" y="${lineY + 5}" text-anchor="middle" font-size="14" font-weight="800" fill="#e8edf7">P</text>
+      <circle cx="${sX}" cy="${lineY}" r="14" fill="rgba(52,211,153,.22)" stroke="#34d399" stroke-width="2.4"/>
+      <text x="${sX}" y="${lineY + 5}" text-anchor="middle" font-size="14" font-weight="800" fill="#e8edf7">S</text>
+      <text x="${x + 20}" y="178" font-size="13" fill="${inI ? "#7dd3fc" : "#64748b"}" font-weight="700">I  ${esc(pr.a)}  ${inI ? "✓" : "✗"}</text>
+      <text x="${x + 20}" y="200" font-size="13" fill="${inII ? "#c4b5fd" : "#64748b"}" font-weight="700">II  ${esc(pr.b)}  ${inII ? "✓" : "✗"}</text>
+      <text x="${cx}" y="226" text-anchor="middle" font-size="11" fill="${poss ? stroke : "#94a3b8"}" font-weight="700">${esc(tag)}</text></g>`;
+  });
+  $("eo-svg").innerHTML = out;
+  const [cls, text] = VERDICT_TEXT[pv.verdict];
+  let why = "";
+  if (pv.verdict === "either") why = "Each one alone is doubtful, but between them they cover every picture that is still possible — one of them must be true.";
+  else if (pv.verdict === "neither") why = "At least one possible picture (red dashed) is covered by neither conclusion, so neither is certain — and they are not complementary.";
+  else if (pv.verdict === "first") why = "Conclusion I is true in every possible picture; II is not.";
+  else if (pv.verdict === "second") why = "Conclusion II is true in every possible picture; I is not.";
+  else why = "Both are true in every possible picture.";
+  const note = pr.a === "P ≥ S" && pr.b === "P ≤ S" && pv.verdict === "either" ? " (≥ with ≤ always covers everything; the two meet at “=”.)" : "";
+  $("eo-verdict").className = "callout " + cls;
+  $("eo-verdict").innerHTML = `<strong>${text}</strong> Statement: <code>${esc(st.text)}</code> — ${esc(st.note)} Possible for P vs S: <strong>${possible.map(esc).join("  ")}</strong>. ${why}${note}`;
+}
+
+/* =====================================================================
+   6. PRACTICE
+   ===================================================================== */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function questionOptions(q) { return q.kind === "pair" ? PAIR_OPTIONS : q.options; }
+function questionHTML(q) {
+  let h = '<div class="q-block">';
+  if (q.code) {
+    h += `<div class="q-line"><span class="q-lbl">Code</span>${Object.entries(q.code).map(([k, v]) => `<span><code>${esc(k)}</code> means <code>${esc(v)}</code></span>`).join("")}</div>`;
+  }
+  h += `<div class="q-line"><span class="q-lbl">Statement${q.statements.length > 1 ? "s" : ""}</span>${q.statements.map(s => `<code>${esc(s)}</code>`).join("")}</div>`;
+  if (q.kind === "pair") {
+    h += `<div class="q-line"><span class="q-lbl">Conclusions</span><span>I.</span><code>${esc(q.conclusions[0])}</code><span>II.</span><code>${esc(q.conclusions[1])}</code></div>`;
+  } else if (q.kind === "status") {
+    h += `<div class="q-line"><span class="q-lbl">Conclusion</span><code>${esc(q.conclusions[0])}</code></div><p class="q-ask">Is it…</p>`;
+  } else {
+    h += `<p class="q-ask">Which conclusion definitely follows?</p>`;
+  }
+  return h + "</div>";
+}
+function updatePracticeVis() {
+  const q = state.shuffled[state.currentQIndex];
+  const box = $("practice-vis");
+  if (!q || !state.testsPassed) { box.classList.add("hidden"); return; }
+  const show = state.answered || state.practiceMode === "hints";
+  box.classList.toggle("hidden", !show);
+  if (!show) return;
+  const g = questionGraph(q);
+  drawChain($("practice-svg"), g, {});
+  $("practice-vis-note").textContent = state.answered
+    ? "Chain after decoding" + (q.code ? " with this question’s legend" : "") + ": " + questionStatements(q).join("   |   ")
+    : "Guided hint: here is the chain" + (q.code ? " (already decoded)" : "") + ". Switch to Independent to draw it in your head.";
+}
+function setPracticeMode(mode) {
+  state.practiceMode = mode;
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+    const on = b.dataset.mode === mode;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  $("timer-container").classList.toggle("hidden", mode !== "timed");
+  if (mode === "timed" && !state.answered) startTimer(); else stopTimer();
+  updatePracticeVis();
+}
+function startTimer() {
+  stopTimer();
+  state.timer.remaining = 90;
+  $("timer-display").textContent = state.timer.remaining;
+  state.timer.interval = setInterval(() => {
+    state.timer.remaining--;
+    $("timer-display").textContent = Math.max(0, state.timer.remaining);
+    if (state.timer.remaining <= 0) {
+      stopTimer();
+      if (!state.answered) markAnswer(-1, state.shuffled[state.currentQIndex]);
+    }
+  }, 1000);
+}
+function stopTimer() { if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; } }
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
+    if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw));
+  } catch (_) {}
+}
+function saveProgress() { try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch (_) {} }
+function renderStats() {
+  $("stat-attempts").textContent = state.stats.attempts;
+  $("stat-correct").textContent = state.stats.correct;
+  $("stat-independent").textContent = state.stats.independentCorrect;
+  $("stat-accuracy").textContent = (state.stats.attempts ? Math.round(state.stats.correct / state.stats.attempts * 100) : 0) + "%";
+}
+function renderQuestion() {
+  if (!state.testsPassed) { $("practice-q-stem").textContent = "Practice is disabled because self-tests failed."; return; }
+  const q = state.shuffled[state.currentQIndex];
+  state.answered = false;
+  $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
+  const d = $("practice-q-difficulty");
+  d.textContent = q.difficulty;
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published" : q.difficulty === "Medium" ? "badge-draft" : "badge-tag");
+  $("practice-q-stem").innerHTML = questionHTML(q);
+  $("practice-feedback").className = "callout hidden";
+  $("practice-error-categorizer").classList.add("hidden");
+  $("practice-solution-box").classList.add("hidden");
+  $("btn-next-question").disabled = true;
+  const c = $("practice-options-container");
+  c.innerHTML = "";
+  questionOptions(q).forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "option-btn";
+    btn.textContent = String.fromCharCode(65 + i) + ". " + opt;
+    btn.addEventListener("click", () => markAnswer(i, q));
+    c.appendChild(btn);
+  });
+  updatePracticeVis();
+  if (state.practiceMode === "timed") startTimer();
+}
+function markAnswer(chosen, q) {
+  if (state.answered) return;
+  state.answered = true;
+  stopTimer();
+  const isCorrect = chosen === q.correctIndex, isTrap = chosen === q.trapOptionIndex;
+  document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.correctIndex) b.classList.add("correct");
+    else if (i === chosen) b.classList.add(isTrap ? "trap" : "incorrect");
+  });
+  const fb = $("practice-feedback");
+  fb.classList.remove("hidden");
+  if (isCorrect) { fb.className = "callout callout-success"; fb.innerHTML = "<strong>✓ Correct.</strong>"; }
+  else if (isTrap) { fb.className = "callout callout-trap"; fb.innerHTML = "<strong>⚠️ Trap:</strong> " + q.trapExplanation; $("practice-error-categorizer").classList.remove("hidden"); }
+  else if (chosen === -1) { fb.className = "callout callout-danger"; fb.innerHTML = "<strong>Time’s up.</strong> Correct: <strong>" + esc(questionOptions(q)[q.correctIndex]) + "</strong>."; $("practice-error-categorizer").classList.remove("hidden"); }
+  else { fb.className = "callout callout-danger"; fb.innerHTML = "<strong>Incorrect.</strong> Correct: <strong>" + esc(questionOptions(q)[q.correctIndex]) + "</strong>."; $("practice-error-categorizer").classList.remove("hidden"); }
+  $("practice-solution-box").classList.remove("hidden");
+  $("practice-solution-text").textContent = q.solution;
+  state.stats.attempts++;
+  if (isCorrect) { state.stats.correct++; if (state.practiceMode !== "hints") state.stats.independentCorrect++; }
+  saveProgress();
+  renderStats();
+  updatePracticeVis();
+  $("btn-next-question").disabled = false;
+}
+function handleResetStats() {
+  if (!confirm("Reset local practice stats?")) return;
+  state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
+  saveProgress();
+  renderStats();
+}
+window.handleResetStats = handleResetStats;
+
+/* =====================================================================
+   7. INIT
+   ===================================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const results = runSelfTests();
+  state.testsPassed = results.failed === 0;
+  const banner = $("test-status-banner");
+  if (!state.testsPassed) {
+    banner.className = "test-banner";
+    banner.innerHTML = `<strong>⚠️ Self-tests failing — practice disabled.</strong><ul>${results.failures.map(f => `<li>${esc(f.n)}: ${esc(f.d)}</li>`).join("")}</ul>`;
+  }
+
+  loadProgress();
+  state.shuffled = shuffle(PRACTICE_QUESTIONS);
+
+  // Section 1
+  const presets = $("s1-presets");
+  Object.entries(CHAIN_PRESETS).forEach(([key, p]) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "mode-btn"; b.dataset.preset = key; b.textContent = p.label;
+    b.setAttribute("role", "tab");
+    b.addEventListener("click", () => { state.s1Preset = key; renderS1(); });
+    presets.appendChild(b);
+  });
+  $("s1-focus").addEventListener("change", (e) => { state.s1Focus = e.target.value; renderS1(); });
+  renderS1();
+
+  // Section 2
+  $("step-prev").addEventListener("click", () => { if (state.step > 0) { state.step--; renderStep(); } });
+  $("step-next").addEventListener("click", () => { if (state.step < STEPS.length - 1) { state.step++; renderStep(); } });
+  renderStep();
+
+  // Section 3
+  preparePredict();
+
+  // Section 4
+  $("lab-add-rel").addEventListener("click", () => {
+    if (state.lab.rels.length >= 8) return;
+    state.lab.rels.push({ a: "T", op: ">", b: "U" });
+    buildLabRows(); refreshLab();
+  });
+  $("lab-add-concl").addEventListener("click", () => {
+    if (state.lab.concls.length >= 6) return;
+    state.lab.concls.push({ x: "R", op: "≥", y: "T" });
+    buildLabRows(); refreshLab();
+  });
+  $("lab-soften").addEventListener("click", () => labMap(o => o === ">" ? "≥" : o === "<" ? "≤" : o));
+  $("lab-harden").addEventListener("click", () => labMap(o => o === "≥" ? ">" : o === "≤" ? "<" : o));
+  $("lab-reset").addEventListener("click", resetLab);
+  resetLab();
+
+  // Section 5
+  const es = $("eo-stmt"), ep = $("eo-pair");
+  EO_STATEMENTS.forEach((s, i) => { const o = document.createElement("option"); o.value = i; o.textContent = s.text + "   — " + s.note; es.appendChild(o); });
+  EO_PAIRS.forEach((p, i) => { const o = document.createElement("option"); o.value = i; o.textContent = `I. ${p.a}     II. ${p.b}`; ep.appendChild(o); });
+  es.addEventListener("change", () => { state.eo.stmt = +es.value; renderEither(); });
+  ep.addEventListener("change", () => { state.eo.pair = +ep.value; renderEither(); });
+  renderEither();
+
+  // Section 7
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b => b.addEventListener("click", () => setPracticeMode(b.dataset.mode)));
+  $("btn-next-question").addEventListener("click", () => {
+    state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
+    renderQuestion();
+  });
+  $("select-error-category").addEventListener("change", (e) => {
+    state.stats.errorsByCat[e.target.value] = (state.stats.errorsByCat[e.target.value] || 0) + 1;
+    saveProgress();
+  });
+  renderQuestion();
+  renderStats();
+  setPracticeMode("hints");
+});
+</script>
+<script src="../assets/lab-ux.js" defer></script>
+</body>
+</html>

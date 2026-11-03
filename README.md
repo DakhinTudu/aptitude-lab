@@ -1,63 +1,51 @@
 # Aptitude & Reasoning Lab
 
-> A free, static, topic-by-topic interactive learning lab for quantitative aptitude, logical reasoning, and data interpretation. Built to help learners understand **why** methods work, predict outcomes, inspect step-by-step logic, and practise independently for Indian competitive exams (including SEBI Grade A, RBI, NABARD, Banking, and SSC).
+Free static lab for quantitative aptitude, logical reasoning, and data interpretation — built for SEBI Grade A / banking / SSC style prep. Change values, predict, then practise. No login, no build step.
 
-## Core Philosophy
+**Live (after you enable Pages):** `https://<your-username>.github.io/<repo-name>/`
 
-- **Relationship over formula:** Sliders and diagrams reveal proportionality, rate, or logical constraints.
-- **Predict before reveal:** Active recall and self-assessment before worked solutions.
-- **Single source of truth:** Deterministic models power visualisations, step-by-step traces, answer checks, and self-tests.
-- **Practice as a first-class citizen:** Guided learning leads directly to independent, untimed and timed practice with trap analysis.
-- **Zero build steps:** Pure HTML5, SVG, vanilla CSS, and vanilla JavaScript. Runs offline and on GitHub Pages directly from the local file system.
+## What’s included
 
-## Repository Structure
+- **17 topic pages** — percentages, ratios, averages, P&L, time & work, trains, SI/CI, PnC, series, direction, blood relations, syllogisms, order & ranking, seating, coding–decoding, inequalities, table DI
+- Learning path on each page: Understand → Play → Predict → Practice → **Exam shortcuts**
+- Self-tests on load; practice disabled if the model fails
+- Shared UX: `assets/lab-ux.css` + `assets/lab-ux.js`
 
-```text
-aptitude-reasoning-lab/
-├── index.html                 # Central curriculum directory and topic navigator
-├── PROJECT.md                 # Product specification and quality gate standard
-├── README.md                  # Project overview and local execution instructions
-├── .nojekyll                  # Bypass Jekyll processing for GitHub Pages
-├── assets/
-│   ├── style.css              # Calm, accessible, responsive design system
-│   ├── common.js              # Safe storage, self-test runner, and shared helpers
-│   └── favicon.svg            # Crisp SVG lab mark
-├── topics/
-│   └── percentages.html       # Percentages & percentage change (Milestone 1 vertical slice)
-└── docs/
-    ├── curriculum.md          # Topic inventory, exam relevance, and review statuses
-    ├── authoring-guide.md     # Engineering guidelines for adding new topic pages
-    ├── question-quality.md    # Principles for high-utility, verified question design
-    └── reviews/
-        └── percentages.md     # Review file and pilot protocol for Percentages
+## Run locally
+
+Open `index.html` in a browser, or:
+
+```bash
+python -m http.server 8000
+# then http://localhost:8000
 ```
 
-## Running Locally
+## Publish on GitHub Pages
 
-Because this project uses vanilla web standards with no build step, bundler, or server requirement:
+1. Create a GitHub repo and push this project (`master` or `main`).
+2. Repo → **Settings → Pages**.
+3. Source: **Deploy from a branch** → `master`/`main` → folder **`/` (root)**.
+4. Wait ~1 minute. Open `https://<user>.github.io/<repo>/`.
 
-1. Clone or download this repository.
-2. Open `index.html` directly in any modern browser (Chrome, Edge, Firefox, Safari).
-3. Alternatively, serve with any local HTTP server:
-   ```bash
-   # Python
-   python -m http.server 8000
-   # Node npx
-   npx serve .
-   ```
+Requirements already in the repo:
 
-## Development and Verification Standards
+- `.nojekyll` — so Pages does not run Jekyll (needed for folders like `topics/`)
+- Relative links only (`assets/…`, `topics/…`) — works on project Pages URLs
+- No backend / env keys
 
-Every topic page contains:
-- A pure, deterministic mathematical/logical model.
-- Browser-runnable self-tests exposed at `window.runSelfTests()`.
-- Interactive visualization (SVG/semantic HTML).
-- Predict-first worked examples.
-- Comprehensive practice questions with error categorization and step-by-step solutions.
-- Fallback-safe local storage for practice history.
+Optional: custom domain under Pages → Custom domain.
 
-See [PROJECT.md](PROJECT.md) for the detailed specification and quality gate.
+## Repo layout
+
+```text
+index.html              # Home / topic directory
+.nojekyll               # GitHub Pages: skip Jekyll
+assets/                 # favicon, lab-ux.css, lab-ux.js, …
+topics/*.html           # One self-contained lesson per topic
+docs/                   # curriculum, authoring notes, reviews
+PROJECT.md              # Product / quality rules
+```
 
 ## Disclaimer
 
-*Educational tool. Check the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority.*
+Educational tool only. Confirm the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other authority.

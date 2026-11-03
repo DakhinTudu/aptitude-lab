@@ -6,6 +6,7 @@
 <title>Averages, Mixtures &amp; Alligation — Aptitude Lab</title>
 <meta name="description" content="See alligation as a lever. Same-basis trap lab, weighted-average mini-lab, ghost-beam predictions, and shuffled practice." />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
 :root {
   --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
@@ -263,6 +264,51 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
   border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
 }
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
 </style>
 </head>
 <body>
@@ -284,8 +330,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        <li><span class="badge badge-published">Published</span></li>
-      </ul>
+        </ul>
     </nav>
   </div>
 </header>
@@ -485,6 +530,36 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
   </section>
 
+  <!-- ===== REPLACE ONE VALUE ===== -->
+  <section class="card" aria-labelledby="s-rep">
+    <div class="card-header">
+      <h2 id="s-rep" class="section-title">Understand: replace one value — why the average moves</h2>
+      <p class="section-subtitle">Don't memorise a formula. One number leaves, one enters. Total changes by (new − old). Average moves by that ÷ n. See the slide — then the mind shortcut is obvious.</p>
+    </div>
+    <div class="control-grid">
+      <div class="control-group">
+        <label for="rep-avg" class="control-label"><span>Old average</span><span id="rep-avg-b" class="badge badge-tag">40</span></label>
+        <input type="range" id="rep-avg" min="10" max="80" value="40">
+      </div>
+      <div class="control-group">
+        <label for="rep-n" class="control-label"><span>Count n</span><span id="rep-n-b" class="badge badge-tag">5</span></label>
+        <input type="range" id="rep-n" min="3" max="12" value="5">
+      </div>
+      <div class="control-group">
+        <label for="rep-old" class="control-label"><span>Value removed</span><span id="rep-old-b" class="badge badge-tag">30</span></label>
+        <input type="range" id="rep-old" min="5" max="90" value="30">
+      </div>
+      <div class="control-group">
+        <label for="rep-new" class="control-label"><span>Value added</span><span id="rep-new-b" class="badge badge-tag">50</span></label>
+        <input type="range" id="rep-new" min="5" max="90" value="50">
+      </div>
+    </div>
+    <div class="vis-container">
+      <svg id="rep-svg" viewBox="0 0 760 200" width="100%" role="img" aria-label="Average replacement number line"></svg>
+    </div>
+    <p id="rep-cap" style="margin-top:10px;font-size:.92rem;color:var(--text-dim);"></p>
+  </section>
+
   <!-- ===== SECTION 5 — PRACTICE ===== -->
   <section class="card" aria-labelledby="s5">
     <div class="card-header">
@@ -544,25 +619,51 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       </div>
     </div>
   </section>
+
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">Alligation cross</p>
+        <p class="lab-shortcuts-body">|c₂−mean| : |mean−c₁| = quantity ratio. Mean must lie between the two prices.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Weighted ≠ simple</p>
+        <p class="lab-shortcuts-body">Don't average averages unless group sizes are equal.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Replacement</p>
+        <p class="lab-shortcuts-body">New avg = old ± (swap-in − swap-out)/n.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">Dilution</p>
+        <p class="lab-shortcuts-body">Left fraction = (1 − removed/total)^k after k equal removals.</p>
+      </li>
+    </ul>
+  </section>
 </main>
 
 <footer class="site-footer">
   <div class="footer-container">
-    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
-      <div>
-        <strong>Aptitude &amp; Reasoning Lab</strong> — Quant stream
-        <div style="font-size:.8rem; margin-top:.25rem;">
-          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
-        </div>
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
       </div>
-      <div style="font-size:.8rem;">
-        <a href="../docs/reviews/averages-alligation.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
-      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
     </div>
-    <div class="disclaimer-box">
-      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
-      Always check the latest official exam notification.
-    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
   </div>
 </footer>
 
@@ -1324,10 +1425,29 @@ function handleResetStats() {
 }
 window.handleResetStats = handleResetStats;
 
-// =====================================================================
-// 8. INIT
-// =====================================================================
+/* ---- Replace one value: total changes, avg slides ---- */
+function renderRep() {
+  const avg = +$("rep-avg").value, n = +$("rep-n").value, oldV = +$("rep-old").value, neu = +$("rep-new").value;
+  const dTotal = neu - oldV, dAvg = dTotal / n, neuAvg = avg + dAvg;
+  const x = v => 80 + (Math.max(0, Math.min(100, v)) / 100) * 600;
+  const wrong = (oldV + neu) / 2;
+  $("rep-svg").innerHTML = `
+    <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f59e0b"/></marker></defs>
+    <text x="380" y="28" text-anchor="middle" font-size="13" fill="#94a3b8">Total changes by ${dTotal >= 0 ? "+" : ""}${dTotal} · that change is shared by ${n} people</text>
+    <line x1="80" y1="110" x2="680" y2="110" stroke="#475569" stroke-width="3"/>
+    <circle cx="${x(avg)}" cy="110" r="14" fill="#38bdf8"/><text x="${x(avg)}" y="80" text-anchor="middle" font-size="12" fill="#38bdf8">old avg ${avg}</text>
+    <circle cx="${x(neuAvg)}" cy="110" r="14" fill="#22c55e"/><text x="${x(neuAvg)}" y="150" text-anchor="middle" font-size="12" fill="#22c55e">new ${neuAvg.toFixed(2)}</text>
+    <path d="M ${x(avg)} 110 L ${x(neuAvg)} 110" stroke="#f59e0b" stroke-width="3" marker-end="url(#arr)"/>
+    <circle cx="${x(wrong)}" cy="180" r="8" fill="#ef4444" opacity="0.7"/><text x="${x(wrong)}" y="200" text-anchor="middle" font-size="11" fill="#ef4444">trap: avg(${oldV},${neu})=${wrong.toFixed(1)}</text>`;
+  $("rep-cap").textContent = `Mind picture: remove ${oldV}, add ${neu} → total ${dTotal >= 0 ? "+" : ""}${dTotal}. Spread over ${n} → average moves ${dAvg >= 0 ? "+" : ""}${dAvg.toFixed(2)}. Trap: averaging the two values (${wrong.toFixed(1)}) ignores the rest of the group.`;
+  $("rep-avg-b").textContent = avg; $("rep-n-b").textContent = n; $("rep-old-b").textContent = oldV; $("rep-new-b").textContent = neu;
+}
+function wireRep() {
+  ["rep-avg","rep-n","rep-old","rep-new"].forEach(id => $(id).addEventListener("input", renderRep));
+  renderRep();
+}
 document.addEventListener("DOMContentLoaded", () => {
+  wireRep();
   const results = runSelfTests();
   state.testsPassed = results.failed === 0;
   const banner = $("test-status-banner");
@@ -1358,5 +1478,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setPracticeMode("hints");
 });
 </script>
+<script src="../assets/lab-ux.js" defer></script>
 </body>
 </html>

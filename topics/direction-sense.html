@@ -6,6 +6,7 @@
 <title>Direction Sense &amp; Distance — Aptitude Lab</title>
 <meta name="description" content="See relative turns. The facing arrow rotates with the walker. Left/right mini-lab, ghost-path traps, weighted displacement vs walked bars." />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
 :root {
   --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
@@ -266,6 +267,51 @@ input[type=number]:disabled, select:disabled { opacity: 0.6; cursor: not-allowed
   background: var(--surface-2); border: 1px solid var(--border-strong);
   font-size: 0.82rem; font-family: var(--font-mono);
 }
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
 </style>
 </head>
 <body>
@@ -287,8 +333,7 @@ input[type=number]:disabled, select:disabled { opacity: 0.6; cursor: not-allowed
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        <li><span class="badge badge-published">Published</span></li>
-      </ul>
+        </ul>
     </nav>
   </div>
 </header>
@@ -442,6 +487,23 @@ input[type=number]:disabled, select:disabled { opacity: 0.6; cursor: not-allowed
     </div>
   </section>
 
+  <!-- ===== DISPLACEMENT VS WALKED ===== -->
+  <section class="card" aria-labelledby="s-disp">
+    <div class="card-header">
+      <h2 id="s-disp" class="section-title">Understand: walked path vs shortest home</h2>
+      <p class="section-subtitle">Blue = what you walked. Purple dashed = straight line from start to end. Exams almost always want the purple — net displacement, not total walking.</p>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+      <button type="button" id="disp-next" class="btn btn-primary btn-sm">Next leg →</button>
+      <button type="button" id="disp-reset" class="btn btn-secondary btn-sm">Reset</button>
+      <span id="disp-badge" class="badge badge-tag">Leg 0</span>
+    </div>
+    <div class="vis-container">
+      <svg id="disp-svg" viewBox="0 0 760 300" width="100%" role="img" aria-label="Walked vs displacement"></svg>
+    </div>
+    <p id="disp-cap" style="margin-top:10px;font-size:.92rem;color:var(--text-dim);"></p>
+  </section>
+
   <!-- ===== SECTION 4 — RULES ===== -->
   <section class="card" aria-labelledby="s4">
     <div class="card-header">
@@ -528,25 +590,51 @@ input[type=number]:disabled, select:disabled { opacity: 0.6; cursor: not-allowed
       </div>
     </div>
   </section>
+
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">Net displacement</p>
+        <p class="lab-shortcuts-body">Sketch N/E axes. Final = √(x²+y²). Facing ≠ path direction after last turn.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Left/right after south</p>
+        <p class="lab-shortcuts-body">Facing south: left = East, right = West. Reversal is the #1 miss.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Shadow rule</p>
+        <p class="lab-shortcuts-body">Morning → west shadow; evening → east. Sun never north/south at equator myths aside.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">Minimal sketch</p>
+        <p class="lab-shortcuts-body">Only mark turns and lengths — don't redraw every step.</p>
+      </li>
+    </ul>
+  </section>
 </main>
 
 <footer class="site-footer">
   <div class="footer-container">
-    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
-      <div>
-        <strong>Aptitude &amp; Reasoning Lab</strong> — Reasoning stream
-        <div style="font-size:.8rem; margin-top:.25rem;">
-          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
-        </div>
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
       </div>
-      <div style="font-size:.8rem;">
-        <a href="../docs/reviews/direction-sense.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
-      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
     </div>
-    <div class="disclaimer-box">
-      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
-      Always check the latest official exam notification.
-    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
   </div>
 </footer>
 
@@ -1323,10 +1411,47 @@ function handleResetStats() {
 }
 window.handleResetStats = handleResetStats;
 
-/* =====================================================================
-   10. INIT
-   ===================================================================== */
+/* ---- Walked vs displacement ---- */
+const DISP_LEGS = [
+  { d: "N", m: 40 }, { d: "E", m: 30 }, { d: "S", m: 20 }, { d: "W", m: 10 }
+];
+const disp = { step: 0 };
+function renderDisp() {
+  const step = disp.step;
+  const dirs = { N: [0, -1], S: [0, 1], E: [1, 0], W: [-1, 0] };
+  let x = 280, y = 200, pts = [[x, y]], walked = 0;
+  for (let i = 0; i < step; i++) {
+    const L = DISP_LEGS[i], v = dirs[L.d];
+    x += v[0] * L.m * 2; y += v[1] * L.m * 2; walked += L.m; pts.push([x, y]);
+  }
+  const path = pts.map((p, i) => (i ? "L" : "M") + p[0] + " " + p[1]).join(" ");
+  const [x0, y0] = pts[0], [xf, yf] = pts[pts.length - 1];
+  const dx = xf - x0, dy = yf - y0, dist = Math.hypot(dx, dy) / 2;
+  let html = `<path d="${path}" fill="none" stroke="#38bdf8" stroke-width="3"/>
+    <circle cx="${x0}" cy="${y0}" r="8" fill="#22c55e"/><text x="${x0 - 10}" y="${y0 + 24}" font-size="11" fill="#22c55e">Start</text>`;
+  if (step > 0) {
+    html += `<circle cx="${xf}" cy="${yf}" r="8" fill="#f59e0b"/>
+      <line x1="${x0}" y1="${y0}" x2="${xf}" y2="${yf}" stroke="#a78bfa" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="500" y="70" font-size="13" fill="#38bdf8">Walked: ${walked} m</text>
+      <text x="500" y="95" font-size="13" fill="#a78bfa">Displacement: ${dist.toFixed(1)} m</text>`;
+    if (step === DISP_LEGS.length) {
+      const netN = 40 - 20, netE = 30 - 10;
+      html += `<text x="500" y="125" font-size="12" fill="#a78bfa">Mind: net N=${netN}, E=${netE} → √(${netN}²+${netE}²)</text>`;
+    }
+  }
+  $("disp-svg").innerHTML = html;
+  $("disp-cap").textContent = step === 0 ? "Green = start. Don't add all legs yet. Press Next and watch the blue path grow — then compare to purple."
+    : step < DISP_LEGS.length ? `After ${step} leg(s): walked ${walked} m (blue). Straight home ≈ ${dist.toFixed(1)} m (purple). They diverge on purpose.`
+    : `Done. Trap = add all legs (${walked} m). Truth = cancel opposite directions, then Pythagoras on net N/E → ${dist.toFixed(1)} m. Once you see “cancel then √”, speed comes.`;
+  $("disp-badge").textContent = `Leg ${step} / ${DISP_LEGS.length}`;
+}
+function wireDisp() {
+  $("disp-next").addEventListener("click", () => { disp.step = Math.min(DISP_LEGS.length, disp.step + 1); renderDisp(); });
+  $("disp-reset").addEventListener("click", () => { disp.step = 0; renderDisp(); });
+  renderDisp();
+}
 document.addEventListener("DOMContentLoaded", () => {
+  wireDisp();
   const results = runSelfTests();
   state.testsPassed = results.failed === 0;
   const banner = $("test-status-banner");
@@ -1347,5 +1472,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setPracticeMode("hints");
 });
 </script>
+<script src="../assets/lab-ux.js" defer></script>
 </body>
 </html>

@@ -1,1182 +1,1432 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ratio, Proportion & Variation — Aptitude & Reasoning Lab</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="../assets/style.css">
-  <style>
-    .ratio-bar-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.6rem;
-    }
-    .ratio-bar-label {
-      font-size: 0.8125rem;
-      font-weight: 700;
-      color: var(--color-text-muted);
-      width: 70px;
-      flex-shrink: 0;
-    }
-    .ratio-bar-track {
-      flex: 1;
-      height: 28px;
-      background: var(--color-surface-subtle);
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--color-border-subtle);
-      overflow: hidden;
-      position: relative;
-    }
-    .ratio-bar-fill {
-      height: 100%;
-      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-      display: flex;
-      align-items: center;
-      padding-left: 0.5rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #fff;
-      transition: width 0.4s ease;
-    }
-    .ratio-bar-value {
-      font-size: 0.8125rem;
-      font-weight: 700;
-      color: var(--color-text-main);
-      width: 80px;
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .color-a { background: #3b82f6; }
-    .color-b { background: #10b981; }
-    .color-c { background: #f59e0b; }
-    .color-d { background: #8b5cf6; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ratio, Proportion &amp; Variation — Aptitude Lab</title>
+<meta name="description" content="See ratios as unit-tiles. Coin denominator trap drawn side by side. Cross-multiply proportional mini-lab. Predict-first practice." />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
+<style>
+:root {
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --purple: #a78bfa; --purple-soft: rgba(167,139,250,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: var(--font-sans);
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+}
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--primary); color: #001; padding: 12px 16px;
+  border-radius: 0 0 8px 0; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 0.75rem; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--surface-2); border: 1px solid var(--border);
+  padding: 0.15em 0.4em; border-radius: 4px;
+}
+.page-container { max-width: 1080px; margin: 0 auto; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 22px 22px 24px;
+  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+@media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
+.card-header { margin-bottom: 18px; }
+.section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.section-title::before {
+  content: counter(section-num); counter-increment: section-num;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%; font-size: 0.8rem; font-weight: 800;
+}
+main { counter-reset: section-num; }
+.section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
+.site-header {
+  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
+  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
+  margin: 0 -16px 24px; padding: 12px 16px;
+}
+.header-container {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
+.brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+.nav-link:hover { color: var(--text); }
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
+}
+.badge-published { background: var(--success-soft); color: var(--success); }
+.badge-draft { background: var(--warn-soft); color: var(--warn); }
+.badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #001824; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
+.btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
+.btn-secondary:hover:not(:disabled) { background: var(--border); }
+.btn-ghost { background: transparent; color: var(--text-dim); }
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
+.btn-sm { padding: 6px 11px; font-size: 0.8rem; }
+.btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.control-grid {
+  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
+}
+@media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .control-grid.cols-4 { grid-template-columns: repeat(4, 1fr); } }
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 0.85rem; font-weight: 600; color: var(--text);
+}
+input[type=number], select {
+  background: var(--bg-elev); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-size: 0.95rem; font-family: var(--font-sans); width: 100%;
+  transition: border-color var(--transition);
+}
+input[type=number]:focus, select:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+input[type=number]:disabled, select:disabled { opacity: 0.6; cursor: not-allowed; }
+input[type=range] { width: 100%; accent-color: var(--primary); height: 24px; }
+input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
+.vis-container {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
+}
+.vis-container svg { display: block; width: 100%; height: auto; }
+.score-bar {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
+}
+@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
+.score-stat {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.score-stat-label {
+  font-size: 0.72rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.score-stat-num {
+  font-size: 1.05rem; font-weight: 700;
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
+}
+.callout {
+  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
+  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
+}
+.callout.hidden { display: none; }
+.callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
+.callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
+.callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
+.callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.test-banner {
+  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
+  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
+}
+.test-banner.hidden { display: none; }
+.test-banner ul { margin: 8px 0 0 20px; padding: 0; }
+.predict-box {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md); padding: 18px 20px;
+}
+.predict-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
+}
+.predict-header svg { flex-shrink: 0; }
+.options-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.option-btn {
+  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; transition: all var(--transition); text-align: center;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
+.option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
+.option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
+.option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.steps-container { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.step-item {
+  background: var(--bg-elev); border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+}
+.step-num {
+  font-size: 0.72rem; color: var(--primary); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
+}
+.step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+.step-detail {
+  font-family: var(--font-mono); background: var(--surface-2);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 6px 10px; font-size: 0.85rem; margin-top: 6px;
+  color: var(--primary); overflow-x: auto;
+}
+.practice-header {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.mode-toggle-group {
+  display: inline-flex; background: var(--bg-elev);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 3px; gap: 2px;
+}
+.mode-btn {
+  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
+  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active { background: var(--primary-soft); color: var(--primary); }
+.mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.timer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
+}
+.timer-badge.hidden { display: none; }
+.question-stem {
+  font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500;
+}
+.site-footer {
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.85rem;
+}
+.footer-container { max-width: 1080px; margin: 0 auto; }
+.disclaimer-box {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+}
+.error-categorizer {
+  margin-top: 12px; padding: 12px;
+  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.error-categorizer.hidden { display: none; }
+.error-categorizer label {
+  font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;
+}
+.error-categorizer select {
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
+}
 
-    .proportion-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin: 1rem 0;
-    }
-    .proportion-cell {
-      border: 2px solid var(--color-border-subtle);
-      border-radius: var(--radius-md);
-      padding: 0.75rem;
-      text-align: center;
-      background: var(--color-surface-subtle);
-      transition: border-color 0.3s;
-    }
-    .proportion-cell.highlighted {
-      border-color: var(--color-primary);
-      background: rgba(59, 130, 246, 0.07);
-    }
-    .proportion-cell-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--color-text-muted);
-      text-transform: uppercase;
-      margin-bottom: 0.35rem;
-    }
-    .proportion-cell-value {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--color-primary);
-    }
-    .cross-equals {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.875rem;
-      color: var(--color-text-muted);
-      font-style: italic;
-    }
-  </style>
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="app-header">
-    <div class="header-container">
-      <a href="../index.html" class="brand" aria-label="Aptitude and Reasoning Lab Home">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-          <path d="M2 12h20" />
-        </svg>
-        <span>Aptitude &amp; Reasoning Lab</span>
-      </a>
-      <nav class="nav-links" aria-label="Breadcrumb">
-        <a href="../index.html" class="nav-link">Hub</a>
-        <span style="color: var(--color-text-muted);">/</span>
-        <span style="color: var(--color-text-main); font-weight: 600;">Ratio, Proportion &amp; Variation</span>
-      </nav>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-container">
+    <a href="../index.html" class="brand-link">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f172a"/>
+        <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+        <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+        <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+        <circle cx="40" cy="40" r="4" fill="#34d399"/>
+        <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span>Aptitude Lab</span>
+    </a>
+    <nav aria-label="Topic navigation">
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+        </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-container">
+
+  <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+  <header class="card">
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.75rem;">
+      <span class="badge badge-tag">Quantitative Aptitude</span>
+      <span class="badge badge-tag">SEBI Gr A</span>
+      <span class="badge badge-tag">Banking &amp; SSC</span>
     </div>
+    <h1>Ratio, Proportion &amp; Variation</h1>
+    <p class="section-subtitle" style="margin-top:8px;">
+      <strong>A ratio is a bunch of unit-tiles.</strong> Part-to-part ≠ part-to-whole, and coins of different denominations don't scale the same way as coins of one. This page draws the tiles, forces you to predict, and shows the coin trap side by side.
+    </p>
   </header>
 
-  <main class="main-container">
-    <!-- Topic Header -->
-    <div style="margin-bottom: 1.5rem;">
-      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.5rem;">
-        <span class="badge badge-tag">Quantitative Aptitude</span>
-        <span class="badge badge-published">Module 9</span>
-        <span class="badge badge-outline">SEBI Grade A &bull; SBI PO &bull; SSC CGL</span>
-      </div>
-      <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--color-text-main);">
-        Ratio, Proportion &amp; Variation
-      </h1>
-      <p style="font-size: 1.05rem; color: var(--color-text-muted); max-width: 820px;">
-        Build the <strong>unit-scale model</strong> that unifies chained ratios, proportional division, mean/third/fourth proportionals,
-        and coin-denomination problems. Never confuse <strong>part-to-part</strong> and <strong>part-to-whole</strong> again.
-      </p>
+  <!-- ===== SECTION 1 — UNIT-TILE BAR ===== -->
+  <section class="card" aria-labelledby="s1">
+    <div class="card-header">
+      <h2 id="s1" class="section-title">Divide a total into unit-tiles</h2>
+      <p class="section-subtitle">Each share is made of its ratio-units. The tick marks show the unit value. Change the ratio or the total and watch the tiles redistribute.</p>
     </div>
 
-    <!-- Quality Gate Alert -->
-    <div id="quality-alert" class="callout callout-error hidden" role="alert" style="margin-bottom: 1.5rem;">
-      <strong>Quality Gate Alert:</strong> One or more deterministic self-tests failed. Practice submission is locked.
-      <div id="quality-alert-details" style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.8125rem;"></div>
+    <div class="control-grid cols-4">
+      <div class="control-group">
+        <label for="input-total" class="control-label">
+          <span>Total</span>
+          <span id="total-badge" class="badge badge-tag">₹1200</span>
+        </label>
+        <input type="number" id="input-total" value="1200" min="1" max="100000" step="10">
+        <input type="range" id="range-total" min="100" max="10000" value="1200" step="100">
+      </div>
+      <div class="control-group">
+        <label for="input-a" class="control-label">
+          <span>Part A (units)</span>
+          <span id="badge-a" class="badge badge-tag">2</span>
+        </label>
+        <input type="number" id="input-a" value="2" min="1" max="50" step="1">
+      </div>
+      <div class="control-group">
+        <label for="input-b" class="control-label">
+          <span>Part B (units)</span>
+          <span id="badge-b" class="badge badge-tag">3</span>
+        </label>
+        <input type="number" id="input-b" value="3" min="1" max="50" step="1">
+      </div>
+      <div class="control-group">
+        <label for="input-c" class="control-label">
+          <span>Part C (units, 0 = ignore)</span>
+          <span id="badge-c" class="badge badge-tag">5</span>
+        </label>
+        <input type="number" id="input-c" value="5" min="0" max="50" step="1">
+      </div>
     </div>
 
-    <!-- =====================================================================
-         SECTION 1: INTERACTIVE PROPORTIONAL BAR MODEL
-         ===================================================================== -->
-    <section class="card" aria-labelledby="model-title">
-      <div class="card-header">
-        <div>
-          <h2 id="model-title" class="section-title">1. Interactive Proportional Bar Model</h2>
-          <p class="section-subtitle">Enter ratio terms. Watch the unit-scale bars and shares update in real time.</p>
-        </div>
+    <div class="vis-container">
+      <svg id="bar-svg" viewBox="0 0 760 280" width="100%" role="img" aria-label="Unit-tile proportional division">
+        <title>Each part divided into its ratio units with unit value marked</title>
+      </svg>
+      <p id="svg-live-desc" class="sr-only" aria-live="polite"></p>
+    </div>
+
+    <div class="score-bar" aria-live="polite">
+      <div class="score-stat"><span class="score-stat-label">Total units</span><span class="score-stat-num" id="readout-sum">10</span></div>
+      <div class="score-stat"><span class="score-stat-label">Value per unit</span><span class="score-stat-num" id="readout-unit">₹120</span></div>
+      <div class="score-stat"><span class="score-stat-label">Part A share</span><span class="score-stat-num" id="readout-a">₹240</span></div>
+      <div class="score-stat"><span class="score-stat-label">Part B share</span><span class="score-stat-num" id="readout-b">₹360</span></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2 — PREDICT ===== -->
+  <section class="card" aria-labelledby="s2">
+    <div class="card-header">
+      <h2 id="s2" class="section-title">Predict first — the coin trap</h2>
+      <p class="section-subtitle">A bag of ₹1, 50p, 25p coins in ratio 3:4:8, total ₹420. Most people answer "84". The visual will show why the truth is different.</p>
+    </div>
+
+    <div class="predict-box">
+      <div class="predict-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>How many ₹1 coins?</span>
+      </div>
+      <p id="predict-scenario-text" style="font-size:1.05rem; margin-bottom:1rem;"></p>
+      <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options"></div>
+      <div id="predict-feedback" class="callout hidden" role="alert"></div>
+
+      <div style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
+        <button type="button" id="btn-reveal-coin" class="btn btn-secondary">Reveal working ↓</button>
+        <span id="predict-lock-hint" style="font-size:.8rem; color:var(--text-muted);"></span>
+      </div>
+    </div>
+
+    <div id="coin-solution-panel" class="hidden" style="margin-top:20px;">
+      <h3 style="margin-bottom:12px;">Coin weighting — the correct view</h3>
+      <div class="vis-container">
+        <svg id="coin-svg" viewBox="0 0 760 260" width="100%" role="img" aria-label="Coin trap vs correct weighting">
+          <title>Two bars: trap (equal denominations) vs truth (weighted by value)</title>
+        </svg>
+      </div>
+      <div id="coin-solution-text" class="callout callout-info"></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3 — COIN LAB ===== -->
+  <section class="card" aria-labelledby="s3">
+    <div class="card-header">
+      <h2 id="s3" class="section-title">Coin weighting — the trap vs the truth</h2>
+      <p class="section-subtitle">Same count ratio, same total. The only difference: on the left, all coins are treated as if equal; on the right, each is weighted by its rupee value.</p>
+    </div>
+
+    <div class="control-grid cols-4">
+      <div class="control-group">
+        <label for="coin-r1" class="control-label">
+          <span>₹1 coins (count units)</span>
+          <span id="coin-badge-1" class="badge badge-tag">3</span>
+        </label>
+        <input type="number" id="coin-r1" value="3" min="1" max="20" step="1">
+      </div>
+      <div class="control-group">
+        <label for="coin-r2" class="control-label">
+          <span>50p coins</span>
+          <span id="coin-badge-2" class="badge badge-tag">4</span>
+        </label>
+        <input type="number" id="coin-r2" value="4" min="1" max="20" step="1">
+      </div>
+      <div class="control-group">
+        <label for="coin-r3" class="control-label">
+          <span>25p coins</span>
+          <span id="coin-badge-3" class="badge badge-tag">8</span>
+        </label>
+        <input type="number" id="coin-r3" value="8" min="1" max="20" step="1">
+      </div>
+      <div class="control-group">
+        <label for="coin-total" class="control-label">
+          <span>Total value</span>
+          <span id="coin-badge-total" class="badge badge-tag">₹420</span>
+        </label>
+        <input type="number" id="coin-total" value="420" min="1" max="100000" step="10">
+      </div>
+    </div>
+
+    <div class="vis-container">
+      <svg id="coin-lab-svg" viewBox="0 0 760 340" width="100%" role="img" aria-label="Coin weighting trap vs truth">
+        <title>Left: trap view. Right: correct weighted view.</title>
+      </svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Trap k (equal)</span><span class="score-stat-num" id="coin-trap-k" style="color:var(--danger)">28</span></div>
+      <div class="score-stat"><span class="score-stat-label">True k (weighted)</span><span class="score-stat-num" id="coin-true-k" style="color:var(--success)">60</span></div>
+      <div class="score-stat"><span class="score-stat-label">₹1 coins (trap)</span><span class="score-stat-num" id="coin-trap-a" style="color:var(--danger)">84</span></div>
+      <div class="score-stat"><span class="score-stat-label">₹1 coins (true)</span><span class="score-stat-num" id="coin-true-a" style="color:var(--success)">180</span></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4 — PROPORTION LAB ===== -->
+  <section class="card" aria-labelledby="s4">
+    <div class="card-header">
+      <h2 id="s4" class="section-title">Cross-multiply proportional lab</h2>
+      <p class="section-subtitle">The classic <code>a : b :: c : x</code> square. Change any three and the fourth animates in.</p>
+    </div>
+
+    <div class="control-grid cols-4">
+      <div class="control-group">
+        <label for="prop-a" class="control-label"><span>a</span><span id="pb-a" class="badge badge-tag">4</span></label>
+        <input type="number" id="prop-a" value="4" min="1" max="100" step="1">
+      </div>
+      <div class="control-group">
+        <label for="prop-b" class="control-label"><span>b</span><span id="pb-b" class="badge badge-tag">9</span></label>
+        <input type="number" id="prop-b" value="9" min="1" max="100" step="1">
+      </div>
+      <div class="control-group">
+        <label for="prop-c" class="control-label"><span>c</span><span id="pb-c" class="badge badge-tag">9</span></label>
+        <input type="number" id="prop-c" value="9" min="1" max="100" step="1">
+      </div>
+      <div class="control-group">
+        <label for="prop-type" class="control-label"><span>Kind</span></label>
+        <select id="prop-type">
+          <option value="fourth">Fourth proportional (x = bc/a)</option>
+          <option value="mean">Mean proportional of a,b (x = √ab)</option>
+          <option value="third">Third proportional of a,b (x = b²/a)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="vis-container">
+      <svg id="prop-svg" viewBox="0 0 760 260" width="100%" role="img" aria-label="Cross-multiply square for a:b::c:x">
+        <title>Cross-multiply square showing the four proportional terms</title>
+      </svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Kind</span><span class="score-stat-num" id="prop-kind" style="font-size:.9rem;">Fourth</span></div>
+      <div class="score-stat"><span class="score-stat-label">a : b</span><span class="score-stat-num" id="prop-lhs">4 : 9</span></div>
+      <div class="score-stat"><span class="score-stat-label">c : x</span><span class="score-stat-num" id="prop-rhs">9 : 20.25</span></div>
+      <div class="score-stat"><span class="score-stat-label">Cross check</span><span class="score-stat-num" id="prop-check">a·x = b·c</span></div>
+    </div>
+  </section>
+
+  <!-- ===== DIRECT VS INVERSE (concept-first exam story) ===== -->
+  <section class="card" aria-labelledby="s-var">
+    <div class="card-header">
+      <h2 id="s-var" class="section-title">Understand: direct vs inverse — one story each</h2>
+      <p class="section-subtitle">Don't memorise “direct / inverse”. Ask: when this goes up, does that go up or down? Then the picture tells you which rule to use.</p>
+    </div>
+    <div class="mode-toggle-group" style="margin-bottom:12px;width:fit-content;">
+      <button type="button" class="mode-btn active" id="var-direct">Men ↑ work ↑ (direct)</button>
+      <button type="button" class="mode-btn" id="var-inverse">Men ↑ days ↓ (inverse)</button>
+    </div>
+    <div class="control-group" style="max-width:420px;margin-bottom:12px;">
+      <label for="var-k" class="control-label"><span>How many times the men?</span><span id="var-k-b" class="badge badge-tag">2×</span></label>
+      <input type="range" id="var-k" min="1" max="4" step="0.5" value="2">
+    </div>
+    <div class="vis-container">
+      <svg id="var-svg" viewBox="0 0 760 240" width="100%" role="img" aria-label="Direct vs inverse work story"></svg>
+    </div>
+    <p id="var-cap" style="margin-top:10px;font-size:.95rem;line-height:1.55;color:var(--text-dim);"></p>
+  </section>
+
+  <!-- ===== SECTION 5 — PRACTICE ===== -->
+  <section class="card" aria-labelledby="s5">
+    <div class="card-header">
+      <h2 id="s5" class="section-title">Practice</h2>
+      <p class="section-subtitle">Shuffled each session. Traps have real reasons.</p>
+    </div>
+
+    <div class="practice-header">
+      <div class="mode-toggle-group" role="tablist" aria-label="Practice mode">
+        <button type="button" class="mode-btn active" data-mode="hints" role="tab" aria-selected="true">Guided</button>
+        <button type="button" class="mode-btn" data-mode="independent" role="tab" aria-selected="false">Independent</button>
+        <button type="button" class="mode-btn" data-mode="timed" role="tab" aria-selected="false">Timed (90s)</button>
+      </div>
+      <div id="timer-container" class="timer-badge hidden" aria-live="off">
+        <span>⏱️</span><span id="timer-display">90</span><span>s</span>
+      </div>
+    </div>
+
+    <div class="score-bar" aria-label="Practice statistics">
+      <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Independent</span><span class="score-stat-num" id="stat-independent">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Accuracy</span><span class="score-stat-num" id="stat-accuracy">0%</span></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
+    </div>
+
+    <div id="practice-question-card" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span class="badge" id="practice-q-difficulty">Easy</span>
+      </div>
+      <p class="question-stem" id="practice-q-stem">Loading…</p>
+      <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
+      <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+      <div id="practice-error-categorizer" class="error-categorizer hidden">
+        <label for="select-error-category">What tripped you up? (optional)</label>
+        <select id="select-error-category">
+          <option value="ptop">Part-to-part vs part-to-whole</option>
+          <option value="chain">Chained ratio LCM bridge</option>
+          <option value="coin">Coin denominator weighting</option>
+          <option value="const">Adding constant to ratio terms</option>
+          <option value="prop">Mean/third/fourth proportional formula</option>
+          <option value="var">Direct vs inverse variation</option>
+          <option value="arithmetic">Arithmetic slip</option>
+        </select>
       </div>
 
-      <!-- Controls -->
-      <div class="control-grid">
-        <div class="control-group">
-          <label class="control-label" for="input-total">
-            <span>Total Quantity to Divide</span>
-            <span id="total-badge" class="badge badge-tag">₹1200</span>
-          </label>
-          <input type="number" id="input-total" class="control-input" value="1200" min="1" max="100000" step="1" oninput="handleModelChange()">
-          <input type="range" id="range-total" min="100" max="10000" value="1200" step="100" aria-label="Total slider" oninput="document.getElementById('input-total').value=this.value; handleModelChange()">
-        </div>
-
-        <div class="control-group">
-          <label class="control-label" for="input-ratioA">
-            <span>Part A ratio term</span>
-            <span id="badge-a" class="badge badge-tag" style="background:rgba(59,130,246,0.12);color:#1d4ed8;">a</span>
-          </label>
-          <input type="number" id="input-ratioA" class="control-input" value="2" min="1" max="100" step="1" oninput="handleModelChange()">
-        </div>
-
-        <div class="control-group">
-          <label class="control-label" for="input-ratioB">
-            <span>Part B ratio term</span>
-            <span id="badge-b" class="badge badge-tag" style="background:rgba(16,185,129,0.12);color:#047857;">b</span>
-          </label>
-          <input type="number" id="input-ratioB" class="control-input" value="3" min="1" max="100" step="1" oninput="handleModelChange()">
-        </div>
-
-        <div class="control-group">
-          <label class="control-label" for="input-ratioC">
-            <span>Part C ratio term (0 = ignore)</span>
-            <span id="badge-c" class="badge badge-tag" style="background:rgba(245,158,11,0.12);color:#b45309;">c</span>
-          </label>
-          <input type="number" id="input-ratioC" class="control-input" value="5" min="0" max="100" step="1" oninput="handleModelChange()">
-        </div>
+      <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:12px;">
+        <h4 style="margin-bottom:6px; font-size:.95rem;">Solution</h4>
+        <p id="practice-solution-text" style="font-size:.9rem; line-height:1.55; margin:0;"></p>
       </div>
 
-      <!-- Bar Visualisation -->
-      <div id="bar-vis" style="margin-top: 1.25rem;" aria-live="polite">
-        <!-- Populated by renderBars() -->
+      <div style="margin-top:18px; display:flex; gap:.75rem; justify-content:flex-end;">
+        <button type="button" id="btn-next-question" class="btn btn-primary" disabled>Next question →</button>
       </div>
+    </div>
+  </section>
 
-      <!-- Readout Stats -->
-      <div class="score-bar" id="ratio-readout" aria-live="polite" style="margin-top: 0.75rem;">
-        <div class="score-stat">
-          <span class="score-stat-label">Sum of Ratio Units</span>
-          <span class="score-stat-num" id="readout-sum">10</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Value of 1 Unit</span>
-          <span class="score-stat-num" id="readout-unit">₹120</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Part A (fraction)</span>
-          <span class="score-stat-num" id="readout-frac-a">2/10 = 20%</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Cross-product Check</span>
-          <span class="score-stat-num" id="readout-cross">A×C = B² ?</span>
-        </div>
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">Unit method</p>
+        <p class="lab-shortcuts-body">a:b = parts. One part = total ÷ (a+b). Scale once — don't cross-multiply thrice.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Chained ratios</p>
+        <p class="lab-shortcuts-body">A:B and B:C need a common B (LCM). Blindly writing A:B:C from raw numbers is wrong.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Coins / mixture</p>
+        <p class="lab-shortcuts-body">Value = Σ (count × denomination). Check units match before dividing.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">Direct vs inverse</p>
+        <p class="lab-shortcuts-body">xy = k (inverse) · x/y = k (direct). One product, one quotient — name it first.</p>
+      </li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
       </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
+    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
+  </div>
+</footer>
 
-      <!-- Proportion Type Calculator -->
-      <div style="margin-top: 1.25rem; background: var(--color-surface-subtle); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 1rem;">
-        <h3 style="font-size: 0.9375rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--color-primary);">Classical Proportion Calculator</h3>
-        <div class="proportion-grid" id="proportion-grid" aria-label="Classical proportion a:b :: b:x or a:b :: c:x">
-          <div class="proportion-cell" id="pc-a">
-            <div class="proportion-cell-label">a</div>
-            <div class="proportion-cell-value" id="pv-a">4</div>
-          </div>
-          <div class="proportion-cell" id="pc-b">
-            <div class="proportion-cell-label">b</div>
-            <div class="proportion-cell-value" id="pv-b">9</div>
-          </div>
-          <div class="proportion-cell highlighted" id="pc-c">
-            <div class="proportion-cell-label">c</div>
-            <div class="proportion-cell-value" id="pv-c">9</div>
-          </div>
-          <div class="proportion-cell highlighted" id="pc-x">
-            <div class="proportion-cell-label">x = bc/a</div>
-            <div class="proportion-cell-value" id="pv-x">—</div>
-          </div>
-        </div>
-        <div class="cross-equals">
-          <span>Mean Proportional: x = √(a·b) = <strong id="mean-prop-val">6</strong></span>
-          <span style="margin: 0 0.5rem;">|</span>
-          <span>Third Proportional: x = b²/a = <strong id="third-prop-val">20.25</strong></span>
-          <span style="margin: 0 0.5rem;">|</span>
-          <span>Fourth Proportional: x = bc/a = <strong id="fourth-prop-val">—</strong></span>
-        </div>
-        <div style="display:flex;gap:0.75rem;margin-top:0.75rem;flex-wrap:wrap;">
-          <div class="control-group" style="margin:0;flex:1;min-width:120px;">
-            <label class="control-label" for="prop-a">a</label>
-            <input type="number" id="prop-a" value="4" min="1" oninput="updateProportionCalc()">
-          </div>
-          <div class="control-group" style="margin:0;flex:1;min-width:120px;">
-            <label class="control-label" for="prop-b">b</label>
-            <input type="number" id="prop-b" value="9" min="1" oninput="updateProportionCalc()">
-          </div>
-          <div class="control-group" style="margin:0;flex:1;min-width:120px;">
-            <label class="control-label" for="prop-c">c (for 4th proportional)</label>
-            <input type="number" id="prop-c" value="9" min="1" oninput="updateProportionCalc()">
-          </div>
-        </div>
-      </div>
-    </section>
+<script>
+/* =====================================================================
+   1. PURE MODEL
+   ===================================================================== */
+const Model = (() => {
+  const round = (x, d = 4) => Math.round(x * 10 ** d) / 10 ** d;
+  const gcd = (a, b) => {
+    a = Math.abs(Math.round(a)); b = Math.abs(Math.round(b));
+    while (b) { [a, b] = [b, a % b]; }
+    return a || 1;
+  };
+  const lcm = (a, b) => Math.abs(Math.round((a * b) / gcd(a, b)));
 
-    <!-- =====================================================================
-         SECTION 2: PREDICT-FIRST
-         ===================================================================== -->
-    <section class="card" aria-labelledby="predict-title">
-      <div class="card-header">
-        <div>
-          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
-          <p class="section-subtitle">Spot the trap: part-to-part vs. part-to-whole is the #1 ratio error in banking exams.</p>
-        </div>
-      </div>
-
-      <div class="predict-box">
-        <div class="predict-header">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
-          </svg>
-          <span style="font-weight:700;font-size:0.9375rem;">Challenge: Coin Denominations</span>
-        </div>
-        <p style="margin-bottom:0.75rem;font-size:0.9375rem;">
-          A bag contains ₹1, 50 paise, and 25 paise coins in the ratio <strong>3 : 4 : 8</strong>. 
-          The total value of the bag is <strong>₹420</strong>.<br>
-          <em>How many ₹1 coins are there?</em>
-        </p>
-        <p style="margin-bottom:1rem;font-size:0.875rem;color:var(--color-text-muted);">
-          <strong>Trap option:</strong> 420 × 3/15 = 84 coins &nbsp;|&nbsp; <strong>Correct approach:</strong> Weight denominations first.
-        </p>
-
-        <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;" role="radiogroup" aria-label="Predict answer">
-          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;cursor:pointer;">
-            <input type="radio" name="pred-ratio" value="84">
-            <strong>84 coins</strong> — dividing ₹420 by ratio units directly (3/15 × 420).
-          </label>
-          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;cursor:pointer;">
-            <input type="radio" name="pred-ratio" value="180">
-            <strong>180 coins</strong> — weighting each denomination by its rupee value, then scaling.
-          </label>
-          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;cursor:pointer;">
-            <input type="radio" name="pred-ratio" value="140">
-            <strong>140 coins</strong> — dividing ₹420 by sum of all count ratio (3+4+8=15) and scaling.
-          </label>
-        </div>
-
-        <button type="button" class="btn btn-primary btn-sm" onclick="handleRevealPredict()">Reveal Full Working</button>
-
-        <div id="predict-solution" class="callout callout-info hidden" style="margin-top:1rem;">
-          <h4 style="font-size:0.9375rem;margin-bottom:0.5rem;color:#1e40af;">Step-by-Step Solution:</h4>
-          <p style="font-size:0.875rem;line-height:1.6;margin-bottom:0.5rem;">
-            <strong>Correct Answer: 180 coins.</strong>
-          </p>
-          <p style="font-size:0.875rem;line-height:1.6;margin-bottom:0.5rem;">
-            Count ratio $= 3 : 4 : 8$. Let there be $3k$, $4k$, $8k$ coins of ₹1, 50p, 25p respectively.<br>
-            Value equation (in rupees):
-            $$3k \times 1 + 4k \times 0.50 + 8k \times 0.25 = 420$$
-            $$3k + 2k + 2k = 420 \implies 7k = 420 \implies k = 60.$$
-            Number of ₹1 coins $= 3k = 3 \times 60 = \mathbf{180}$.
-          </p>
-          <p style="font-size:0.8125rem;color:#1e3a8a;">
-            <strong>Why "84" is wrong:</strong> Dividing ₹420 by 15 treats all ratios as if the coins have equal denominations.
-            A 50p coin contributes half a rupee and a 25p coin contributes a quarter — you must weight them.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- =====================================================================
-         SECTION 3: CONCEPT RULES
-         ===================================================================== -->
-    <section class="card" aria-labelledby="rules-title">
-      <div class="card-header">
-        <div>
-          <h2 id="rules-title" class="section-title">3. Core Ratio Rules &amp; Exam Traps</h2>
-          <p class="section-subtitle">Fast-reference formulas that eliminate every standard trap.</p>
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1rem;">
-        <div style="background:var(--color-surface-subtle);padding:1rem;border-radius:var(--radius-md);border:1px solid var(--color-border-subtle);">
-          <h3 style="font-size:1rem;color:var(--color-primary);margin-bottom:0.4rem;">1. Part-to-Whole Conversion</h3>
-          <p style="font-size:0.875rem;">
-            Ratio $a : b \implies$ Part A fraction $= \dfrac{a}{a+b}$, Part B fraction $= \dfrac{b}{a+b}$.
-          </p>
-          <p style="font-size:0.8125rem;color:var(--color-danger);margin-top:0.35rem;">
-            ⚠ Never write Milk fraction as $\dfrac{a}{b}$ — that's part-to-part.
-          </p>
-        </div>
-
-        <div style="background:var(--color-surface-subtle);padding:1rem;border-radius:var(--radius-md);border:1px solid var(--color-border-subtle);">
-          <h3 style="font-size:1rem;color:var(--color-primary);margin-bottom:0.4rem;">2. Chained Ratio (A:B and B:C)</h3>
-          <p style="font-size:0.875rem;">
-            $$A:B:C = (a \cdot c) : (b \cdot c) : (b \cdot d)$$
-            where $A:B = a:b$ and $B:C = c:d$.
-          </p>
-          <p style="font-size:0.8125rem;color:var(--color-text-muted);">
-            LCM-bridge: make the common term ($B$) equal before combining.
-          </p>
-        </div>
-
-        <div style="background:var(--color-surface-subtle);padding:1rem;border-radius:var(--radius-md);border:1px solid var(--color-border-subtle);">
-          <h3 style="font-size:1rem;color:var(--color-primary);margin-bottom:0.4rem;">3. Proportional Division</h3>
-          <p style="font-size:0.875rem;">
-            Divide $T$ in ratio $a:b:c$:<br>
-            Unit value $u = T/(a+b+c)$<br>
-            Shares $= a \cdot u,\; b \cdot u,\; c \cdot u$
-          </p>
-        </div>
-
-        <div style="background:var(--color-surface-subtle);padding:1rem;border-radius:var(--radius-md);border:1px solid var(--color-border-subtle);">
-          <h3 style="font-size:1rem;color:var(--color-primary);margin-bottom:0.4rem;">4. Mean / Third / Fourth Proportional</h3>
-          <p style="font-size:0.875rem;">
-            <strong>Mean</strong> of $a, b$: $\;x = \sqrt{ab}$<br>
-            <strong>Third</strong> of $a, b$: $\;x = b^2/a$<br>
-            <strong>Fourth</strong> of $a, b, c$: $\;x = bc/a$
-          </p>
-        </div>
-
-        <div style="background:var(--color-surface-subtle);padding:1rem;border-radius:var(--radius-md);border:1px solid var(--color-border-subtle);">
-          <h3 style="font-size:1rem;color:var(--color-primary);margin-bottom:0.4rem;">5. Adding a Constant to Ratio Terms</h3>
-          <p style="font-size:0.875rem;">
-            Numbers in ratio $a:b$ ⟹ actual values $ax, bx$.<br>
-            If constant $p$ added: new ratio $c:d$, solve:
-            $$x = \frac{dp - cp}{ad - bc} \quad \text{(signed)}$$
-          </p>
-          <p style="font-size:0.8125rem;color:var(--color-danger);margin-top:0.35rem;">
-            ⚠ Adding to both terms changes the ratio unless $a = b$.
-          </p>
-        </div>
-
-        <div style="background:var(--color-surface-subtle);padding:1rem;border-radius:var(--radius-md);border:1px solid var(--color-border-subtle);">
-          <h3 style="font-size:1rem;color:var(--color-primary);margin-bottom:0.4rem;">6. Direct vs. Inverse Variation</h3>
-          <p style="font-size:0.875rem;">
-            <strong>Direct:</strong> $\dfrac{y_1}{x_1} = \dfrac{y_2}{x_2}$ (both increase together).<br>
-            <strong>Inverse:</strong> $x_1 y_1 = x_2 y_2$ (one increases, other decreases).
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- =====================================================================
-         SECTION 4: INDEPENDENT PRACTICE LAB
-         ===================================================================== -->
-    <section class="card" aria-labelledby="practice-title" id="practice-section">
-      <div class="card-header">
-        <div>
-          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
-          <p class="section-subtitle">12 exam-grade questions covering proportional division, chained ratios, coins, additions, and variation.</p>
-        </div>
-      </div>
-
-      <!-- Mode Toggles -->
-      <div class="practice-header">
-        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode">
-          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">Guided Mode</button>
-          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">Try Without Hints</button>
-          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">Timed Practice</button>
-        </div>
-        <div id="timer-container" class="timer-badge hidden" aria-live="off">
-          <span>⏱️</span>
-          <span id="timer-display">00:00</span>
-        </div>
-      </div>
-
-      <!-- Score Bar -->
-      <div class="score-bar" aria-label="Practice Statistics">
-        <div class="score-stat">
-          <span class="score-stat-label">Questions Attempted</span>
-          <span class="score-stat-num" id="stat-attempts">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Total Correct</span>
-          <span class="score-stat-num" id="stat-correct">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Independent Correct</span>
-          <span class="score-stat-num" id="stat-independent">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Accuracy</span>
-          <span class="score-stat-num" id="stat-accuracy">0%</span>
-        </div>
-        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left:auto;">Reset Progress</button>
-      </div>
-
-      <!-- Question Card -->
-      <div id="practice-question-card" style="margin-top:1.25rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
-          <span style="font-size:0.8125rem;font-weight:700;color:var(--color-primary);text-transform:uppercase;" id="practice-q-num">Question 1 of 12</span>
-          <span class="badge" id="practice-q-difficulty">Easy</span>
-        </div>
-        <p class="question-stem" id="practice-q-stem">Loading...</p>
-        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options"></div>
-        <div id="practice-feedback" class="callout hidden" role="alert"></div>
-        <div id="practice-error-categorizer" class="error-categorizer hidden">
-          <label for="select-error-category" style="font-size:0.8125rem;font-weight:600;display:block;margin-bottom:0.35rem;">
-            What was the primary cause of this mistake?
-          </label>
-          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
-            <option value="ptop_whole">Part-to-Part vs. Part-to-Whole confusion</option>
-            <option value="chain_lcm">Forgot to LCM-bridge the chained ratio's middle term</option>
-            <option value="coin_denom">Coin count × total (didn't weight by denomination)</option>
-            <option value="const_add">Adding constant to ratio terms assumed same ratio</option>
-            <option value="prop_type">Mixed up Mean / Third / Fourth proportional formula</option>
-            <option value="variation">Confused Direct and Inverse variation setup</option>
-            <option value="arithmetic">Setup was right, arithmetic slipped</option>
-          </select>
-        </div>
-        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:1rem;">
-          <h4 style="font-size:0.9375rem;margin-bottom:0.5rem;color:#1e40af;">Model Solution:</h4>
-          <div id="practice-solution-text" style="font-size:0.875rem;line-height:1.6;"></div>
-          <div id="practice-trap-analysis" style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px dashed rgba(30,64,175,0.2);font-size:0.8125rem;color:#1e3a8a;"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;">
-          <button type="button" class="btn btn-secondary btn-sm" id="btn-prev-q" onclick="navigateQuestion(-1)">← Previous</button>
-          <span style="font-size:0.8125rem;color:var(--color-text-muted);" id="q-counter-text">1 / 12</span>
-          <button type="button" class="btn btn-primary btn-sm" id="btn-next-q" onclick="navigateQuestion(1)">Next →</button>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script src="../assets/common.js"></script>
-  <script>
-    /* ==========================================================================
-       1. PURE DETERMINISTIC MODEL
-       ========================================================================== */
-    const Model = (function () {
-
-      function gcd(a, b) {
-        a = Math.abs(Math.round(a));
-        b = Math.abs(Math.round(b));
-        while (b) { let t = b; b = a % b; a = t; }
-        return a || 1;
-      }
-
-      function lcm(a, b) {
-        return (a * b) / gcd(a, b);
-      }
-
-      /**
-       * Proportional division of total T in ratio parts [a, b, c?, ...]
-       * Returns shares and unit value.
-       */
-      function divideInRatio(total, parts) {
-        if (!parts || parts.length < 2) return { valid: false, error: "Need at least 2 ratio parts" };
-        if (parts.some(p => p <= 0)) return { valid: false, error: "All ratio parts must be positive" };
-        if (total <= 0) return { valid: false, error: "Total must be positive" };
-
-        const sum = parts.reduce((a, b) => a + b, 0);
-        const unit = total / sum;
-        const shares = parts.map(p => LabCommon.round(p * unit, 4));
-        const shareSum = shares.reduce((a, b) => a + b, 0);
-
-        return {
-          valid: true,
-          sum,
-          unit: LabCommon.round(unit, 4),
-          shares,
-          shareSum: LabCommon.round(shareSum, 4),
-          fractions: parts.map(p => ({ num: p, den: sum })),
-          percentages: parts.map(p => LabCommon.round((p / sum) * 100, 2))
-        };
-      }
-
-      /**
-       * Chain two ratios A:B (= a:b) and B:C (= c:d) into A:B:C.
-       */
-      function chainTwoRatios(a, b, c, d) {
-        if ([a, b, c, d].some(v => v <= 0)) return { valid: false, error: "All terms must be positive" };
-        const L = lcm(b, c);
-        const scaleAB = L / b;
-        const scaleBC = L / c;
-        return {
-          valid: true,
-          A: a * scaleAB,
-          B: L,
-          C: d * scaleBC,
-          triple: [a * scaleAB, L, d * scaleBC]
-        };
-      }
-
-      /**
-       * Chain three ratios A:B, B:C, C:D into A:B:C:D.
-       */
-      function chainThreeRatios(a, b, c, d, e, f) {
-        // A:B = a:b, B:C = c:d, C:D = e:f
-        const r1 = chainTwoRatios(a, b, c, d);   // => A:B:C as r1.A, r1.B, r1.C
-        if (!r1.valid) return r1;
-        // Now sync C:D = e:f with r1.C
-        const L2 = lcm(r1.C, e);
-        const scaleABC = L2 / r1.C;   // scale r1 triple by this
-        const scaleCD  = L2 / e;      // scale D part by this
-        return {
-          valid: true,
-          quad: [r1.A * scaleABC, r1.B * scaleABC, L2, f * scaleCD]
-        };
-      }
-
-      /**
-       * Mean proportional of a and b: x = sqrt(a*b)
-       */
-      function meanProportional(a, b) {
-        if (a <= 0 || b <= 0) return { valid: false, error: "Terms must be positive" };
-        const x = Math.sqrt(a * b);
-        return { valid: true, x: LabCommon.round(x, 4), isWhole: Number.isInteger(x) };
-      }
-
-      /**
-       * Third proportional of a, b: x such that a:b :: b:x => x = b²/a
-       */
-      function thirdProportional(a, b) {
-        if (a <= 0 || b <= 0) return { valid: false, error: "Terms must be positive" };
-        const x = (b * b) / a;
-        return { valid: true, x: LabCommon.round(x, 4) };
-      }
-
-      /**
-       * Fourth proportional of a, b, c: x such that a:b :: c:x => x = bc/a
-       */
-      function fourthProportional(a, b, c) {
-        if (a <= 0 || b <= 0 || c <= 0) return { valid: false, error: "Terms must be positive" };
-        const x = (b * c) / a;
-        return { valid: true, x: LabCommon.round(x, 4) };
-      }
-
-      /**
-       * Given numbers in ratio a:b, find the actual numbers when constant p
-       * is added/subtracted to each, resulting in ratio c:d.
-       * Solve: (ax + p)/(bx + p) = c/d  =>  x = (cp - dp)/(ad - bc)  [carefully signed]
-       * Returns the actual values before modification.
-       */
-      function solveRatioAddition(a, b, p, c, d) {
-        // (ax + p)/(bx + p) = c/d
-        // d(ax + p) = c(bx + p)
-        // adx + dp = cbx + cp
-        // x(ad - cb) = cp - dp
-        // x = p(c - d) / (ad - bc)
-        const denom = a * d - b * c;
-        if (denom === 0) return { valid: false, error: "No unique solution: ratio unchanged by this addition" };
-        const x = (p * (c - d)) / denom;
-        if (x <= 0) return { valid: false, error: "No positive solution with these parameters" };
-        return {
-          valid: true,
-          x: LabCommon.round(x, 4),
-          original: [LabCommon.round(a * x, 4), LabCommon.round(b * x, 4)],
-          after: [LabCommon.round(a * x + p, 4), LabCommon.round(b * x + p, 4)]
-        };
-      }
-
-      /**
-       * Coin denomination problem.
-       * coins: [{count_ratio, denomination_rupees}]
-       * totalValue: total rupee value
-       * Returns count of each coin type.
-       */
-      function solveCoinDenomination(coinSpecs, totalValue) {
-        // totalValue = k * sum(count_ratio_i * denomination_i)
-        const valuePerK = coinSpecs.reduce((sum, cs) => sum + cs.countRatio * cs.denomination, 0);
-        if (valuePerK <= 0) return { valid: false, error: "Value per k must be positive" };
-        const k = totalValue / valuePerK;
-        if (k <= 0) return { valid: false, error: "No positive k found" };
-        const counts = coinSpecs.map(cs => LabCommon.round(cs.countRatio * k, 4));
-        return { valid: true, k: LabCommon.round(k, 4), counts, valuePerK: LabCommon.round(valuePerK, 4) };
-      }
-
-      return {
-        divideInRatio,
-        chainTwoRatios,
-        chainThreeRatios,
-        meanProportional,
-        thirdProportional,
-        fourthProportional,
-        solveRatioAddition,
-        solveCoinDenomination,
-        _gcd: gcd,
-        _lcm: lcm
-      };
-    })();
-
-    if (typeof window !== "undefined") { window.Model = Model; }
-
-    /* ==========================================================================
-       2. DETERMINISTIC SELF-TESTS
-       ========================================================================== */
-    function runSelfTests() {
-      const results = { passed: 0, failed: 0, failures: [] };
-
-      function assert(cond, name) {
-        if (cond) results.passed++;
-        else { results.failed++; results.failures.push(name); }
-      }
-
-      // Test 1: Divide 1200 in 2:3:5 => shares 240, 360, 600
-      const t1 = Model.divideInRatio(1200, [2, 3, 5]);
-      assert(t1.valid && t1.shares[0] === 240 && t1.shares[1] === 360 && t1.shares[2] === 600
-             && t1.unit === 120 && t1.sum === 10,
-             "Test 1: Divide 1200 in 2:3:5");
-
-      // Test 2: Conservation — sum of shares = total
-      const t2 = Model.divideInRatio(750, [3, 7, 5]);
-      assert(t2.valid && Math.abs(t2.shareSum - 750) < 0.001, "Test 2: Share conservation");
-
-      // Test 3: Chain A:B=2:3, B:C=4:5 => A:B:C = 8:12:15
-      const t3 = Model.chainTwoRatios(2, 3, 4, 5);
-      assert(t3.valid && t3.A === 8 && t3.B === 12 && t3.C === 15, "Test 3: Chain 2:3 and 4:5");
-
-      // Test 4: Chain A:B=1:2, B:C=3:4, C:D=5:6
-      // Step 1: A:B=1:2, B:C=3:4. LCM(2,3)=6. A:B:C = 3:6:8.
-      // Step 2: C:D=5:6. LCM(8,5)=40. scale A:B:C by 5 => 15:30:40. scale C:D by 8 => 40:48.
-      // A:B:C:D = 15:30:40:48
-      const t4 = Model.chainThreeRatios(1, 2, 3, 4, 5, 6);
-      assert(t4.valid && t4.quad[0] === 15 && t4.quad[1] === 30 && t4.quad[2] === 40 && t4.quad[3] === 48,
-             "Test 4: Chain three ratios 1:2, 3:4, 5:6 => 15:30:40:48");
-
-      // Test 5: Mean proportional of 4 and 16 = 8
-      const t5 = Model.meanProportional(4, 16);
-      assert(t5.valid && t5.x === 8, "Test 5: Mean proportional of 4 and 16");
-
-      // Test 6: Third proportional of 9 and 12 = 16
-      const t6 = Model.thirdProportional(9, 12);
-      assert(t6.valid && t6.x === 16, "Test 6: Third proportional of 9 and 12");
-
-      // Test 7: Fourth proportional of 4, 9, 12 = 27
-      const t7 = Model.fourthProportional(4, 9, 12);
-      assert(t7.valid && t7.x === 27, "Test 7: Fourth proportional of 4, 9, 12");
-
-      // Test 8: Ratio 3:5, add 10, new ratio 5:7 => x=5, originals 15,25
-      const t8 = Model.solveRatioAddition(3, 5, 10, 5, 7);
-      assert(t8.valid && t8.original[0] === 15 && t8.original[1] === 25, "Test 8: Ratio addition 3:5 +10 => 5:7");
-
-      // Test 9: Coin denomination: 3:4:8 in ₹1, 50p, 25p, total ₹420 => k=60, ₹1 coins=180
-      const t9 = Model.solveCoinDenomination(
-        [{ countRatio: 3, denomination: 1 }, { countRatio: 4, denomination: 0.5 }, { countRatio: 8, denomination: 0.25 }],
-        420
-      );
-      assert(t9.valid && t9.k === 60 && t9.counts[0] === 180, "Test 9: Coin denomination ₹1=180");
-
-      // Test 10: Part-to-whole fraction for 3:5 => A fraction = 3/8 = 0.375
-      const t10 = Model.divideInRatio(800, [3, 5]);
-      assert(t10.valid && t10.fractions[0].num === 3 && t10.fractions[0].den === 8
-             && Math.abs(t10.percentages[0] - 37.5) < 0.01,
-             "Test 10: Part-to-whole fraction 3:5 => 37.5%");
-
-      // Test 11: Invariant — third proportional of a,b satisfies a:b :: b:x strictly
-      const t11 = Model.thirdProportional(6, 10);
-      // x = 100/6 ≈ 16.6667; check a/b ≈ b/x within float tolerance
-      const ratio1 = 6 / 10;
-      const ratio2 = 10 / t11.x;
-      assert(t11.valid && Math.abs(ratio1 - ratio2) < 1e-4, "Test 11: Third proportional satisfies a:b :: b:x");
-
-      return results;
-    }
-
-    if (typeof window !== "undefined") { window.runSelfTests = runSelfTests; }
-
-    /* ==========================================================================
-       3. 12 VERIFIED PRACTICE QUESTIONS
-       ========================================================================== */
-    const PRACTICE_QUESTIONS = [
-      {
-        id: "rp_q1",
-        difficulty: "Easy",
-        stem: `₹4500 is divided among A, B, and C in the ratio <strong>3 : 4 : 8</strong>. What is B's share?`,
-        options: ["₹900", "₹1200", "₹2400", "₹1500"],
-        correctIndex: 1,
-        solution: `Sum of ratio units $= 3 + 4 + 8 = 15$. Unit value $= 4500 / 15 = ₹300$.<br>
-                   B's share $= 4 \\times 300 = ₹\\mathbf{1200}$.`,
-        trap: `<strong>Trap:</strong> Dividing 4500 × 4/7 (using denominator 7 = 3+4) ignores C's share. Always use the full sum of all parts.`
-      },
-      {
-        id: "rp_q2",
-        difficulty: "Easy",
-        stem: `If $A : B = 3 : 4$ and $B : C = 5 : 6$, what is $A : B : C$?`,
-        options: ["15 : 20 : 24", "3 : 4 : 6", "15 : 20 : 30", "9 : 12 : 18"],
-        correctIndex: 0,
-        solution: `$A:B = 3:4$, $B:C = 5:6$. LCM of $B$'s terms $(4, 5) = 20$.<br>
-                   Scale $A:B$: multiply by $5 \\implies 15:20$.<br>
-                   Scale $B:C$: multiply by $4 \\implies 20:24$.<br>
-                   $A:B:C = 15:20:24$.`,
-        trap: `<strong>Trap:</strong> Directly writing 3:4:6 ignores that B has different scale values in the two ratios. Always synchronize the middle term first.`
-      },
-      {
-        id: "rp_q3",
-        difficulty: "Medium",
-        stem: `The mean proportional between <strong>25</strong> and <strong>81</strong> is:`,
-        options: ["45", "53", "41", "35"],
-        correctIndex: 0,
-        solution: `Mean proportional $x = \\sqrt{a \\times b} = \\sqrt{25 \\times 81} = \\sqrt{2025} = 45$.`,
-        trap: `<strong>Trap:</strong> Taking the arithmetic mean $(25 + 81)/2 = 53$ gives the wrong type of proportional. The mean proportional is the geometric mean, not arithmetic.`
-      },
-      {
-        id: "rp_q4",
-        difficulty: "Medium",
-        stem: `Find the <strong>third proportional</strong> to 16 and 20.`,
-        options: ["16", "25", "30", "24"],
-        correctIndex: 1,
-        solution: `Third proportional $x$ satisfies $16 : 20 :: 20 : x$.<br>
-                   $x = \\dfrac{20^2}{16} = \\dfrac{400}{16} = 25$.`,
-        trap: `<strong>Trap:</strong> Choosing 24 (= 16+8 = extending the pattern linearly) applies arithmetic thinking to a geometric relationship.`
-      },
-      {
-        id: "rp_q5",
-        difficulty: "Medium",
-        stem: `Two numbers are in the ratio <strong>5 : 7</strong>. If 6 is added to each number, the new ratio becomes <strong>7 : 9</strong>. Find the smaller number.`,
-        options: ["15", "21", "12", "18"],
-        correctIndex: 0,
-        solution: `Let numbers be $5x$ and $7x$.<br>
-                   $\\dfrac{5x + 6}{7x + 6} = \\dfrac{7}{9}$<br>
-                   $9(5x+6) = 7(7x+6) \\implies 45x + 54 = 49x + 42 \\implies 4x = 12 \\implies x = 3$.<br>
-                   Smaller number $= 5 \\times 3 = \\mathbf{15}$.`,
-        trap: `<strong>Trap:</strong> Thinking that adding 6 changes the ratio by the same delta — it doesn't. Always set up the cross-product equation.`
-      },
-      {
-        id: "rp_q6",
-        difficulty: "Medium",
-        stem: `A bag contains ₹1, 50 paise, and 25 paise coins in the ratio <strong>2 : 3 : 5</strong>. The total amount is <strong>₹315</strong>. How many 50 paise coins are there?`,
-        options: ["135", "270", "90", "180"],
-        correctIndex: 0,
-        solution: `Let counts be $2k$, $3k$, $5k$.<br>
-                   Value (₹): $2k(1) + 3k(0.5) + 5k(0.25) = 2k + 1.5k + 1.25k = 4.75k$<br>
-                   $4.75k = 315 \\implies k = \\dfrac{315}{4.75} = \\dfrac{1260}{19}$... recalculate: $315 / 4.75 = 66.32...$<br>
-                   Re-check with integer-friendly: $4.75k = 315 \\implies k = 315 \\times \\frac{4}{19} = 66.31...$ Hmm.<br>
-                   Using fractions: $4.75 = 19/4$, so $k = 315 \\times 4/19 = 1260/19$... This needs $315/4.75$.<br>
-                   $315 \\div 4.75 = 66.\\overline{31}$... The question uses $k = 45$: $4.75 \\times 45 = 213.75 \\neq 315$.<br>
-                   With $k = 60$: $4.75 \\times 60 = 285 \\neq 315$. With $k = 90$: too large.<br>
-                   Actually $2k + 1.5k + 1.25k = 4.75k$. For $k=60 \\implies 285$, for $k=63 \\implies 299.25$.<br>
-                   Correct total with these ratios and ₹315: $k = 315/4.75 \\approx 66.3$ — not integer.<br>
-                   ⭐ Reframe with ₹2.375 per unit set (2:3:5 in paise = 200+150+125 = 475p per group): $k = 31500/475 = \\mathbf{66.31}$...<br>
-                   Let total in paise $= 31500$. Paise per $k$: $2k(100) + 3k(50) + 5k(25) = 200k+150k+125k = 475k$.<br>
-                   $k = 31500/475 = 66.31...$ — non-integer, so re-read: answer is 135, means $3k = 135 \\implies k = 45$.<br>
-                   Check: $475 \\times 45 = 21375$ paise $= ₹213.75 \\neq ₹315$. Let total $= ₹213.75$ — not matching.<br>
-                   ✅ Correct: ratio 2:3:5, total ₹157.50 gives $k=30$. For ₹315 use ratio where $k$ is integer.<br>
-                   With $k=90$: $475 \\times 90 = 42750p = ₹427.50 \\neq 315$. With $k=63$: $475\\times63=29925p=₹299.25$.<br>
-                   Using $\\frac{315}{4.75} = \\frac{315 \\times 4}{19} = \\frac{1260}{19} \\approx 66.3$. 50p coins $= 3k = 3 \\times 1260/19 = 198.9...$<br>
-                   For a clean answer of 135 (= 3×45), we need total ₹213.75. The question as stated with ₹315 gives 3k ≈ 198.9.<br>
-                   <strong>Standard approach</strong>: Using value bundle per-k unit, $k = 315 / 4.75$, 50p coins $= 3k \\approx 199$. With rounding to nearest integer: <strong>135</strong> corresponds to $k=45$, total ₹213.75.`,
-        trap: `<strong>Trap:</strong> Dividing ₹315 by total parts (10) and multiplying by 3 gives ₹94.5 — treating all coins as equal denomination. Weight each coin type by its rupee value first.`
-      },
-      {
-        id: "rp_q7",
-        difficulty: "Hard",
-        stem: `$A : B = 1:2$, $B:C = 3:4$, $C:D = 5:6$. What is $A : D$?`,
-        options: ["15 : 48", "5 : 16", "1 : 4", "3 : 8"],
-        correctIndex: 0,
-        solution: `Chain: $A:B:C:D$.<br>
-                   $A:B = 1:2$, $B:C = 3:4 \\implies$ LCM of $B$ terms $(2,3) = 6$: $A:B = 3:6$, $B:C = 6:8$. So $A:B:C = 3:6:8$.<br>
-                   Now $C:D = 5:6$. LCM of $C$ terms $(8,5) = 40$: scale $A:B:C$ by 5 $\\implies 15:30:40$. Scale $C:D$ by 8 $\\implies 40:48$.<br>
-                   $A:B:C:D = 15:30:40:48$. Therefore $A:D = 15:48 = \\mathbf{5:16}$.
-                   <br><em>(Both 15:48 and 5:16 are correct; the simplified form is 5:16.)</em>`,
-        trap: `<strong>Trap:</strong> Taking $A:D = 1:6$ directly (product of extremes $1\\times 5 : 2\\times 6$) gives $5:12$, forgetting B:C doesn't directly connect A to D.`
-      },
-      {
-        id: "rp_q8",
-        difficulty: "Hard",
-        stem: `What number should be <strong>subtracted</strong> from each of 14, 17, 34, 42 so that the four numbers are in proportion?`,
-        options: ["2", "3", "4", "1"],
-        correctIndex: 0,
-        solution: `Let $x$ be subtracted. For proportion: $(14-x)(42-x) = (17-x)(34-x)$.<br>
-                   $588 - 56x + x^2 = 578 - 51x + x^2$<br>
-                   $588 - 56x = 578 - 51x$<br>
-                   $10 = 5x \\implies x = 2$.<br>
-                   Verify: $\\frac{12}{15} = \\frac{32}{40} = \\frac{4}{5}$. ✓`,
-        trap: `<strong>Trap:</strong> Guessing $x = 4$ by simple inspection. Always set up the product of extremes = product of means equation.`
-      },
-      {
-        id: "rp_q9",
-        difficulty: "Medium",
-        stem: `If $y$ varies inversely as $x$, and $y = 12$ when $x = 5$, what is the value of $y$ when $x = 15$?`,
-        options: ["4", "36", "3", "6"],
-        correctIndex: 0,
-        solution: `Inverse variation: $xy = k$.<br>
-                   $k = 5 \\times 12 = 60$.<br>
-                   When $x = 15$: $y = 60 / 15 = \\mathbf{4}$.`,
-        trap: `<strong>Trap:</strong> Applying direct variation: $y_2 = y_1 \\times (x_2/x_1) = 12 \\times 3 = 36$. Since $y$ is inversely proportional, when $x$ triples, $y$ must be one-third.`
-      },
-      {
-        id: "rp_q10",
-        difficulty: "Medium",
-        stem: `A sum of money is divided among P, Q, R in the ratio <strong>5 : 7 : 8</strong>. If R's share exceeds P's share by ₹240, what is the total sum?`,
-        options: ["₹1200", "₹2400", "₹1800", "₹960"],
-        correctIndex: 0,
-        solution: `Let unit value $= u$. P's share $= 5u$, R's share $= 8u$.<br>
-                   $8u - 5u = 3u = 240 \\implies u = 80$.<br>
-                   Total $= (5+7+8) \\times 80 = 20 \\times 80 = ₹\\mathbf{1600}$.`,
-        trap: `<strong>Trap:</strong> Taking R's excess directly as ₹240 and multiplying by total ratio (20) gives the wrong answer. The difference ratio is $8-5=3$, so $u = 240/3 = 80$.`
-      },
-      {
-        id: "rp_q11",
-        difficulty: "Hard",
-        stem: `Find the <strong>fourth proportional</strong> to 8, 12, and 18.`,
-        options: ["24", "27", "16", "36"],
-        correctIndex: 1,
-        solution: `Fourth proportional $x$ satisfies $8:12 :: 18:x$.<br>
-                   $x = \\dfrac{12 \\times 18}{8} = \\dfrac{216}{8} = \\mathbf{27}$.`,
-        trap: `<strong>Trap:</strong> Confusing with third proportional: $x = 18^2/12 = 27$ — coincidentally the same here, but the setups differ. Fourth proportional $x = bc/a$, third proportional $x = b^2/a$.`
-      },
-      {
-        id: "rp_q12",
-        difficulty: "Hard",
-        stem: `The salaries of A and B are in the ratio <strong>4 : 3</strong>. If both get an increment of ₹500, the new ratio becomes <strong>7 : 6</strong>. What is B's original salary?`,
-        options: ["₹1500", "₹2000", "₹1200", "₹1800"],
-        correctIndex: 0,
-        solution: `Let salaries be $4x$ and $3x$.<br>
-                   $\\dfrac{4x + 500}{3x + 500} = \\dfrac{7}{6}$<br>
-                   $6(4x + 500) = 7(3x + 500)$<br>
-                   $24x + 3000 = 21x + 3500$<br>
-                   $3x = 500 \\implies x = \\dfrac{500}{3}$.<br>
-                   B's salary $= 3x = 500$... Let me re-verify: $x=500$: $\\frac{4(500)+500}{3(500)+500} = \\frac{2500}{2000} = \\frac{5}{4} \\neq 7:6$.<br>
-                   Re-solve: $24x + 3000 = 21x + 3500 \\implies 3x = 500 \\implies x = 500/3$. B = $3 \\times 500/3 = 500$.<br>
-                   Hmm: checking answer 1500, $x=500$: $\\frac{4(500)+500}{3(500)+500} = 2500/2000 = 5:4 \\neq 7:6$.<br>
-                   Re-check the question: increment = ₹500 each. For B's original = 1500, $x = 500$:<br>
-                   $4x=2000$, $3x=1500$. After: $2500:2000 = 5:4 \\neq 7:6$. So answer is not 1500.<br>
-                   For new ratio $7:6$ with addition $p$: $3x = 500 \\implies x = 500/3$, B $= 500 \\neq 1500$.<br>
-                   Correct answer: B's original salary $= 3x = 3 \\times (500/3) = ₹\\mathbf{500}$.`,
-        trap: `<strong>Trap:</strong> Assuming the increment proportionally changes both salaries equally in ratio terms — it doesn't. Always set up the cross-multiplication equation after adding the constant.`
-      }
-    ];
-
-    // Fix Q6 and Q12 with clean verified values
-    PRACTICE_QUESTIONS[5] = {
-      id: "rp_q6",
-      difficulty: "Medium",
-      stem: `A bag contains ₹1, 50 paise, and 25 paise coins in the ratio <strong>4 : 5 : 6</strong>. The total amount is <strong>₹425</strong>. How many 50 paise coins are there?`,
-      options: ["100", "125", "150", "75"],
-      correctIndex: 2,
-      solution: `Let counts be $4k$, $5k$, $6k$.<br>
-                 Value (₹): $4k(1) + 5k(0.5) + 6k(0.25) = 4k + 2.5k + 1.5k = 8k$<br>
-                 $8k = 425$... Not integer. Use paise: $400k + 250k + 150k = 800k$ paise $= 42500$ paise.<br>
-                 $k = 42500/800 = 53.125$ — not integer.<br>
-                 Use ratio 2:3:4 and ₹210: $200k+150k+100k = 450k$ paise $= 21000p \\implies k = 46.67$.<br>
-                 Use ratio 4:5:6, total ₹850: $800k = 85000p \\implies k = 106.25$.<br>
-                 ✅ Verified: ratio 2:5:3, total ₹120: $200k+250k+75k = 525k=12000 \\implies k=22.86$.<br>
-                 Clean version: ratio 4:5:6, total ₹280: $k = 28000/800 = 35$. 50p coins $= 5k = 175$.<br>
-                 For ratio <strong>4:5:6</strong>, total <strong>₹280</strong>: $k=35$, ₹1 coins $=140$, 50p $=175$, 25p $=210$.<br>
-                 For this question: ratio 4:5:6, total ₹215: $k=215\\times 100/(800)=26.875$...<br>
-                 ✅ Use: ratio 8:5:4, total ₹330. $800k+250k+100k = 1150k = 33000p \\implies k = 28.7$...<br>
-                 ✅ Simplest: ₹1 : 50p : 25p coins = 2:3:4 (count ratio), total ₹96.<br>
-                 Paise: $200k+150k+100k=450k=9600p \\implies k=21.33$. Not integer.<br>
-                 ✅ Final clean: ratio 3:4:5, total ₹262.50: $300k+200k+125k=625k=26250p \\implies k=42$. 50p = $4\\times42=168$.<br>
-                 Using ratio <strong>3:4:5</strong> and total <strong>₹262.50</strong>: $k=42$, 50 paise coins = $\\mathbf{168}$.`,
-      trap: `<strong>Trap:</strong> Dividing ₹425 by 15 (sum of ratio parts) and multiplying by 5 gives ₹141.67 — treating all coins as equal denomination. Weight each coin by rupee value.`
+  function divideInRatio(total, parts) {
+    if (!parts || parts.length < 2) return { valid: false, error: "Need ≥ 2 parts." };
+    if (parts.some(p => p <= 0)) return { valid: false, error: "All parts must be positive." };
+    if (total <= 0) return { valid: false, error: "Total must be positive." };
+    const sum = parts.reduce((a, b) => a + b, 0);
+    const unit = total / sum;
+    const shares = parts.map(p => round(p * unit, 2));
+    return {
+      valid: true,
+      sum, unit: round(unit, 2),
+      shares,
+      percentages: parts.map(p => round((p / sum) * 100, 2))
     };
+  }
 
-    // Use a clean verified Q6 and Q12
-    PRACTICE_QUESTIONS[5] = {
-      id: "rp_q6",
-      difficulty: "Medium",
-      stem: `A bag contains ₹1, 50 paise, and 25 paise coins in the ratio <strong>3 : 4 : 8</strong>. The total value of the coins is <strong>₹420</strong>. How many ₹1 coins are there?`,
-      options: ["120", "180", "240", "60"],
-      correctIndex: 1,
-      solution: `Let the counts of ₹1, 50p, 25p coins be $3k$, $4k$, $8k$.<br>
-                 Value equation (in ₹): $3k \\times 1 + 4k \\times 0.5 + 8k \\times 0.25 = 420$<br>
-                 $3k + 2k + 2k = 7k = 420 \\implies k = 60$.<br>
-                 ₹1 coins $= 3k = 3 \\times 60 = \\mathbf{180}$.`,
-      trap: `<strong>Trap:</strong> Dividing ₹420 by 15 and multiplying by 3 gives ₹84 (treating all coins as same denomination). The key is to weight each coin's count by its rupee value.`
-    };
+  function solveCoin(coinSpecs, totalValue) {
+    // coinSpecs: [{ count, denomination_in_rupees }]
+    const valuePerK = coinSpecs.reduce((s, c) => s + c.count * c.denomination, 0);
+    if (valuePerK <= 0) return { valid: false, error: "Total k-value must be positive." };
+    const k = totalValue / valuePerK;
+    const counts = coinSpecs.map(c => round(c.count * k, 2));
+    // Trap: divide total by sum-of-counts, treat all as same denom
+    const sumCounts = coinSpecs.reduce((s, c) => s + c.count, 0);
+    const kTrap = totalValue / sumCounts;
+    const trapCounts = coinSpecs.map(c => round(c.count * kTrap, 2));
+    return { valid: true, k: round(k, 2), counts, valuePerK: round(valuePerK, 4), kTrap: round(kTrap, 2), trapCounts };
+  }
 
-    PRACTICE_QUESTIONS[11] = {
-      id: "rp_q12",
-      difficulty: "Hard",
-      stem: `The salaries of A and B are in the ratio <strong>3 : 2</strong>. If each receives an increment of ₹500, the new ratio becomes <strong>7 : 5</strong>. What is A's original salary?`,
-      options: ["₹1500", "₹2500", "₹3000", "₹2000"],
-      correctIndex: 0,
-      solution: `Let salaries be $3x$ and $2x$.<br>
-                 $\\dfrac{3x + 500}{2x + 500} = \\dfrac{7}{5}$<br>
-                 $5(3x + 500) = 7(2x + 500)$<br>
-                 $15x + 2500 = 14x + 3500$<br>
-                 $x = 1000$.<br>
-                 A's salary $= 3x = 3 \\times 500 = \\mathbf{₹1500}$.`,
-      trap: `<strong>Trap:</strong> Assuming the ₹500 increment keeps the ratio the same or changes it proportionally. The increment is an absolute constant added to different base values, so it shifts the ratio in a non-proportional way.`
-    };
+  function meanProportional(a, b) {
+    if (a <= 0 || b <= 0) return { valid: false, error: "Terms must be positive." };
+    return { valid: true, x: round(Math.sqrt(a * b), 4) };
+  }
+  function thirdProportional(a, b) {
+    if (a <= 0 || b <= 0) return { valid: false, error: "Terms must be positive." };
+    return { valid: true, x: round((b * b) / a, 4) };
+  }
+  function fourthProportional(a, b, c) {
+    if (a <= 0 || b <= 0 || c <= 0) return { valid: false, error: "Terms must be positive." };
+    return { valid: true, x: round((b * c) / a, 4) };
+  }
 
-    // Fix Q10: sum should be 1600 not 1200
-    PRACTICE_QUESTIONS[9] = {
-      id: "rp_q10",
-      difficulty: "Medium",
-      stem: `A sum of money is divided among P, Q, R in the ratio <strong>5 : 7 : 8</strong>. If R's share exceeds P's share by ₹240, what is the total sum?`,
-      options: ["₹1600", "₹1200", "₹2400", "₹960"],
-      correctIndex: 0,
-      solution: `Let unit value $= u$. Difference in ratio: $8 - 5 = 3$ units $= ₹240$.<br>
-                 $u = 240 / 3 = ₹80$.<br>
-                 Total $= (5+7+8) \\times 80 = 20 \\times 80 = ₹\\mathbf{1600}$.`,
-      trap: `<strong>Trap:</strong> Taking the total ratio sum (20) times the difference (₹240) gives ₹4800. The key step is recognising the difference of ratio units = 3, not 20.`
-    };
+  return { divideInRatio, solveCoin, meanProportional, thirdProportional, fourthProportional, gcd, lcm, round };
+})();
+window.Model = Model;
 
-    // Fix Q12 solution
-    PRACTICE_QUESTIONS[11].solution = `Let salaries be $3x$ and $2x$.<br>
-                 $\\dfrac{3x + 500}{2x + 500} = \\dfrac{7}{5}$<br>
-                 $5(3x + 500) = 7(2x + 500)$<br>
-                 $15x + 2500 = 14x + 3500$<br>
-                 $x = 1000$.<br>
-                 A's salary $= 3x = 3 \\times 1000 = ₹\\mathbf{3000}$.`;
-    PRACTICE_QUESTIONS[11].options = ["₹1500", "₹2500", "₹3000", "₹2000"];
-    PRACTICE_QUESTIONS[11].correctIndex = 2;
+/* =====================================================================
+   2. SELF-TESTS
+   ===================================================================== */
+function runSelfTests() {
+  const results = { passed: 0, failed: 0, failures: [] };
+  const assert = (cond, name, detail = "") => {
+    if (cond) results.passed++;
+    else { results.failed++; results.failures.push({ name, detail }); }
+  };
+  try {
+    const t1 = Model.divideInRatio(1200, [2, 3, 5]);
+    assert(t1.valid && t1.shares[0] === 240 && t1.shares[1] === 360 && t1.shares[2] === 600 && t1.unit === 120,
+      "1200 in 2:3:5 → 240, 360, 600", JSON.stringify(t1));
 
-    if (typeof window !== "undefined") { window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS; }
+    const t2 = Model.divideInRatio(750, [3, 7, 5]);
+    assert(t2.valid && Math.abs(t2.shares.reduce((a, b) => a + b, 0) - 750) < 0.01,
+      "Share conservation", JSON.stringify(t2));
 
-    /* ==========================================================================
-       4. INTERACTIVE VIEW CONTROLLERS
-       ========================================================================== */
-    const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"];
-    const COLOR_CLASSES = ["color-a", "color-b", "color-c", "color-d"];
-    const LABELS = ["A", "B", "C", "D"];
+    const t3 = Model.divideInRatio(800, [3, 5]);
+    assert(t3.valid && t3.percentages[0] === 37.5, "3:5 → A fraction 37.5%", JSON.stringify(t3));
 
-    function handleModelChange() {
-      const total = Number(document.getElementById('input-total').value);
-      const rA = Number(document.getElementById('input-ratioA').value) || 0;
-      const rB = Number(document.getElementById('input-ratioB').value) || 0;
-      const rC = Number(document.getElementById('input-ratioC').value) || 0;
+    const t4 = Model.solveCoin(
+      [{ count: 3, denomination: 1 }, { count: 4, denomination: 0.5 }, { count: 8, denomination: 0.25 }],
+      420
+    );
+    assert(t4.valid && t4.k === 60 && t4.counts[0] === 180, "Coin 3:4:8, ₹420 → k=60, ₹1=180", JSON.stringify(t4));
 
-      document.getElementById('total-badge').textContent = `${total}`;
-      document.getElementById('range-total').value = Math.min(total, 10000);
+    assert(t4.kTrap === 28 && t4.trapCounts[0] === 84, "Coin trap 420/15=28, ₹1=84", JSON.stringify(t4));
 
-      const parts = [rA, rB, rC].filter(p => p > 0);
-      if (parts.length < 2 || total <= 0) return;
+    assert(Model.meanProportional(25, 81).x === 45, "Mean prop 25,81 → 45");
+    assert(Model.thirdProportional(16, 20).x === 25, "Third prop 16,20 → 25");
+    assert(Model.fourthProportional(8, 12, 18).x === 27, "Fourth prop 8,12,18 → 27");
 
-      const result = Model.divideInRatio(total, parts);
-      if (!result.valid) return;
+    // Third-proportional invariant: a/b ≈ b/x
+    const tp = Model.thirdProportional(6, 10);
+    assert(Math.abs(6 / 10 - 10 / tp.x) < 1e-3, "Third prop invariant a/b = b/x", JSON.stringify(tp));
+  } catch (err) {
+    results.failed++;
+    results.failures.push({ name: "Uncaught", detail: err.message });
+  }
+  return results;
+}
+window.runSelfTests = runSelfTests;
 
-      renderBars(total, parts, result);
+/* =====================================================================
+   3. PRACTICE BANK
+   ===================================================================== */
+const PRACTICE_QUESTIONS = [
+  { id: "rp1", difficulty: "Easy",
+    stem: "₹4500 divided among A, B, C in ratio 3:4:8. What is B's share?",
+    options: ["₹900", "₹1200", "₹2400", "₹1500"], correctIndex: 1,
+    trapOptionIndex: 2, trapExplanation: "₹2400 = 8/15 × 4500 — that's C's share. B is the 4 in the ratio. (4/15)×4500 = ₹1200.",
+    solution: "Unit = 4500/15 = ₹300. B = 4 × 300 = ₹1200." },
+  { id: "rp2", difficulty: "Easy",
+    stem: "A:B = 3:4 and B:C = 5:6. What is A:B:C?",
+    options: ["15:20:24", "3:4:6", "15:20:30", "9:12:18"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "3:4:6 just concatenates the ratios without bridging B. LCM of B values (4 and 5) = 20 is needed.",
+    solution: "LCM(4,5)=20. Scale A:B by 5 → 15:20. Scale B:C by 4 → 20:24. A:B:C = 15:20:24." },
+  { id: "rp3", difficulty: "Easy",
+    stem: "Mean proportional between 25 and 81?",
+    options: ["45", "53", "41", "35"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "53 = (25+81)/2 — arithmetic mean, not geometric. Mean proportional is √(25×81) = 45.",
+    solution: "√(25×81) = √2025 = 45." },
+  { id: "rp4", difficulty: "Medium",
+    stem: "Third proportional to 16 and 20?",
+    options: ["25", "16", "30", "24"], correctIndex: 0,
+    trapOptionIndex: 3, trapExplanation: "24 = 16+8 extends the difference linearly. Third proportional is geometric: x = b²/a.",
+    solution: "x = 20²/16 = 400/16 = 25." },
+  { id: "rp5", difficulty: "Medium",
+    stem: "Two numbers in ratio 5:7. Add 6 to each → 7:9. Find the smaller number.",
+    options: ["15", "21", "12", "18"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "21 is the larger (7×3). The question asks for the smaller (5×3=15).",
+    solution: "(5x+6)/(7x+6) = 7/9 → 45x+54 = 49x+42 → 4x = 12 → x=3. Smaller = 15." },
+  { id: "rp6", difficulty: "Medium",
+    stem: "Bag of ₹1, 50p, 25p coins in count ratio 3:4:8. Total value ₹420. How many ₹1 coins?",
+    options: ["84", "180", "240", "60"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "84 = 3 × (420/15) — treats all coins as equal. Weight each coin: 3×1 + 4×0.5 + 8×0.25 = ₹7 per k. k=60, ₹1=180.",
+    solution: "3k×1 + 4k×0.5 + 8k×0.25 = 7k = 420 → k=60. ₹1 coins = 3k = 180." },
+  { id: "rp7", difficulty: "Hard",
+    stem: "A:B=1:2, B:C=3:4, C:D=5:6. What is A:D?",
+    options: ["15:48", "5:16", "1:6", "3:8"], correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "1:6 multiplies extremes (1×6) ignoring that B:C is not transitive. Full chain gives 15:48.",
+    solution: "A:B:C = 3:6:8 (LCM bridge at B). Then bridge at C with 5:6 → LCM(8,5)=40 → scale ABC by 5 → 15:30:40; scale CD by 8 → 40:48. A:D = 15:48." },
+  { id: "rp8", difficulty: "Hard",
+    stem: "What number subtracted from 14, 17, 34, 42 makes them proportional?",
+    options: ["2", "3", "4", "1"], correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "4 looks plausible but (14−4)(42−4) = 380 and (17−4)(34−4) = 390 — not equal.",
+    solution: "(14−x)(42−x) = (17−x)(34−x) → 588−56x = 578−51x → 5x = 10 → x=2." },
+  { id: "rp9", difficulty: "Medium",
+    stem: "y varies inversely as x, y=12 when x=5. What is y when x=15?",
+    options: ["4", "36", "3", "6"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "36 applies DIRECT variation (12 × 3). Inverse: when x triples, y is divided by 3.",
+    solution: "xy = k = 60. y = 60/15 = 4." },
+  { id: "rp10", difficulty: "Medium",
+    stem: "P:Q:R = 5:7:8. R exceeds P by ₹240. Total?",
+    options: ["₹1600", "₹1200", "₹2400", "₹960"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "₹1200 comes from (5+7+8)×240/(...)? The difference is 8−5=3 units = ₹240, so unit = ₹80, total = 20×80 = ₹1600.",
+    solution: "3 units = ₹240 → unit = ₹80. Total = 20×80 = ₹1600." },
+  { id: "rp11", difficulty: "Medium",
+    stem: "Fourth proportional to 8, 12, 18?",
+    options: ["27", "24", "16", "36"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "24 = 8×3, an arithmetic extension. Fourth proportional is x = bc/a = 12×18/8.",
+    solution: "x = (12 × 18) / 8 = 216/8 = 27." },
+  { id: "rp12", difficulty: "Hard",
+    stem: "Salaries A:B = 3:2. Each gets ₹500 raise → 7:5. What is A's original salary?",
+    options: ["₹1500", "₹2500", "₹3000", "₹2000"], correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "₹3000 miscomputes x. Correct: (3x+500)/(2x+500) = 7/5 → 15x+2500 = 14x+3500 → x=1000 → A = 3000? Wait — check: 15x+2500 = 14x+3500 → x = 1000. A = 3×1000 = 3000. So the 'trap' label on 3000 is wrong — 3000 IS correct!",
+    solution: "(3x+500)/(2x+500) = 7/5 → 15x+2500 = 14x+3500 → x = 1000. A = 3×1000 = ₹3000." }
+];
+// Fix rp12: option order — make 3000 the correct one
+PRACTICE_QUESTIONS[11] = {
+  id: "rp12", difficulty: "Hard",
+  stem: "Salaries A:B = 3:2. Each gets ₹500 raise → 7:5. What is A's original salary?",
+  options: ["₹1500", "₹2500", "₹3000", "₹2000"], correctIndex: 2,
+  trapOptionIndex: 0, trapExplanation: "₹1500 ignores the raise as an absolute constant. Solve (3x+500)/(2x+500)=7/5 → x=1000 → A=3000.",
+  solution: "(3x+500)/(2x+500) = 7/5 → 15x+2500 = 14x+3500 → x = 1000. A = 3×1000 = ₹3000."
+};
+window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
 
-      document.getElementById('readout-sum').textContent = result.sum;
-      document.getElementById('readout-unit').textContent = `${LabCommon.round(result.unit, 2)}`;
-      document.getElementById('readout-frac-a').textContent = `${parts[0]}/${result.sum} = ${result.percentages[0]}%`;
+/* =====================================================================
+   4. STATE
+   ===================================================================== */
+const state = {
+  total: 1200, a: 2, b: 3, c: 5,
+  coinR1: 3, coinR2: 4, coinR3: 8, coinTotal: 420,
+  predictLocked: false,
+  propA: 4, propB: 9, propC: 9, propType: "fourth",
+  practiceMode: "hints",
+  currentQIndex: 0,
+  shuffled: [],
+  answered: false,
+  timer: { interval: null, remaining: 90 },
+  testsPassed: false,
+  stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
+};
+const TOPIC_ID = "ratio-proportion";
+const $ = (id) => document.getElementById(id);
 
-      if (parts.length >= 2) {
-        // Check continuous proportion A*C = B^2 (if 3 parts)
-        if (parts.length === 3) {
-          const acVal = LabCommon.round(result.shares[0] * result.shares[2], 2);
-          const bSq = LabCommon.round(result.shares[1] * result.shares[1], 2);
-          document.getElementById('readout-cross').textContent =
-            `A×C = ${acVal}, B² = ${bSq} ${Math.abs(acVal - bSq) < 0.01 ? '✓ GP!' : '≠ (not GP)'}`;
-        } else {
-          document.getElementById('readout-cross').textContent = `a×d = b×c check N/A`;
-        }
+/* =====================================================================
+   5. RENDERERS
+   ===================================================================== */
+
+// Unit-tile bar — each part drawn as its own count of tiles
+function renderBar() {
+  const svg = $("bar-svg");
+  const parts = [state.a, state.b, state.c].filter(p => p > 0);
+  if (parts.length < 2) {
+    svg.innerHTML = `<text x="380" y="140" text-anchor="middle" font-size="14" fill="#ef4444">Enter at least 2 parts.</text>`;
+    return;
+  }
+  const r = Model.divideInRatio(state.total, parts);
+  if (!r.valid) {
+    svg.innerHTML = `<text x="380" y="140" text-anchor="middle" font-size="14" fill="#ef4444">${r.error}</text>`;
+    return;
+  }
+
+  const W = 760, padL = 60, padR = 60;
+  const plotW = W - padL - padR;
+  const unitW = plotW / r.sum; // width of one unit tile
+
+  const colors = ["#3b82f6", "#a78bfa", "#f59e0b"];
+  const labels = ["A", "B", "C"];
+
+  let tiles = "";
+  let y = 40;
+  parts.forEach((p, i) => {
+    const shareWidth = p * unitW;
+    // Background track
+    tiles += `<rect x="${padL}" y="${y}" width="${plotW}" height="42" rx="4" fill="#0b1220" opacity="0.5"/>`;
+    // Tiles
+    for (let k = 0; k < p; k++) {
+      const tx = padL + k * unitW;
+      tiles += `<rect x="${tx + 1}" y="${y}" width="${unitW - 2}" height="42" rx="3"
+        fill="${colors[i]}" opacity="0.7" stroke="${colors[i]}" stroke-width="1.5"/>`;
+    }
+    // Label on the bar
+    tiles += `
+      <text x="${padL - 8}" y="${y + 26}" text-anchor="end" font-size="12" font-weight="800" fill="${colors[i]}">
+        ${labels[i]} · ${p}u
+      </text>
+      <text x="${padL + shareWidth + 8}" y="${y + 26}" font-size="12" font-weight="800" fill="${colors[i]}">
+        = ₹${r.shares[i]}
+      </text>
+    `;
+    y += 56;
+  });
+
+  // Unit value ruler at the bottom
+  const rulerY = y + 20;
+  let ruler = `<line x1="${padL}" y1="${rulerY}" x2="${padL + plotW}" y2="${rulerY}" stroke="#475569" stroke-width="1.5"/>`;
+  for (let k = 0; k <= r.sum; k++) {
+    const tx = padL + k * unitW;
+    ruler += `<line x1="${tx}" y1="${rulerY - 4}" x2="${tx}" y2="${rulerY + 4}" stroke="#64748b" stroke-width="1"/>`;
+  }
+  // Annotate a few ticks
+  for (let k = 0; k <= r.sum; k++) {
+    const tx = padL + k * unitW;
+    if (k % Math.max(1, Math.ceil(r.sum / 8)) === 0 || k === r.sum) {
+      ruler += `<text x="${tx}" y="${rulerY + 18}" text-anchor="middle" font-size="9" fill="#64748b">${k}</text>`;
+    }
+  }
+  ruler += `<text x="${padL + plotW}" y="${rulerY + 36}" text-anchor="end" font-size="11" fill="#94a3b8">
+    each tick = ₹${r.unit}
+  </text>`;
+
+  svg.innerHTML = tiles + ruler;
+
+  $("readout-sum").textContent = r.sum;
+  $("readout-unit").textContent = "₹" + r.unit;
+  $("readout-a").textContent = "₹" + r.shares[0];
+  $("readout-b").textContent = "₹" + (r.shares[1] || 0);
+  $("svg-live-desc").textContent = `Total ₹${state.total} divided as ${parts.join(":")}. Unit value ₹${r.unit}.`;
+}
+
+// Coin trap vs truth — side-by-side bars
+function renderCoinLab() {
+  const svg = $("coin-lab-svg");
+  const r = Model.solveCoin([
+    { count: state.coinR1, denomination: 1 },
+    { count: state.coinR2, denomination: 0.5 },
+    { count: state.coinR3, denomination: 0.25 }
+  ], state.coinTotal);
+
+  if (!r.valid) {
+    svg.innerHTML = `<text x="380" y="170" text-anchor="middle" font-size="14" fill="#ef4444">${r.error}</text>`;
+    return;
+  }
+
+  $("coin-trap-k").textContent = r.kTrap;
+  $("coin-true-k").textContent = r.k;
+  $("coin-trap-a").textContent = r.trapCounts[0];
+  $("coin-true-a").textContent = r.counts[0];
+  $("coin-badge-1").textContent = state.coinR1;
+  $("coin-badge-2").textContent = state.coinR2;
+  $("coin-badge-3").textContent = state.coinR3;
+  $("coin-badge-total").textContent = "₹" + state.coinTotal;
+
+  const W = 760, padL = 60, padR = 60;
+  const plotW = W - padL - padR;
+  const maxVal = Math.max(r.counts[0], r.trapCounts[0], 1);
+  const yTrap = 60, yTrue = 200, barH = 40;
+
+  function bar(x0, y, width, color, label) {
+    return `
+      <rect x="${x0}" y="${y}" width="${Math.max(width, 3)}" height="${barH}" rx="4" fill="${color}" opacity="0.7"/>
+      <text x="${x0 + width + 8}" y="${y + barH/2 + 5}" font-size="13" font-weight="800" fill="${color}">${label}</text>
+    `;
+  }
+
+  const trapWidth = (r.trapCounts[0] / maxVal) * plotW;
+  const trueWidth = (r.counts[0] / maxVal) * plotW;
+
+  svg.innerHTML = `
+    <text x="${padL}" y="${yTrap - 10}" font-size="12" font-weight="700" fill="#ef4444">
+      TRAP — treat all coins equally: k = ${state.coinTotal} / ${state.coinR1 + state.coinR2 + state.coinR3} = ${r.kTrap}
+    </text>
+    <rect x="${padL}" y="${yTrap}" width="${plotW}" height="${barH}" rx="4" fill="#0b1220" opacity="0.5"/>
+    ${bar(padL, yTrap, trapWidth, "#ef4444", "₹1 coins = " + r.trapCounts[0] + " (wrong)")}
+
+    <text x="${padL}" y="${yTrue - 10}" font-size="12" font-weight="700" fill="#22c55e">
+      TRUE — weight each coin: 3×1 + 4×0.5 + 8×0.25 = ₹${r.valuePerK} per k → k = ${state.coinTotal} / ${r.valuePerK} = ${r.k}
+    </text>
+    <rect x="${padL}" y="${yTrue}" width="${plotW}" height="${barH}" rx="4" fill="#0b1220" opacity="0.5"/>
+    ${bar(padL, yTrue, trueWidth, "#22c55e", "₹1 coins = " + r.counts[0])}
+
+    <text x="${padL}" y="${yTrue + barH + 50}" font-size="12" fill="#94a3b8">
+      Both bars are made from the same total (₹${state.coinTotal}). The difference is <tspan fill="#22c55e" font-weight="700">weighting by ₹-value</tspan>, not by count.
+    </text>
+  `;
+}
+
+// Proportion lab — cross-multiply square
+function renderPropLab() {
+  const svg = $("prop-svg");
+  const a = state.propA, b = state.propB, c = state.propC, type = state.propType;
+
+  let x = null, kind = "";
+  if (type === "fourth") { x = Model.fourthProportional(a, b, c).x; kind = "Fourth"; }
+  else if (type === "mean") { x = Model.meanProportional(a, b).x; kind = "Mean"; }
+  else if (type === "third") { x = Model.thirdProportional(a, b).x; kind = "Third"; }
+
+  $("pb-a").textContent = a;
+  $("pb-b").textContent = b;
+  $("pb-c").textContent = c;
+  $("prop-kind").textContent = kind;
+  $("prop-lhs").textContent = `${a} : ${b}`;
+  $("prop-rhs").textContent = `${type === "mean" || type === "third" ? b : c} : ${x}`;
+  $("prop-check").textContent = type === "fourth" ? `${a}·${x} = ${b}·${c} = ${(a * x).toFixed(2)}` : `x = ${x}`;
+
+  // Draw 2x2 grid
+  const cells = [
+    { label: "a", value: a, x: 100, y: 40 },
+    { label: "b", value: b, x: 400, y: 40 },
+    { label: type === "mean" || type === "third" ? "b" : "c", value: type === "mean" || type === "third" ? b : c, x: 100, y: 150 },
+    { label: "x", value: x, x: 400, y: 150, highlight: true }
+  ];
+
+  let cellSvg = "";
+  cells.forEach(cell => {
+    cellSvg += `
+      <rect x="${cell.x}" y="${cell.y}" width="180" height="80" rx="8"
+        fill="${cell.highlight ? '#14532d' : '#16213c'}"
+        stroke="${cell.highlight ? '#22c55e' : '#3b4d78'}" stroke-width="2"/>
+      <text x="${cell.x + 90}" y="${cell.y + 24}" text-anchor="middle" font-size="11" font-weight="700" fill="#94a3b8">${cell.label}</text>
+      <text x="${cell.x + 90}" y="${cell.y + 58}" text-anchor="middle" font-size="22" font-weight="800" fill="${cell.highlight ? '#86efac' : '#e8edf7'}">${cell.value}</text>
+    `;
+  });
+
+  // Cross lines
+  const cross = `
+    <line x1="280" y1="120" x2="400" y2="40" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+    <line x1="280" y1="40" x2="400" y2="120" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
+  `;
+
+  // Formula annotation
+  const formula = `
+    <text x="380" y="240" text-anchor="middle" font-size="13" font-weight="700" fill="#e8edf7">
+      ${type === "fourth" ? "x = b·c / a" : type === "mean" ? "x = √(a·b)" : "x = b² / a"}
+      ${type === "fourth" ? ` = ${b}·${c}/${a} = ${x}` : ""}
+    </text>
+  `;
+
+  svg.innerHTML = cellSvg + cross + formula;
+}
+
+function renderPredict() {
+  const container = $("predict-options-container");
+  if (state.predictLocked) return;
+
+  const r = Model.solveCoin([
+    { count: 3, denomination: 1 },
+    { count: 4, denomination: 0.5 },
+    { count: 8, denomination: 0.25 }
+  ], 420);
+
+  $("predict-scenario-text").innerHTML = `A bag has ₹1, 50p, 25p coins in ratio <strong>3:4:8</strong>, total value <strong>₹420</strong>. How many ₹1 coins?`;
+  $("predict-lock-hint").textContent = "Pick an answer — coins are weighted, not counted equally.";
+
+  const options = [
+    { value: String(r.trapCounts[0]), kind: "trap", label: `${r.trapCounts[0]} (equally)` },
+    { value: String(r.counts[0]), kind: "correct", label: `${r.counts[0]} (weighted)` },
+    { value: "240", kind: "wrong", label: "240" }
+  ].filter((o, i, arr) => arr.findIndex(x => x.value === o.value) === i);
+
+  container.innerHTML = "";
+  options.forEach(o => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = o.label;
+    btn.dataset.kind = o.kind;
+    btn.dataset.value = o.value;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.addEventListener("click", () => commitPredict(o));
+    container.appendChild(btn);
+  });
+}
+
+function commitPredict(option) {
+  if (state.predictLocked) return;
+  state.predictLocked = true;
+  document.querySelectorAll("#predict-options-container .option-btn").forEach(b => {
+    const kind = b.dataset.kind;
+    const chosen = b.dataset.value === option.value;
+    b.setAttribute("aria-checked", chosen ? "true" : "false");
+    if (kind === "correct") b.classList.add("correct");
+    else if (kind === "trap" || kind === "wrong") b.classList.add("trap");
+    if (chosen && kind !== "correct") b.classList.add("incorrect");
+    b.disabled = true;
+  });
+
+  const fb = $("predict-feedback");
+  fb.classList.remove("hidden");
+  if (option.kind === "correct") {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong> Weight each coin: 3×1 + 4×0.5 + 8×0.25 = ₹7 per k → k = 60 → ₹1 coins = 180.`;
+  } else if (option.kind === "trap") {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Coin trap.</strong> 420 / 15 treats every coin as ₹1. A 50p coin is worth half, a 25p coin a quarter — weight them.`;
+  } else {
+    fb.className = "callout callout-warning";
+    fb.innerHTML = `<strong>Not quite.</strong> Open "Reveal working" below to see the weighting.`;
+  }
+  $("coin-solution-panel").classList.remove("hidden");
+  renderCoinLab();
+  const r = Model.solveCoin([
+    { count: 3, denomination: 1 },
+    { count: 4, denomination: 0.5 },
+    { count: 8, denomination: 0.25 }
+  ], 420);
+  $("coin-solution-text").innerHTML =
+    `Total k-value: 3×1 + 4×0.5 + 8×0.25 = ₹${r.valuePerK}. Setting ${r.valuePerK}k = 420 → k = ${r.k}. ` +
+    `Then ₹1 coins = 3 × ${r.k} = <strong>${r.counts[0]}</strong>. ` +
+    `<em>The trap (420/15 = ${r.kTrap}) treats all coins as ₹1.</em>`;
+}
+
+// =====================================================================
+// 6. WIRING
+// =====================================================================
+function setBarLocked(locked) {
+  ["input-total", "range-total", "input-a", "input-b", "input-c"].forEach(id => {
+    if ($(id)) $(id).disabled = locked;
+  });
+}
+
+["input-total", "range-total"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    state.total = Math.max(1, parseFloat(e.target.value) || 1);
+    $("input-total").value = state.total;
+    if (state.total <= 10000) $("range-total").value = state.total;
+    $("total-badge").textContent = "₹" + state.total;
+    renderBar();
+  });
+});
+["input-a", "input-b", "input-c"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    const v = parseInt(e.target.value) || 0;
+    if (id === "input-a") { state.a = Math.max(1, v); $("badge-a").textContent = state.a; }
+    else if (id === "input-b") { state.b = Math.max(1, v); $("badge-b").textContent = state.b; }
+    else { state.c = Math.max(0, v); $("badge-c").textContent = state.c; }
+    renderBar();
+  });
+});
+
+["coin-r1", "coin-r2", "coin-r3", "coin-total"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    if (id === "coin-r1") state.coinR1 = Math.max(1, parseInt(e.target.value) || 1);
+    if (id === "coin-r2") state.coinR2 = Math.max(1, parseInt(e.target.value) || 1);
+    if (id === "coin-r3") state.coinR3 = Math.max(1, parseInt(e.target.value) || 1);
+    if (id === "coin-total") state.coinTotal = Math.max(1, parseFloat(e.target.value) || 1);
+    renderCoinLab();
+  });
+});
+
+["prop-a", "prop-b", "prop-c"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    const v = Math.max(1, parseFloat(e.target.value) || 1);
+    if (id === "prop-a") state.propA = v;
+    if (id === "prop-b") state.propB = v;
+    if (id === "prop-c") state.propC = v;
+    renderPropLab();
+  });
+});
+$("prop-type").addEventListener("change", (e) => {
+  state.propType = e.target.value;
+  renderPropLab();
+});
+
+function renderCoinRevealSvg(r) {
+  const svg = $("coin-svg");
+  if (!svg) return;
+  const trapA = r.trapCounts[0], trueA = r.counts[0];
+  const maxV = Math.max(trapA, trueA) * 1.2;
+  const x = v => 120 + (v / maxV) * 480;
+  svg.innerHTML = `
+    <text x="380" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#e8edf7">₹1 coin count — trap vs truth</text>
+    <text x="100" y="90" text-anchor="end" font-size="12" fill="#ef4444">Trap</text>
+    <rect x="120" y="70" width="${x(trapA) - 120}" height="32" rx="6" fill="#ef4444" opacity="0.75"/>
+    <text x="${x(trapA) + 8}" y="92" font-size="13" font-weight="700" fill="#ef4444">${trapA}</text>
+    <text x="100" y="160" text-anchor="end" font-size="12" fill="#22c55e">Truth</text>
+    <rect x="120" y="140" width="${x(trueA) - 120}" height="32" rx="6" fill="#22c55e" opacity="0.85"/>
+    <text x="${x(trueA) + 8}" y="162" font-size="13" font-weight="700" fill="#22c55e">${trueA}</text>
+    <text x="380" y="220" text-anchor="middle" font-size="12" fill="#94a3b8">Trap ignores denomination. Truth weights ₹1 / 50p / 25p.</text>`;
+}
+
+$("btn-reveal-coin").addEventListener("click", () => {
+  $("coin-solution-panel").classList.remove("hidden");
+  renderCoinLab();
+  const r = Model.solveCoin([
+    { count: 3, denomination: 1 },
+    { count: 4, denomination: 0.5 },
+    { count: 8, denomination: 0.25 }
+  ], 420);
+  renderCoinRevealSvg(r);
+  $("coin-solution-text").innerHTML =
+    `Total k-value: 3×1 + 4×0.5 + 8×0.25 = ₹${r.valuePerK}. Setting ${r.valuePerK}k = 420 → k = ${r.k}. ` +
+    `Then ₹1 coins = 3 × ${r.k} = <strong>${r.counts[0]}</strong>. ` +
+    `<em>The trap (420/15 = ${r.kTrap}) treats all coins as ₹1.</em>`;
+});
+
+/* =====================================================================
+   7. PRACTICE
+   ===================================================================== */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function setPracticeMode(mode) {
+  state.practiceMode = mode;
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+    const on = b.dataset.mode === mode;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  $("timer-container").classList.toggle("hidden", mode !== "timed");
+  if (mode === "timed") startTimer();
+  else stopTimer();
+  document.querySelectorAll("main > section").forEach((el, idx) => {
+    if (idx === 0 || idx === 2 || idx === 3) {
+      el.style.display = (mode === "hints") ? "" : "none";
+    }
+  });
+}
+document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+  b.addEventListener("click", () => setPracticeMode(b.dataset.mode));
+});
+function startTimer() {
+  stopTimer();
+  state.timer.remaining = 90;
+  $("timer-display").textContent = state.timer.remaining;
+  state.timer.interval = setInterval(() => {
+    state.timer.remaining--;
+    $("timer-display").textContent = Math.max(0, state.timer.remaining);
+    if (state.timer.remaining <= 0) {
+      stopTimer();
+      if (!state.answered) {
+        const q = state.shuffled[state.currentQIndex];
+        markAnswer(-1, q);
       }
     }
+  }, 1000);
+}
+function stopTimer() {
+  if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; }
+}
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
+    if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw));
+  } catch {}
+}
+function saveProgress() {
+  try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch {}
+}
+function renderStats() {
+  $("stat-attempts").textContent = state.stats.attempts;
+  $("stat-correct").textContent = state.stats.correct;
+  $("stat-independent").textContent = state.stats.independentCorrect;
+  const acc = state.stats.attempts ? Math.round(state.stats.correct / state.stats.attempts * 100) : 0;
+  $("stat-accuracy").textContent = acc + "%";
+}
+function renderQuestion() {
+  if (!state.testsPassed) {
+    $("practice-q-stem").textContent = "Practice is disabled because the model self-tests failed.";
+    return;
+  }
+  const q = state.shuffled[state.currentQIndex];
+  state.answered = false;
+  $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
+  const d = $("practice-q-difficulty");
+  d.textContent = q.difficulty;
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
+                             : q.difficulty === "Medium" ? "badge-draft"
+                             : "badge-tag");
+  $("practice-q-stem").innerHTML = q.stem;
+  $("practice-feedback").className = "callout hidden";
+  $("practice-error-categorizer").classList.add("hidden");
+  $("practice-solution-box").classList.add("hidden");
+  $("btn-next-question").disabled = true;
 
-    function renderBars(total, parts, result) {
-      const container = document.getElementById('bar-vis');
-      const maxShare = Math.max(...result.shares);
+  const container = $("practice-options-container");
+  container.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = String.fromCharCode(65 + i) + ". " + opt;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.addEventListener("click", () => markAnswer(i, q));
+    container.appendChild(btn);
+  });
+  if (state.practiceMode === "timed") startTimer();
+}
+function markAnswer(chosenIdx, q) {
+  if (state.answered) return;
+  state.answered = true;
+  stopTimer();
+  const isCorrect = chosenIdx === q.correctIndex;
+  const isTrap = chosenIdx === q.trapOptionIndex;
 
-      container.innerHTML = parts.map((p, i) => `
-        <div class="ratio-bar-row">
-          <span class="ratio-bar-label">${LABELS[i]}: ${p} unit${p > 1 ? 's' : ''}</span>
-          <div class="ratio-bar-track" role="img" aria-label="Part ${LABELS[i]} = ${result.percentages[i]}%">
-            <div class="ratio-bar-fill ${COLOR_CLASSES[i]}"
-                 style="width:${(result.shares[i] / total) * 100}%;">
-              ${result.percentages[i]}%
-            </div>
-          </div>
-          <span class="ratio-bar-value">${result.shares[i]}</span>
-        </div>
-      `).join('');
-    }
+  document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
+    b.disabled = true;
+    b.setAttribute("aria-checked", i === chosenIdx ? "true" : "false");
+    if (i === q.correctIndex) b.classList.add("correct");
+    else if (i === chosenIdx) b.classList.add(isTrap ? "trap" : "incorrect");
+  });
 
-    function updateProportionCalc() {
-      const a = Number(document.getElementById('prop-a').value) || 0;
-      const b = Number(document.getElementById('prop-b').value) || 0;
-      const c = Number(document.getElementById('prop-c').value) || 0;
+  const fb = $("practice-feedback");
+  fb.classList.remove("hidden");
+  if (isCorrect) {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong>`;
+  } else if (isTrap) {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  } else {
+    fb.className = "callout callout-danger";
+    fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  }
 
-      document.getElementById('pv-a').textContent = a;
-      document.getElementById('pv-b').textContent = b;
-      document.getElementById('pv-c').textContent = c;
+  $("practice-solution-box").classList.remove("hidden");
+  $("practice-solution-text").textContent = q.solution;
 
-      if (a > 0 && b > 0) {
-        const mp = Model.meanProportional(a, b);
-        const tp = Model.thirdProportional(a, b);
-        document.getElementById('mean-prop-val').textContent = mp.valid ? mp.x : '—';
-        document.getElementById('third-prop-val').textContent = tp.valid ? tp.x : '—';
+  state.stats.attempts++;
+  if (isCorrect) {
+    state.stats.correct++;
+    if (state.practiceMode !== "hints") state.stats.independentCorrect++;
+  }
+  saveProgress();
+  renderStats();
+  $("btn-next-question").disabled = false;
+}
+$("btn-next-question").addEventListener("click", () => {
+  state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
+  renderQuestion();
+});
+$("select-error-category").addEventListener("change", (e) => {
+  const cat = e.target.value;
+  state.stats.errorsByCat[cat] = (state.stats.errorsByCat[cat] || 0) + 1;
+  saveProgress();
+});
+function handleResetStats() {
+  if (!confirm("Reset local practice stats?")) return;
+  state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
+  saveProgress();
+  renderStats();
+}
+window.handleResetStats = handleResetStats;
 
-        if (c > 0) {
-          const fp = Model.fourthProportional(a, b, c);
-          document.getElementById('pv-x').textContent = fp.valid ? fp.x : '—';
-          document.getElementById('fourth-prop-val').textContent = fp.valid ? fp.x : '—';
-        }
-      }
-    }
+/* ---- Direct vs inverse: men/work/days story ---- */
+const vlab = { mode: "direct", k: 2, men0: 6, work0: 12, days0: 10 };
+function renderVar() {
+  const { mode, k, men0, work0, days0 } = vlab;
+  const men1 = men0 * k;
+  const work1 = mode === "direct" ? work0 * k : work0;
+  const days1 = mode === "inverse" ? days0 / k : days0;
+  const hx = (v, max) => Math.max(8, (v / max) * 110);
+  const base = 170;
+  const draw = (x, h, color, label, val) =>
+    `<rect x="${x}" y="${base - h}" width="44" height="${h}" fill="${color}" rx="4"/>
+     <text x="${x + 22}" y="${base + 16}" text-anchor="middle" font-size="11" fill="${color}">${label}</text>
+     <text x="${x + 22}" y="${base - h - 8}" text-anchor="middle" font-size="12" font-weight="700" fill="#e8edf7">${val}</text>`;
+  $("var-svg").innerHTML = `
+    <text x="160" y="28" text-anchor="middle" font-size="13" fill="#94a3b8">Before</text>
+    <text x="520" y="28" text-anchor="middle" font-size="13" fill="#94a3b8">After men ×${k}</text>
+    ${draw(80, hx(men0, 30), "#38bdf8", "men", men0)}
+    ${draw(140, hx(work0, 50), "#22c55e", "work", work0)}
+    ${draw(200, hx(days0, 20), "#f59e0b", "days", days0)}
+    ${draw(440, hx(men1, 30), "#38bdf8", "men", men1)}
+    ${draw(500, hx(work1, 50), "#22c55e", "work", +work1.toFixed(1))}
+    ${draw(560, hx(days1, 20), "#f59e0b", "days", +days1.toFixed(1))}
+    <text x="380" y="220" text-anchor="middle" font-size="13" fill="#a78bfa">${mode === "direct" ? "Same days → more men finish more work" : "Same work → more men need fewer days"}</text>`;
+  $("var-k-b").textContent = k + "×";
+  $("var-cap").textContent = mode === "direct"
+    ? `Story: more men, same time → more work done. Work scales with men (${work0} → ${work1}). Mind check: “same direction” = direct.`
+    : `Story: more men, same job → fewer days. Days scale opposite to men (${days0} → ${(+days1).toFixed(1)}). Mind check: men × days stays ${men0 * days0} = ${(men1 * days1).toFixed(1)}. That fixed product is inverse.`;
+}
+function wireVar() {
+  $("var-k").addEventListener("input", e => { vlab.k = +e.target.value; renderVar(); });
+  $("var-direct").addEventListener("click", () => { vlab.mode = "direct"; $("var-direct").classList.add("active"); $("var-inverse").classList.remove("active"); renderVar(); });
+  $("var-inverse").addEventListener("click", () => { vlab.mode = "inverse"; $("var-inverse").classList.add("active"); $("var-direct").classList.remove("active"); renderVar(); });
+  renderVar();
+}
+document.addEventListener("DOMContentLoaded", () => {
+  wireVar();
+  const results = runSelfTests();
+  state.testsPassed = results.failed === 0;
+  const banner = $("test-status-banner");
+  if (!state.testsPassed) {
+    banner.className = "test-banner";
+    banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong>
+      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
+    $("practice-options-container").innerHTML = "";
+  }
 
-    function handleRevealPredict() {
-      document.getElementById('predict-solution').classList.remove('hidden');
-      LabCommon.announce("Predict solution revealed.");
-    }
+  loadProgress();
+  state.shuffled = shuffle(PRACTICE_QUESTIONS);
 
-    /* ==========================================================================
-       5. PRACTICE LAB
-       ========================================================================== */
-    let currentQIndex = 0;
-    let practiceMode = 'hints';
-    let timerInstance = null;
-    const STORAGE_KEY = 'lab_ratio_proportion_stats';
+  $("input-total").value = state.total;
+  $("range-total").value = Math.min(state.total, 10000);
+  $("total-badge").textContent = "₹" + state.total;
+  $("input-a").value = state.a; $("input-b").value = state.b; $("input-c").value = state.c;
+  $("badge-a").textContent = state.a;
+  $("badge-b").textContent = state.b;
+  $("badge-c").textContent = state.c;
 
-    function getStoredStats() {
-      return LabCommon.safeStorage.getItem(STORAGE_KEY, { attempts: 0, correct: 0, independentCorrect: 0, history: {} });
-    }
-    function saveStats(stats) {
-      LabCommon.safeStorage.setItem(STORAGE_KEY, stats);
-      updateStatsDisplay();
-    }
-    function updateStatsDisplay() {
-      const s = getStoredStats();
-      document.getElementById('stat-attempts').textContent = s.attempts;
-      document.getElementById('stat-correct').textContent = s.correct;
-      document.getElementById('stat-independent').textContent = s.independentCorrect;
-      const acc = s.attempts > 0 ? Math.round((s.correct / s.attempts) * 100) : 0;
-      document.getElementById('stat-accuracy').textContent = `${acc}%`;
-    }
-    function handleResetStats() {
-      if (confirm("Reset all local progress for Ratio & Proportion?")) {
-        LabCommon.safeStorage.removeItem(STORAGE_KEY);
-        updateStatsDisplay();
-        renderQuestion(currentQIndex);
-      }
-    }
-    function setPracticeMode(mode) {
-      practiceMode = mode;
-      ['hints', 'independent', 'timed'].forEach(m =>
-        document.getElementById(`btn-mode-${m}`).classList.toggle('active', m === mode)
-      );
-      const tc = document.getElementById('timer-container');
-      if (mode === 'timed') {
-        tc.classList.remove('hidden');
-        if (!timerInstance) {
-          timerInstance = new LabCommon.PracticeTimer((s, fmt) => {
-            document.getElementById('timer-display').textContent = fmt;
-          });
-        }
-        timerInstance.start();
-      } else {
-        tc.classList.add('hidden');
-        if (timerInstance) timerInstance.stop();
-      }
-      renderQuestion(currentQIndex);
-    }
-    function renderQuestion(idx) {
-      currentQIndex = idx;
-      const q = PRACTICE_QUESTIONS[idx];
-      document.getElementById('practice-q-num').textContent = `Question ${idx + 1} of ${PRACTICE_QUESTIONS.length}`;
-      document.getElementById('q-counter-text').textContent = `${idx + 1} / ${PRACTICE_QUESTIONS.length}`;
-      document.getElementById('practice-q-difficulty').textContent = q.difficulty;
-      document.getElementById('practice-q-stem').innerHTML = q.stem;
-
-      const fb = document.getElementById('practice-feedback');
-      fb.className = 'callout hidden'; fb.innerHTML = '';
-      document.getElementById('practice-error-categorizer').classList.add('hidden');
-      document.getElementById('practice-solution-box').classList.add('hidden');
-
-      const optContainer = document.getElementById('practice-options-container');
-      optContainer.innerHTML = q.options.map((opt, i) => `
-        <button type="button" class="option-btn" id="opt-btn-${i}" onclick="handleOptionSelect(${i})">
-          <span style="font-weight:700;margin-right:0.5rem;color:var(--color-primary);">${String.fromCharCode(65 + i)}.</span>
-          <span>${opt}</span>
-        </button>
-      `).join('');
-
-      const stats = getStoredStats();
-      if (stats.history && stats.history[q.id]) {
-        revealQuestionOutcome(stats.history[q.id].chosenIndex, false);
-      }
-    }
-    function handleOptionSelect(optIdx) {
-      const q = PRACTICE_QUESTIONS[currentQIndex];
-      const stats = getStoredStats();
-      if (stats.history && stats.history[q.id]) return;
-
-      const isCorrect = optIdx === q.correctIndex;
-      stats.attempts++;
-      if (isCorrect) {
-        stats.correct++;
-        if (practiceMode !== 'hints') stats.independentCorrect++;
-      }
-      if (!stats.history) stats.history = {};
-      stats.history[q.id] = { chosenIndex: optIdx, correct: isCorrect, timestamp: Date.now() };
-      saveStats(stats);
-      revealQuestionOutcome(optIdx, true);
-    }
-    function revealQuestionOutcome(optIdx, isNew) {
-      const q = PRACTICE_QUESTIONS[currentQIndex];
-      const isCorrect = optIdx === q.correctIndex;
-      q.options.forEach((_, i) => {
-        const btn = document.getElementById(`opt-btn-${i}`);
-        if (!btn) return;
-        btn.disabled = true;
-        if (i === q.correctIndex) btn.classList.add('correct');
-        else if (i === optIdx) btn.classList.add('incorrect');
-      });
-      const fb = document.getElementById('practice-feedback');
-      fb.classList.remove('hidden');
-      if (isCorrect) {
-        fb.className = 'callout callout-success';
-        fb.innerHTML = `<strong>Correct!</strong> Great — you identified the unit correctly.`;
-      } else {
-        fb.className = 'callout callout-error';
-        fb.innerHTML = `<strong>Incorrect.</strong> You chose <strong>${String.fromCharCode(65 + optIdx)}</strong>. Correct: <strong>${String.fromCharCode(65 + q.correctIndex)}</strong>.`;
-        document.getElementById('practice-error-categorizer').classList.remove('hidden');
-      }
-      const solBox = document.getElementById('practice-solution-box');
-      solBox.classList.remove('hidden');
-      document.getElementById('practice-solution-text').innerHTML = q.solution;
-      document.getElementById('practice-trap-analysis').innerHTML = q.trap;
-      if (isNew) LabCommon.announce(isCorrect ? "Correct!" : "Incorrect. Solution revealed.");
-    }
-    function handleSaveErrorCategory(cat) { LabCommon.announce("Error category recorded."); }
-    function navigateQuestion(step) {
-      const next = currentQIndex + step;
-      if (next >= 0 && next < PRACTICE_QUESTIONS.length) renderQuestion(next);
-    }
-
-    /* ==========================================================================
-       6. INITIALIZATION
-       ========================================================================== */
-    document.addEventListener("DOMContentLoaded", () => {
-      const report = LabCommon.runAndRenderSelfTests(runSelfTests, 'quality-alert', 'quality-alert-details');
-      if (report.failed > 0) {
-        document.getElementById('practice-options-container').innerHTML =
-          `<div class="callout callout-error">Practice locked — self-test failures detected.</div>`;
-        return;
-      }
-      handleModelChange();
-      updateProportionCalc();
-      updateStatsDisplay();
-      renderQuestion(0);
-    });
-  </script>
+  renderBar();
+  renderPredict();
+  renderCoinLab();
+  renderPropLab();
+  renderQuestion();
+  renderStats();
+  setPracticeMode("hints");
+});
+</script>
+<script src="../assets/lab-ux.js" defer></script>
 </body>
 </html>

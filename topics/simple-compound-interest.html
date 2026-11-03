@@ -1,1047 +1,1338 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple &amp; Compound Interest Comparison — Aptitude &amp; Reasoning Lab</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="../assets/style.css">
-  <style>
-    .growth-chart-container {
-      background: var(--color-surface-subtle);
-      border: 1px solid var(--color-border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-      position: relative;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Simple &amp; Compound Interest — Aptitude Lab</title>
+<meta name="description" content="See the gap grow. Interactive curve with year slider, doubling mini-lab, interest-on-interest breakdown, and predict-first practice." />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
+<style>
+:root {
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --purple: #a78bfa; --purple-soft: rgba(167,139,250,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: var(--font-sans);
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+}
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--primary); color: #001; padding: 12px 16px;
+  border-radius: 0 0 8px 0; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 0.75rem; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--surface-2); border: 1px solid var(--border);
+  padding: 0.15em 0.4em; border-radius: 4px;
+}
+.page-container { max-width: 1080px; margin: 0 auto; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 22px 22px 24px;
+  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+@media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
+.card-header { margin-bottom: 18px; }
+.section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.section-title::before {
+  content: counter(section-num); counter-increment: section-num;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%; font-size: 0.8rem; font-weight: 800;
+}
+main { counter-reset: section-num; }
+.section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
+.site-header {
+  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
+  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
+  margin: 0 -16px 24px; padding: 12px 16px;
+}
+.header-container {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
+.brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+.nav-link:hover { color: var(--text); }
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
+}
+.badge-published { background: var(--success-soft); color: var(--success); }
+.badge-draft { background: var(--warn-soft); color: var(--warn); }
+.badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #001824; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
+.btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
+.btn-secondary:hover:not(:disabled) { background: var(--border); }
+.btn-ghost { background: transparent; color: var(--text-dim); }
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
+.btn-sm { padding: 6px 11px; font-size: 0.8rem; }
+.btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.control-grid {
+  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
+}
+@media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .control-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; } }
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 0.85rem; font-weight: 600; color: var(--text);
+}
+select, input[type=number] {
+  background: var(--bg-elev); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-size: 0.9rem; font-family: var(--font-sans);
+  transition: border-color var(--transition);
+}
+select:focus, input[type=number]:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+input[type=range] { width: 100%; accent-color: var(--primary); height: 24px; }
+input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
+.vis-container {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
+}
+.vis-container svg { display: block; width: 100%; height: auto; }
+.score-bar {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
+}
+@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
+.score-stat {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.score-stat-label {
+  font-size: 0.72rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.score-stat-num {
+  font-size: 1.05rem; font-weight: 700;
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
+}
+.callout {
+  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
+  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
+}
+.callout.hidden { display: none; }
+.callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
+.callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
+.callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
+.callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.test-banner {
+  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
+  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
+}
+.test-banner.hidden { display: none; }
+.test-banner ul { margin: 8px 0 0 20px; padding: 0; }
+.predict-box {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md); padding: 18px 20px;
+}
+.predict-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
+}
+.predict-header svg { flex-shrink: 0; }
+.options-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.option-btn {
+  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 0.92rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition); text-align: center;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
+.option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
+.option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
+.option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.steps-container { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.step-item {
+  background: var(--bg-elev); border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+}
+.step-num {
+  font-size: 0.72rem; color: var(--primary); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
+}
+.step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+.practice-header {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.mode-toggle-group {
+  display: inline-flex; background: var(--bg-elev);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 3px; gap: 2px;
+}
+.mode-btn {
+  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
+  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active { background: var(--primary-soft); color: var(--primary); }
+.mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.timer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
+}
+.timer-badge.hidden { display: none; }
+.question-stem {
+  font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500;
+}
+.site-footer {
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.85rem;
+}
+.footer-container { max-width: 1080px; margin: 0 auto; }
+.disclaimer-box {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+}
+.error-categorizer {
+  margin-top: 12px; padding: 12px;
+  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.error-categorizer.hidden { display: none; }
+.error-categorizer label {
+  font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;
+}
+.error-categorizer select {
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
+}
+/* Interest-on-interest mini-lab */
+.ioi-lab {
+  display: flex; flex-direction: column; gap: 12px;
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 14px;
+}
+.ioi-bar-row {
+  display: flex; align-items: center; gap: 10px;
+}
+.ioi-bar-label {
+  font-size: 0.85rem; font-weight: 700; color: var(--text-dim); min-width: 60px;
+}
+.ioi-bar-track {
+  flex: 1; height: 32px; background: var(--surface); border-radius: 4px;
+  overflow: hidden; display: flex; position: relative;
+}
+.ioi-seg {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; color: #fff;
+  transition: all var(--transition);
+}
+.ioi-seg.principal { background: #38bdf8; }
+.ioi-seg.ioi { background: #22c55e; }
+.ioi-bar-value { font-size: 0.8rem; font-weight: 700; color: var(--text); min-width: 90px; text-align: right; }
 
-    .growth-svg {
-      width: 100%;
-      height: 250px;
-      overflow: visible;
-    }
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
 
-    .breakdown-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.875rem;
-      margin-top: 1rem;
-      background: var(--color-surface);
-      border: 1px solid var(--color-border-subtle);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-    }
-
-    .breakdown-table th, .breakdown-table td {
-      padding: 0.6rem 0.85rem;
-      border-bottom: 1px solid var(--color-border-subtle);
-      text-align: right;
-    }
-
-    .breakdown-table th:first-child, .breakdown-table td:first-child {
-      text-align: left;
-      font-weight: 600;
-    }
-
-    .breakdown-table th {
-      background: var(--color-surface-subtle);
-      font-weight: 700;
-    }
-
-    .stat-formula-pill {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 0.8125rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: var(--radius-sm);
-      background: rgba(59, 130, 246, 0.1);
-      color: var(--color-primary);
-      font-weight: 700;
-    }
-  </style>
+</style>
 </head>
 <body>
-  <!-- Header / Navigation Hub -->
-  <header class="app-header">
-    <div class="header-container">
-      <a href="../index.html" class="brand" aria-label="Aptitude and Reasoning Lab Home">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-          <path d="M2 12h20" />
-        </svg>
-        <span>Aptitude &amp; Reasoning Lab</span>
-      </a>
-      <nav class="nav-links" aria-label="Breadcrumb">
-        <a href="../index.html" class="nav-link">Hub</a>
-        <span style="color: var(--color-text-muted);">/</span>
-        <span style="color: var(--color-text-main); font-weight: 600;">Simple &amp; Compound Interest</span>
-      </nav>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-container">
+    <a href="../index.html" class="brand-link">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f172a"/>
+        <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+        <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+        <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+        <circle cx="40" cy="40" r="4" fill="#34d399"/>
+        <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span>Aptitude Lab</span>
+    </a>
+    <nav aria-label="Topic navigation">
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+        </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-container">
+
+  <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+  <header class="card">
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.75rem;">
+      <span class="badge badge-tag">Quantitative Aptitude</span>
+      <span class="badge badge-tag">SEBI Gr A</span>
+      <span class="badge badge-tag">Banking &amp; SSC</span>
     </div>
+    <h1>Simple &amp; Compound Interest</h1>
+    <p class="section-subtitle" style="margin-top:8px;">
+      <strong>The gap between SI and CI is not a formula — it's interest on interest.</strong> This page draws both curves, lets you slide a year-marker to read the gap at any time, and shows that the CI−SI difference is *literally* the compounding of earlier interest.
+    </p>
   </header>
 
-  <main class="main-container">
-    <!-- Breadcrumb / Topic Metadata Header -->
-    <div style="margin-bottom: 1.5rem;">
-      <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
-        <span class="badge badge-tag">Quantitative Aptitude</span>
-        <span class="badge badge-published">Module 13</span>
-        <span class="badge badge-outline">SEBI Grade A &bull; SBI PO &bull; SSC CGL</span>
-      </div>
-      <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--color-text-main);">
-        Simple &amp; Compound Interest Comparison
-      </h1>
-      <p style="font-size: 1.05rem; color: var(--color-text-muted); max-width: 820px;">
-        Unravel the gap between <strong>linear simple interest</strong> and <strong>exponential compounding</strong>.
-        Master the 2-year and 3-year $CI - SI$ delta formulas, effective annual rates (EAR), half-yearly frequencies, and compounding multiplication laws.
-      </p>
+  <!-- ===== SECTION 1 — GROWTH CURVE ===== -->
+  <section class="card" aria-labelledby="s1">
+    <div class="card-header">
+      <h2 id="s1" class="section-title">The two curves, and the gap between them</h2>
+      <p class="section-subtitle">Drag the year slider. The gap at any year is *priced* on the chart — it's the difference between the green (CI) and blue (SI) curves at that point.</p>
     </div>
 
-    <!-- Quality Gate Fail-Visibly Alert Container -->
-    <div id="quality-alert" class="callout callout-error hidden" role="alert" style="margin-bottom: 1.5rem;">
-      <strong>Quality Gate Alert:</strong> One or more deterministic logic invariants failed. Practice submissions are locked until solver integrity is restored.
-      <div id="quality-alert-details" style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.8125rem;"></div>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="input-p" class="control-label">
+          <span>Principal P</span>
+          <span id="badge-p" class="badge badge-tag">₹10,000</span>
+        </label>
+        <input type="number" id="input-p" value="10000" min="1000" max="100000" step="1000">
+        <input type="range" id="range-p" min="1000" max="50000" value="10000" step="1000">
+      </div>
+      <div class="control-group">
+        <label for="input-r" class="control-label">
+          <span>Rate R% p.a.</span>
+          <span id="badge-r" class="badge badge-tag">10%</span>
+        </label>
+        <input type="number" id="input-r" value="10" min="1" max="30" step="0.5">
+        <input type="range" id="range-r" min="1" max="25" value="10" step="0.5">
+      </div>
+      <div class="control-group">
+        <label for="select-freq" class="control-label">
+          <span>Compounding</span>
+        </label>
+        <select id="select-freq">
+          <option value="1">Annually (k=1)</option>
+          <option value="2">Half-yearly (k=2)</option>
+          <option value="4">Quarterly (k=4)</option>
+        </select>
+      </div>
     </div>
 
-    <!-- Section 1: Interactive Growth Curve Visualizer -->
-    <section class="card" aria-labelledby="model-title">
-      <div class="card-header">
-        <div>
-          <h2 id="model-title" class="section-title">1. Linear vs. Exponential Growth Curve Engine</h2>
-          <p class="section-subtitle">Adjust principal, interest rate, and compounding frequency to visualize the widening compounding spread over time.</p>
-        </div>
+    <div class="control-grid" style="grid-template-columns:1fr;">
+      <div class="control-group">
+        <label for="year-slider" class="control-label">
+          <span>Year marker</span>
+          <span id="year-badge" class="badge badge-tag">Year 5</span>
+        </label>
+        <input type="range" id="year-slider" min="0" max="10" step="1" value="5">
       </div>
+    </div>
 
-      <!-- Controls Grid -->
-      <div class="control-grid">
-        <div class="control-group">
-          <label class="control-label" for="input-principal">
-            <span>Principal Sum ($P$)</span>
-            <span id="badge-p" class="badge badge-tag">₹10,000</span>
-          </label>
-          <input type="number" id="input-principal" class="control-input" value="10000" min="1000" max="100000" step="1000" oninput="handleModelChange()">
-          <input type="range" id="range-p" min="1000" max="50000" value="10000" step="1000" oninput="document.getElementById('input-principal').value=this.value; handleModelChange()">
-        </div>
+    <div class="vis-container">
+      <svg id="curve-svg" viewBox="0 0 760 340" width="100%" role="img" aria-label="SI vs CI growth curves with a year marker">
+        <title>Simple interest (linear) vs compound interest (exponential) with a year marker showing the gap</title>
+      </svg>
+    </div>
 
-        <div class="control-group">
-          <label class="control-label" for="input-rate">
-            <span>Annual Interest Rate ($R\%$)</span>
-            <span id="badge-r" class="badge badge-tag">10.0% p.a.</span>
-          </label>
-          <input type="number" id="input-rate" class="control-input" value="10" min="1" max="30" step="0.5" oninput="handleModelChange()">
-          <input type="range" id="range-r" min="1" max="25" value="10" step="0.5" oninput="document.getElementById('input-rate').value=this.value; handleModelChange()">
-        </div>
+    <div class="score-bar" aria-live="polite">
+      <div class="score-stat"><span class="score-stat-label">SI amount at year</span><span class="score-stat-num" id="readout-si" style="color:#38bdf8">₹15,000</span></div>
+      <div class="score-stat"><span class="score-stat-label">CI amount at year</span><span class="score-stat-num" id="readout-ci" style="color:#22c55e">₹16,105</span></div>
+      <div class="score-stat"><span class="score-stat-label">Gap at year</span><span class="score-stat-num" id="readout-gap" style="color:#f59e0b">₹1,105</span></div>
+      <div class="score-stat"><span class="score-stat-label">Effective rate</span><span class="score-stat-num" id="readout-ear">10.00%</span></div>
+    </div>
+  </section>
 
-        <div class="control-group">
-          <label class="control-label" for="select-freq">
-            <span>Compounding Frequency</span>
-          </label>
-          <select id="select-freq" class="control-input" onchange="handleModelChange()">
-            <option value="1" selected>Compounded Annually (k = 1)</option>
-            <option value="2">Compounded Half-Yearly (k = 2)</option>
-            <option value="4">Compounded Quarterly (k = 4)</option>
-          </select>
-        </div>
+  <!-- ===== SECTION 2 — INTEREST-ON-INTEREST LAB ===== -->
+  <section class="card" aria-labelledby="s2">
+    <div class="card-header">
+      <h2 id="s2" class="section-title">Why CI is bigger: interest on interest</h2>
+      <p class="section-subtitle">At each year, CI earns interest on *principal* (same as SI) plus interest on *earlier interest* (unique to CI). The green portion is what makes the gap.</p>
+    </div>
+
+    <div class="ioi-lab" id="ioi-lab"></div>
+
+    <p style="font-size:.85rem; color:var(--text-muted); margin-top:14px; line-height:1.6;">
+      <strong>The gap at year T = the sum of all the green segments up to year T.</strong> That's why the Δ formula for 2 years is <code>P·(R/100)²</code> — it's *only* the interest-on-interest block from year 2. For 3 years it adds another block from year 3, plus interest-on-interest-on-interest. The formulas you memorise are just accounting for these extra compounding blocks.
+    </p>
+  </section>
+
+  <!-- ===== SECTION 3 — DOUBLING MINI-LAB ===== -->
+  <section class="card" aria-labelledby="s3">
+    <div class="card-header">
+      <h2 id="s3" class="section-title">Doubling: linear vs exponential</h2>
+      <p class="section-subtitle">SI doubling time is `100/R`. CI doubling time is `ln 2 / ln(1+R)`. Slide the rate and watch them separate.</p>
+    </div>
+
+    <div class="control-grid" style="grid-template-columns:1fr; max-width:480px;">
+      <div class="control-group">
+        <label for="rate-lab" class="control-label">
+          <span>Rate R% p.a.</span>
+          <span id="rate-lab-badge" class="badge badge-tag">10%</span>
+        </label>
+        <input type="range" id="rate-lab" min="1" max="25" value="10" step="0.5">
       </div>
+    </div>
 
-      <!-- Growth Chart SVG -->
-      <div class="growth-chart-container" aria-label="Visual interest growth curve comparison">
-        <svg id="growth-svg" class="growth-svg" viewBox="0 0 720 250" role="img" aria-labelledby="svg-desc">
-          <title id="svg-desc">Linear simple interest slope vs exponential compound interest curve</title>
-          <!-- Populated by Model.renderGrowthChart -->
+    <div class="vis-container">
+      <svg id="doubling-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="SI vs CI doubling timelines">
+        <title>Two timelines showing when SI and CI double the principal</title>
+      </svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">SI doubles in</span><span class="score-stat-num" id="si-double" style="color:#38bdf8">10.00 years</span></div>
+      <div class="score-stat"><span class="score-stat-label">CI doubles in</span><span class="score-stat-num" id="ci-double" style="color:#22c55e">7.27 years</span></div>
+      <div class="score-stat"><span class="score-stat-label">CI wins by</span><span class="score-stat-num" id="double-gap" style="color:#f59e0b">2.73 years</span></div>
+      <div class="score-stat"><span class="score-stat-label">CI multiplier in SI-double time</span><span class="score-stat-num" id="ci-multiplier">1.59×</span></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4 — PREDICT ===== -->
+  <section class="card" aria-labelledby="s4">
+    <div class="card-header">
+      <h2 id="s4" class="section-title">Predict first — the 8-fold puzzle</h2>
+      <p class="section-subtitle">Doubling is exponential. The answer isn't what linear intuition says.</p>
+    </div>
+
+    <div class="predict-box">
+      <div class="predict-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
         </svg>
-
-        <div id="chart-caption" style="margin-top: 0.75rem; font-size: 0.8125rem; color: var(--color-text-muted); text-align: center;">
-          <!-- Dynamically populated -->
-        </div>
+        <span>The trap</span>
       </div>
+      <p style="font-size:1.05rem; margin-bottom:1rem;">
+        A sum doubles in 5 years at compound interest. How many years to become 8× itself?
+      </p>
+      <div class="options-grid" id="predict-options" role="radiogroup" aria-label="Prediction options"></div>
+      <div id="predict-feedback" class="callout hidden" role="alert"></div>
+    </div>
 
-      <!-- Key Readout Stats Bar -->
-      <div class="score-bar" id="model-readout" aria-live="polite">
-        <div class="score-stat">
-          <span class="score-stat-label">2-Year Gap (CI - SI)</span>
-          <span class="score-stat-num" id="readout-delta2">₹100</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">3-Year Gap (CI - SI)</span>
-          <span class="score-stat-num" id="readout-delta3">₹310</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Effective Annual Rate</span>
-          <span class="score-stat-num" id="readout-ear" style="color: #047857;">10.00%</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Doubling Time (CI vs SI)</span>
-          <span class="score-stat-num" id="readout-double">7.27 yrs vs 10 yrs</span>
-        </div>
+    <div id="worked-solution" class="hidden" style="margin-top:20px;">
+      <h3 style="margin-bottom:10px;">Step-by-step</h3>
+      <div class="steps-container" id="solution-steps"></div>
+    </div>
+  </section>
+
+  <!-- ===== WHY CI GROWS (concept-first) ===== -->
+  <section class="card" aria-labelledby="s-freq">
+    <div class="card-header">
+      <h2 id="s-freq" class="section-title">Understand: why CI beats SI — year by year</h2>
+      <p class="section-subtitle">SI always takes % of the <em>original</em> principal. CI takes % of <em>last year's total</em>. Step through years — the extra is interest on interest. Formula comes after you see it.</p>
+    </div>
+    <div class="control-grid">
+      <div class="control-group">
+        <label for="fq-p" class="control-label"><span>Principal ₹</span><span id="fq-p-b" class="badge badge-tag">10000</span></label>
+        <input type="range" id="fq-p" min="1000" max="50000" step="1000" value="10000">
       </div>
-
-      <!-- Year-by-Year Comparison Table -->
-      <table class="breakdown-table" aria-label="Year-by-year simple vs compound interest breakdown">
-        <thead>
-          <tr>
-            <th>Year</th>
-            <th>Simple Interest Accrued</th>
-            <th>SI Amount</th>
-            <th>Compound Interest Accrued</th>
-            <th>CI Amount</th>
-            <th>Widening Spread (CI - SI)</th>
-          </tr>
-        </thead>
-        <tbody id="breakdown-tbody">
-          <!-- Populated dynamically -->
-        </tbody>
-      </table>
-    </section>
-
-    <!-- Section 2: Predict-First Worked Example -->
-    <section class="card" aria-labelledby="predict-title">
-      <div class="card-header">
-        <div>
-          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
-          <p class="section-subtitle">Avoid the #1 Doubling Trap: Linear addition vs. Exponential doubling.</p>
-        </div>
+      <div class="control-group">
+        <label for="fq-r" class="control-label"><span>Rate % p.a.</span><span id="fq-r-b" class="badge badge-tag">10</span></label>
+        <input type="range" id="fq-r" min="4" max="20" value="10">
       </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
+      <button type="button" id="fq-next" class="btn btn-primary btn-sm">Next year →</button>
+      <button type="button" id="fq-reset" class="btn btn-secondary btn-sm">Reset to year 0</button>
+      <span id="fq-badge" class="badge badge-tag">Year 0</span>
+    </div>
+    <div class="vis-container">
+      <svg id="fq-svg" viewBox="0 0 760 300" width="100%" role="img" aria-label="SI vs CI year by year"></svg>
+    </div>
+    <p id="fq-cap" style="margin-top:10px;font-size:.95rem;line-height:1.55;color:var(--text-dim);"></p>
+  </section>
 
-      <div class="predict-box">
-        <div class="predict-header">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
-          </svg>
-          <span style="font-weight: 700; font-size: 0.9375rem;">Challenge: The Eight-Fold Multiplication Puzzle</span>
-        </div>
-        <p style="margin-bottom: 0.75rem; font-size: 0.9375rem;">
-          A sum of money <strong>doubles itself in 5 years</strong> under <strong>compound interest</strong> (compounded annually).<br>
-          <em>In how many years will this sum become <strong>8 times of itself</strong>?</em>
-        </p>
+  <!-- ===== SECTION 5 — PRACTICE ===== -->
+  <section class="card" aria-labelledby="s5">
+    <div class="card-header">
+      <h2 id="s5" class="section-title">Practice</h2>
+      <p class="section-subtitle">Shuffled each session. Traps are genuine.</p>
+    </div>
 
-        <!-- Predict Radio Options -->
-        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;" role="radiogroup" aria-label="Predict answer">
-          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
-            <input type="radio" name="predict-radio" value="40">
-            <strong>40 years</strong> — Simple linear scaling: $8 \times 5 = 40$ years.
-          </label>
-          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
-            <input type="radio" name="predict-radio" value="35">
-            <strong>35 years</strong> — Simple interest rule: $(8 - 1) \times 5 = 35$ years.
-          </label>
-          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
-            <input type="radio" name="predict-radio" value="15">
-            <strong>15 years</strong> — Compound exponential rule: $8 = 2^3 \implies 3 \times 5 = 15$ years.
-          </label>
-        </div>
-
-        <button type="button" class="btn btn-primary btn-sm" id="btn-reveal-predict" onclick="handleRevealPredict()">
-          Reveal Mathematical Resolution
-        </button>
-
-        <!-- Revealed Solution Callout -->
-        <div id="predict-solution" class="callout callout-info hidden" style="margin-top: 1rem;">
-          <h4 style="font-size: 0.9375rem; margin-bottom: 0.5rem; color: #1e40af;">Mathematical Resolution:</h4>
-          <p style="font-size: 0.875rem; line-height: 1.5; margin-bottom: 0.5rem;">
-            <strong>Correct Answer: 15 years.</strong>
-          </p>
-          <p style="font-size: 0.875rem; line-height: 1.5; margin-bottom: 0.5rem;">
-            In Compound Interest, money multiplies by the same geometric factor over equal intervals of time:<br>
-            &bull; At $T = 0$: Amount $= 1P$<br>
-            &bull; At $T = 5$ years: Amount doubles $\implies 2P$<br>
-            &bull; At $T = 10$ years: Doubles again $\implies 2 \times 2P = 4P$<br>
-            &bull; At $T = 15$ years: Doubles again $\implies 2 \times 4P = \mathbf{8P}$!
-          </p>
-          <div class="stat-formula-pill">
-            If a sum becomes k-fold in T years, it becomes kᵐ-fold in (m × T) years.
-          </div>
-          <p style="font-size: 0.8125rem; color: #1e3a8a; margin-top: 0.5rem;">
-            <strong>Why 35 is wrong:</strong> 35 years would be the correct answer if this were <em>Simple Interest</em> where each 5-year block adds $+1P$ of interest linearly. In compound interest, it only takes 15 years!
-          </p>
-        </div>
+    <div class="practice-header">
+      <div class="mode-toggle-group" role="tablist" aria-label="Practice mode">
+        <button type="button" class="mode-btn active" data-mode="hints" role="tab" aria-selected="true">Guided</button>
+        <button type="button" class="mode-btn" data-mode="independent" role="tab" aria-selected="false">Independent</button>
+        <button type="button" class="mode-btn" data-mode="timed" role="tab" aria-selected="false">Timed (90s)</button>
       </div>
-    </section>
-
-    <!-- Section 3: Comprehensive Rules & Trap Encyclopedia -->
-    <section class="card" aria-labelledby="rules-title">
-      <div class="card-header">
-        <div>
-          <h2 id="rules-title" class="section-title">3. Essential CI &amp; SI Formulas &amp; Exam Shortcuts</h2>
-          <p class="section-subtitle">Axiomatic formulas that resolve 3-year differences and EMI calculations instantly.</p>
-        </div>
+      <div id="timer-container" class="timer-badge hidden" aria-live="off">
+        <span>⏱️</span><span id="timer-display">90</span><span>s</span>
       </div>
+    </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">1. The 2-Year Difference Formula</h3>
-          <p style="font-size: 0.875rem;">
-            The difference between CI and SI for 2 years at annual rate $R\%$:
-          </p>
-          <div class="stat-formula-pill" style="display: block; text-align: center; margin: 0.5rem 0;">
-            Δ₂ = CI₂ - SI₂ = P × (R / 100)²
-          </div>
-          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            To find Principal: $P = \Delta_2 \times (100 / R)^2$.
-          </p>
-        </div>
+    <div class="score-bar" aria-label="Practice statistics">
+      <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Independent</span><span class="score-stat-num" id="stat-independent">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Accuracy</span><span class="score-stat-num" id="stat-accuracy">0%</span></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
+    </div>
 
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">2. The 3-Year Difference Shortcut</h3>
-          <p style="font-size: 0.875rem;">
-            Difference for 3 years:
-          </p>
-          <div class="stat-formula-pill" style="display: block; text-align: center; margin: 0.5rem 0;">
-            Δ₃ = P × (R / 100)² × (300 + R) / 100
-          </div>
-          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            Ratio of 3-year gap to 2-year gap: $\frac{\Delta_3}{\Delta_2} = \frac{300 + R}{100} = 3 + \frac{R}{100}$.
-          </p>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">3. Compounding Frequency Shift</h3>
-          <p style="font-size: 0.875rem;">
-            When interest is compounded $k$ times a year:
-          </p>
-          <ul style="font-size: 0.8125rem; margin-left: 1.25rem; margin-top: 0.35rem; color: var(--color-text-muted);">
-            <li><strong>Half-Yearly ($k=2$):</strong> Rate $= R/2\%$, Periods $= 2T$.</li>
-            <li><strong>Quarterly ($k=4$):</strong> Rate $= R/4\%$, Periods $= 4T$.</li>
-            <li><strong>Effective Rate:</strong> $\text{EAR} = (1 + R/100k)^k - 1$.</li>
-          </ul>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">4. Equal Annual Installments (Loans)</h3>
-          <p style="font-size: 0.875rem;">
-            Loan amount $P$ repaid in 2 equal annual installments of ₹$x$ at compound rate $R\%$:
-          </p>
-          <div class="stat-formula-pill" style="display: block; text-align: center; margin: 0.5rem 0;">
-            P = x / (1 + R/100) + x / (1 + R/100)²
-          </div>
-          <p style="font-size: 0.8125rem; color: var(--color-danger); font-weight: 600;">
-            ⚠ Never divide total amount by 2. Future money must be discounted to present value.
-          </p>
-        </div>
+    <div id="practice-question-card" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span class="badge" id="practice-q-difficulty">Easy</span>
       </div>
-    </section>
-
-    <!-- Section 4: Independent Practice Lab (12 Verified Questions) -->
-    <section class="card" aria-labelledby="practice-title" id="practice-section">
-      <div class="card-header">
-        <div>
-          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
-          <p class="section-subtitle">12 exam-grade questions testing differences, half-yearly compounding, EAR, doubling shortcuts, and loan installments.</p>
-        </div>
+      <p class="question-stem" id="practice-q-stem">Loading…</p>
+      <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
+      <div id="practice-feedback" class="callout hidden" role="alert"></div>
+      <div id="practice-error-categorizer" class="error-categorizer hidden">
+        <label for="select-error-category">What tripped you up? (optional)</label>
+        <select id="select-error-category">
+          <option value="linear">Applied linear scaling to exponential</option>
+          <option value="delta">Wrong Δ formula (2-yr vs 3-yr)</option>
+          <option value="freq">Forgot to halve rate / double periods</option>
+          <option value="installment">Treated future installments as present value</option>
+          <option value="arithmetic">Arithmetic slip</option>
+          <option value="time_guess">Time-pressure guess</option>
+        </select>
       </div>
-
-      <!-- Practice Controls & Mode Toggles -->
-      <div class="practice-header">
-        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
-          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
-            Guided Mode
-          </button>
-          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
-            Try Without Hints
-          </button>
-          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
-            Timed Practice
-          </button>
-        </div>
-
-        <div id="timer-container" class="timer-badge hidden" aria-live="off">
-          <span>⏱️</span>
-          <span id="timer-display">00:00</span>
-        </div>
+      <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:12px;">
+        <h4 style="margin-bottom:6px; font-size:.95rem;">Solution</h4>
+        <p id="practice-solution-text" style="font-size:.9rem; line-height:1.55; margin:0;"></p>
       </div>
-
-      <!-- Score & Accuracy Progress Bar -->
-      <div class="score-bar" aria-label="Current Practice Statistics">
-        <div class="score-stat">
-          <span class="score-stat-label">Questions Attempted</span>
-          <span class="score-stat-num" id="stat-attempts">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Total Correct</span>
-          <span class="score-stat-num" id="stat-correct">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Independent Correct</span>
-          <span class="score-stat-num" id="stat-independent">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Accuracy</span>
-          <span class="score-stat-num" id="stat-accuracy">0%</span>
-        </div>
-        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
-          Reset Local Progress
-        </button>
+      <div style="margin-top:18px; display:flex; gap:.75rem; justify-content:flex-end;">
+        <button type="button" id="btn-next-question" class="btn btn-primary" disabled>Next question →</button>
       </div>
+    </div>
+  </section>
 
-      <!-- Question Box -->
-      <div id="practice-question-card" style="margin-top: 1.25rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
-            Question 1 of 12
-          </span>
-          <span class="badge" id="practice-q-difficulty">Easy</span>
-        </div>
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">CI − SI (2 yr)</p>
+        <p class="lab-shortcuts-body">Δ₂ = P(R/100)². 3 yr: Δ₃ = P(R/100)²(3 + R/100).</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">SI% on CI stem</p>
+        <p class="lab-shortcuts-body">Don't treat CI as simple %. Use (1+R/100)^n − 1.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Effective rate</p>
+        <p class="lab-shortcuts-body">Two successive rises: multiply multipliers, then −1.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">Half-yearly</p>
+        <p class="lab-shortcuts-body">Rate ÷2, time ×2 in the CI formula (when compounding frequency doubles).</p>
+      </li>
+    </ul>
+  </section>
+</main>
 
-        <p class="question-stem" id="practice-q-stem">
-          Loading practice question...
-        </p>
-
-        <!-- Options container -->
-        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
-          <!-- Rendered dynamically -->
-        </div>
-
-        <!-- Practice Feedback Callout -->
-        <div id="practice-feedback" class="callout hidden" role="alert"></div>
-
-        <!-- Error Categorizer (appears on incorrect submission) -->
-        <div id="practice-error-categorizer" class="error-categorizer hidden">
-          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
-            Reflective Analysis: What was the primary root cause of this error?
-          </label>
-          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
-            <option value="frequency_shift">Frequency Shift Error (Forgot to divide rate or double periods)</option>
-            <option value="ci_si_mult">Multiplication Rule Mixup (Used linear scaling on compound doubling)</option>
-            <option value="delta_formula">Delta Formula Slip (Miscalibrated 2-year or 3-year CI-SI formula)</option>
-            <option value="installment_pv">Installment Present Value (Divided sum directly without discounting)</option>
-            <option value="arithmetic_slip">Arithmetic Slip during power evaluation</option>
-            <option value="time_guess">Rushed / Guess under time pressure</option>
-          </select>
-        </div>
-
-        <!-- Practice Worked Solution Box (revealed upon answering) -->
-        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
-          <h4 style="font-size: 0.9375rem; margin-bottom: 0.5rem; color: #1e40af;">Mathematical Solution:</h4>
-          <div id="practice-solution-text" style="font-size: 0.875rem; line-height: 1.6;"></div>
-          <div id="practice-trap-analysis" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed rgba(30, 64, 175, 0.2); font-size: 0.8125rem; color: #1e3a8a;"></div>
-        </div>
-
-        <!-- Question Navigation Controls -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
-          <button type="button" class="btn btn-secondary btn-sm" id="btn-prev-q" onclick="navigateQuestion(-1)">
-            ← Previous Question
-          </button>
-          <span style="font-size: 0.8125rem; color: var(--color-text-muted);" id="q-counter-text">
-            1 / 12
-          </span>
-          <button type="button" class="btn btn-primary btn-sm" id="btn-next-q" onclick="navigateQuestion(1)">
-            Next Question →
-          </button>
-        </div>
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
       </div>
-    </section>
-  </main>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
+    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
+  </div>
+</footer>
 
-  <script src="../assets/common.js"></script>
-  <script>
-    /* ==========================================================================
-       1. PURE DETERMINISTIC INTEREST MODEL
-       ========================================================================== */
-    const Model = (function () {
-      function solveSI(p, r, t) {
-        if (p <= 0 || r <= 0 || t <= 0) return { valid: false, error: "Invalid parameters" };
-        const si = LabCommon.round((p * r * t) / 100, 2);
-        const amount = LabCommon.round(p + si, 2);
-        return { valid: true, p, r, t, si, amount };
-      }
+<script>
+/* =====================================================================
+   1. PURE MODEL
+   ===================================================================== */
+const Model = (() => {
+  const round = (x, d = 2) => Math.round(x * 10 ** d) / 10 ** d;
 
-      function solveCI(p, r, t, freq = 1) {
-        if (p <= 0 || r <= 0 || t <= 0 || freq < 1) return { valid: false, error: "Invalid parameters" };
-        const ratePerPeriod = r / (100 * freq);
-        const totalPeriods = t * freq;
-        const amount = LabCommon.round(p * Math.pow(1 + ratePerPeriod, totalPeriods), 2);
-        const ci = LabCommon.round(amount - p, 2);
-        const ear = LabCommon.round((Math.pow(1 + ratePerPeriod, freq) - 1) * 100, 4);
+  function si(p, r, t) {
+    const interest = round((p * r * t) / 100);
+    return { interest, amount: round(p + interest), p, r, t };
+  }
 
-        return { valid: true, p, r, t, freq, ci, amount, ear };
-      }
+  function ci(p, r, t, freq = 1) {
+    const ratePerPeriod = r / (100 * freq);
+    const n = t * freq;
+    const amount = round(p * Math.pow(1 + ratePerPeriod, n));
+    const interest = round(amount - p);
+    const ear = round((Math.pow(1 + ratePerPeriod, freq) - 1) * 100, 4);
+    return { interest, amount, p, r, t, freq, ear };
+  }
 
-      function solveDifference(p, r, years) {
-        if (p <= 0 || r <= 0 || (years !== 2 && years !== 3)) {
-          return { valid: false, error: "Years must be 2 or 3" };
-        }
-        if (years === 2) {
-          const delta = LabCommon.round(p * Math.pow(r / 100, 2), 2);
-          return { valid: true, years: 2, delta, formula: `Δ₂ = P(R/100)² = ${delta}` };
-        } else {
-          const delta = LabCommon.round(p * Math.pow(r / 100, 2) * ((300 + r) / 100), 2);
-          return { valid: true, years: 3, delta, formula: `Δ₃ = P(R/100)² × (300+R)/100 = ${delta}` };
-        }
-      }
+  function delta2(p, r) {
+    return round(p * Math.pow(r / 100, 2));
+  }
 
-      function solvePrincipalFromDelta2(delta, r) {
-        if (delta <= 0 || r <= 0) return { valid: false, error: "Inputs must be positive" };
-        const p = LabCommon.round(delta / Math.pow(r / 100, 2), 2);
-        return { valid: true, p };
-      }
+  function delta3(p, r) {
+    return round(p * Math.pow(r / 100, 2) * ((300 + r) / 100));
+  }
 
-      function solveInstallment(loan, r, n = 2) {
-        if (loan <= 0 || r <= 0 || n !== 2) return { valid: false, error: "Currently supports 2-year installment" };
-        // loan = x / (1 + r/100) + x / (1 + r/100)^2
-        const factor = 1 + r / 100;
-        const discountSum = (1 / factor) + (1 / Math.pow(factor, 2));
-        const installment = LabCommon.round(loan / discountSum, 2);
-        return { valid: true, loan, r, installment };
-      }
+  function doublingSI(r) { return round(100 / r); }
+  function doublingCI(r) { return round(Math.log(2) / Math.log(1 + r / 100)); }
 
-      return {
-        solveSI,
-        solveCI,
-        solveDifference,
-        solvePrincipalFromDelta2,
-        solveInstallment
-      };
-    })();
+  function installment2(loan, r) {
+    const f = 1 + r / 100;
+    const sum = 1 / f + 1 / (f * f);
+    return round(loan / sum);
+  }
 
-    if (typeof window !== "undefined") {
-      window.Model = Model;
-    }
-
-    /* ==========================================================================
-       2. DETERMINISTIC SELF-TEST SUITE (Quality Gate)
-       ========================================================================== */
-    function runSelfTests() {
-      const results = { passed: 0, failed: 0, failures: [] };
-
-      function assert(condition, testName) {
-        if (condition) {
-          results.passed++;
-        } else {
-          results.failed++;
-          results.failures.push(testName);
-        }
-      }
-
-      // Test 1: Simple Interest (5000, 10%, 2 yrs => SI = 1000)
-      const t1 = Model.solveSI(5000, 10, 2);
-      assert(t1.valid && t1.si === 1000 && t1.amount === 6000, "Test 1: SI on 5000@10% for 2 yrs = 1000");
-
-      // Test 2: Compound Interest Annual (5000, 10%, 2 yrs => CI = 1050)
-      const t2 = Model.solveCI(5000, 10, 2, 1);
-      assert(t2.valid && t2.ci === 1050 && t2.amount === 6050, "Test 2: CI on 5000@10% for 2 yrs = 1050");
-
-      // Test 3: 2-Year Delta Invariant (5000, 10% => Delta = 50)
-      const t3 = Model.solveDifference(5000, 10, 2);
-      assert(t3.valid && t3.delta === 50, "Test 3: 2-year difference delta = 50");
-
-      // Test 4: 3-Year Delta Invariant (10000, 10% => Delta = 310)
-      const t4 = Model.solveDifference(10000, 10, 3);
-      assert(t4.valid && t4.delta === 310, "Test 4: 3-year difference delta = 310");
-
-      // Test 5: Principal from 2-Year Delta (Delta = 144, R = 12% => P = 10000)
-      const t5 = Model.solvePrincipalFromDelta2(144, 12);
-      assert(t5.valid && t5.p === 10000, "Test 5: P from delta 144@12% = 10000");
-
-      // Test 6: Half-Yearly Compounding (8000, 10%, 1 yr, freq=2 => CI = 820)
-      const t6 = Model.solveCI(8000, 10, 1, 2);
-      assert(t6.valid && t6.ci === 820, "Test 6: Half-yearly CI on 8000@10% 1yr = 820");
-
-      // Test 7: Effective Annual Rate for Semi-Annual 10% = 10.25%
-      assert(t6.valid && Math.abs(t6.ear - 10.25) < 0.001, "Test 7: EAR for 10% semi-annual = 10.25%");
-
-      // Test 8: Quarterly Compounding (16000, 20%, 0.75 yr (9 mos), freq=4 => CI = 2522)
-      const t8 = Model.solveCI(16000, 20, 0.75, 4);
-      assert(t8.valid && t8.ci === 2522, "Test 8: Quarterly CI on 16000@20% 9 mos = 2522");
-
-      // Test 9: 2-Year Installment Solver (Loan 2100, R=10% => Installment = 1210)
-      const t9 = Model.solveInstallment(2100, 10, 2);
-      assert(t9.valid && t9.installment === 1210, "Test 9: 2-year installment for 2100@10% = 1210");
-
-      // Test 10: Ratio of 3-Year to 2-Year Delta for R=10% is 31/10
-      const d2 = Model.solveDifference(10000, 10, 2).delta;
-      const d3 = Model.solveDifference(10000, 10, 3).delta;
-      assert(Math.abs(d3 / d2 - 3.1) < 0.0001, "Test 10: Delta3 / Delta2 ratio = 3.1 for R=10%");
-
-      // Test 11: Linear slope vs Exponential divergence (CI strictly > SI for T >= 2)
-      assert(t2.ci > t1.si, "Test 11: Invariant: CI > SI strictly for T >= 2 and R > 0");
-
-      return results;
-    }
-
-    if (typeof window !== "undefined") {
-      window.runSelfTests = runSelfTests;
-    }
-
-    /* ==========================================================================
-       3. 12 VERIFIED PRACTICE QUESTIONS
-       ========================================================================== */
-    const PRACTICE_QUESTIONS = [
-      {
-        id: "ci_q1",
-        difficulty: "Easy",
-        stem: `What is the <strong>difference between the compound interest and simple interest</strong> on ₹5,000 for 2 years at 10% per annum?`,
-        options: ["₹50", "₹55", "₹45", "₹60"],
-        correctIndex: 0,
-        solution: `<strong>2-Year Difference Formula:</strong><br>
-                   $$\\Delta_2 = P\\left(\\frac{R}{100}\\right)^2 = 5000 \\times \\left(\\frac{10}{100}\\right)^2 = 5000 \\times 0.01 = \\mathbf{₹50}$$`,
-        trap: `<strong>Trap Avoidance:</strong> Manually calculating SI ($1000$) and CI ($1050$) works, but the direct formula $\\Delta = P(R/100)^2$ saves 30 seconds.`
-      },
-      {
-        id: "ci_q2",
-        difficulty: "Medium",
-        stem: `The difference between CI and SI on a certain sum of money for <strong>2 years at 12% per annum</strong> is <strong>₹144</strong>. Find the principal sum.`,
-        options: ["₹10,000", "₹12,000", "₹9,000", "₹8,500"],
-        correctIndex: 0,
-        solution: `$$\\Delta_2 = P\\left(\\frac{R}{100}\\right)^2 \\implies 144 = P \\times (0.12)^2 = P \\times 0.0144$$
-                   $$P = \\frac{144}{0.0144} = \\mathbf{₹10,000}$$`,
-        trap: `<strong>Trap Avoidance:</strong> Squaring 12 as 1.44 instead of 0.0144 ($12/100 = 0.12$). Ensure decimal precision.`
-      },
-      {
-        id: "ci_q3",
-        difficulty: "Easy",
-        stem: `A sum of money <strong>doubles itself in 5 years</strong> at compound interest (compounded annually). In how many years will it become <strong>8 times of itself</strong>?`,
-        options: ["15 years", "20 years", "25 years", "40 years"],
-        correctIndex: 0,
-        solution: `In compound interest, amounts scale geometrically:<br>
-                   $$8 = 2^3$$
-                   $$\\text{Time required} = 3 \\times 5 = \\mathbf{15\\text{ years}}$$`,
-        trap: `<strong>Linear Multiplication Trap:</strong> 40 years ($8 \\times 5$) applies linear arithmetic logic. Compound doubling is exponential.`
-      },
-      {
-        id: "ci_q4",
-        difficulty: "Easy",
-        stem: `A sum of money <strong>doubles itself in 8 years</strong> at simple interest. In how many years will it become <strong>4 times of itself</strong>?`,
-        options: ["24 years", "32 years", "16 years", "20 years"],
-        correctIndex: 0,
-        solution: `In Simple Interest, only the interest accumulates linearly:<br>
-                   To double: Interest $= 1P$ in 8 years.<br>
-                   To become 4-fold: Interest required $= 4P - P = 3P$.<br>
-                   $$\\text{Time required} = 3 \\times 8 = \\mathbf{24\\text{ years}}$$`,
-        trap: `<strong>The 32-Year Trap:</strong> $4 \\times 8 = 32$ years treats the principal itself as multiplying. Simple interest only multiplies the earned interest ($3P$, not $4P$).`
-      },
-      {
-        id: "ci_q5",
-        difficulty: "Medium",
-        stem: `Find the <strong>compound interest on ₹8,000 for 1 year at 10% per annum</strong>, compounded <strong>half-yearly</strong>.`,
-        options: ["₹820", "₹800", "₹840", "₹810"],
-        correctIndex: 0,
-        solution: `Half-yearly adjustments:<br>
-                   Rate per half-year $= 10\\% / 2 = 5\\%$.<br>
-                   Number of periods $= 1 \\times 2 = 2$.<br>
-                   $$A = 8000 \\times (1 + 0.05)^2 = 8000 \\times 1.1025 = ₹8,820$$
-                   $$CI = 8820 - 8000 = \\mathbf{₹820}$$`,
-        trap: `<strong>Trap Avoidance:</strong> ₹800 is the simple annual interest without compounding ($8000 \\times 10\\% = 800$). Compounding half-yearly yields an extra ₹20.`
-      },
-      {
-        id: "ci_q6",
-        difficulty: "Medium",
-        stem: `What is the <strong>difference between CI and SI on ₹10,000 for 3 years at 10% per annum</strong>?`,
-        options: ["₹310", "₹300", "₹325", "₹305"],
-        correctIndex: 0,
-        solution: `<strong>3-Year Difference Formula:</strong><br>
-                   $$\\Delta_3 = P\\left(\\frac{R}{100}\\right)^2 \\left(\\frac{300 + R}{100}\\right)$$
-                   $$\\Delta_3 = 10000 \\times (0.1)^2 \\times \\left(\\frac{310}{100}\\right) = 100 \\times 3.1 = \\mathbf{₹310}$$`,
-        trap: `<strong>Trap Avoidance:</strong> Multiplying 2-year difference by 3 ($100 \\times 3 = 300$). The 3rd year adds interest on interest on interest, yielding ₹310.`
-      },
-      {
-        id: "ci_q7",
-        difficulty: "Easy",
-        stem: `What is the <strong>Effective Annual Rate (EAR)</strong> of interest corresponding to a nominal rate of <strong>10% per annum compounded half-yearly</strong>?`,
-        options: ["10.25%", "10.50%", "10.00%", "10.75%"],
-        correctIndex: 0,
-        solution: `$$\\text{EAR} = \\left(1 + \\frac{R/2}{100}\\right)^2 - 1 = (1 + 0.05)^2 - 1 = 1.1025 - 1 = \\mathbf{10.25\\%}$$`,
-        trap: `<strong>Trap Avoidance:</strong> Nominal rate is 10%, but due to semi-annual compounding the actual yield is 10.25%.`
-      },
-      {
-        id: "ci_q8",
-        difficulty: "Hard",
-        stem: `The ratio of the difference between CI and SI for <strong>3 years to that for 2 years</strong> on the same sum at the same rate of interest is <strong>31 : 10</strong>. Find the rate of interest per annum.`,
-        options: ["10%", "12%", "8%", "15%"],
-        correctIndex: 0,
-        solution: `<strong>Ratio Shortcut:</strong><br>
-                   $$\\frac{\\Delta_3}{\\Delta_2} = \\frac{300 + R}{100}$$
-                   $$\\frac{300 + R}{100} = \\frac{31}{10} = \\frac{310}{100} \\implies 300 + R = 310 \\implies R = \\mathbf{10\\%}$$`,
-        trap: `<strong>Trap Avoidance:</strong> Setting up massive cubic polynomial expansions. The ratio $\\Delta_3 / \\Delta_2 = (300+R)/100$ solves for $R$ in 5 seconds!`
-      },
-      {
-        id: "ci_q9",
-        difficulty: "Hard",
-        stem: `A sum of <strong>₹16,000</strong> is invested at <strong>20% per annum compound interest compounded quarterly</strong>. What is the compound interest accrued after <strong>9 months</strong>?`,
-        options: ["₹2,522", "₹2,400", "₹2,600", "₹2,480"],
-        correctIndex: 0,
-        solution: `Quarterly adjustments:<br>
-                   Rate per quarter $= 20\\% / 4 = 5\\%$.<br>
-                   Number of quarters in 9 months $= 9 / 3 = 3$ quarters.<br>
-                   $$A = 16000 \\times (1 + 0.05)^3 = 16000 \\times 1.157625 = ₹18,522$$
-                   $$CI = 18522 - 16000 = \\mathbf{₹2,522}$$`,
-        trap: `<strong>Trap Avoidance:</strong> Using 9 as the power or using 20% as the periodic rate. Divide rate by 4 and count quarterly periods (3).`
-      },
-      {
-        id: "ci_q10",
-        difficulty: "Hard",
-        stem: `A loan of <strong>₹2,100</strong> is to be paid back in <strong>2 equal annual installments</strong> at <strong>10% compound interest per annum</strong>. What is the value of each installment?`,
-        options: ["₹1,210", "₹1,155", "₹1,200", "₹1,250"],
-        correctIndex: 0,
-        solution: `Let each installment be ₹$x$. Present value of installments equals the loan:<br>
-                   $$\\frac{x}{1.10} + \\frac{x}{(1.10)^2} = 2100$$
-                   $$x\\left(\\frac{10}{11} + \\frac{100}{121}\\right) = 2100 \\implies x\\left(\\frac{110 + 100}{121}\\right) = 2100$$
-                   $$x \\times \\frac{210}{121} = 2100 \\implies x = 2100 \\times \\frac{121}{210} = \\mathbf{₹1,210}$$`,
-        trap: `<strong>The Equal Division Trap:</strong> Adding 10% to 2100 (= 2310) and dividing by 2 (= 1155). Future installment payments must be discounted to present value.`
-      },
-      {
-        id: "ci_q11",
-        difficulty: "Easy",
-        stem: `At what rate of simple interest per annum will a sum of money <strong>double itself in 12.5 years</strong>?`,
-        options: ["8%", "8.5%", "7.5%", "10%"],
-        correctIndex: 0,
-        solution: `When a sum doubles, $SI = P$.<br>
-                   $$P = \\frac{P \\times R \\times 12.5}{100} \\implies R = \\frac{100}{12.5} = \\mathbf{8\\%}$$`,
-        trap: `<strong>Trap Avoidance:</strong> $100 / 12.5 = 8$ exactly ($12.5 \\times 8 = 100$).`
-      },
-      {
-        id: "ci_q12",
-        difficulty: "Hard",
-        stem: `A sum of <strong>₹10,000</strong> was invested for 3 years at successive annual compound rates of <strong>4% in Year 1, 5% in Year 2, and 6% in Year 3</strong>. What is the total compound interest earned?`,
-        options: ["₹1,575.20", "₹1,500.00", "₹1,620.50", "₹1,550.00"],
-        correctIndex: 0,
-        solution: `Successive annual compounding multiplier:<br>
-                   $$A = 10000 \\times (1 + 0.04) \\times (1 + 0.05) \\times (1 + 0.06)$$
-                   $$A = 10000 \\times 1.04 \\times 1.05 \\times 1.06 = 10000 \\times 1.15752 = ₹11,575.20$$
-                   $$CI = 11575.20 - 10000 = \\mathbf{₹1,575.20}$$`,
-        trap: `<strong>Simple Addition Trap:</strong> $4 + 5 + 6 = 15\\% \\implies 1500$. Compounding accumulates interest on earlier interest, yielding ₹1,575.20.`
-      }
-    ];
-
-    if (typeof window !== "undefined") {
-      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
-    }
-
-    /* ==========================================================================
-       4. INTERACTIVE VIEW CONTROLLER & SVG RENDERER
-       ========================================================================== */
-    function handleModelChange() {
-      const p = Math.max(1000, Number(document.getElementById('input-principal').value) || 10000);
-      const r = Math.max(0.5, Number(document.getElementById('input-rate').value) || 10);
-      const freq = Number(document.getElementById('select-freq').value) || 1;
-
-      document.getElementById('badge-p').textContent = `₹${p.toLocaleString()}`;
-      document.getElementById('badge-r').textContent = `${r}% p.a.`;
-
-      // Calculate Readouts
-      const delta2 = Model.solveDifference(p, r, 2);
-      const delta3 = Model.solveDifference(p, r, 3);
-      const ciRes = Model.solveCI(p, r, 1, freq);
-
-      document.getElementById('readout-delta2').textContent = `₹${delta2.delta}`;
-      document.getElementById('readout-delta3').textContent = `₹${delta3.delta}`;
-      document.getElementById('readout-ear').textContent = `${ciRes.ear}%`;
-
-      // Doubling times
-      const siDouble = LabCommon.round(100 / r, 1);
-      const ciDouble = LabCommon.round(Math.log(2) / Math.log(1 + (r / 100) / freq) / freq, 2);
-      document.getElementById('readout-double').textContent = `${ciDouble} yrs (CI) vs ${siDouble} yrs (SI)`;
-
-      renderChart(p, r, freq);
-      renderBreakdownTable(p, r, freq);
-    }
-
-    function renderChart(p, r, freq) {
-      const svg = document.getElementById('growth-svg');
-      const maxYears = 10;
-      const siEnd = p * (1 + (r * maxYears) / 100);
-      const ciEnd = p * Math.pow(1 + (r / 100) / freq, maxYears * freq);
-      const maxVal = ciEnd * 1.05;
-
-      const originX = 70;
-      const originY = 210;
-      const chartW = 600;
-      const chartH = 170;
-
-      // Generate Points
-      let siPath = `M ${originX} ${originY - (p / maxVal) * chartH}`;
-      let ciPath = `M ${originX} ${originY - (p / maxVal) * chartH}`;
-      let areaPath = `M ${originX} ${originY - (p / maxVal) * chartH}`;
-
-      const ciPoints = [];
-
-      for (let t = 0; t <= maxYears; t += 0.5) {
-        const x = originX + (t / maxYears) * chartW;
-        const siVal = p * (1 + (r * t) / 100);
-        const ciVal = p * Math.pow(1 + (r / 100) / freq, t * freq);
-
-        const ySI = originY - (siVal / maxVal) * chartH;
-        const yCI = originY - (ciVal / maxVal) * chartH;
-
-        siPath += ` L ${x} ${ySI}`;
-        ciPath += ` L ${x} ${yCI}`;
-        ciPoints.push({ x, yCI });
-      }
-
-      // Shaded gap area
-      for (let i = ciPoints.length - 1; i >= 0; i--) {
-        const t = (i * 0.5);
-        const x = ciPoints[i].x;
-        const siVal = p * (1 + (r * t) / 100);
-        const ySI = originY - (siVal / maxVal) * chartH;
-        areaPath += ` L ${x} ${ciPoints[i].yCI}`;
-      }
-      for (let i = 0; i < ciPoints.length; i++) {
-        const t = (i * 0.5);
-        const x = ciPoints[i].x;
-        const siVal = p * (1 + (r * t) / 100);
-        const ySI = originY - (siVal / maxVal) * chartH;
-        areaPath += ` L ${x} ${ySI}`;
-      }
-      areaPath += ' Z';
-
-      let svgHtml = `
-        <!-- Shaded Gap Area -->
-        <path d="${areaPath}" fill="rgba(245, 158, 11, 0.18)" />
-
-        <!-- Axis Lines -->
-        <line x1="${originX}" y1="${originY}" x2="${originX + chartW}" y2="${originY}" stroke="var(--color-border)" stroke-width="2" />
-        <line x1="${originX}" y1="${originY}" x2="${originX}" y2="${originY - chartH}" stroke="var(--color-border)" stroke-width="2" />
-
-        <!-- SI Line (Blue) -->
-        <path d="${siPath}" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" />
-
-        <!-- CI Line (Emerald) -->
-        <path d="${ciPath}" fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" />
-
-        <!-- Axis Labels -->
-        <text x="${originX}" y="${originY + 20}" font-size="11" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle">0 yrs</text>
-        <text x="${originX + chartW / 2}" y="${originY + 20}" font-size="11" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle">5 yrs</text>
-        <text x="${originX + chartW}" y="${originY + 20}" font-size="11" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle">10 yrs</text>
-
-        <!-- Legend -->
-        <circle cx="${originX + 30}" cy="30" r="5" fill="#3b82f6" />
-        <text x="${originX + 42}" y="34" font-size="12" font-weight="700" fill="#3b82f6">Simple Interest (Linear)</text>
-
-        <circle cx="${originX + 210}" cy="30" r="5" fill="#10b981" />
-        <text x="${originX + 222}" y="34" font-size="12" font-weight="700" fill="#10b981">Compound Interest (Exponential)</text>
-
-        <rect x="${originX + 430}" y="25" width="14" height="10" fill="rgba(245, 158, 11, 0.3)" />
-        <text x="${originX + 450}" y="34" font-size="12" font-weight="700" fill="#b45309">CI - SI Widening Spread</text>
-      `;
-
-      svg.innerHTML = svgHtml;
-      document.getElementById('chart-caption').textContent = 
-        `At Year 10: Simple Interest yields ₹${Math.round(siEnd - p).toLocaleString()} (Total ₹${Math.round(siEnd).toLocaleString()}) | Compound Interest yields ₹${Math.round(ciEnd - p).toLocaleString()} (Total ₹${Math.round(ciEnd).toLocaleString()}). Spread = ₹${Math.round(ciEnd - siEnd).toLocaleString()}.`;
-    }
-
-    function renderBreakdownTable(p, r, freq) {
-      const tbody = document.getElementById('breakdown-tbody');
-      let html = '';
-
-      for (let t = 1; t <= 5; t++) {
-        const si = Model.solveSI(p, r, t);
-        const ci = Model.solveCI(p, r, t, freq);
-        const gap = LabCommon.round(ci.ci - si.si, 2);
-
-        html += `
-          <tr>
-            <td><strong>Year ${t}</strong></td>
-            <td>₹${si.si.toLocaleString()}</td>
-            <td>₹${si.amount.toLocaleString()}</td>
-            <td style="color:#047857; font-weight:700;">₹${ci.ci.toLocaleString()}</td>
-            <td style="color:#047857; font-weight:700;">₹${ci.amount.toLocaleString()}</td>
-            <td style="color:#b45309; font-weight:800;">+₹${gap.toLocaleString()}</td>
-          </tr>
-        `;
-      }
-      tbody.innerHTML = html;
-    }
-
-    function handleRevealPredict() {
-      document.getElementById('predict-solution').classList.remove('hidden');
-      LabCommon.announce("Revealed resolution for eight-fold multiplication puzzle.");
-    }
-
-    /* ==========================================================================
-       5. PRACTICE LAB INTERACTION & PROGRESS LOGIC
-       ========================================================================== */
-    let currentQIndex = 0;
-    let practiceMode = 'hints';
-    let timerInstance = null;
-    let selectedOptionIndex = null;
-
-    const STORAGE_KEY = 'lab_interest_comparison_stats';
-
-    function getStoredStats() {
-      return LabCommon.safeStorage.getItem(STORAGE_KEY, {
-        attempts: 0,
-        correct: 0,
-        independentCorrect: 0,
-        history: {}
+  // Per-year breakdown of SI vs CI, showing interest-on-interest
+  function yearBreakdown(p, r, years, freq = 1) {
+    const rows = [];
+    for (let t = 1; t <= years; t++) {
+      const siRes = si(p, r, t);
+      const ciRes = ci(p, r, t, freq);
+      const baseInterest = round(p * r * t / 100); // same as SI interest
+      const ioi = round(ciRes.interest - baseInterest);
+      rows.push({
+        year: t,
+        siInterest: siRes.interest,
+        ciInterest: ciRes.interest,
+        baseInterest,
+        ioi,
+        gap: round(ciRes.interest - siRes.interest)
       });
     }
+    return rows;
+  }
 
-    function saveStats(stats) {
-      LabCommon.safeStorage.setItem(STORAGE_KEY, stats);
-      updateStatsDisplay();
+  return { si, ci, delta2, delta3, doublingSI, doublingCI, installment2, yearBreakdown, round };
+})();
+window.Model = Model;
+
+/* =====================================================================
+   2. SELF-TESTS
+   ===================================================================== */
+function runSelfTests() {
+  const results = { passed: 0, failed: 0, failures: [] };
+  const assert = (cond, name, detail = "") => {
+    if (cond) results.passed++;
+    else { results.failed++; results.failures.push({ name, detail }); }
+  };
+  try {
+    const t1 = Model.si(5000, 10, 2);
+    assert(t1.interest === 1000 && t1.amount === 6000, "SI 5000@10% 2yr = 1000", JSON.stringify(t1));
+
+    const t2 = Model.ci(5000, 10, 2, 1);
+    assert(t2.interest === 1050 && t2.amount === 6050, "CI 5000@10% 2yr = 1050", JSON.stringify(t2));
+
+    const t3 = Model.delta2(5000, 10);
+    assert(t3 === 50, "Δ2 5000@10% = 50", `got ${t3}`);
+
+    const t4 = Model.delta3(10000, 10);
+    assert(t4 === 310, "Δ3 10000@10% = 310", `got ${t4}`);
+
+    const t5 = Model.ci(8000, 10, 1, 2);
+    assert(t5.interest === 820, "CI 8000@10% 1yr half-yearly = 820", JSON.stringify(t5));
+
+    assert(Math.abs(t5.ear - 10.25) < 0.01, "EAR for 10% half-yearly = 10.25", `got ${t5.ear}`);
+
+    const t7 = Model.installment2(2100, 10);
+    assert(t7 === 1210, "2-yr installment on 2100@10% = 1210", `got ${t7}`);
+
+    const t8 = Model.doublingSI(10);
+    const t9 = Model.doublingCI(10);
+    assert(t8 === 10, "SI doubling @10% = 10 years");
+    assert(Math.abs(t9 - 7.27) < 0.1, "CI doubling @10% ≈ 7.27 years", `got ${t9}`);
+
+    // Ratio invariant: Δ3/Δ2 = 3 + R/100
+    const ratio = Model.delta3(10000, 10) / Model.delta2(10000, 10);
+    assert(Math.abs(ratio - 3.1) < 0.001, "Δ3/Δ2 @10% = 3.1", `got ${ratio}`);
+
+    // CI > SI strictly for t≥2
+    const c = Model.ci(10000, 10, 3, 1);
+    const s = Model.si(10000, 10, 3);
+    assert(c.interest > s.interest, "CI > SI for t=3 @10%");
+  } catch (err) {
+    results.failed++;
+    results.failures.push({ name: "Uncaught", detail: err.message });
+  }
+  return results;
+}
+window.runSelfTests = runSelfTests;
+
+/* =====================================================================
+   3. PRACTICE BANK
+   ===================================================================== */
+const PRACTICE_QUESTIONS = [
+  { id: "ci1", difficulty: "Easy",
+    stem: "Difference between CI and SI on ₹5,000 for 2 years at 10% p.a.?",
+    options: ["₹50", "₹55", "₹45", "₹60"], correctIndex: 0,
+    trapOptionIndex: 3, trapExplanation: "₹60 comes from mis-multiplying. The formula is P·(R/100)² = 5000·(0.1)² = ₹50.",
+    solution: "Δ₂ = P·(R/100)² = 5000 × 0.01 = ₹50." },
+  { id: "ci2", difficulty: "Medium",
+    stem: "Difference between CI and SI is ₹144 on a sum for 2 years at 12% p.a. Find the principal.",
+    options: ["₹10,000", "₹12,000", "₹9,000", "₹8,500"], correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "₹9,000 treats the difference as if it were a 2-year gap at simple scaling.",
+    solution: "144 = P·(0.12)² = P·0.0144 → P = 144/0.0144 = ₹10,000." },
+  { id: "ci3", difficulty: "Easy",
+    stem: "A sum doubles in 5 years at compound interest. How many years to become 8× itself?",
+    options: ["15 years", "20 years", "25 years", "40 years"], correctIndex: 0,
+    trapOptionIndex: 3, trapExplanation: "40 = 8×5 is LINEAR thinking. Compounding is exponential: 8 = 2³ → 3·5 = 15 years.",
+    solution: "8 = 2³, so time = 3 × 5 = 15 years." },
+  { id: "ci4", difficulty: "Easy",
+    stem: "A sum doubles in 8 years at simple interest. How many years to become 4× itself?",
+    options: ["24 years", "32 years", "16 years", "20 years"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "32 = 4×8 wrongly scales the principal. SI only accumulates INTEREST linearly — 4× needs 3P of interest, so 3×8 = 24.",
+    solution: "SI doubling = +1P interest in 8 yr. 4× needs +3P → 3×8 = 24 years." },
+  { id: "ci5", difficulty: "Medium",
+    stem: "CI on ₹8,000 for 1 year at 10% p.a. compounded half-yearly?",
+    options: ["₹820", "₹800", "₹840", "₹810"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "₹800 = plain annual SI. Semi-annual compounding adds interest on the half-year's interest, giving ₹820.",
+    solution: "Rate per half = 5%. A = 8000·1.05² = 8820. CI = 820." },
+  { id: "ci6", difficulty: "Medium",
+    stem: "Difference between CI and SI on ₹10,000 for 3 years at 10% p.a.?",
+    options: ["₹310", "₹300", "₹325", "₹305"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "₹300 = 3×Δ₂. Each extra year's compounding adds MORE gap than the previous, so it's ₹310, not ₹300.",
+    solution: "Δ₃ = P·(R/100)²·(300+R)/100 = 10000·0.01·3.1 = ₹310." },
+  { id: "ci7", difficulty: "Easy",
+    stem: "EAR for 10% p.a. compounded half-yearly?",
+    options: ["10.25%", "10.50%", "10.00%", "10.75%"], correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "10.00% is the NOMINAL rate. Compounding doubles the frequency of growth, so the effective rate is 10.25%.",
+    solution: "EAR = (1 + 0.05)² − 1 = 10.25%." },
+  { id: "ci8", difficulty: "Hard",
+    stem: "Ratio of Δ₃ to Δ₂ on the same sum at the same rate is 31:10. Find R.",
+    options: ["10%", "12%", "8%", "15%"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "12% comes from assuming Δ₃/Δ₂ = 3 + R is a linear equation — it's (300+R)/100.",
+    solution: "Δ₃/Δ₂ = (300+R)/100 = 31/10 → 300+R = 310 → R = 10%." },
+  { id: "ci9", difficulty: "Hard",
+    stem: "₹16,000 at 20% p.a. compounded QUARTERLY, CI after 9 months?",
+    options: ["₹2,522", "₹2,400", "₹2,600", "₹2,480"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "₹2,400 = simple interest at 20% for 9 months. Quarterly compounding adds the interest-on-interest correction, giving ₹2,522.",
+    solution: "Rate/qtr = 5%. Periods = 3. A = 16000·1.05³ = 18522. CI = 2522." },
+  { id: "ci10", difficulty: "Hard",
+    stem: "Loan ₹2,100, repaid in 2 equal annual installments at 10% CI. Value of each installment?",
+    options: ["₹1,210", "₹1,155", "₹1,200", "₹1,250"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "₹1,155 = (2100×1.10)/2 — treats future installments as if they were present value. But ₹x paid a year from now is worth less than ₹x today.",
+    solution: "x/1.10 + x/1.10² = 2100 → x·210/121 = 2100 → x = ₹1,210." },
+  { id: "ci11", difficulty: "Easy",
+    stem: "At what rate of SI does a sum double in 12.5 years?",
+    options: ["8%", "8.5%", "7.5%", "10%"], correctIndex: 0,
+    trapOptionIndex: 3, trapExplanation: "10% would double in 10 years, not 12.5. Use R = 100/T = 100/12.5 = 8%.",
+    solution: "Doubling ⇒ SI = P ⇒ P·R·T/100 = P ⇒ R = 100/T = 8%." },
+  { id: "ci12", difficulty: "Hard",
+    stem: "₹10,000 at 4%, 5%, 6% in successive years. Total CI?",
+    options: ["₹1,575.20", "₹1,500.00", "₹1,620.50", "₹1,550.00"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "₹1,500 = 4+5+6 = 15% applied once. Compounding multiplies the successive factors, not the rates.",
+    solution: "A = 10000·1.04·1.05·1.06 = 11575.20 → CI = ₹1,575.20." }
+];
+window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+
+/* =====================================================================
+   4. STATE
+   ===================================================================== */
+const state = {
+  p: 10000, r: 10, freq: 1, year: 5,
+  rateLab: 10,
+  predictLocked: false,
+  practiceMode: "hints",
+  currentQIndex: 0,
+  shuffled: [],
+  answered: false,
+  timer: { interval: null, remaining: 90 },
+  testsPassed: false,
+  stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
+};
+const TOPIC_ID = "si-ci";
+const $ = (id) => document.getElementById(id);
+
+/* =====================================================================
+   5. RENDERERS
+   ===================================================================== */
+
+// Curve chart with year marker + gap bracket
+function renderCurve() {
+  const svg = $("curve-svg");
+  const p = state.p, r = state.r, freq = state.freq, currentYear = state.year;
+  const maxYears = 10;
+  const siEnd = p * (1 + (r * maxYears) / 100);
+  const ciEnd = p * Math.pow(1 + r / 100 / freq, maxYears * freq);
+  const maxVal = Math.max(siEnd, ciEnd) * 1.1;
+
+  const W = 760, H = 340;
+  const originX = 70, originY = 280;
+  const chartW = 620, chartH = 220;
+
+  const X = (t) => originX + (t / maxYears) * chartW;
+  const Y = (v) => originY - (v / maxVal) * chartH;
+
+  // Sample curves
+  let siPath = `M ${X(0)} ${Y(p)}`;
+  let ciPath = `M ${X(0)} ${Y(p)}`;
+  for (let t = 0.25; t <= maxYears; t += 0.25) {
+    siPath += ` L ${X(t)} ${Y(p * (1 + r * t / 100))}`;
+    ciPath += ` L ${X(t)} ${Y(p * Math.pow(1 + r / 100 / freq, t * freq))}`;
+  }
+
+  // Shaded gap area
+  let areaPath = `M ${X(0)} ${Y(p)}`;
+  for (let t = 0.25; t <= maxYears; t += 0.25) {
+    areaPath += ` L ${X(t)} ${Y(p * Math.pow(1 + r / 100 / freq, t * freq))}`;
+  }
+  for (let t = maxYears; t >= 0; t -= 0.25) {
+    areaPath += ` L ${X(t)} ${Y(p * (1 + r * t / 100))}`;
+  }
+  areaPath += " Z";
+
+  // Current year values
+  const siCurr = p * (1 + r * currentYear / 100);
+  const ciCurr = p * Math.pow(1 + r / 100 / freq, currentYear * freq);
+  const gap = ciCurr - siCurr;
+
+  const xCurr = X(currentYear);
+  const ySI = Y(siCurr), yCI = Y(ciCurr);
+
+  // Year axis ticks
+  let ticks = "";
+  for (let t = 0; t <= maxYears; t += 2) {
+    ticks += `<line x1="${X(t)}" y1="${originY}" x2="${X(t)}" y2="${originY + 6}" stroke="#475569" stroke-width="1"/>`;
+    ticks += `<text x="${X(t)}" y="${originY + 22}" text-anchor="middle" font-size="11" fill="#64748b">${t} yr</text>`;
+  }
+
+  // Y-axis label ticks
+  let yTicks = "";
+  const yMaxTicks = 4;
+  for (let i = 0; i <= yMaxTicks; i++) {
+    const val = (maxVal * i / yMaxTicks);
+    yTicks += `<line x1="${originX - 4}" y1="${Y(val)}" x2="${originX}" y2="${Y(val)}" stroke="#475569" stroke-width="1"/>`;
+    yTicks += `<text x="${originX - 8}" y="${Y(val) + 4}" text-anchor="end" font-size="10" fill="#64748b">₹${Math.round(val / 1000)}k</text>`;
+  }
+
+  // Gap bracket
+  const bracketX = xCurr + 8;
+  const bracket = `
+    <line x1="${bracketX}" y1="${ySI}" x2="${bracketX}" y2="${yCI}" stroke="#f59e0b" stroke-width="2"/>
+    <line x1="${bracketX - 4}" y1="${ySI}" x2="${bracketX + 4}" y2="${ySI}" stroke="#f59e0b" stroke-width="2"/>
+    <line x1="${bracketX - 4}" y1="${yCI}" x2="${bracketX + 4}" y2="${yCI}" stroke="#f59e0b" stroke-width="2"/>
+    <text x="${bracketX + 10}" y="${(ySI + yCI) / 2 + 4}" font-size="11" font-weight="800" fill="#f59e0b">+₹${Math.round(gap).toLocaleString()}</text>
+  `;
+
+  svg.innerHTML = `
+    <!-- Shaded gap -->
+    <path d="${areaPath}" fill="rgba(245,158,11,0.15)"/>
+
+    <!-- Axis -->
+    <line x1="${originX}" y1="${originY}" x2="${originX + chartW}" y2="${originY}" stroke="#475569" stroke-width="1.5"/>
+    <line x1="${originX}" y1="${originY}" x2="${originX}" y2="${originY - chartH}" stroke="#475569" stroke-width="1.5"/>
+    ${ticks}
+    ${yTicks}
+
+    <!-- Curves -->
+    <path d="${siPath}" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+    <path d="${ciPath}" fill="none" stroke="#22c55e" stroke-width="3.5" stroke-linecap="round"/>
+
+    <!-- Year marker vertical -->
+    <line x1="${xCurr}" y1="${originY}" x2="${xCurr}" y2="${Math.min(ySI, yCI) - 10}" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <circle cx="${xCurr}" cy="${ySI}" r="6" fill="#38bdf8" stroke="#0ea5e9" stroke-width="2"/>
+    <circle cx="${xCurr}" cy="${yCI}" r="6" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+
+    ${bracket}
+
+    <!-- Legend -->
+    <circle cx="${originX + 20}" cy="30" r="5" fill="#38bdf8"/>
+    <text x="${originX + 32}" y="34" font-size="11" font-weight="700" fill="#38bdf8">Simple (linear)</text>
+    <circle cx="${originX + 180}" cy="30" r="5" fill="#22c55e"/>
+    <text x="${originX + 192}" y="34" font-size="11" font-weight="700" fill="#22c55e">Compound (exponential)</text>
+    <rect x="${originX + 380}" y="25" width="14" height="10" fill="rgba(245,158,11,0.3)"/>
+    <text x="${originX + 400}" y="34" font-size="11" font-weight="700" fill="#f59e0b">Gap = interest-on-interest</text>
+  `;
+
+  $("readout-si").textContent = "₹" + Math.round(siCurr).toLocaleString();
+  $("readout-ci").textContent = "₹" + Math.round(ciCurr).toLocaleString();
+  $("readout-gap").textContent = "₹" + Math.round(gap).toLocaleString();
+  const ear = (Math.pow(1 + r / 100 / freq, freq) - 1) * 100;
+  $("readout-ear").textContent = ear.toFixed(4) + "%";
+}
+
+// Interest-on-interest mini-lab: for years 1..5, split each year's CI into principal-interest + interest-on-interest
+function renderIOI() {
+  const lab = $("ioi-lab");
+  const p = state.p, r = state.r, freq = state.freq;
+  const rows = Model.yearBreakdown(p, r, 5, freq);
+  const maxCI = Math.max(...rows.map(x => x.ciInterest), 1);
+
+  lab.innerHTML = rows.map(row => {
+    const basePct = (row.baseInterest / maxCI) * 100;
+    const ioiPct = (row.ioi / maxCI) * 100;
+    return `
+      <div class="ioi-bar-row">
+        <span class="ioi-bar-label">Y${row.year}</span>
+        <div class="ioi-bar-track">
+          <div class="ioi-seg principal" style="width:${basePct}%">₹${Math.round(row.baseInterest)}</div>
+          <div class="ioi-seg ioi" style="width:${ioiPct}%">${row.ioi > 0 ? '+₹' + Math.round(row.ioi) : ''}</div>
+        </div>
+        <span class="ioi-bar-value">CI: ₹${Math.round(row.ciInterest)}</span>
+      </div>
+    `;
+  }).join("");
+}
+
+// Doubling timelines
+function renderDoubling() {
+  const svg = $("doubling-svg");
+  const r = state.rateLab;
+  const siY = Model.doublingSI(r);
+  const ciY = Model.doublingCI(r);
+
+  const W = 760, H = 220;
+  const padL = 100, padR = 60, plotW = W - padL - padR;
+  const maxYears = Math.max(siY, ciY) * 1.15;
+  const X = (t) => padL + (t / maxYears) * plotW;
+
+  const ySI = 80, yCI = 150;
+
+  svg.innerHTML = `
+    <text x="${padL}" y="${ySI - 20}" font-size="12" font-weight="700" fill="#38bdf8">SI timeline</text>
+    <line x1="${padL}" y1="${ySI}" x2="${padL + plotW}" y2="${ySI}" stroke="#475569" stroke-width="2"/>
+    <circle cx="${X(siY)}" cy="${ySI}" r="8" fill="#38bdf8" stroke="#0ea5e9" stroke-width="2"/>
+    <text x="${X(siY)}" y="${ySI - 14}" text-anchor="middle" font-size="12" font-weight="800" fill="#38bdf8">${siY.toFixed(1)} yr</text>
+    <text x="${X(siY)}" y="${ySI + 26}" text-anchor="middle" font-size="11" fill="#94a3b8">100/R</text>
+
+    <text x="${padL}" y="${yCI - 20}" font-size="12" font-weight="700" fill="#22c55e">CI timeline</text>
+    <line x1="${padL}" y1="${yCI}" x2="${padL + plotW}" y2="${yCI}" stroke="#475569" stroke-width="2"/>
+    <circle cx="${X(ciY)}" cy="${yCI}" r="8" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+    <text x="${X(ciY)}" y="${yCI - 14}" text-anchor="middle" font-size="12" font-weight="800" fill="#22c55e">${ciY.toFixed(2)} yr</text>
+    <text x="${X(ciY)}" y="${yCI + 26}" text-anchor="middle" font-size="11" fill="#94a3b8">ln 2 / ln(1+R)</text>
+
+    <!-- Gap bracket -->
+    <line x1="${X(ciY)}" y1="${yCI + 40}" x2="${X(siY)}" y2="${yCI + 40}" stroke="#f59e0b" stroke-width="2"/>
+    <line x1="${X(ciY)}" y1="${yCI + 35}" x2="${X(ciY)}" y2="${yCI + 45}" stroke="#f59e0b" stroke-width="2"/>
+    <line x1="${X(siY)}" y1="${yCI + 35}" x2="${X(siY)}" y2="${yCI + 45}" stroke="#f59e0b" stroke-width="2"/>
+    <text x="${(X(ciY) + X(siY)) / 2}" y="${yCI + 60}" text-anchor="middle" font-size="11" font-weight="800" fill="#f59e0b">
+      gap ${(siY - ciY).toFixed(2)} yr
+    </text>
+  `;
+
+  $("si-double").textContent = siY.toFixed(2) + " years";
+  $("ci-double").textContent = ciY.toFixed(2) + " years";
+  $("double-gap").textContent = (siY - ciY).toFixed(2) + " years";
+  $("ci-multiplier").textContent = Math.pow(1 + r/100, siY).toFixed(2) + "×";
+}
+
+// =====================================================================
+// 6. WIRING
+// =====================================================================
+["input-p", "range-p"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    state.p = Math.max(1000, parseFloat(e.target.value) || 1000);
+    $("input-p").value = state.p;
+    if (state.p <= 50000) $("range-p").value = state.p;
+    $("badge-p").textContent = "₹" + state.p.toLocaleString();
+    renderCurve();
+    renderIOI();
+  });
+});
+["input-r", "range-r"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    state.r = Math.max(1, parseFloat(e.target.value) || 1);
+    $("input-r").value = state.r;
+    if (state.r <= 25) $("range-r").value = state.r;
+    $("badge-r").textContent = state.r + "%";
+    renderCurve();
+    renderIOI();
+  });
+});
+$("select-freq").addEventListener("change", (e) => {
+  state.freq = parseInt(e.target.value);
+  renderCurve();
+  renderIOI();
+});
+$("year-slider").addEventListener("input", (e) => {
+  state.year = parseInt(e.target.value);
+  $("year-badge").textContent = `Year ${state.year}`;
+  renderCurve();
+});
+$("rate-lab").addEventListener("input", (e) => {
+  state.rateLab = parseFloat(e.target.value);
+  $("rate-lab-badge").textContent = state.rateLab + "%";
+  renderDoubling();
+});
+
+// Predict
+function preparePredict() {
+  if (state.predictLocked) return;
+  const container = $("predict-options");
+  container.innerHTML = "";
+  const opts = [
+    { value: "15", kind: "correct", label: "15 years (3 × 5)" },
+    { value: "35", kind: "trap", label: "35 years (7 × 5)" },
+    { value: "40", kind: "trap", label: "40 years (8 × 5)" }
+  ];
+  opts.forEach(o => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = o.label;
+    btn.dataset.kind = o.kind;
+    btn.dataset.value = o.value;
+    btn.addEventListener("click", () => commitPredict(o));
+    container.appendChild(btn);
+  });
+  $("predict-feedback").className = "callout hidden";
+  $("worked-solution").classList.add("hidden");
+}
+
+function commitPredict(o) {
+  if (state.predictLocked) return;
+  state.predictLocked = true;
+  document.querySelectorAll("#predict-options .option-btn").forEach(b => {
+    const kind = b.dataset.kind;
+    const chosen = b.dataset.value === o.value;
+    if (kind === "correct") b.classList.add("correct");
+    else if (kind === "trap") b.classList.add("trap");
+    if (chosen && kind !== "correct") b.classList.add("incorrect");
+    b.disabled = true;
+  });
+
+  const fb = $("predict-feedback");
+  fb.classList.remove("hidden");
+  if (o.kind === "correct") {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong> 8 = 2³, so 3 doubling periods → 15 years.`;
+  } else if (o.value === "40") {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Linear trap:</strong> 8 × 5 = 40 assumes each "multiple" costs 5 years. Compounding doubles the *whole* amount each period, not adds a fixed block.`;
+  } else {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ SI-style trap:</strong> 35 = (8−1)×5 is the SI formula. Compounding is exponential — a much shorter 15 years.`;
+  }
+
+  $("worked-solution").classList.remove("hidden");
+  $("solution-steps").innerHTML = [
+    { title: "Doubling rule", body: "At any time T, amount = P × 2^T/5." },
+    { title: "Solve 2^(T/5) = 8", body: "2^(T/5) = 2³ → T/5 = 3 → T = 15." },
+    { title: "Answer", body: "15 years." }
+  ].map((st, i) => `
+    <div class="step-item">
+      <div class="step-num">Step ${i + 1}</div>
+      <div class="step-title">${st.title}</div>
+      <div>${st.body}</div>
+    </div>`).join("");
+}
+
+/* =====================================================================
+   7. PRACTICE
+   ===================================================================== */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function setPracticeMode(mode) {
+  state.practiceMode = mode;
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+    const on = b.dataset.mode === mode;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  $("timer-container").classList.toggle("hidden", mode !== "timed");
+  if (mode === "timed") startTimer();
+  else stopTimer();
+  document.querySelectorAll("main > section").forEach((el, idx) => {
+    if (idx === 0 || idx === 1 || idx === 2 || idx === 3) {
+      el.style.display = (mode === "hints") ? "" : "none";
     }
-
-    function updateStatsDisplay() {
-      const stats = getStoredStats();
-      document.getElementById('stat-attempts').textContent = stats.attempts;
-      document.getElementById('stat-correct').textContent = stats.correct;
-      document.getElementById('stat-independent').textContent = stats.independentCorrect;
-      const acc = stats.attempts > 0 ? Math.round((stats.correct / stats.attempts) * 100) : 0;
-      document.getElementById('stat-accuracy').textContent = `${acc}%`;
-    }
-
-    function handleResetStats() {
-      if (confirm("Reset all local practice statistics for this module?")) {
-        LabCommon.safeStorage.removeItem(STORAGE_KEY);
-        updateStatsDisplay();
-        renderQuestion(currentQIndex);
+  });
+}
+document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+  b.addEventListener("click", () => setPracticeMode(b.dataset.mode));
+});
+function startTimer() {
+  stopTimer();
+  state.timer.remaining = 90;
+  $("timer-display").textContent = state.timer.remaining;
+  state.timer.interval = setInterval(() => {
+    state.timer.remaining--;
+    $("timer-display").textContent = Math.max(0, state.timer.remaining);
+    if (state.timer.remaining <= 0) {
+      stopTimer();
+      if (!state.answered) {
+        const q = state.shuffled[state.currentQIndex];
+        markAnswer(-1, q);
       }
     }
+  }, 1000);
+}
+function stopTimer() {
+  if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; }
+}
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
+    if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw));
+  } catch {}
+}
+function saveProgress() {
+  try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch {}
+}
+function renderStats() {
+  $("stat-attempts").textContent = state.stats.attempts;
+  $("stat-correct").textContent = state.stats.correct;
+  $("stat-independent").textContent = state.stats.independentCorrect;
+  const acc = state.stats.attempts ? Math.round(state.stats.correct / state.stats.attempts * 100) : 0;
+  $("stat-accuracy").textContent = acc + "%";
+}
+function renderQuestion() {
+  if (!state.testsPassed) {
+    $("practice-q-stem").textContent = "Practice is disabled because self-tests failed.";
+    return;
+  }
+  const q = state.shuffled[state.currentQIndex];
+  state.answered = false;
+  $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
+  const d = $("practice-q-difficulty");
+  d.textContent = q.difficulty;
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
+                             : q.difficulty === "Medium" ? "badge-draft"
+                             : "badge-tag");
+  $("practice-q-stem").textContent = q.stem;
+  $("practice-feedback").className = "callout hidden";
+  $("practice-error-categorizer").classList.add("hidden");
+  $("practice-solution-box").classList.add("hidden");
+  $("btn-next-question").disabled = true;
 
-    function setPracticeMode(mode) {
-      practiceMode = mode;
-      document.getElementById('btn-mode-hints').classList.toggle('active', mode === 'hints');
-      document.getElementById('btn-mode-independent').classList.toggle('active', mode === 'independent');
-      document.getElementById('btn-mode-timed').classList.toggle('active', mode === 'timed');
+  const container = $("practice-options-container");
+  container.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = String.fromCharCode(65 + i) + ". " + opt;
+    btn.addEventListener("click", () => markAnswer(i, q));
+    container.appendChild(btn);
+  });
+  if (state.practiceMode === "timed") startTimer();
+}
+function markAnswer(chosen, q) {
+  if (state.answered) return;
+  state.answered = true;
+  stopTimer();
+  const isCorrect = chosen === q.correctIndex;
+  const isTrap = chosen === q.trapOptionIndex;
+  document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.correctIndex) b.classList.add("correct");
+    else if (i === chosen) b.classList.add(isTrap ? "trap" : "incorrect");
+  });
+  const fb = $("practice-feedback");
+  fb.classList.remove("hidden");
+  if (isCorrect) {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong>`;
+  } else if (isTrap) {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  } else {
+    fb.className = "callout callout-danger";
+    fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  }
+  $("practice-solution-box").classList.remove("hidden");
+  $("practice-solution-text").textContent = q.solution;
+  state.stats.attempts++;
+  if (isCorrect) {
+    state.stats.correct++;
+    if (state.practiceMode !== "hints") state.stats.independentCorrect++;
+  }
+  saveProgress();
+  renderStats();
+  $("btn-next-question").disabled = false;
+}
+$("btn-next-question").addEventListener("click", () => {
+  state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
+  renderQuestion();
+});
+$("select-error-category").addEventListener("change", (e) => {
+  state.stats.errorsByCat[e.target.value] = (state.stats.errorsByCat[e.target.value] || 0) + 1;
+  saveProgress();
+});
+function handleResetStats() {
+  if (!confirm("Reset local practice stats?")) return;
+  state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
+  saveProgress();
+  renderStats();
+}
+window.handleResetStats = handleResetStats;
 
-      const timerContainer = document.getElementById('timer-container');
-      if (mode === 'timed') {
-        timerContainer.classList.remove('hidden');
-        if (!timerInstance) {
-          timerInstance = new LabCommon.PracticeTimer((seconds, formatted) => {
-            document.getElementById('timer-display').textContent = formatted;
-          });
-        }
-        timerInstance.start();
-      } else {
-        timerContainer.classList.add('hidden');
-        if (timerInstance) {
-          timerInstance.stop();
-        }
-      }
-
-      renderQuestion(currentQIndex);
-    }
-
-    function renderQuestion(idx) {
-      currentQIndex = idx;
-      const q = PRACTICE_QUESTIONS[idx];
-      selectedOptionIndex = null;
-
-      document.getElementById('practice-q-num').textContent = `Question ${idx + 1} of ${PRACTICE_QUESTIONS.length}`;
-      document.getElementById('q-counter-text').textContent = `${idx + 1} / ${PRACTICE_QUESTIONS.length}`;
-      document.getElementById('practice-q-difficulty').textContent = q.difficulty;
-      document.getElementById('practice-q-stem').innerHTML = q.stem;
-
-      const fb = document.getElementById('practice-feedback');
-      fb.className = 'callout hidden';
-      fb.innerHTML = '';
-
-      document.getElementById('practice-error-categorizer').classList.add('hidden');
-      document.getElementById('practice-solution-box').classList.add('hidden');
-
-      const optContainer = document.getElementById('practice-options-container');
-      optContainer.innerHTML = q.options.map((opt, i) => `
-        <button type="button" class="option-btn" id="opt-btn-${i}" onclick="handleOptionSelect(${i})">
-          <span style="font-weight: 700; margin-right: 0.5rem; color: var(--color-primary);">${String.fromCharCode(65 + i)}.</span>
-          <span>${opt}</span>
-        </button>
-      `).join('');
-
-      const stats = getStoredStats();
-      if (stats.history && stats.history[q.id]) {
-        const hist = stats.history[q.id];
-        revealQuestionOutcome(hist.chosenIndex, false);
-      }
-    }
-
-    function handleOptionSelect(optIdx) {
-      const q = PRACTICE_QUESTIONS[currentQIndex];
-      const stats = getStoredStats();
-
-      if (stats.history && stats.history[q.id]) return;
-
-      const isCorrect = (optIdx === q.correctIndex);
-
-      stats.attempts++;
-      if (isCorrect) {
-        stats.correct++;
-        if (practiceMode === 'independent' || practiceMode === 'timed') {
-          stats.independentCorrect++;
-        }
-      }
-
-      if (!stats.history) stats.history = {};
-      stats.history[q.id] = {
-        chosenIndex: optIdx,
-        correct: isCorrect,
-        timestamp: Date.now()
-      };
-
-      saveStats(stats);
-      revealQuestionOutcome(optIdx, true);
-    }
-
-    function revealQuestionOutcome(optIdx, isNewAnswer) {
-      const q = PRACTICE_QUESTIONS[currentQIndex];
-      const isCorrect = (optIdx === q.correctIndex);
-
-      q.options.forEach((_, i) => {
-        const btn = document.getElementById(`opt-btn-${i}`);
-        if (btn) {
-          btn.disabled = true;
-          if (i === q.correctIndex) {
-            btn.classList.add('correct');
-          } else if (i === optIdx) {
-            btn.classList.add('incorrect');
-          }
-        }
-      });
-
-      const fb = document.getElementById('practice-feedback');
-      fb.classList.remove('hidden');
-      if (isCorrect) {
-        fb.className = 'callout callout-success';
-        fb.innerHTML = `<strong>Correct!</strong> Well calculated. You handled the interest equations and compounding frequencies cleanly.`;
-      } else {
-        fb.className = 'callout callout-error';
-        fb.innerHTML = `<strong>Incorrect.</strong> You chose (${String.fromCharCode(65 + optIdx)}). The correct answer is (${String.fromCharCode(65 + q.correctIndex)}). See the mathematical resolution below.`;
-        document.getElementById('practice-error-categorizer').classList.remove('hidden');
-      }
-
-      const solBox = document.getElementById('practice-solution-box');
-      solBox.classList.remove('hidden');
-      document.getElementById('practice-solution-text').innerHTML = q.solution;
-      document.getElementById('practice-trap-analysis').innerHTML = q.trap;
-
-      if (isNewAnswer) {
-        LabCommon.announce(isCorrect ? "Correct answer submitted." : "Incorrect answer. Solution revealed.");
-      }
-    }
-
-    function handleSaveErrorCategory(category) {
-      LabCommon.announce("Reflective error reason recorded.");
-    }
-
-    function navigateQuestion(step) {
-      const nextIdx = currentQIndex + step;
-      if (nextIdx >= 0 && nextIdx < PRACTICE_QUESTIONS.length) {
-        renderQuestion(nextIdx);
-      }
-    }
-
-    /* ==========================================================================
-       6. INITIALIZATION & SELF-TEST GATE ENFORCEMENT
-       ========================================================================== */
-    document.addEventListener("DOMContentLoaded", () => {
-      const testReport = LabCommon.runAndRenderSelfTests(runSelfTests, 'quality-alert', 'quality-alert-details');
-
-      if (testReport.failed > 0) {
-        console.error("Quality gate triggered! Practice disabled.");
-        const optContainer = document.getElementById('practice-options-container');
-        if (optContainer) {
-          optContainer.innerHTML = `<div class="callout callout-error">Practice locked due to logic invariant test failure. Check developer console.</div>`;
-        }
-        return;
-      }
-
-      handleModelChange();
-      updateStatsDisplay();
-      renderQuestion(0);
+/* ---- Why CI beats SI: year-by-year (concept first) ---- */
+const fq = { p: 10000, r: 10, year: 0, maxY: 5 };
+function renderFq() {
+  const { p, r, year } = fq;
+  const rows = [];
+  let siA = p, ciA = p;
+  for (let y = 1; y <= fq.maxY; y++) {
+    const siAdd = p * r / 100;
+    const ciAdd = ciA * r / 100;
+    siA += siAdd; ciA += ciAdd;
+    rows.push({ y, siAdd, ciAdd, extra: ciAdd - siAdd, siA, ciA });
+  }
+  const show = rows.filter(x => x.y <= year);
+  const maxA = rows[rows.length - 1].ciA;
+  const scale = 160 / maxA;
+  let bars = `<text x="120" y="28" text-anchor="middle" font-size="13" fill="#f59e0b">SI (always % of ₹${p})</text>
+    <text x="320" y="28" text-anchor="middle" font-size="13" fill="#38bdf8">CI (% of growing total)</text>
+    <text x="560" y="28" text-anchor="middle" font-size="13" fill="#a78bfa">Extra = interest on interest</text>`;
+  if (year === 0) {
+    bars += `<rect x="80" y="${220 - p * scale}" width="80" height="${p * scale}" fill="#334155"/>
+      <rect x="280" y="${220 - p * scale}" width="80" height="${p * scale}" fill="#334155"/>
+      <text x="380" y="160" text-anchor="middle" font-size="14" fill="#94a3b8">Year 0: both start at ₹${p}. Press Next year.</text>`;
+  } else {
+    const last = show[show.length - 1];
+    bars += `<rect x="80" y="${220 - last.siA * scale}" width="80" height="${last.siA * scale}" fill="#f59e0b"/>
+      <text x="120" y="245" text-anchor="middle" font-size="12" fill="#f59e0b">₹${Math.round(last.siA)}</text>
+      <rect x="280" y="${220 - last.ciA * scale}" width="80" height="${last.ciA * scale}" fill="#38bdf8"/>
+      <text x="320" y="245" text-anchor="middle" font-size="12" fill="#38bdf8">₹${Math.round(last.ciA)}</text>
+      <rect x="520" y="${220 - Math.max(4, (last.ciA - last.siA) * scale * 3)}" width="80" height="${Math.max(4, (last.ciA - last.siA) * scale * 3)}" fill="#a78bfa"/>
+      <text x="560" y="245" text-anchor="middle" font-size="12" fill="#a78bfa">+₹${Math.round(last.ciA - last.siA)}</text>`;
+    // year chips
+    show.forEach((row, i) => {
+      bars += `<text x="40" y="${60 + i * 28}" font-size="12" fill="#94a3b8">Y${row.y}: SI +${Math.round(row.siAdd)} · CI +${Math.round(row.ciAdd)} · extra +${Math.round(row.extra)}</text>`;
     });
-  </script>
+  }
+  $("fq-svg").innerHTML = bars;
+  $("fq-badge").textContent = `Year ${year}`;
+  $("fq-p-b").textContent = p; $("fq-r-b").textContent = r;
+  if (year === 0) $("fq-cap").textContent = "Same money, same rate. Difference appears only after year 1 — because CI charges interest on last year's interest too.";
+  else if (year === 1) $("fq-cap").textContent = `Year 1: both add the same ₹${Math.round(p * r / 100)} (still % of original). No gap yet. Mind tip: first year SI = CI.`;
+  else $("fq-cap").textContent = `Year ${year}: SI still adds ₹${Math.round(p * r / 100)} every year. CI adds more each year because the base grew. Gap = ₹${Math.round(show[show.length - 1].ciA - show[show.length - 1].siA)}. That gap is all you need to “see” before using the formula.`;
+}
+function wireFq() {
+  $("fq-p").addEventListener("input", e => { fq.p = +e.target.value; fq.year = 0; renderFq(); });
+  $("fq-r").addEventListener("input", e => { fq.r = +e.target.value; fq.year = 0; renderFq(); });
+  $("fq-next").addEventListener("click", () => { fq.year = Math.min(fq.maxY, fq.year + 1); renderFq(); });
+  $("fq-reset").addEventListener("click", () => { fq.year = 0; renderFq(); });
+  renderFq();
+}
+document.addEventListener("DOMContentLoaded", () => {
+  wireFq();
+  const results = runSelfTests();
+  state.testsPassed = results.failed === 0;
+  const banner = $("test-status-banner");
+  if (!state.testsPassed) {
+    banner.className = "test-banner";
+    banner.innerHTML = `<strong>⚠️ Self-tests failing — practice disabled.</strong>
+      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
+    $("practice-options-container").innerHTML = "";
+  }
+
+  loadProgress();
+  state.shuffled = shuffle(PRACTICE_QUESTIONS);
+
+  $("input-p").value = state.p; $("range-p").value = state.p;
+  $("badge-p").textContent = "₹" + state.p.toLocaleString();
+  $("input-r").value = state.r; $("range-r").value = state.r;
+  $("badge-r").textContent = state.r + "%";
+  $("year-badge").textContent = `Year ${state.year}`;
+  $("year-slider").value = state.year;
+
+  renderCurve();
+  renderIOI();
+  renderDoubling();
+  preparePredict();
+  renderQuestion();
+  renderStats();
+  setPracticeMode("hints");
+});
+</script>
+<script src="../assets/lab-ux.js" defer></script>
 </body>
 </html>

@@ -6,6 +6,7 @@
 <title>Trains, Bridges &amp; Relative Speed — Aptitude Lab</title>
 <meta name="description" content="See why the train must travel its own length. Animated clearance, ghost-bar traps, 5/18 conversion lab, relative speed mini-lab, and predict-first practice." />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
 :root {
   --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
@@ -263,6 +264,51 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
   border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
 }
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
 </style>
 </head>
 <body>
@@ -284,8 +330,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        <li><span class="badge badge-published">Published</span></li>
-      </ul>
+        </ul>
     </nav>
   </div>
 </header>
@@ -353,7 +398,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
 
     <div class="vis-container">
-      <svg id="crossing-svg" viewBox="0 0 760 340" width="100%" role="img" aria-label="Animated train crossing bridge">
+      <svg id="crossing-svg" viewBox="0 0 760 400" width="100%" role="img" aria-label="Animated train crossing bridge">
         <title>Train crossing a bridge, with engine entry and tail clearance moments marked</title>
       </svg>
       <p id="svg-live-desc" class="sr-only" aria-live="polite"></p>
@@ -478,6 +523,32 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
   </section>
 
+  <!-- ===== POLE VS PLATFORM ===== -->
+  <section class="card" aria-labelledby="s-pole">
+    <div class="card-header">
+      <h2 id="s-pole" class="section-title">Understand: what distance must the train cover?</h2>
+      <p class="section-subtitle">Clear means the <em>tail</em> has passed. Pole/man ≈ zero length → only train length. Platform has length → train + platform. See the green distance bar — that is time × speed.</p>
+    </div>
+    <div class="mode-toggle-group" style="margin-bottom:12px;width:fit-content;">
+      <button type="button" class="mode-btn active" data-obj="pole">Pole / man</button>
+      <button type="button" class="mode-btn" data-obj="platform">Platform</button>
+    </div>
+    <div class="control-grid">
+      <div class="control-group">
+        <label for="pp-lt" class="control-label"><span>Train L (m)</span><span id="pp-lt-b" class="badge badge-tag">150</span></label>
+        <input type="range" id="pp-lt" min="50" max="400" step="10" value="150">
+      </div>
+      <div class="control-group">
+        <label for="pp-lp" class="control-label"><span>Platform L (m)</span><span id="pp-lp-b" class="badge badge-tag">200</span></label>
+        <input type="range" id="pp-lp" min="50" max="500" step="10" value="200">
+      </div>
+    </div>
+    <div class="vis-container">
+      <svg id="pp-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="Pole vs platform distance"></svg>
+    </div>
+    <p id="pp-cap" style="margin-top:10px;font-size:.92rem;color:var(--text-dim);"></p>
+  </section>
+
   <!-- ===== SECTION 5 — PRACTICE ===== -->
   <section class="card" aria-labelledby="s5">
     <div class="card-header">
@@ -536,25 +607,51 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       </div>
     </div>
   </section>
+
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">Distance = L_t + L_b</p>
+        <p class="lab-shortcuts-body">Cross time = (train + bridge) / speed. Pole/man: bridge = 0 → only L_t.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Forget train length</p>
+        <p class="lab-shortcuts-body">Crossing a bridge is never "bridge ÷ speed" alone — tail must clear.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Units first</p>
+        <p class="lab-shortcuts-body">km/h → m/s: ×5/18. m/s → km/h: ×18/5. Do this before arithmetic.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">Relative speed</p>
+        <p class="lab-shortcuts-body">Same direction: |v₁−v₂|. Opposite: v₁+v₂. Then same (L₁+L₂)/v_rel.</p>
+      </li>
+    </ul>
+  </section>
 </main>
 
 <footer class="site-footer">
   <div class="footer-container">
-    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
-      <div>
-        <strong>Aptitude &amp; Reasoning Lab</strong> — Quant stream
-        <div style="font-size:.8rem; margin-top:.25rem;">
-          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
-        </div>
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
       </div>
-      <div style="font-size:.8rem;">
-        <a href="../docs/reviews/trains-bridge.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
-      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
     </div>
-    <div class="disclaimer-box">
-      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
-      Always check the latest official exam notification.
-    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
   </div>
 </footer>
 
@@ -777,12 +874,12 @@ function renderCrossing(result) {
   const totalDist = lt + lb;
 
   // World coordinates: x from 0 to totalDist
-  const W = 760, H = 340;
+  // Height must fit: t=T train (~248) + distance ruler labels (~344) + ghost (~360)
+  const W = 760, H = 400;
   const padL = 60, padR = 60;
   const plotW = W - padL - padR;
   const X = (v) => padL + (Math.min(Math.max(v, 0), totalDist) / totalDist) * plotW;
 
-  const trackY = 150;
   const trainH = 28;
 
   // Bridge: from x = lt to x = lt + lb (train's front passes bridge at start when tail is at x=0)
@@ -792,23 +889,25 @@ function renderCrossing(result) {
 
   // Two "snapshots": t = 0 (engine enters) and t = T (tail exits)
   // Also draw the user's prediction as ghost if wrong
-  const snapY0 = 80;    // engine enters
-  const snapYT = 220;   // tail clears
+  const snapY0 = 70;    // engine enters
+  const snapYT = 200;   // tail clears
+  const rulerY = snapYT + trainH + 70; // distance breakdown (must stay inside H)
 
   let ghost = "";
   if (state.predictLocked && state.userPrediction !== null && Number(state.userPrediction) !== crossTime) {
     const ghostDist = Number(state.userPrediction) * vMs;
     const ghostFront = X(ghostDist);
     const ghostRear = X(ghostDist - lt);
+    const ghostY = Math.min(rulerY + 36, H - 36);
     ghost = `
-      <text x="${padL}" y="${snapYT + 90}" font-size="11" font-weight="700" fill="#f59e0b">
+      <text x="${padL}" y="${ghostY}" font-size="11" font-weight="700" fill="#f59e0b">
         Your answer at ${state.userPrediction} s: tail is still inside the bridge
       </text>
-      <rect x="${Math.max(ghostRear, padL)}" y="${snapYT + 50}" width="${Math.max(ghostFront - ghostRear, 2)}" height="${trainH}"
+      <rect x="${Math.max(ghostRear, padL)}" y="${ghostY - 40}" width="${Math.max(ghostFront - ghostRear, 2)}" height="${trainH}"
         rx="4" fill="#f59e0b" opacity="0.4" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <line x1="${ghostRear}" y1="${snapYT + 40}" x2="${ghostRear}" y2="${snapYT + 90}"
+      <line x1="${ghostRear}" y1="${ghostY - 50}" x2="${ghostRear}" y2="${ghostY}"
         stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 2"/>
-      <text x="${ghostRear}" y="${snapYT + 40}" text-anchor="middle" font-size="10" fill="#f59e0b">tail here</text>
+      <text x="${ghostRear}" y="${ghostY - 52}" text-anchor="middle" font-size="10" fill="#f59e0b">tail here</text>
     `;
   }
 
@@ -824,11 +923,13 @@ function renderCrossing(result) {
     `;
   }
 
+  const bridgeTop = snapY0 - 16;
+  const bridgeBottom = snapYT + trainH + 36;
   svg.innerHTML = `
-    <!-- BRIDGE (spans both snapshots vertically) -->
-    <rect x="${bridgeX1}" y="${snapY0 - 10}" width="${Math.max(bridgeW, 2)}" height="${snapYT + 70}"
+    <!-- BRIDGE (spans both snapshots vertically; clipped to viewBox) -->
+    <rect x="${bridgeX1}" y="${bridgeTop}" width="${Math.max(bridgeW, 2)}" height="${bridgeBottom - bridgeTop}"
       fill="#1e3a8a" opacity="0.25" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4"/>
-    <text x="${(bridgeX1 + bridgeX2)/2}" y="${snapY0 - 20}" text-anchor="middle" font-size="12" font-weight="700" fill="#3b82f6">
+    <text x="${(bridgeX1 + bridgeX2)/2}" y="${bridgeTop - 8}" text-anchor="middle" font-size="12" font-weight="700" fill="#3b82f6">
       Bridge ${lb} m
     </text>
 
@@ -848,24 +949,23 @@ function renderCrossing(result) {
     <line x1="${bridgeX2}" y1="${snapYT - 14}" x2="${bridgeX2}" y2="${snapYT + trainH + 14}" stroke="#22c55e" stroke-width="2"/>
     <text x="${bridgeX2}" y="${snapYT + trainH + 24}" text-anchor="middle" font-size="10" fill="#22c55e">bridge end</text>
 
-    <!-- Distance ruler -->
-    <text x="${padL}" y="${snapYT + trainH + 60}" font-size="12" font-weight="700" fill="#94a3b8">Distance the front travels:</text>
-    <!-- L_train portion -->
-    <line x1="${X(0)}" y1="${snapYT + trainH + 80}" x2="${X(lt)}" y2="${snapYT + trainH + 80}" stroke="#3b82f6" stroke-width="3"/>
-    <text x="${(X(0) + X(lt))/2}" y="${snapYT + trainH + 96}" text-anchor="middle" font-size="11" font-weight="700" fill="#3b82f6">
+    <!-- Distance ruler (kept inside viewBox) -->
+    <text x="${padL}" y="${rulerY}" font-size="12" font-weight="700" fill="#94a3b8">Distance the front travels:</text>
+    <line x1="${X(0)}" y1="${rulerY + 18}" x2="${X(lt)}" y2="${rulerY + 18}" stroke="#3b82f6" stroke-width="3"/>
+    <text x="${(X(0) + X(lt))/2}" y="${rulerY + 34}" text-anchor="middle" font-size="11" font-weight="700" fill="#3b82f6">
       L = ${lt} m
     </text>
-    <!-- L_bridge portion -->
-    <line x1="${X(lt)}" y1="${snapYT + trainH + 80}" x2="${X(lt + lb)}" y2="${snapYT + trainH + 80}" stroke="#f59e0b" stroke-width="3"/>
-    <text x="${(X(lt) + X(lt+lb))/2}" y="${snapYT + trainH + 96}" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">
+    <line x1="${X(lt)}" y1="${rulerY + 18}" x2="${X(lt + lb)}" y2="${rulerY + 18}" stroke="#f59e0b" stroke-width="3"/>
+    <text x="${(X(lt) + X(lt+lb))/2}" y="${rulerY + 34}" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">
       B = ${lb} m
     </text>
-    <text x="${X(totalDist) + 10}" y="${snapYT + trainH + 80}" font-size="11" font-weight="800" fill="#22c55e">
+    <text x="${X(totalDist) + 140 > W - padR ? W - padR : X(totalDist) + 10}" y="${rulerY + 18}" font-size="11" font-weight="800" fill="#22c55e" text-anchor="${X(totalDist) + 140 > W - padR ? "end" : "start"}">
       total ${totalDist} m → ${crossTime} s @ ${vMs} m/s
     </text>
 
     ${ghost}
   `;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
 
   $("svg-live-desc").textContent =
     `Train of ${lt} metres crosses a ${lb} metre bridge at ${vMs} metres per second. Cross time ${crossTime} seconds.`;
@@ -1392,10 +1492,35 @@ function handleResetStats() {
 }
 window.handleResetStats = handleResetStats;
 
-/* =====================================================================
-   11. INIT
-   ===================================================================== */
+/* ---- Pole vs platform ---- */
+const pp = { obj: "pole", lt: 150, lp: 200 };
+function renderPp() {
+  const { obj, lt, lp } = pp;
+  const dist = obj === "pole" ? lt : lt + lp;
+  const scale = 500 / Math.max(dist, 1), x0 = 80, y = 110;
+  const tw = lt * scale, pw = lp * scale;
+  let html = `<rect x="${x0}" y="${y}" width="${tw}" height="36" fill="#38bdf8" rx="4"/><text x="${x0 + tw / 2}" y="${y + 24}" text-anchor="middle" font-size="12" font-weight="700" fill="#001824">Train ${lt}m</text>`;
+  if (obj === "platform") html += `<rect x="${x0 + tw}" y="${y + 50}" width="${pw}" height="24" fill="#64748b" rx="3"/><text x="${x0 + tw + pw / 2}" y="${y + 66}" text-anchor="middle" font-size="11" fill="#e8edf7">Platform ${lp}m</text>`;
+  else html += `<line x1="${x0 + tw}" y1="${y - 10}" x2="${x0 + tw}" y2="${y + 50}" stroke="#f59e0b" stroke-width="3"/><text x="${x0 + tw + 8}" y="${y - 16}" font-size="12" fill="#f59e0b">pole / man</text>`;
+  html += `<line x1="${x0}" y1="200" x2="${x0 + dist * scale}" y2="200" stroke="#22c55e" stroke-width="3"/>
+    <text x="${x0 + dist * scale / 2}" y="220" text-anchor="middle" font-size="13" font-weight="700" fill="#22c55e">distance to clear = ${dist} m</text>`;
+  $("pp-svg").innerHTML = html;
+  $("pp-cap").textContent = obj === "pole"
+    ? `Mind picture: nose reaches the pole, but clear only when the tail reaches it — so the train must travel its own length (${lt} m). Trap: forgetting train length.`
+    : `Mind picture: nose enters platform, clear when tail leaves the far end → cover train + platform = ${lt}+${lp}=${dist} m. Once you see “add lengths”, t = distance/speed is fast in your head.`;
+  $("pp-lt-b").textContent = lt; $("pp-lp-b").textContent = lp;
+}
+function wirePp() {
+  $("pp-lt").addEventListener("input", e => { pp.lt = +e.target.value; renderPp(); });
+  $("pp-lp").addEventListener("input", e => { pp.lp = +e.target.value; renderPp(); });
+  document.querySelectorAll("[data-obj]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-obj]").forEach(x => x.classList.remove("active"));
+    b.classList.add("active"); pp.obj = b.dataset.obj; renderPp();
+  }));
+  renderPp();
+}
 document.addEventListener("DOMContentLoaded", () => {
+  wirePp();
   const results = runSelfTests();
   state.testsPassed = results.failed === 0;
   const banner = $("test-status-banner");
@@ -1424,5 +1549,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setPracticeMode("hints");
 });
 </script>
+<script src="../assets/lab-ux.js" defer></script>
 </body>
 </html>

@@ -6,6 +6,7 @@
 <title>Profit, Loss &amp; Marked Price — Aptitude Lab</title>
 <meta name="description" content="See the price waterfall: CP → markup → MP → discount → SP. Interactive, predict-first, with ghost-bar traps and a unified number line." />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
 /* =====================================================================
    DESIGN TOKENS (shared with percentages page — keep in sync)
@@ -322,6 +323,51 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .ghost-fade { opacity: 0; animation: fadeIn 400ms ease-out forwards; }
 @keyframes fadeIn { to { opacity: 1; } }
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
 </style>
 </head>
 <body>
@@ -343,8 +389,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        <li><span class="badge badge-published">Published</span></li>
-      </ul>
+        </ul>
     </nav>
   </div>
 </header>
@@ -505,8 +550,8 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
   <!-- ===== SECTION 4 — EQUAL SP MINI-LAB ===== -->
   <section class="card" aria-labelledby="s4">
     <div class="card-header">
-      <h2 id="s4" class="section-title">Equal selling price — why it's always a loss</h2>
-      <p class="section-subtitle">Same +x% and −x%, same SP. Two different CPs. Always a loss of (x/10)²%. Move the slider to see why.</p>
+      <h2 id="s4" class="section-title">Understand: equal SP with +x% and −x% — why always a loss</h2>
+      <p class="section-subtitle">Don't memorise (x/10)². Two items, same SP: one bought cheap (gain), one bought dear (loss). Total CP &gt; total SP every time. See the two bars vs the shared SP line — then the shortcut makes sense.</p>
     </div>
 
     <div class="control-group" style="max-width:420px;">
@@ -594,25 +639,51 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       </div>
     </div>
   </section>
+
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">SP = CP × multiplier</p>
+        <p class="lab-shortcuts-body">Profit p% → ×(1+p/100). Loss → ×(1−p/100). Chain discounts the same way.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Equal SP ≠ equal %</p>
+        <p class="lab-shortcuts-body">Two articles at same SP: overall loss% = (d/(100−d/2)) style — never add the two % blindly.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Successive discount</p>
+        <p class="lab-shortcuts-body">20%+10% ≠ 30%. Do 0.8×0.9 = 0.72 → 28% off.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">False weight</p>
+        <p class="lab-shortcuts-body">Gain% ≈ (true−false)/false × 100 when sold "at cost".</p>
+      </li>
+    </ul>
+  </section>
 </main>
 
 <footer class="site-footer">
   <div class="footer-container">
-    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
-      <div>
-        <strong>Aptitude &amp; Reasoning Lab</strong> — Quant stream
-        <div style="font-size:.8rem; margin-top:.25rem;">
-          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
-        </div>
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
       </div>
-      <div style="font-size:.8rem;">
-        <a href="../docs/reviews/profit-loss.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
-      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
     </div>
-    <div class="disclaimer-box">
-      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
-      Always check the latest official exam notification.
-    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
   </div>
 </footer>
 
@@ -1063,7 +1134,7 @@ function renderEqualSP() {
       Total CP = ₹${fmt(r.totalCP)} · Total SP = ₹${fmt(r.totalSP)} · Net = −₹${fmt(r.totalCP - r.totalSP)}
     </text>
     <text x="${padL}" y="${ySP + 22}" font-size="13" font-weight="800" fill="#fca5a5">
-      Always a LOSS of (x/10)² = ${r.lossPct}%
+      Always a LOSS of (x/10)² = ${r.lossPct}% — because the dearer CP pulls total CP above 2×SP
     </text>
   `;
 }
@@ -1464,5 +1535,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setPracticeMode("hints");
 });
 </script>
+<script src="../assets/lab-ux.js" defer></script>
 </body>
 </html>

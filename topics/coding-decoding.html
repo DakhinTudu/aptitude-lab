@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coding &amp; Decoding — Aptitude Lab</title>
+<meta name="description" content="See letter shifts as sliding along the alphabet, the A-Z mirror as paired columns, and Chinese coding as a map you build from shared words." />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<link rel="stylesheet" href="../assets/lab-ux.css" />
+<style>
+:root {
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --purple: #a78bfa; --purple-soft: rgba(167,139,250,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: var(--font-sans);
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+}
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--primary); color: #001; padding: 12px 16px;
+  border-radius: 0 0 8px 0; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 0.75rem; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--surface-2); border: 1px solid var(--border);
+  padding: 0.15em 0.4em; border-radius: 4px;
+}
+.page-container { max-width: 1080px; margin: 0 auto; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 22px 22px 24px;
+  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+@media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
+.card-header { margin-bottom: 18px; }
+.section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.section-title::before {
+  content: counter(section-num); counter-increment: section-num;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; flex-shrink: 0; background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%; font-size: 0.8rem; font-weight: 800;
+}
+main { counter-reset: section-num; }
+.section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
+.site-header {
+  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
+  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
+  margin: 0 -16px 24px; padding: 12px 16px;
+}
+.header-container {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
+.brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+.nav-link:hover { color: var(--text); }
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
+}
+.badge-published { background: var(--success-soft); color: var(--success); }
+.badge-draft { background: var(--warn-soft); color: var(--warn); }
+.badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #001824; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
+.btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
+.btn-secondary:hover:not(:disabled) { background: var(--border); }
+.btn-ghost { background: transparent; color: var(--text-dim); }
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
+.btn-sm { padding: 6px 11px; font-size: 0.8rem; }
+.btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.control-grid {
+  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
+}
+@media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 0.85rem; font-weight: 600; color: var(--text);
+}
+input[type=number], input[type=text] {
+  background: var(--bg-elev); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-size: 0.95rem; font-family: var(--font-mono);
+  letter-spacing: .12em; text-transform: uppercase;
+  transition: border-color var(--transition);
+}
+input[type=number]:focus, input[type=text]:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+input[type=range] { width: 100%; accent-color: var(--primary); height: 24px; }
+.vis-container {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
+}
+.vis-container svg { display: block; width: 100%; height: auto; }
+.vis-container.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.vis-container.scroll svg { min-width: 640px; }
+.scroll-hint { display: none; font-size: .75rem; color: var(--text-muted); margin: -6px 0 10px; }
+@media (max-width: 700px) { .scroll-hint { display: block; } }
+.score-bar {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
+}
+@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
+.score-stat {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 2px; min-width: 0;
+}
+.score-stat-label {
+  font-size: 0.72rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.score-stat-num {
+  font-size: 1.05rem; font-weight: 700;
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
+  overflow-wrap: anywhere;
+}
+.callout {
+  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
+  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
+}
+.callout.hidden, .hidden { display: none; }
+.callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
+.callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
+.callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
+.callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.test-banner {
+  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
+  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
+}
+.test-banner.hidden { display: none; }
+.test-banner ul { margin: 8px 0 0 20px; padding: 0; }
+.predict-box {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md); padding: 18px 20px;
+}
+.predict-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
+}
+.predict-header svg { flex-shrink: 0; }
+.options-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.option-btn {
+  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 0.92rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition); text-align: center;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
+.option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
+.option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
+.option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.practice-header {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.mode-toggle-group {
+  display: inline-flex; flex-wrap: wrap; background: var(--bg-elev);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 3px; gap: 2px; max-width: 100%;
+}
+.mode-btn {
+  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
+  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active { background: var(--primary-soft); color: var(--primary); }
+.mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.timer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
+}
+.timer-badge.hidden { display: none; }
+.question-stem {
+  font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500;
+}
+.site-footer {
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.85rem;
+}
+.footer-container { max-width: 1080px; margin: 0 auto; }
+.disclaimer-box {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+}
+.error-categorizer {
+  margin-top: 12px; padding: 12px;
+  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.error-categorizer.hidden { display: none; }
+.error-categorizer label {
+  font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;
+}
+.error-categorizer select {
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
+}
+/* --- coding-decoding specifics --- */
+.step-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; align-items: center; }
+.lab-caption { margin-top: 12px; font-size: .95rem; line-height: 1.5; min-height: 3em; }
+.stmt-list { display: flex; flex-direction: column; gap: 8px; margin: 6px 0 14px; }
+.stmt {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 8px 10px;
+}
+.stmt-no { font-size: .7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-right: 4px; }
+.stmt .eq { color: var(--text-muted); font-weight: 800; padding: 0 4px; }
+.chip {
+  display: inline-block; padding: 3px 10px; border-radius: 999px;
+  font-family: var(--font-mono); font-size: .88rem; font-weight: 700;
+  border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text);
+  transition: background var(--transition), border-color var(--transition);
+}
+.chip-c { color: var(--purple); }
+.chip.done { border-color: rgba(34,197,94,.55); background: var(--success-soft); }
+.chip.hl { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
+.rule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+.rule-card { background: var(--bg-elev); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border); }
+.rule-card h3 { margin-bottom: .4rem; font-size: .95rem; }
+.rule-card p { font-size: .82rem; color: var(--text-dim); margin: .4rem 0 0; }
+.pitfalls { margin: 14px 0 0; padding-left: 1.2rem; color: var(--text-dim); font-size: .88rem; }
+.pitfalls li { margin-bottom: 4px; }
+
+/* Simple live footer */
+.lab-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.lab-footer-brand {
+  font-size: 0.88rem;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.lab-footer-brand a,
+.lab-footer-brand strong {
+  color: var(--text, #e8edf7);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
+.lab-footer-sep { color: var(--text-muted, #64748b); }
+.lab-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.84rem;
+}
+.lab-footer-nav a {
+  color: var(--primary, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+}
+.lab-footer-nav a:hover { text-decoration: underline; }
+.lab-footer-note {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+.disclaimer-box { display: none; }
+
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-container">
+    <a href="../index.html" class="brand-link">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f172a"/>
+        <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+        <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+        <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+        <circle cx="40" cy="40" r="4" fill="#34d399"/>
+        <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span>Aptitude Lab</span>
+    </a>
+    <nav aria-label="Topic navigation">
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+        </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-container">
+
+  <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+  <header class="card">
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.75rem;">
+      <span class="badge badge-tag">Logical Reasoning</span>
+      <span class="badge badge-tag">SEBI Gr A</span>
+      <span class="badge badge-tag">Banking &amp; SSC</span>
+    </div>
+    <h1>Coding &amp; Decoding</h1>
+    <p class="section-subtitle" style="margin-top:8px;">
+      <strong>A code is just a rule applied to every letter or word the same way.</strong> Shifts slide along the alphabet, the A–Z mirror pairs letters in columns, and Chinese coding is a map you build from the word that two statements share. See each picture first — the formula comes last.
+    </p>
+  </header>
+
+  <!-- ===== LAB 1 — LETTER SHIFT ===== -->
+  <section class="card" aria-labelledby="s1">
+    <div class="card-header">
+      <h2 id="s1" class="section-title">Understand: a shift is sliding along the alphabet</h2>
+      <p class="section-subtitle">Type a word, pick a shift, then step through. Every letter hops the same number of cells.</p>
+    </div>
+
+    <div class="control-grid">
+      <div class="control-group">
+        <label for="shift-word" class="control-label"><span>Word (letters only)</span></label>
+        <input type="text" id="shift-word" value="CAT" maxlength="8" autocomplete="off" spellcheck="false" inputmode="text" />
+      </div>
+      <div class="control-group">
+        <label for="shift-k" class="control-label"><span>Shift k (+ = forward, − = backward)</span><span id="shift-k-badge" class="badge badge-tag">+2</span></label>
+        <input type="range" id="shift-k" min="-25" max="25" value="2" />
+      </div>
+    </div>
+
+    <div class="step-row">
+      <button type="button" id="shift-prev" class="btn btn-secondary btn-sm">← Prev</button>
+      <button type="button" id="shift-next" class="btn btn-primary btn-sm">Next step →</button>
+      <span id="shift-badge" class="badge badge-tag">Step 1 / 4</span>
+      <button type="button" id="shift-play" class="btn btn-ghost btn-sm">▶ Hop the first letter</button>
+    </div>
+
+    <div class="vis-container scroll">
+      <svg id="shift-svg" viewBox="0 0 760 330" role="img" aria-label="Alphabet row with arrows showing each letter moving by the shift">
+        <title>Letter shift on the alphabet</title>
+      </svg>
+    </div>
+    <p class="scroll-hint">Swipe the picture sideways to see all 26 letters.</p>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Word</span><span class="score-stat-num" id="shift-out-plain">CAT</span></div>
+      <div class="score-stat"><span class="score-stat-label">Shift</span><span class="score-stat-num" id="shift-out-k">+2</span></div>
+      <div class="score-stat"><span class="score-stat-label">Coded</span><span class="score-stat-num" id="shift-out-coded" style="color:var(--success);">ECV</span></div>
+      <div class="score-stat"><span class="score-stat-label">To decode</span><span class="score-stat-num" id="shift-out-decode">−2</span></div>
+    </div>
+    <p id="shift-caption" class="lab-caption" aria-live="polite"></p>
+  </section>
+
+  <!-- ===== LAB 2 — MIRROR ===== -->
+  <section class="card" aria-labelledby="s2">
+    <div class="card-header">
+      <h2 id="s2" class="section-title">Play: the A↔Z mirror</h2>
+      <p class="section-subtitle">Fold the alphabet in half. Each letter's partner sits right under (or over) it.</p>
+    </div>
+
+    <div class="control-grid">
+      <div class="control-group">
+        <label for="rev-word" class="control-label"><span>Word (letters only)</span></label>
+        <input type="text" id="rev-word" value="MIND" maxlength="8" autocomplete="off" spellcheck="false" />
+      </div>
+      <div class="control-group" style="justify-content:flex-end;">
+        <p class="section-subtitle" style="margin:0;">Try <code>AZ</code>, <code>MN</code>, <code>BYTE</code>. Then compare with a shift of 13 below the picture.</p>
+      </div>
+    </div>
+
+    <div class="step-row">
+      <button type="button" id="rev-prev" class="btn btn-secondary btn-sm">← Prev</button>
+      <button type="button" id="rev-next" class="btn btn-primary btn-sm">Next step →</button>
+      <span id="rev-badge" class="badge badge-tag">Step 1 / 4</span>
+    </div>
+
+    <div class="vis-container scroll">
+      <svg id="rev-svg" viewBox="0 0 760 290" role="img" aria-label="Alphabet folded in half showing mirror pairs">
+        <title>A to Z mirror pairs</title>
+      </svg>
+    </div>
+    <p class="scroll-hint">Swipe the picture sideways if it looks cramped.</p>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Word</span><span class="score-stat-num" id="rev-out-plain">MIND</span></div>
+      <div class="score-stat"><span class="score-stat-label">Mirror</span><span class="score-stat-num" id="rev-out-mirror" style="color:var(--success);">NRMW</span></div>
+      <div class="score-stat"><span class="score-stat-label">If shift +13 instead</span><span class="score-stat-num" id="rev-out-rot" style="color:var(--warn);">ZVAQ</span></div>
+      <div class="score-stat"><span class="score-stat-label">Decode</span><span class="score-stat-num" id="rev-out-decode">same mirror</span></div>
+    </div>
+    <p id="rev-caption" class="lab-caption" aria-live="polite"></p>
+  </section>
+
+  <!-- ===== LAB 3 — CHINESE CODING ===== -->
+  <section class="card" aria-labelledby="s3">
+    <div class="card-header">
+      <h2 id="s3" class="section-title">Play: Chinese coding — build the map</h2>
+      <p class="section-subtitle">The order of codes inside a statement does <strong>not</strong> match the order of words. Find what is shared, then eliminate.</p>
+    </div>
+
+    <div class="mode-toggle-group" id="cc-scenarios" role="tablist" aria-label="Coding scenario" style="margin-bottom:14px;"></div>
+
+    <div id="cc-statements" class="stmt-list" aria-label="Given statements"></div>
+
+    <div class="step-row">
+      <button type="button" id="cc-prev" class="btn btn-secondary btn-sm">← Prev</button>
+      <button type="button" id="cc-next" class="btn btn-primary btn-sm">Next step →</button>
+      <span id="cc-badge" class="badge badge-tag">Step 1</span>
+      <span style="font-size:.85rem;color:var(--text-dim);">Find the code for:</span>
+      <span id="cc-query" style="display:inline-flex;gap:6px;flex-wrap:wrap;"></span>
+    </div>
+
+    <div class="vis-container">
+      <svg id="cc-svg" viewBox="0 0 760 240" role="img" aria-label="Map from words to codes built step by step">
+        <title>Word to code map</title>
+      </svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Pairs found</span><span class="score-stat-num" id="cc-out-found">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Query</span><span class="score-stat-num" id="cc-out-query">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Answer</span><span class="score-stat-num" id="cc-out-answer" style="color:var(--success);">…</span></div>
+      <div class="score-stat"><span class="score-stat-label">Status</span><span class="score-stat-num" id="cc-out-status" style="font-size:.85rem;">building</span></div>
+    </div>
+    <p id="cc-caption" class="lab-caption" aria-live="polite"></p>
+  </section>
+
+  <!-- ===== PREDICT ===== -->
+  <section class="card" aria-labelledby="s4">
+    <div class="card-header">
+      <h2 id="s4" class="section-title">Predict first — the Chinese-coding trap</h2>
+      <p class="section-subtitle">Decide before you reveal. Then the map in the lab above will back you up.</p>
+    </div>
+
+    <div class="predict-box">
+      <div class="predict-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>In a code: “sky blue” = “ta no” and “blue sea” = “zi ta”</span>
+      </div>
+      <p style="font-size:1.05rem; margin-bottom:1rem;">What is the code for <strong>sea</strong>?</p>
+      <div class="options-grid" id="predict-options" role="radiogroup" aria-label="Prediction options"></div>
+      <div id="predict-feedback" class="callout hidden" role="alert"></div>
+    </div>
+
+    <div id="predict-reveal" class="hidden" style="margin-top:20px;">
+      <div class="callout callout-info">
+        <strong>Working:</strong> “blue” is the only word in both statements, and “ta” is the only code in both → blue = ta. In statement 1, sky = no. In statement 2, once blue = ta is removed, sea = zi. <strong>Answer: zi.</strong> Matching by position would have given “ta” — the order of codes is not the order of words.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RULES ===== -->
+  <section class="card" aria-labelledby="s5">
+    <div class="card-header">
+      <h2 id="s5" class="section-title">Rules that fall out of the pictures</h2>
+      <p class="section-subtitle">Now that you have seen the slide, the mirror and the shared word, the formulas are just bookkeeping.</p>
+    </div>
+    <div class="rule-grid">
+      <div class="rule-card">
+        <h3 style="color:var(--primary);">Shift</h3>
+        <code>new = ((p + k − 1) mod 26) + 1</code>
+        <p>p is the letter's number (A=1…Z=26). Passing Z wraps to A. Decode by shifting by −k.</p>
+      </div>
+      <div class="rule-card">
+        <h3 style="color:var(--purple);">Mirror (A↔Z)</h3>
+        <code>new = 27 − p</code>
+        <p>Pairs are A–Z, B–Y, …, M–N. Every pair sums to 27. Applying it twice returns the original.</p>
+      </div>
+      <div class="rule-card">
+        <h3 style="color:var(--warn);">Find k from one pair</h3>
+        <code>k = (p_code − p_plain) mod 26</code>
+        <p>Check one more letter to be sure the whole word follows the same k. A k of −2 is the same as +24.</p>
+      </div>
+      <div class="rule-card">
+        <h3 style="color:var(--success);">Chinese coding</h3>
+        <code>shared word ⇔ shared code</code>
+        <p>A word in two statements pairs with the code those statements share. Then eliminate matched pairs. No shared word → cannot be determined.</p>
+      </div>
+    </div>
+    <ul class="pitfalls">
+      <li><strong>Direction.</strong> Check whether the code moved the letter forward or backward before applying it to a new word.</li>
+      <li><strong>Wrap.</strong> X, Y, Z (and A, B, C going backward) wrap around — never run off the alphabet.</li>
+      <li><strong>Mirror ≠ shift by 13.</strong> The mirror reverses direction; a shift of 13 does not.</li>
+      <li><strong>Order of operations.</strong> “Mirror then shift” and “shift then mirror” give different words.</li>
+    </ul>
+  </section>
+
+  <!-- ===== PRACTICE ===== -->
+  <section class="card" aria-labelledby="s6">
+    <div class="card-header">
+      <h2 id="s6" class="section-title">Practice</h2>
+      <p class="section-subtitle">Shuffled each session. Traps are genuine — the wrong options match real mistakes.</p>
+    </div>
+
+    <div class="practice-header">
+      <div class="mode-toggle-group" role="tablist" aria-label="Practice mode">
+        <button type="button" class="mode-btn active" data-mode="hints" role="tab" aria-selected="true">Guided</button>
+        <button type="button" class="mode-btn" data-mode="independent" role="tab" aria-selected="false">Independent</button>
+        <button type="button" class="mode-btn" data-mode="timed" role="tab" aria-selected="false">Timed (90s)</button>
+      </div>
+      <div id="timer-container" class="timer-badge hidden" aria-live="off">
+        <span>⏱️</span><span id="timer-display">90</span><span>s</span>
+      </div>
+    </div>
+
+    <div class="score-bar" aria-label="Practice statistics">
+      <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Independent</span><span class="score-stat-num" id="stat-independent">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Accuracy</span><span class="score-stat-num" id="stat-accuracy">0%</span></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
+    </div>
+
+    <div id="practice-question-card" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1</span>
+        <span class="badge" id="practice-q-difficulty">Easy</span>
+      </div>
+      <p class="question-stem" id="practice-q-stem">Loading…</p>
+      <div id="practice-hint" class="callout callout-info hidden"><strong>Hint:</strong> <span id="practice-hint-text"></span></div>
+      <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
+      <div id="practice-feedback" class="callout hidden" role="alert"></div>
+      <div id="practice-error-categorizer" class="error-categorizer hidden">
+        <label for="select-error-category">What tripped you up? (optional)</label>
+        <select id="select-error-category">
+          <option value="direction">Wrong direction (+ vs −)</option>
+          <option value="wrap">Wrap-around slip (X/Y/Z or A/B/C)</option>
+          <option value="mirror_vs_shift">Mixed up mirror with a shift</option>
+          <option value="position_match">Matched codes by position</option>
+          <option value="order_ops">Order of operations</option>
+          <option value="ambiguity">Ignored “cannot be determined”</option>
+          <option value="arithmetic">Letter-number arithmetic slip</option>
+          <option value="time_guess">Time-pressure guess</option>
+        </select>
+      </div>
+      <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:12px;">
+        <h4 style="margin-bottom:6px; font-size:.95rem;">Solution</h4>
+        <p id="practice-solution-text" style="font-size:.9rem; line-height:1.55; margin:0;"></p>
+      </div>
+      <div style="margin-top:18px; display:flex; gap:.75rem; justify-content:flex-end;">
+        <button type="button" id="btn-next-question" class="btn btn-primary" disabled>Next question →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EXAM SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+    <div class="card-header">
+      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+    </div>
+    <ul class="lab-shortcuts-grid">
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Use</span>
+        <p class="lab-shortcuts-title">Infer the shift</p>
+        <p class="lab-shortcuts-body">First letter delta → apply to all (or progressive +1,+2,…).</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="trap">
+        <span class="lab-shortcuts-tag">Trap</span>
+        <p class="lab-shortcuts-title">Mirror ≠ reverse word</p>
+        <p class="lab-shortcuts-body">A↔Z changes each letter in place. Don't reverse the string unless said.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="check">
+        <span class="lab-shortcuts-tag">Check</span>
+        <p class="lab-shortcuts-title">Chinese coding</p>
+        <p class="lab-shortcuts-body">Shared word ↔ shared code. Never match by position in the sentence.</p>
+      </li>
+      <li class="lab-shortcuts-item" data-kind="speed">
+        <span class="lab-shortcuts-tag">Speed</span>
+        <p class="lab-shortcuts-title">Opposite letter</p>
+        <p class="lab-shortcuts-body">Partner index = 27 − position (A=1…Z=26).</p>
+      </li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="lab-footer-row">
+      <div class="lab-footer-brand">
+        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
+        <span class="lab-footer-sep" aria-hidden="true">·</span>
+        <span>Free interactive practice for competitive exams</span>
+      </div>
+      <nav class="lab-footer-nav" aria-label="Footer">
+        <a href="../index.html">All topics</a>
+      </nav>
+    </div>
+    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
+  </div>
+</footer>
+
+<!-- =====================================================================
+     CORE (pure, no DOM): Model + self-tests + practice bank
+     ===================================================================== -->
+<script id="pure-core">
+/* ---------- 1. PURE MODEL ---------- */
+const Model = (() => {
+  const isLetter = (ch) => typeof ch === "string" && /^[A-Za-z]$/.test(ch);
+  const posOf = (ch) => ch.toUpperCase().charCodeAt(0) - 64;                 // A=1 … Z=26
+  const letterOf = (p) => String.fromCharCode(65 + ((((p - 1) % 26) + 26) % 26)); // wraps any integer
+
+  // Caesar-style shift. k>0 forward, k<0 backward. Non-letters are kept. Output is uppercase.
+  function letterShift(word, k) {
+    if (typeof word !== "string" || !Number.isInteger(k)) return null;
+    let out = "";
+    for (const ch of word) out += isLetter(ch) ? letterOf(posOf(ch) + k) : ch;
+    return out;
+  }
+
+  // A↔Z, B↔Y, …, M↔N  (position p → 27 − p)
+  function oppositeLetter(ch) {
+    return isLetter(ch) ? letterOf(27 - posOf(ch)) : null;
+  }
+  function reverseAlphabet(word) {
+    if (typeof word !== "string") return null;
+    let out = "";
+    for (const ch of word) out += isLetter(ch) ? oppositeLetter(ch) : ch;
+    return out;
+  }
+
+  // i-th letter (0-based) moves by start + i*step. e.g. +1, +2, +3, …
+  function progressiveShift(word, start = 1, step = 1) {
+    if (typeof word !== "string" || !Number.isInteger(start) || !Number.isInteger(step)) return null;
+    let out = "", i = 0;
+    for (const ch of word) {
+      if (isLetter(ch)) { out += letterOf(posOf(ch) + start + i * step); i++; }
+      else out += ch;
+    }
+    return out;
+  }
+
+  // Deduce the forward shift (0..25) that turns plain into coded. null if letters disagree.
+  function inferShift(plain, coded) {
+    if (typeof plain !== "string" || typeof coded !== "string") return null;
+    const a = [...plain].filter(isLetter), b = [...coded].filter(isLetter);
+    if (!a.length || a.length !== b.length) return null;
+    const k = (((posOf(b[0]) - posOf(a[0])) % 26) + 26) % 26;
+    for (let i = 1; i < a.length; i++) {
+      if ((((posOf(b[i]) - posOf(a[i])) % 26) + 26) % 26 !== k) return null;
+    }
+    return k;
+  }
+
+  /* ---- Chinese coding ---- */
+  function parseStatement(s) {
+    if (typeof s !== "string") return null;
+    const parts = s.split("=");
+    if (parts.length !== 2) return null;
+    const tok = (x) => x.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const words = tok(parts[0]), codes = tok(parts[1]);
+    if (!words.length || words.length !== codes.length) return null;
+    return { words, codes };
+  }
+  function normalizeStatements(m) {
+    if (!Array.isArray(m) || !m.length) return null;
+    const out = [];
+    for (const s of m) {
+      let st = null;
+      if (typeof s === "string") st = parseStatement(s);
+      else if (s && Array.isArray(s.words) && Array.isArray(s.codes)) {
+        st = { words: s.words.map((x) => String(x).trim().toLowerCase()), codes: s.codes.map((x) => String(x).trim().toLowerCase()) };
+      }
+      if (!st || !st.words.length || st.words.length !== st.codes.length) return null;
+      if (st.words.some((x) => !x) || st.codes.some((x) => !x)) return null;
+      if (new Set(st.words).size !== st.words.length || new Set(st.codes).size !== st.codes.length) return null;
+      out.push(st);
+    }
+    return out;
+  }
+
+  /*
+   * mappings: ["red blue = ab cd", …] or [{words:[…], codes:[…]}, …]
+   * Order inside a statement carries NO meaning. Assumes one word ↔ one code overall.
+   * query: a word (→ code), a code (→ word) or several words separated by spaces.
+   * status: "unique" | "ambiguous" | "unknown" | "inconsistent" | "invalid"
+   * trace: ordered list of pairs fixed, with the rule that fixed each.
+   */
+  function wordCodeSolve(mappings, query) {
+    const stmts = normalizeStatements(mappings);
+    if (!stmts) return { valid: false, status: "invalid", error: "Each statement needs equal, non-empty word and code lists.", mapping: {}, trace: [], words: [], codes: [] };
+
+    const words = [], codes = [], wStmts = new Map();
+    stmts.forEach((st, i) => {
+      st.words.forEach((w) => { if (!wStmts.has(w)) { wStmts.set(w, []); words.push(w); } wStmts.get(w).push(i); });
+      st.codes.forEach((c) => { if (!codes.includes(c)) codes.push(c); });
+    });
+
+    const base = { valid: true, words, codes, mapping: {}, trace: [], answer: null, candidates: [] };
+    const bad = () => Object.assign({}, base, { status: "inconsistent" });
+
+    const cand = new Map();
+    for (const w of words) {
+      let set = null;
+      for (const i of wStmts.get(w)) {
+        const cs = new Set(stmts[i].codes);
+        set = set ? new Set([...set].filter((c) => cs.has(c))) : cs;
+      }
+      if (set.size === 0) return bad();
+      cand.set(w, set);
+    }
+
+    const fixed = new Map(), trace = [];
+    const fix = (w, c, rule) => {
+      fixed.set(w, c);
+      trace.push({ word: w, code: c, rule, from: wStmts.get(w).map((i) => i + 1) });
+    };
+
+    // Phase A: a word in 2+ statements whose statements share exactly one code.
+    for (const w of words) {
+      if (wStmts.get(w).length >= 2 && cand.get(w).size === 1) fix(w, [...cand.get(w)][0], "common");
+    }
+
+    // Phase B: eliminate, and place "last-left" codes, until nothing changes.
+    let changed = true, guard = 0;
+    while (changed && guard++ < 500) {
+      changed = false;
+      for (const [w, c] of fixed) {
+        for (const [w2, set] of cand) {
+          if (w2 !== w && set.has(c)) {
+            set.delete(c); changed = true;
+            if (set.size === 0) return bad();
+          }
+        }
+      }
+      for (const w of words) {
+        if (!fixed.has(w) && cand.get(w).size === 1) {
+          const only = stmts.length === 1 && stmts[0].words.length === 1;
+          fix(w, [...cand.get(w)][0], only ? "single" : "eliminate");
+          changed = true;
+        }
+      }
+      stmts.forEach((st) => {
+        for (const c of st.codes) {
+          const holders = st.words.filter((w) => cand.get(w).has(c));
+          if (holders.length === 1 && !fixed.has(holders[0])) {
+            cand.set(holders[0], new Set([c]));
+            fix(holders[0], c, "last");
+            changed = true;
+          }
+        }
+      });
+    }
+    for (const st of stmts) {
+      for (const c of st.codes) if (!st.words.some((w) => cand.get(w).has(c))) return bad();
+    }
+
+    const res = Object.assign({}, base, { mapping: Object.fromEntries(fixed), trace, status: "unknown" });
+    const q = String(query == null ? "" : query).trim().toLowerCase();
+    if (!q) return res;
+
+    const answers = [];
+    for (const t of q.split(/\s+/)) {
+      if (cand.has(t)) {
+        if (fixed.has(t)) answers.push(fixed.get(t));
+        else { res.status = "ambiguous"; res.candidates = [...cand.get(t)]; return res; }
+      } else if (codes.includes(t)) {
+        const hit = [...fixed].find(([, cc]) => cc === t);
+        if (hit) answers.push(hit[0]);
+        else { res.status = "ambiguous"; res.candidates = words.filter((w) => cand.get(w).has(t)); return res; }
+      } else { res.status = "unknown"; return res; }
+    }
+    res.status = "unique";
+    res.answer = answers.join(" ");
+    return res;
+  }
+
+  return { isLetter, posOf, letterOf, letterShift, oppositeLetter, reverseAlphabet, progressiveShift, inferShift, parseStatement, wordCodeSolve };
+})();
+if (typeof window !== "undefined") window.Model = Model;
+
+/* ---------- 2. PRACTICE BANK (every key is re-verified by runSelfTests) ---------- */
+const CANNOT = "Cannot be determined";
+const wcAnswer = (stmts, q) => { const r = Model.wordCodeSolve(stmts, q); return r.status === "unique" ? r.answer : CANNOT; };
+
+const PRACTICE_QUESTIONS = [
+  { id: "c1", difficulty: "Easy",
+    stem: "In a code, CAT is written as ECV. How is DOG written in that code?",
+    options: ["BME", "FQI", "GRJ", "EPH"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "BME moves each letter 2 steps BACK. CAT → ECV moved forward (C→E is +2).",
+    hint: "Compare C with E. Which way did the letter move, and by how many cells?",
+    solution: "C→E is +2, A→C is +2, T→V is +2. Apply +2 to D, O, G → F, Q, I = FQI.",
+    verify: () => Model.letterShift("DOG", Model.inferShift("CAT", "ECV")) },
+
+  { id: "c2", difficulty: "Easy",
+    stem: "In a code, every letter is replaced by its opposite in the alphabet (A↔Z, B↔Y …). How is BAD written?",
+    options: ["WZY", "ZYX", "YZW", "YAW"], correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "WZY is the right letters in reverse ORDER. The mirror changes each letter in place; it does not reverse the word.",
+    hint: "B and Y are mirror partners (2 and 25). Keep the letter positions in the word.",
+    solution: "B↔Y, A↔Z, D↔W, in the same order → YZW.",
+    verify: () => Model.reverseAlphabet("BAD") },
+
+  { id: "c3", difficulty: "Easy",
+    stem: "Which letter is the opposite of K in the alphabet (A↔Z mirror)?",
+    options: ["Q", "O", "P", "L"], correctIndex: 2,
+    trapOptionIndex: 1, trapExplanation: "O = 26 − 11 is off by one. Positions in a mirror pair add to 27, not 26.",
+    hint: "K is the 11th letter. Its partner is the letter whose number added to 11 gives 27.",
+    solution: "K is 11th. 27 − 11 = 16, the 16th letter is P. (Check: A–Z, B–Y, … K–P.)",
+    verify: () => Model.oppositeLetter("K") },
+
+  { id: "c4", difficulty: "Medium",
+    stem: "In a code, “sun moon” = “ka li” and “star moon” = “li zo”. What is the code for “star”?",
+    options: ["li", "ka", "zo", CANNOT], correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "li is the code for “moon” (the shared word). Reading “star” as the first word → first code is a position match, which is not allowed.",
+    hint: "Which word is in both statements? Which code is in both?",
+    solution: "moon is in both and li is in both → moon = li. In statement 2, the other code zo must be star.",
+    verify: () => wcAnswer(["sun moon = ka li", "star moon = li zo"], "star") },
+
+  { id: "c5", difficulty: "Medium",
+    stem: "In a code, each letter moves 5 places forward. How is WORK written?",
+    options: ["ATWP", "CTWP", "BTWP", "BUWP"], correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "ATWP wraps one step too far for W. W is 23; 23 + 5 = 28; 28 − 26 = 2 = B, not A.",
+    hint: "W + 5 passes Z. Count: X, Y, Z, A, B.",
+    solution: "W→B (wraps), O→T, R→W, K→P → BTWP.",
+    verify: () => Model.letterShift("WORK", 5) },
+
+  { id: "c6", difficulty: "Medium",
+    stem: "In a code, FLOWER is written as DJMUCP. How is GARDEN written?",
+    options: ["ICTFGP", "FZQCDM", "EYPBCL", "EYQBCL"], correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "ICTFGP shifts forward by 2. F→D moves BACK 2 (F is 6, D is 4).",
+    hint: "Compare the first letters F and D — which letter is earlier in the alphabet?",
+    solution: "Every letter goes back 2. G→E, A→Y (wraps), R→P, D→B, E→C, N→L → EYPBCL.",
+    verify: () => Model.letterShift("GARDEN", Model.inferShift("FLOWER", "DJMUCP")) },
+
+  { id: "c7", difficulty: "Medium",
+    stem: "In a code, each letter is replaced by its opposite (A↔Z, B↔Y …). How is MIND written?",
+    options: ["ZVAQ", "WMRN", "MRNW", "NRMW"], correctIndex: 3,
+    trapOptionIndex: 0, trapExplanation: "ZVAQ is a shift of 13 (ROT13). The mirror reverses direction; it is not a 13-step slide.",
+    hint: "M and N are partners (13 and 14). Do each letter separately: M, I, N, D.",
+    solution: "M↔N, I↔R, N↔M, D↔W → NRMW.",
+    verify: () => Model.reverseAlphabet("MIND") },
+
+  { id: "c8", difficulty: "Medium",
+    stem: "In a code, “pen book” = “pa ni”, “ink book” = “ni ko”, “cap ink” = “ko zu”. What is the code for “cap”?",
+    options: ["ko", "ni", "zu", "pa"], correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "ko is the code for “ink”. Matching “cap” (first word) with ko (first code) is a position match.",
+    hint: "Find “ink” first: it appears in statements 2 and 3.",
+    solution: "book = ni (statements 1 & 2). ink = ko (statements 2 & 3). In statement 3, cap must be the remaining code zu.",
+    verify: () => wcAnswer(["pen book = pa ni", "ink book = ni ko", "cap ink = ko zu"], "cap") },
+
+  { id: "c9", difficulty: "Hard",
+    stem: "In a code, the 1st letter moves +1, the 2nd +2, the 3rd +3, the 4th +4. How is PLAN written?",
+    options: ["QMBO", "QNDR", "RNCP", "QNCR"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "QMBO applies the first shift (+1) to every letter. Here the shift grows with the position.",
+    hint: "Do one letter at a time: P+1, L+2, A+3, N+4.",
+    solution: "P+1 = Q, L+2 = N, A+3 = D, N+4 = R → QNDR.",
+    verify: () => Model.progressiveShift("PLAN", 1, 1) },
+
+  { id: "c10", difficulty: "Hard",
+    stem: "In a code, “cat dog” = “ma ti” and “rat owl” = “su pe”. What is the code for “dog”?",
+    options: ["ma", "ti", "su", CANNOT], correctIndex: 3,
+    trapOptionIndex: 1, trapExplanation: "ti assumes the second word has the second code. With no shared word, dog could be ma or ti.",
+    hint: "Is there any word or code that appears in both statements?",
+    solution: "No word and no code is shared, so “dog” could be either ma or ti. It cannot be determined.",
+    verify: () => wcAnswer(["cat dog = ma ti", "rat owl = su pe"], "dog") },
+
+  { id: "c11", difficulty: "Hard",
+    stem: "In a code, each letter is first replaced by its opposite (A↔Z …), then moved one place forward. How is CAB written?",
+    options: ["WYX", "XZY", "YAZ", "ZBA"], correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "WYX does shift first (C→D …) and mirror second. The order matters.",
+    hint: "Step 1: CAB → XZY. Step 2: move each of those one forward (Z wraps to A).",
+    solution: "Mirror: C→X, A→Z, B→Y gives XZY. Then +1: X→Y, Z→A, Y→Z → YAZ.",
+    verify: () => Model.letterShift(Model.reverseAlphabet("CAB"), 1) },
+
+  { id: "c12", difficulty: "Hard",
+    stem: "In a code, “pen red big” = “li mo ka”, “red tall” = “li zu”, “big sit” = “mo ne”. What is the code for “pen”?",
+    options: ["li", "ka", "ne", "zu"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "li is the code for “red” (shared by statements 1 and 2). pen is first in statement 1, but codes are not in order.",
+    hint: "red is shared by statements 1 & 2; big is shared by statements 1 & 3. Remove both from statement 1.",
+    solution: "red = li (statements 1 & 2). big = mo (statements 1 & 3). The only code left in statement 1 is ka, so pen = ka.",
+    verify: () => wcAnswer(["pen red big = li mo ka", "red tall = li zu", "big sit = mo ne"], "pen") },
+
+  { id: "c13", difficulty: "Medium",
+    stem: "Which pair are opposite letters in the A↔Z mirror?",
+    options: ["G–S", "G–U", "G–T", "H–T"], correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "G (7) + S (19) = 26. Mirror pairs must sum to 27.",
+    hint: "G is the 7th letter. What number added to 7 gives 27?",
+    solution: "27 − 7 = 20, and the 20th letter is T. G–T. (H–T would need H = 7.)",
+    verify: () => "G–" + Model.oppositeLetter("G") },
+
+  { id: "c14", difficulty: "Medium",
+    stem: "In a code, MARKET is written as PDUNHW. How is ZONE written?",
+    options: ["WLKB", "CRQH", "BRQH", "DSRI"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "WLKB moves backward by 3. M→P is forward.",
+    hint: "M→P is +3. Now remember Z wraps to A, B, C.",
+    solution: "Shift is +3. Z→C (wraps), O→R, N→Q, E→H → CRQH.",
+    verify: () => Model.letterShift("ZONE", Model.inferShift("MARKET", "PDUNHW")) }
+];
+if (typeof window !== "undefined") window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+
+/* ---------- 3. SELF-TESTS ---------- */
+function runSelfTests() {
+  const results = { passed: 0, failed: 0, failures: [] };
+  const assert = (cond, name, detail = "") => {
+    if (cond) results.passed++;
+    else { results.failed++; results.failures.push({ n: name, d: detail }); }
+  };
+  try {
+    // letterShift
+    assert(Model.letterShift("CAT", 2) === "ECV", "letterShift CAT +2 = ECV", Model.letterShift("CAT", 2));
+    assert(Model.letterShift("XYZ", 3) === "ABC", "letterShift wraps forward");
+    assert(Model.letterShift("ABC", -1) === "ZAB", "letterShift wraps backward");
+    assert(Model.letterShift("HELLO", 26) === "HELLO", "shift by 26 is identity");
+    assert(Model.letterShift("abc", 0) === "ABC", "lowercase upper-cased");
+    assert(Model.letterShift("A B", 1) === "B C", "spaces kept");
+    assert(Model.letterShift("MARKET", 3) === "PDUNHW", "MARKET +3 = PDUNHW");
+    assert(Model.letterShift(Model.letterShift("MARKET", 7), -7) === "MARKET", "shift then −shift round-trips");
+    assert(Model.letterShift("CAT", 1.5) === null, "non-integer shift rejected");
+    assert(Model.letterShift("MIND", 27) === Model.letterShift("MIND", 1), "k and k+26 agree");
+
+    // mirror
+    assert(Model.oppositeLetter("A") === "Z" && Model.oppositeLetter("Z") === "A", "A↔Z");
+    assert(Model.oppositeLetter("K") === "P", "K↔P");
+    assert(Model.oppositeLetter("m") === "N", "lowercase m ↔ N");
+    assert(Model.oppositeLetter("1") === null && Model.oppositeLetter("AB") === null, "non-letter has no opposite");
+    let sumOk = true;
+    for (let p = 1; p <= 26; p++) {
+      const o = Model.oppositeLetter(Model.letterOf(p));
+      if (Model.posOf(o) + p !== 27) sumOk = false;
+    }
+    assert(sumOk, "every mirror pair sums to 27");
+    assert(Model.reverseAlphabet("MIND") === "NRMW", "reverseAlphabet MIND = NRMW", Model.reverseAlphabet("MIND"));
+    assert(Model.reverseAlphabet(Model.reverseAlphabet("PLAN")) === "PLAN", "mirror is its own inverse");
+    assert(Model.reverseAlphabet("MIND") !== Model.letterShift("MIND", 13), "mirror differs from shift by 13");
+    assert(Model.letterShift(Model.reverseAlphabet("CAB"), 1) !== Model.reverseAlphabet(Model.letterShift("CAB", 1)), "mirror/shift order matters");
+
+    // progressive + infer
+    assert(Model.progressiveShift("PLAN", 1, 1) === "QNDR", "progressiveShift PLAN = QNDR");
+    assert(Model.inferShift("CAT", "ECV") === 2, "inferShift CAT→ECV = 2");
+    assert(Model.inferShift("FLOWER", "DJMUCP") === 24, "inferShift backward 2 = 24");
+    assert(Model.inferShift("CAT", "EDV") === null, "inferShift inconsistent → null");
+
+    // wordCodeSolve
+    let r = Model.wordCodeSolve(["red blue = ab cd", "green red = ef ab"], "green");
+    assert(r.status === "unique" && r.answer === "ef", "common word pairs with common code", JSON.stringify(r.answer));
+    assert(r.mapping.red === "ab" && r.mapping.blue === "cd", "elimination fills the rest");
+    assert(r.trace.length === 3 && r.trace[0].rule === "common", "trace starts with the shared word");
+    r = Model.wordCodeSolve(["red blue = ab cd", "green red = ef ab"], "cd");
+    assert(r.status === "unique" && r.answer === "blue", "reverse lookup code → word");
+    r = Model.wordCodeSolve(["red blue = ab cd", "green red = ef ab"], "blue green");
+    assert(r.answer === "cd ef", "multi-word query");
+    r = Model.wordCodeSolve([{ words: ["we", "go", "home"], codes: ["mi", "lo", "ta"] }, "go away = mi su", "home sweet = lo bi"], "we");
+    assert(r.status === "unique" && r.answer === "ta", "3-statement elimination", JSON.stringify(r.answer));
+    r = Model.wordCodeSolve(["cat dog = ma ti", "rat owl = su pe"], "dog");
+    assert(r.status === "ambiguous" && r.candidates.length === 2, "no shared word → ambiguous");
+    r = Model.wordCodeSolve(["a b = x y", "a c = z w"], "a");
+    assert(r.status === "inconsistent", "no common code → inconsistent");
+    r = Model.wordCodeSolve(["a b = x"], "a");
+    assert(r.valid === false && r.status === "invalid", "unequal lengths invalid");
+    r = Model.wordCodeSolve(["a b = x y"], "zzz");
+    assert(r.status === "unknown", "unknown query word");
+    r = Model.wordCodeSolve(["constructor toString = ab cd", "toString x = cd ef"], "x");
+    assert(r.answer === "ef", "words like 'constructor' are safe");
+    assert(Model.parseStatement("a b = 1 2").codes[1] === "2", "parseStatement splits codes");
+    assert(Model.parseStatement("a = b = c") === null, "parseStatement rejects two '='");
+
+    // practice bank integrity: every key must match the model
+    assert(PRACTICE_QUESTIONS.length >= 12, "at least 12 practice questions", String(PRACTICE_QUESTIONS.length));
+    const diffs = new Set(PRACTICE_QUESTIONS.map((q) => q.difficulty));
+    assert(diffs.has("Easy") && diffs.has("Medium") && diffs.has("Hard"), "difficulty mix Easy/Medium/Hard");
+    assert(new Set(PRACTICE_QUESTIONS.map((q) => q.id)).size === PRACTICE_QUESTIONS.length, "question ids unique");
+    PRACTICE_QUESTIONS.forEach((q) => {
+      const expected = q.verify();
+      assert(q.options[q.correctIndex] === expected, `key ${q.id} matches model`, `${q.options[q.correctIndex]} vs ${expected}`);
+      assert(new Set(q.options).size === q.options.length, `options distinct ${q.id}`);
+      assert(Number.isInteger(q.trapOptionIndex) && q.trapOptionIndex >= 0 && q.trapOptionIndex < q.options.length && q.trapOptionIndex !== q.correctIndex, `trap valid ${q.id}`);
+      assert(!!q.solution && !!q.trapExplanation && !!q.hint, `text complete ${q.id}`);
+    });
+  } catch (err) {
+    results.failed++;
+    results.failures.push({ n: "Uncaught", d: err && err.message });
+  }
+  return results;
+}
+if (typeof window !== "undefined") window.runSelfTests = runSelfTests;
+</script>
+
+<!-- =====================================================================
+     UI (DOM)
+     ===================================================================== -->
+<script id="ui">
+const TOPIC_ID = "coding-decoding";
+const $ = (id) => document.getElementById(id);
+const reducedMotion = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const PALETTE = ["#38bdf8", "#22c55e", "#a78bfa", "#f472b6", "#2dd4bf", "#fb923c", "#60a5fa", "#a3e635"];
+const WRAP_COLOR = "#f59e0b";
+
+const state = {
+  shiftWord: "CAT", shiftK: 2, shiftStep: 0, shiftTimer: null,
+  revWord: "MIND", revStep: 0,
+  ccIndex: 0, ccStep: 0, ccQuery: null,
+  predictLocked: false,
+  practiceMode: "hints", currentQIndex: 0, shuffled: [], answered: false,
+  timer: { interval: null, remaining: 90 },
+  testsPassed: false,
+  stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
+};
+
+const cleanWord = (s, max) => String(s || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, max);
+const signed = (k) => (k > 0 ? "+" + k : k < 0 ? "−" + Math.abs(k) : "0");
+
+function cell(x, y, w, h, letter, num, fill, stroke, textFill) {
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>
+    <text x="${x + w / 2}" y="${y + 18}" text-anchor="middle" font-size="15" font-weight="800" fill="${textFill}">${letter}</text>
+    <text x="${x + w / 2}" y="${y + 32}" text-anchor="middle" font-size="9" fill="#94a3b8">${num}</text>`;
+}
+function markerDefs(colors) {
+  return "<defs>" + colors.map((c, i) => `<marker id="ah${i}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="${c}"/></marker>`).join("") + "</defs>";
+}
+
+/* ---------------- LAB 1: shift ---------------- */
+function shiftCaption(word, k, step) {
+  if (!word) return "Type a word using letters A–Z.";
+  const first = word[0], p = Model.posOf(first), dst = Model.letterShift(first, k);
+  const dir = k >= 0 ? "right" : "left";
+  const caps = [
+    "Step 1 — Write the alphabet in a row and number it A=1 … Z=26. A code that shifts letters is just a rule for moving along this row.",
+    k === 0
+      ? "Step 2 — A shift of 0 leaves every letter where it is."
+      : `Step 2 — Take the first letter, ${first}. A shift of ${signed(k)} means hop ${Math.abs(k)} cell${Math.abs(k) === 1 ? "" : "s"} to the ${dir}. ${first} lands on ${dst}.`,
+    `Step 3 — Every letter makes the same hop. ${word} becomes ${Model.letterShift(word, k)}. Spot the ${k >= 0 ? "forward" : "backward"} slide: all arrows are parallel.`,
+    `Step 4 — If a hop runs past ${k >= 0 ? "Z" : "A"}, it wraps to the other end (amber arrows). Formula, now that you've seen it: new = ((p + k − 1) mod 26) + 1. For ${first}: ((${p} + ${k} − 1) mod 26) + 1 = ${Model.posOf(dst)} = ${dst}.`
+  ];
+  return caps[step];
+}
+
+function renderShift(hop) {
+  const svg = $("shift-svg"), word = state.shiftWord, k = state.shiftK, step = state.shiftStep;
+  const W = 760, padX = 20, cw = (W - 2 * padX) / 26, ch = 38, topY = 70, botY = 210;
+  const cx = (i) => padX + i * cw + cw / 2;
+  const letters = [...word];
+  const srcSet = new Set(), dstSet = new Set();
+  const shownLetters = step === 0 ? [] : step === 1 ? letters.slice(0, 1) : letters;
+  shownLetters.forEach((l) => { const s = Model.posOf(l) - 1; srcSet.add(s); dstSet.add(Model.posOf(Model.letterShift(l, k)) - 1); });
+
+  let s = markerDefs(PALETTE.concat([WRAP_COLOR]));
+  s += `<text x="${padX}" y="24" font-size="12" font-weight="700" fill="#94a3b8">Plain letter</text>`;
+  s += `<text x="${padX}" y="${botY - 10}" font-size="12" font-weight="700" fill="#94a3b8">After the move</text>`;
+
+  // hop dots for the first letter
+  if (step >= 1 && word && k !== 0) {
+    const s0 = Model.posOf(word[0]) - 1, dir = k > 0 ? 1 : -1, n = Math.abs(k);
+    for (let h = 1; h <= n; h++) {
+      const col = (((s0 + dir * h) % 26) + 26) % 26;
+      const lit = hop === undefined || h <= hop;
+      const wrapped = s0 + dir * h < 0 || s0 + dir * h > 25;
+      s += `<circle cx="${cx(col)}" cy="${topY - 18}" r="8" fill="${lit ? (wrapped && step >= 3 ? WRAP_COLOR : "#38bdf8") : "#334155"}" opacity="${lit ? 0.95 : 0.6}"/>
+        <text x="${cx(col)}" y="${topY - 14.5}" text-anchor="middle" font-size="9" font-weight="800" fill="${lit ? "#001824" : "#94a3b8"}">${h}</text>`;
+    }
+  }
+
+  for (let i = 0; i < 26; i++) {
+    const L = Model.letterOf(i + 1);
+    const isSrc = srcSet.has(i), isDst = dstSet.has(i);
+    s += cell(cx(i) - cw / 2 + 2, topY, cw - 4, ch, L, i + 1, isSrc ? "rgba(56,189,248,.22)" : "#16213c", isSrc ? "#38bdf8" : "#2a3758", isSrc ? "#e8edf7" : "#94a3b8");
+    s += cell(cx(i) - cw / 2 + 2, botY, cw - 4, ch, L, i + 1, isDst ? "rgba(34,197,94,.22)" : "#16213c", isDst ? "#22c55e" : "#2a3758", isDst ? "#e8edf7" : "#94a3b8");
+  }
+
+  if (hop !== undefined && word && k !== 0) {
+    const s0 = Model.posOf(word[0]) - 1, dir = k > 0 ? 1 : -1;
+    const col = (((s0 + dir * hop) % 26) + 26) % 26;
+    s += `<rect x="${cx(col) - cw / 2 + 1}" y="${topY - 2}" width="${cw - 2}" height="${ch + 4}" rx="6" fill="none" stroke="#fbbf24" stroke-width="3"/>`;
+  }
+
+  if (step >= 2 || (step === 1 && hop === undefined)) {
+    shownLetters.forEach((l, j) => {
+      const sIdx = Model.posOf(l) - 1, dIdx = Model.posOf(Model.letterShift(l, k)) - 1;
+      const raw = sIdx + k, wrapped = raw < 0 || raw > 25;
+      const color = wrapped && step >= 3 ? WRAP_COLOR : PALETTE[j % PALETTE.length];
+      const mi = wrapped && step >= 3 ? PALETTE.length : j % PALETTE.length;
+      const x1 = cx(sIdx) + (j - (shownLetters.length - 1) / 2) * 1.5, x2 = cx(dIdx) + (j - (shownLetters.length - 1) / 2) * 1.5;
+      s += `<line x1="${x1}" y1="${topY + ch + 2}" x2="${x2}" y2="${botY - 3}" stroke="${color}" stroke-width="2.4" ${wrapped && step >= 3 ? 'stroke-dasharray="6 4"' : ""} marker-end="url(#ah${mi})"/>`;
+    });
+  }
+
+  if (step >= 3 && word) {
+    const coded = Model.letterShift(word, k);
+    s += `<text x="${W / 2}" y="${botY + ch + 44}" text-anchor="middle" font-size="16" font-weight="800" fill="#e8edf7">${word} → ${coded}</text>`;
+    s += `<text x="${W / 2}" y="${botY + ch + 66}" text-anchor="middle" font-size="12" fill="#fbbf24">new = ((p + k − 1) mod 26) + 1</text>`;
+  } else if (step >= 2 && word) {
+    s += `<text x="${W / 2}" y="${botY + ch + 44}" text-anchor="middle" font-size="16" font-weight="800" fill="#e8edf7">${word} → ${Model.letterShift(word, k)}</text>`;
+  }
+  svg.innerHTML = s;
+
+  const coded = word ? Model.letterShift(word, k) : "—";
+  $("shift-out-plain").textContent = word || "—";
+  $("shift-out-k").textContent = signed(k);
+  $("shift-out-coded").textContent = coded;
+  $("shift-out-decode").textContent = signed(-k);
+  $("shift-k-badge").textContent = signed(k);
+  $("shift-badge").textContent = `Step ${step + 1} / 4`;
+  $("shift-prev").disabled = step === 0;
+  $("shift-next").disabled = step === 3;
+  $("shift-caption").textContent = shiftCaption(word, k, step);
+}
+
+function stopShiftAnim() {
+  if (state.shiftTimer) { clearTimeout(state.shiftTimer); state.shiftTimer = null; }
+}
+function playShift() {
+  stopShiftAnim();
+  if (!state.shiftWord || state.shiftK === 0) { state.shiftStep = Math.max(state.shiftStep, 1); renderShift(); return; }
+  state.shiftStep = Math.max(1, Math.min(state.shiftStep, 1));
+  const n = Math.abs(state.shiftK);
+  if (reducedMotion()) { renderShift(); return; }
+  let h = 0;
+  const tick = () => {
+    renderShift(h);
+    $("shift-caption").textContent = `Hop ${h} of ${n} — ${state.shiftWord[0]} lands on ${Model.letterShift(state.shiftWord[0], Math.sign(state.shiftK) * h)}.`;
+    if (h < n) { h++; state.shiftTimer = setTimeout(tick, 110); }
+    else { state.shiftTimer = setTimeout(() => { state.shiftTimer = null; renderShift(); }, 500); }
+  };
+  tick();
+}
+
+/* ---------------- LAB 2: mirror ---------------- */
+function revCaption(word, step) {
+  const caps = [
+    "Step 1 — Write the first half of the alphabet, A to M (the 1st to 13th letters).",
+    "Step 2 — Directly beneath it, write the second half backwards: Z under A, Y under B … N under M.",
+    "Step 3 — Each column is a mirror pair: A↔Z, B↔Y … M↔N. A letter's code is whatever sits above or below it" + (word ? `. ${word} → ${Model.reverseAlphabet(word)}.` : "."),
+    "Step 4 — Add the two numbers in any column: 1+26, 2+25 … 13+14 — always 27. So the partner of position p is 27 − p. Mirror is not a slide: M→N is 1 cell, but a shift of 13 would give Z."
+  ];
+  return caps[step];
+}
+function renderRev() {
+  const svg = $("rev-svg"), word = state.revWord, step = state.revStep;
+  const W = 760, padX = 20, cw = (W - 2 * padX) / 13, ch = 38, topY = 50, botY = 170;
+  const cx = (i) => padX + i * cw + cw / 2;
+  const hiCols = new Set([...word].map((l) => Math.min(Model.posOf(l), 27 - Model.posOf(l)) - 1));
+  let s = markerDefs(PALETTE);
+  s += `<text x="${padX}" y="${topY - 14}" font-size="12" font-weight="700" fill="#94a3b8">First half</text>`;
+  if (step >= 1) s += `<text x="${padX}" y="${botY - 14}" font-size="12" font-weight="700" fill="#94a3b8">Second half, backwards</text>`;
+  for (let i = 0; i < 13; i++) {
+    const hi = step >= 2 && hiCols.has(i);
+    const top = Model.letterOf(i + 1), bot = Model.letterOf(26 - i);
+    s += cell(cx(i) - cw / 2 + 2, topY, cw - 4, ch, top, i + 1, hi ? "rgba(167,139,250,.22)" : "#16213c", hi ? "#a78bfa" : "#2a3758", hi ? "#e8edf7" : "#94a3b8");
+    if (step >= 1) s += cell(cx(i) - cw / 2 + 2, botY, cw - 4, ch, bot, 26 - i, hi ? "rgba(167,139,250,.22)" : "#16213c", hi ? "#a78bfa" : "#2a3758", hi ? "#e8edf7" : "#94a3b8");
+    if (step >= 2) {
+      s += `<line x1="${cx(i)}" y1="${topY + ch + 2}" x2="${cx(i)}" y2="${botY - 3}" stroke="${hi ? "#a78bfa" : "#334155"}" stroke-width="${hi ? 2.5 : 1.2}" stroke-dasharray="${hi ? "0" : "3 3"}"/>`;
+    }
+    if (step >= 3) s += `<text x="${cx(i)}" y="${botY + ch + 20}" text-anchor="middle" font-size="10" fill="#fbbf24">${i + 1}+${26 - i}</text>`;
+  }
+  if (step >= 2 && word) {
+    [...word].forEach((l, j) => {
+      const p = Model.posOf(l), col = Math.min(p, 27 - p) - 1, fromTop = p <= 13;
+      const off = (j - (word.length - 1) / 2) * 5;
+      const y1 = fromTop ? topY + ch + 2 : botY - 3, y2 = fromTop ? botY - 3 : topY + ch + 2;
+      s += `<line x1="${cx(col) + off}" y1="${y1}" x2="${cx(col) + off}" y2="${y2}" stroke="${PALETTE[j % PALETTE.length]}" stroke-width="2.4" marker-end="url(#ah${j % PALETTE.length})"/>`;
+    });
+  }
+  if (step >= 2 && word) s += `<text x="${W / 2}" y="${botY + ch + 50}" text-anchor="middle" font-size="16" font-weight="800" fill="#e8edf7">${word} → ${Model.reverseAlphabet(word)}</text>`;
+  if (step >= 3) s += `<text x="${W / 2}" y="${botY + ch + 72}" text-anchor="middle" font-size="12" fill="#fbbf24">partner of p = 27 − p</text>`;
+  svg.innerHTML = s;
+
+  $("rev-out-plain").textContent = word || "—";
+  $("rev-out-mirror").textContent = word ? Model.reverseAlphabet(word) : "—";
+  $("rev-out-rot").textContent = word ? Model.letterShift(word, 13) : "—";
+  $("rev-out-decode").textContent = "same mirror";
+  $("rev-badge").textContent = `Step ${step + 1} / 4`;
+  $("rev-prev").disabled = step === 0;
+  $("rev-next").disabled = step === 3;
+  $("rev-caption").textContent = word ? revCaption(word, step) : "Type a word using letters A–Z.";
+}
+
+/* ---------------- LAB 3: Chinese coding ---------------- */
+const CC_SCENARIOS = [
+  { id: "s1", title: "Two statements", stmts: ["red blue = ab cd", "green red = ef ab"], query: "green" },
+  { id: "s2", title: "A chain of three", stmts: ["tea milk = pa ru", "milk sugar = ru ko", "sugar cup = ko ze"], query: "cup" },
+  { id: "s3", title: "Elimination", stmts: ["we go home = mi lo ta", "go away = mi su", "home sweet = lo bi"], query: "we" },
+  { id: "s4", title: "Not enough info", stmts: ["cat dog = ma ti", "rat owl = su pe"], query: "dog" }
+];
+function ccReason(t) {
+  const stm = t.from.length > 1 ? "statements " + t.from.join(" and ") : "statement " + t.from[0];
+  if (t.rule === "common") return `“${t.word}” appears in ${stm}, and the only code those statements share is “${t.code}”. So ${t.word} = ${t.code}.`;
+  if (t.rule === "last") return `In ${stm}, every other code is already taken, so “${t.code}” can only belong to “${t.word}”.`;
+  if (t.rule === "single") return `The statement has one word and one code: ${t.word} = ${t.code}.`;
+  return `Everything else in ${stm} is already matched, so “${t.word}” must be “${t.code}”.`;
+}
+function ccFinalStep(res) { return res.trace.length + 1; }
+
+function renderCC() {
+  const sc = CC_SCENARIOS[state.ccIndex];
+  const res = Model.wordCodeSolve(sc.stmts, state.ccQuery);
+  const maxStep = ccFinalStep(res);
+  state.ccStep = Math.min(state.ccStep, maxStep);
+  const step = state.ccStep, shown = res.trace.slice(0, Math.min(step, res.trace.length));
+  const isFinal = step === maxStep;
+  const cur = step >= 1 && step <= res.trace.length ? res.trace[step - 1] : null;
+  const doneW = new Set(shown.map((t) => t.word)), doneC = new Set(shown.map((t) => t.code));
+  const qWord = isFinal && res.status === "unique" ? state.ccQuery : null;
+
+  // statements
+  $("cc-statements").innerHTML = sc.stmts.map((raw, i) => {
+    const st = Model.parseStatement(raw);
+    const w = st.words.map((x) => `<span class="chip${doneW.has(x) ? " done" : ""}${cur && cur.word === x && cur.from.includes(i + 1) ? " hl" : ""}">${x}</span>`).join("");
+    const c = st.codes.map((x) => `<span class="chip chip-c${doneC.has(x) ? " done" : ""}${cur && cur.code === x && cur.from.includes(i + 1) ? " hl" : ""}">${x}</span>`).join("");
+    return `<div class="stmt"><span class="stmt-no">S${i + 1}</span>${w}<span class="eq">=</span>${c}</div>`;
+  }).join("");
+
+  // query chips
+  $("cc-query").innerHTML = res.words.map((w) => `<button type="button" class="mode-btn${w === state.ccQuery ? " active" : ""}" data-q="${w}" style="border:1px solid var(--border-strong);">${w}</button>`).join("");
+  $("cc-query").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { state.ccQuery = b.dataset.q; renderCC(); }));
+
+  // map SVG
+  const n = Math.max(res.words.length, res.codes.length), rowH = 36, top = 38, H = top + n * rowH + 12;
+  const wx = 70, cwid = 170, cx2 = 520;
+  const yOf = (i) => top + i * rowH;
+  let s = `<text x="${wx + cwid / 2}" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#94a3b8">WORD</text>
+           <text x="${cx2 + cwid / 2}" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#94a3b8">CODE</text>`;
+  shown.forEach((t, j) => {
+    const wi = res.words.indexOf(t.word), ci = res.codes.indexOf(t.code);
+    const isQ = qWord === t.word, color = isQ ? "#22c55e" : PALETTE[j % PALETTE.length];
+    s += `<line x1="${wx + cwid}" y1="${yOf(wi) + 14}" x2="${cx2}" y2="${yOf(ci) + 14}" stroke="${color}" stroke-width="${isQ ? 4 : 2.4}"/>`;
+  });
+  res.words.forEach((w, i) => {
+    const d = doneW.has(w), q = qWord === w;
+    s += `<rect x="${wx}" y="${yOf(i)}" width="${cwid}" height="28" rx="6" fill="${q ? "rgba(34,197,94,.25)" : d ? "rgba(34,197,94,.1)" : "#16213c"}" stroke="${q ? "#22c55e" : d ? "#22c55e" : "#3b4d78"}" stroke-width="${q ? 3 : 1.5}"/>
+      <text x="${wx + cwid / 2}" y="${yOf(i) + 19}" text-anchor="middle" font-size="14" font-weight="700" fill="#e8edf7">${w}</text>`;
+  });
+  res.codes.forEach((c, i) => {
+    const d = doneC.has(c), q = qWord && res.mapping[qWord] === c;
+    s += `<rect x="${cx2}" y="${yOf(i)}" width="${cwid}" height="28" rx="6" fill="${q ? "rgba(34,197,94,.25)" : d ? "rgba(167,139,250,.14)" : "#16213c"}" stroke="${q ? "#22c55e" : d ? "#a78bfa" : "#3b4d78"}" stroke-width="${q ? 3 : 1.5}"/>
+      <text x="${cx2 + cwid / 2}" y="${yOf(i) + 19}" text-anchor="middle" font-size="14" font-weight="700" fill="#e8edf7">${c}</text>`;
+  });
+  const svg = $("cc-svg");
+  svg.setAttribute("viewBox", `0 0 760 ${H}`);
+  svg.innerHTML = s;
+
+  // caption & readouts
+  let cap;
+  if (step === 0) cap = "Step 1 — Read the statements. The order of the codes inside a statement does NOT match the order of the words. Look for a word (and a code) that appears in more than one statement.";
+  else if (!isFinal) cap = `Step ${step + 1} — ${ccReason(cur)}`;
+  else if (res.status === "unique") cap = `Step ${step + 1} — Read the map: ${state.ccQuery} → ${res.answer}. Rule, now that you've built it: a word shared by two statements pairs with the code they share; eliminate matched pairs; the leftover pairs up.`;
+  else if (res.status === "ambiguous") cap = `Step ${step + 1} — No word or code is shared between the statements, so “${state.ccQuery}” could be ${res.candidates.join(" or ")}. Answer: cannot be determined.`;
+  else cap = `Step ${step + 1} — These statements contradict each other or do not contain that word.`;
+  $("cc-caption").textContent = cap;
+  $("cc-badge").textContent = `Step ${step + 1} / ${maxStep + 1}`;
+  $("cc-prev").disabled = step === 0;
+  $("cc-next").disabled = isFinal;
+  $("cc-out-found").textContent = `${shown.length} / ${res.words.length}`;
+  $("cc-out-query").textContent = state.ccQuery || "—";
+  $("cc-out-answer").textContent = isFinal ? (res.status === "unique" ? res.answer : "can't tell") : "…";
+  $("cc-out-answer").style.color = isFinal && res.status !== "unique" ? "var(--warn)" : "var(--success)";
+  $("cc-out-status").textContent = isFinal ? (res.status === "unique" ? "solved" : res.status) : "building";
+}
+
+function setScenario(i) {
+  state.ccIndex = i; state.ccStep = 0; state.ccQuery = CC_SCENARIOS[i].query;
+  document.querySelectorAll("#cc-scenarios button").forEach((b, j) => {
+    b.classList.toggle("active", j === i);
+    b.setAttribute("aria-selected", j === i ? "true" : "false");
+  });
+  renderCC();
+}
+
+/* ---------------- PREDICT ---------------- */
+function preparePredict() {
+  if (state.predictLocked) return;
+  const container = $("predict-options");
+  container.innerHTML = "";
+  [
+    { value: "ta", kind: "trap", label: "ta" },
+    { value: "no", kind: "wrong", label: "no" },
+    { value: "zi", kind: "correct", label: "zi" },
+    { value: "cannot", kind: "wrong", label: "Cannot be determined" }
+  ].forEach((o) => {
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "option-btn"; btn.textContent = o.label;
+    btn.dataset.kind = o.kind; btn.dataset.value = o.value;
+    btn.addEventListener("click", () => commitPredict(o));
+    container.appendChild(btn);
+  });
+  $("predict-feedback").className = "callout hidden";
+  $("predict-reveal").classList.add("hidden");
+}
+function commitPredict(o) {
+  if (state.predictLocked) return;
+  state.predictLocked = true;
+  document.querySelectorAll("#predict-options .option-btn").forEach((b) => {
+    const kind = b.dataset.kind, chosen = b.dataset.value === o.value;
+    if (kind === "correct") b.classList.add("correct");
+    else if (kind === "trap") b.classList.add("trap");
+    if (chosen && kind !== "correct" && kind !== "trap") b.classList.add("incorrect");
+    b.disabled = true;
+  });
+  const fb = $("predict-feedback");
+  fb.classList.remove("hidden");
+  if (o.kind === "correct") { fb.className = "callout callout-success"; fb.innerHTML = "<strong>✓ Correct.</strong> blue is the shared word, so blue = ta; sea gets the leftover code zi."; }
+  else if (o.kind === "trap") { fb.className = "callout callout-trap"; fb.innerHTML = "<strong>⚠️ Trap:</strong> “ta” is the code for <em>blue</em>. “sea” is second in its statement, but codes are not in word order."; }
+  else if (o.value === "no") { fb.className = "callout callout-trap"; fb.innerHTML = "<strong>⚠️ Not quite.</strong> “no” is the code for <em>sky</em> (the other code in statement 1)."; }
+  else { fb.className = "callout callout-trap"; fb.innerHTML = "<strong>⚠️ Not quite.</strong> The statements share the word “blue” and the code “ta”, which is enough to solve everything."; }
+  $("predict-reveal").classList.remove("hidden");
+}
+
+/* ---------------- PRACTICE ---------------- */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function setPracticeMode(mode) {
+  state.practiceMode = mode;
+  document.querySelectorAll(".mode-btn[data-mode]").forEach((b) => {
+    const on = b.dataset.mode === mode;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  $("timer-container").classList.toggle("hidden", mode !== "timed");
+  if (mode === "timed") startTimer(); else stopTimer();
+  updateHint();
+}
+function updateHint() {
+  const q = state.shuffled[state.currentQIndex];
+  const show = state.testsPassed && q && state.practiceMode === "hints" && !state.answered;
+  $("practice-hint").classList.toggle("hidden", !show);
+  if (q) $("practice-hint-text").textContent = q.hint;
+}
+function startTimer() {
+  stopTimer();
+  state.timer.remaining = 90;
+  $("timer-display").textContent = state.timer.remaining;
+  state.timer.interval = setInterval(() => {
+    state.timer.remaining--;
+    $("timer-display").textContent = Math.max(0, state.timer.remaining);
+    if (state.timer.remaining <= 0) {
+      stopTimer();
+      if (!state.answered) markAnswer(-1, state.shuffled[state.currentQIndex]);
+    }
+  }, 1000);
+}
+function stopTimer() { if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; } }
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
+    if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw));
+  } catch (_) {}
+}
+function saveProgress() {
+  try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch (_) {}
+}
+function renderStats() {
+  $("stat-attempts").textContent = state.stats.attempts;
+  $("stat-correct").textContent = state.stats.correct;
+  $("stat-independent").textContent = state.stats.independentCorrect;
+  const acc = state.stats.attempts ? Math.round(state.stats.correct / state.stats.attempts * 100) : 0;
+  $("stat-accuracy").textContent = acc + "%";
+}
+function renderQuestion() {
+  if (!state.testsPassed) {
+    $("practice-q-stem").textContent = "Practice is disabled because self-tests failed.";
+    $("practice-options-container").innerHTML = "";
+    $("btn-next-question").disabled = true;
+    $("practice-hint").classList.add("hidden");
+    return;
+  }
+  const q = state.shuffled[state.currentQIndex];
+  state.answered = false;
+  $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
+  const d = $("practice-q-difficulty");
+  d.textContent = q.difficulty;
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published" : q.difficulty === "Medium" ? "badge-draft" : "badge-tag");
+  $("practice-q-stem").textContent = q.stem;
+  $("practice-feedback").className = "callout hidden";
+  $("practice-error-categorizer").classList.add("hidden");
+  $("practice-solution-box").classList.add("hidden");
+  $("btn-next-question").disabled = true;
+  const c = $("practice-options-container");
+  c.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "option-btn";
+    btn.textContent = String.fromCharCode(65 + i) + ". " + opt;
+    btn.addEventListener("click", () => markAnswer(i, q));
+    c.appendChild(btn);
+  });
+  updateHint();
+  if (state.practiceMode === "timed") startTimer();
+}
+function markAnswer(chosen, q) {
+  if (state.answered || !state.testsPassed) return;
+  state.answered = true;
+  stopTimer();
+  updateHint();
+  const isCorrect = chosen === q.correctIndex, isTrap = chosen === q.trapOptionIndex;
+  document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.correctIndex) b.classList.add("correct");
+    else if (i === chosen) b.classList.add(isTrap ? "trap" : "incorrect");
+  });
+  const fb = $("practice-feedback");
+  fb.classList.remove("hidden");
+  if (isCorrect) { fb.className = "callout callout-success"; fb.innerHTML = "<strong>✓ Correct.</strong>"; }
+  else if (isTrap) { fb.className = "callout callout-trap"; fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`; $("practice-error-categorizer").classList.remove("hidden"); }
+  else if (chosen === -1) { fb.className = "callout callout-danger"; fb.innerHTML = `<strong>Time's up.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`; $("practice-error-categorizer").classList.remove("hidden"); }
+  else { fb.className = "callout callout-danger"; fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`; $("practice-error-categorizer").classList.remove("hidden"); }
+  $("practice-solution-box").classList.remove("hidden");
+  $("practice-solution-text").textContent = q.solution;
+  state.stats.attempts++;
+  if (isCorrect) { state.stats.correct++; if (state.practiceMode !== "hints") state.stats.independentCorrect++; }
+  saveProgress();
+  renderStats();
+  $("btn-next-question").disabled = false;
+}
+function handleResetStats() {
+  if (!confirm("Reset local practice stats?")) return;
+  state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
+  saveProgress();
+  renderStats();
+}
+window.handleResetStats = handleResetStats;
+
+/* ---------------- INIT ---------------- */
+document.addEventListener("DOMContentLoaded", () => {
+  const results = runSelfTests();
+  state.testsPassed = results.failed === 0;
+  const banner = $("test-status-banner");
+  if (!state.testsPassed) {
+    banner.className = "test-banner";
+    banner.innerHTML = `<strong>⚠️ Self-tests failing — practice disabled.</strong>
+      <ul>${results.failures.map((f) => `<li>${f.n}${f.d ? ": " + f.d : ""}</li>`).join("")}</ul>`;
+  }
+  loadProgress();
+  state.shuffled = shuffle(PRACTICE_QUESTIONS);
+
+  // lab 1
+  $("shift-word").addEventListener("input", (e) => {
+    stopShiftAnim();
+    state.shiftWord = cleanWord(e.target.value, 8);
+    if (e.target.value !== state.shiftWord && e.target.value.toUpperCase() !== state.shiftWord) e.target.value = state.shiftWord;
+    renderShift();
+  });
+  $("shift-k").addEventListener("input", (e) => { stopShiftAnim(); state.shiftK = parseInt(e.target.value, 10); renderShift(); });
+  $("shift-prev").addEventListener("click", () => { stopShiftAnim(); if (state.shiftStep > 0) { state.shiftStep--; renderShift(); } });
+  $("shift-next").addEventListener("click", () => { stopShiftAnim(); if (state.shiftStep < 3) { state.shiftStep++; renderShift(); } });
+  $("shift-play").addEventListener("click", playShift);
+  renderShift();
+
+  // lab 2
+  $("rev-word").addEventListener("input", (e) => {
+    state.revWord = cleanWord(e.target.value, 8);
+    if (e.target.value !== state.revWord && e.target.value.toUpperCase() !== state.revWord) e.target.value = state.revWord;
+    renderRev();
+  });
+  $("rev-prev").addEventListener("click", () => { if (state.revStep > 0) { state.revStep--; renderRev(); } });
+  $("rev-next").addEventListener("click", () => { if (state.revStep < 3) { state.revStep++; renderRev(); } });
+  renderRev();
+
+  // lab 3
+  const sc = $("cc-scenarios");
+  CC_SCENARIOS.forEach((s, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "mode-btn"; b.textContent = s.title;
+    b.setAttribute("role", "tab");
+    b.addEventListener("click", () => setScenario(i));
+    sc.appendChild(b);
+  });
+  $("cc-prev").addEventListener("click", () => { if (state.ccStep > 0) { state.ccStep--; renderCC(); } });
+  $("cc-next").addEventListener("click", () => { state.ccStep++; renderCC(); });
+  setScenario(0);
+
+  preparePredict();
+  $("btn-next-question").addEventListener("click", () => {
+    state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
+    renderQuestion();
+  });
+  $("select-error-category").addEventListener("change", (e) => {
+    state.stats.errorsByCat[e.target.value] = (state.stats.errorsByCat[e.target.value] || 0) + 1;
+    saveProgress();
+  });
+  document.querySelectorAll(".mode-btn[data-mode]").forEach((b) => b.addEventListener("click", () => setPracticeMode(b.dataset.mode)));
+  renderQuestion();
+  renderStats();
+  setPracticeMode("hints");
+});
+</script>
+<script src="../assets/lab-ux.js" defer></script>
+</body>
+</html>
