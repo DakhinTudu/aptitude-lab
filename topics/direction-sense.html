@@ -1,1155 +1,1351 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Direction Sense & Distance — Aptitude & Reasoning Lab</title>
-  <meta name="description" content="Master direction sense, coordinate grid tracking, relative turns, Pythagorean displacement, and shadow rules with interactive path models and timed practice.">
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="../assets/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Direction Sense &amp; Distance — Aptitude Lab</title>
+<meta name="description" content="See relative turns. The facing arrow rotates with the walker. Left/right mini-lab, ghost-path traps, weighted displacement vs walked bars." />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<style>
+:root {
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --purple: #a78bfa; --purple-soft: rgba(167,139,250,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: var(--font-sans);
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+}
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--primary); color: #001; padding: 12px 16px;
+  border-radius: 0 0 8px 0; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 0.75rem; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--surface-2); border: 1px solid var(--border);
+  padding: 0.15em 0.4em; border-radius: 4px;
+}
+.page-container { max-width: 1080px; margin: 0 auto; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 22px 22px 24px;
+  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+@media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
+.card-header { margin-bottom: 18px; }
+.section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.section-title::before {
+  content: counter(section-num); counter-increment: section-num;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%; font-size: 0.8rem; font-weight: 800;
+}
+main { counter-reset: section-num; }
+.section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
+.site-header {
+  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
+  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
+  margin: 0 -16px 24px; padding: 12px 16px;
+}
+.header-container {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
+.brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+.nav-link:hover { color: var(--text); }
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
+}
+.badge-published { background: var(--success-soft); color: var(--success); }
+.badge-draft { background: var(--warn-soft); color: var(--warn); }
+.badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #001824; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
+.btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
+.btn-secondary:hover:not(:disabled) { background: var(--border); }
+.btn-ghost { background: transparent; color: var(--text-dim); }
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
+.btn-sm { padding: 6px 11px; font-size: 0.8rem; }
+.btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.control-grid {
+  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
+}
+@media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 0.85rem; font-weight: 600; color: var(--text);
+}
+input[type=number], select {
+  background: var(--bg-elev); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-size: 0.95rem; font-family: var(--font-sans); width: 100%;
+  transition: border-color var(--transition);
+}
+input[type=number]:focus, select:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+input[type=number]:disabled, select:disabled { opacity: 0.6; cursor: not-allowed; }
+.vis-container {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
+}
+.vis-container svg { display: block; width: 100%; height: auto; }
+.score-bar {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
+}
+@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
+.score-stat {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.score-stat-label {
+  font-size: 0.72rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.score-stat-num {
+  font-size: 1.05rem; font-weight: 700;
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
+}
+.callout {
+  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
+  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
+}
+.callout.hidden { display: none; }
+.callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
+.callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
+.callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
+.callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.test-banner {
+  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
+  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
+}
+.test-banner.hidden { display: none; }
+.test-banner ul { margin: 8px 0 0 20px; padding: 0; }
+.predict-box {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md); padding: 18px 20px;
+}
+.predict-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
+}
+.predict-header svg { flex-shrink: 0; }
+.options-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.option-btn {
+  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  font-family: var(--font-mono); font-size: 0.92rem; font-weight: 700;
+  cursor: pointer; transition: all var(--transition); text-align: center;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
+.option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
+.option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
+.option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.steps-container { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.step-item {
+  background: var(--bg-elev); border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+}
+.step-num {
+  font-size: 0.72rem; color: var(--primary); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
+}
+.step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+.step-detail {
+  font-family: var(--font-mono); background: var(--surface-2);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 6px 10px; font-size: 0.85rem; margin-top: 6px;
+  color: var(--primary); overflow-x: auto;
+}
+.practice-header {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.mode-toggle-group {
+  display: inline-flex; background: var(--bg-elev);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 3px; gap: 2px;
+}
+.mode-btn {
+  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
+  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active { background: var(--primary-soft); color: var(--primary); }
+.mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.timer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
+}
+.timer-badge.hidden { display: none; }
+.question-stem {
+  font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500;
+}
+.site-footer {
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.85rem;
+}
+.footer-container { max-width: 1080px; margin: 0 auto; }
+.disclaimer-box {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+}
+.error-categorizer {
+  margin-top: 12px; padding: 12px;
+  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.error-categorizer.hidden { display: none; }
+.error-categorizer label {
+  font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;
+}
+.error-categorizer select {
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
+}
+.route-step-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--border-strong);
+  font-size: 0.82rem; font-family: var(--font-mono);
+}
+</style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="header-container">
-      <a href="../index.html" class="brand-link" aria-label="Aptitude and Reasoning Lab Home">
-        <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-          <rect width="64" height="64" rx="14" fill="#0f172a" />
-          <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3" />
-          <circle cx="24" cy="24" r="4" fill="#38bdf8" />
-          <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4" />
-          <circle cx="40" cy="40" r="4" fill="#34d399" />
-          <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
-        </svg>
-        <span>Aptitude Lab</span>
-      </a>
+<header class="site-header">
+  <div class="header-container">
+    <a href="../index.html" class="brand-link">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f172a"/>
+        <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+        <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+        <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+        <circle cx="40" cy="40" r="4" fill="#34d399"/>
+        <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span>Aptitude Lab</span>
+    </a>
+    <nav aria-label="Topic navigation">
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+        <li><span class="badge badge-published">Published</span></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
-      <nav aria-label="Topic navigation">
-        <ul class="nav-links">
-          <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-          <li><span class="badge badge-published">Published</span></li>
-        </ul>
-      </nav>
+<main id="main-content" class="page-container">
+
+  <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+  <header class="card">
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.75rem;">
+      <span class="badge badge-tag">Logical Reasoning</span>
+      <span class="badge badge-tag">SEBI Gr A</span>
+      <span class="badge badge-tag">Banking &amp; SSC</span>
     </div>
+    <h1>Direction Sense &amp; Distance</h1>
+    <p class="section-subtitle" style="margin-top:8px;">
+      <strong>Left and right depend on which way you're facing.</strong> The facing arrow follows the walker — turn left while facing south and it swings east, not west. This page makes the reorientation visible, then adds Pythagorean displacement, the scalar-vs-displacement gap, and shadow rules.
+    </p>
   </header>
 
-  <!-- Main Content -->
-  <main id="main-content" class="page-container">
-    
-    <!-- Model Self-Test Banner -->
-    <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+  <!-- ===== SECTION 1 — PATH GRID ===== -->
+  <section class="card" aria-labelledby="s1">
+    <div class="card-header">
+      <h2 id="s1" class="section-title">Walk the path</h2>
+      <p class="section-subtitle">Build the route step by step. The facing arrow follows the walker. The dashed green line is the shortest distance — always shorter than the walked path.</p>
+    </div>
 
-    <!-- Topic Hero -->
-    <header class="card" style="margin-bottom: 1.25rem;">
-      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
-        <span class="badge badge-tag">Logical Reasoning</span>
-        <span class="badge badge-tag">SEBI Gr A (IT & Gen)</span>
-        <span class="badge badge-tag">Banking & SSC</span>
-      </div>
-      <h1>Direction Sense & Distance</h1>
-      <p class="section-subtitle">
-        Track multi-segment paths on a 2D coordinate grid. Master relative left/right turns (especially when facing South), straight-line displacement via the Pythagorean theorem, and shadow directions.
-      </p>
-    </header>
-
-    <!-- Section 1: Concept & Interactive Coordinate Grid -->
-    <section class="card" aria-labelledby="interactive-model-title">
-      <div class="card-header">
-        <div>
-          <h2 id="interactive-model-title" class="section-title">
-            <span>1. Interactive Coordinate Path Grid</span>
-          </h2>
-          <p class="section-subtitle">Follow each step on the grid to observe changes in position $(x, y)$, facing orientation, and shortest distance.</p>
-        </div>
-      </div>
-
-      <!-- Quick Preset Routes -->
-      <div style="margin-bottom: 1.25rem;">
-        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-muted); display: block; margin-bottom: 0.4rem;">
-          Standard Exam Route Presets:
-        </span>
-        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('3N_4E')">3 km N, 4 km E (5 km NE)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('12S_5E')">12 km S, Left 5 km (13 km SE)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('10E_10N_10W')">10 km E, 10 km N, 10 km W (10 km N)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('square_loop')">Square Loop (0 km, at Start)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('multi_turn')">Multi-Turn Maze (8 km East)</button>
-        </div>
-      </div>
-
-      <!-- Path Builder Controls -->
-      <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; border: 1px solid var(--color-border-subtle);">
-        <div style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 140px;">
-            <label for="step-direction" class="control-label">Direction / Turn</label>
-            <select id="step-direction">
-              <option value="N">North (+y)</option>
-              <option value="S">South (-y)</option>
-              <option value="E">East (+x)</option>
-              <option value="W">West (-x)</option>
-              <option value="L">Turn Left (Relative)</option>
-              <option value="R">Turn Right (Relative)</option>
-            </select>
-          </div>
-          <div style="width: 130px;">
-            <label for="step-distance" class="control-label">Distance (km)</label>
-            <input type="number" id="step-distance" value="5" min="1" max="50" step="1">
-          </div>
-          <button type="button" class="btn btn-primary" onclick="handleAddStep()">+ Add Step</button>
-          <button type="button" class="btn btn-secondary" onclick="handleUndoStep()">Undo</button>
-          <button type="button" class="btn btn-ghost" onclick="handleClearRoute()">Reset Path</button>
-        </div>
-      </div>
-
-      <!-- SVG Coordinate Grid -->
-      <div class="vis-container" aria-label="Visual coordinate grid showing path, displacement vector, and compass rose">
-        <svg id="grid-svg" viewBox="0 0 620 300" width="100%" height="300" role="img" aria-labelledby="svg-desc">
-          <title id="svg-desc">2D Coordinate plane tracking movement path and straight-line displacement vector</title>
-          <!-- Populated by Model Renderer -->
-        </svg>
-      </div>
-
-      <!-- Computed Model Outputs Readout -->
-      <div class="score-bar" id="model-readout" aria-live="polite">
-        <div class="score-stat">
-          <span class="score-stat-label">Final Coordinates</span>
-          <span class="score-stat-num" id="readout-coords">(0, 0)</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Shortest Distance</span>
-          <span class="score-stat-num" id="readout-displacement">0.0 km</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Total Distance Walked</span>
-          <span class="score-stat-num" id="readout-total-walked">0.0 km</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Direction from Start</span>
-          <span class="score-stat-num" id="readout-dir-start">At Start</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Current Facing</span>
-          <span class="score-stat-num" id="readout-facing">North</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 2: Predict-First Worked Example -->
-    <section class="card" aria-labelledby="predict-title">
-      <div class="card-header">
-        <div>
-          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
-          <p class="section-subtitle">Predict the final displacement and direction before inspecting the worked steps.</p>
-        </div>
-      </div>
-
-      <div class="predict-box">
-        <div class="predict-header">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
-          </svg>
-          <span>Predict distance and direction from start:</span>
-        </div>
-        <p id="predict-scenario-text" style="font-size: 1.05rem; font-weight: 500; margin-bottom: 1rem;">
-          Rohan walks 12 km South, then turns to his left and walks 5 km. How far is he from his starting point and in which direction?
-        </p>
-
-        <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options">
-          <!-- Dynamically populated predict options -->
-        </div>
-
-        <div id="predict-feedback" class="callout hidden" role="alert"></div>
-
-        <div style="margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-          <button type="button" id="btn-reveal-solution" class="btn btn-secondary">
-            Inspect Worked Solution ↓
-          </button>
-          <span style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            (When facing South, turning left takes you towards the East!)
-          </span>
-        </div>
-      </div>
-
-      <!-- Step-by-Step Worked Solution Trace -->
-      <div id="worked-solution-panel" class="hidden">
-        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Verified Step-by-Step Mathematical Trace</h3>
-        <div class="steps-container" id="solution-steps-container">
-          <!-- Populated from pure Model.solve() -->
-        </div>
-
-        <!-- Trap Callout -->
-        <div class="callout callout-trap" id="solution-trap-callout">
-          <strong>⚠️ Common Trap to Avoid:</strong>
-          <span id="solution-trap-text"></span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 3: Core Exam Rules Reference -->
-    <section class="card" aria-labelledby="reference-title">
-      <div class="card-header">
-        <div>
-          <h2 id="reference-title" class="section-title">3. Core Exam Rules & Fast Shortcuts</h2>
-          <p class="section-subtitle">Relative turns, Pythagorean triples, and shadow rules.</p>
-        </div>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The Facing-South Trap</h3>
-          <p style="font-size: 0.875rem;">When a person walks South, their left and right are opposite to yours:</p>
-          <ul style="font-size: 0.8125rem; padding-left: 1.25rem; margin-top: 0.3rem;">
-            <li>Facing North $\implies$ Left = West, Right = East</li>
-            <li><strong>Facing South $\implies$ Left = East, Right = West</strong></li>
-            <li>Facing East $\implies$ Left = North, Right = South</li>
-            <li>Facing West $\implies$ Left = South, Right = North</li>
-          </ul>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Standard Pythagorean Triples</h3>
-          <p style="font-size: 0.875rem;">Spot right triangles instantly to avoid long square-root calculations:</p>
-          <div class="step-detail" style="display: block; text-align: center; margin: 0.4rem 0;">
-            $3-4-5$ &nbsp;|&nbsp; $5-12-13$ &nbsp;|&nbsp; $7-24-25$ &nbsp;|&nbsp; $8-15-17$
-          </div>
-          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            Multiples also hold: $(6, 8, 10)$, $(9, 12, 15)$, $(10, 24, 26)$, etc.
-          </p>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Sun & Shadow Rules</h3>
-          <p style="font-size: 0.875rem;">Shadow always falls opposite to the sun:</p>
-          <ul style="font-size: 0.8125rem; padding-left: 1.25rem; margin-top: 0.3rem;">
-            <li><strong>Morning (Sunrise in East):</strong> All shadows fall towards <strong>West</strong>.</li>
-            <li><strong>Evening (Sunset in West):</strong> All shadows fall towards <strong>East</strong>.</li>
-            <li>At 12:00 Noon: No shadow (sun directly overhead).</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 4: Practice Lab (Independent & Timed) -->
-    <section class="card" aria-labelledby="practice-title" id="practice-section">
-      <div class="card-header">
-        <div>
-          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
-          <p class="section-subtitle">Real competitive-exam questions. Unseen questions solved independently build genuine retrieval.</p>
-        </div>
-      </div>
-
-      <!-- Practice Controls & Mode Toggles -->
-      <div class="practice-header">
-        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
-          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
-            Guided Mode
-          </button>
-          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
-            Try Without Hints
-          </button>
-          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
-            Timed Practice
-          </button>
-        </div>
-
-        <div id="timer-container" class="timer-badge hidden" aria-live="off">
-          <span>⏱️</span>
-          <span id="timer-display">00:00</span>
-        </div>
-      </div>
-
-      <!-- Score & Accuracy Progress Bar -->
-      <div class="score-bar" aria-label="Current Practice Statistics">
-        <div class="score-stat">
-          <span class="score-stat-label">Questions Attempted</span>
-          <span class="score-stat-num" id="stat-attempts">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Total Correct</span>
-          <span class="score-stat-num" id="stat-correct">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Independent Correct</span>
-          <span class="score-stat-num" id="stat-independent">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Accuracy</span>
-          <span class="score-stat-num" id="stat-accuracy">0%</span>
-        </div>
-        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
-          Reset Local Progress
-        </button>
-      </div>
-
-      <!-- Question Box -->
-      <div id="practice-question-card" style="margin-top: 1.25rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
-            Question 1 of 12
-          </span>
-          <span class="badge" id="practice-q-difficulty">Easy</span>
-        </div>
-
-        <p class="question-stem" id="practice-q-stem">
-          Loading practice question...
-        </p>
-
-        <!-- Options container -->
-        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
-          <!-- Rendered dynamically -->
-        </div>
-
-        <!-- Practice Feedback Callout -->
-        <div id="practice-feedback" class="callout hidden" role="alert"></div>
-
-        <!-- Error Categorizer (appears on incorrect submission) -->
-        <div id="practice-error-categorizer" class="error-categorizer hidden">
-          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
-            Reflective Analysis: What was the primary reason for this mistake?
-          </label>
-          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
-            <option value="concept">Concept Misunderstanding (Confused facing-south turn or shadow direction)</option>
-            <option value="method">Wrong Setup / Method (Used total distance instead of Pythagoras displacement)</option>
-            <option value="arithmetic">Arithmetic Slip (Setup was right, calculation erred)</option>
-            <option value="misread">Misread Condition (Answered for facing direction vs direction from start)</option>
-            <option value="time_guess">Time Pressure / Rushed Guess</option>
-          </select>
-        </div>
-
-        <!-- Practice Worked Solution Box (revealed upon answering) -->
-        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
-          <h4 style="margin-bottom: 0.4rem; font-size: 0.95rem;">Step-by-Step Solution:</h4>
-          <p id="practice-solution-text" style="font-size: 0.9rem; line-height: 1.5;"></p>
-        </div>
-
-        <!-- Practice Action Bar -->
-        <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem; justify-content: flex-end;">
-          <button type="button" id="btn-next-question" class="btn btn-primary" onclick="loadNextQuestion()">
-            Next Question →
-          </button>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <strong>Aptitude & Reasoning Lab</strong> — Logical & Analytical Reasoning Stream
-          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
-            Topic Review Status: <span class="badge badge-published">published</span> • Last Reviewed: 2026-10-29
-          </div>
-        </div>
-        <div style="font-size: 0.8125rem;">
-          <a href="../docs/reviews/direction-sense.md" style="color: var(--color-primary); text-decoration: none;">View Topic Review & Test Specification ↗</a>
-        </div>
-      </div>
-
-      <div class="disclaimer-box">
-        <strong>Educational Disclaimer:</strong> Educational tool. Check the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority. All questions and solvers are original or derived from public standard mathematical relationships.
+    <div style="margin-bottom:18px;">
+      <span style="font-size:.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:.5rem;">
+        Presets:
+      </span>
+      <div style="display:flex; gap:.4rem; flex-wrap:wrap;">
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="3N_4E">3N, 4E → 5 NE</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="12S_5E">12S, left 5 → 13 SE</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="10E_10N_10W">10E, L10, L10 → 10 N</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="square_loop">Square loop → 0 km</button>
       </div>
     </div>
-  </footer>
 
-  <!-- Scripts -->
-  <script src="../assets/common.js"></script>
-  <script>
-    /* ==========================================================================
-       1. PURE MODEL (Cartesian coordinate path tracking & vector deduction)
-       ========================================================================== */
-    const Model = (() => {
-      const CARDINALS = ["N", "E", "S", "W"];
-
-      function turnDirection(currentFacing, turn) {
-        let idx = CARDINALS.indexOf(currentFacing);
-        if (idx === -1) idx = 0; // default N
-        if (turn === "R") {
-          return CARDINALS[(idx + 1) % 4];
-        } else if (turn === "L") {
-          return CARDINALS[(idx + 3) % 4];
-        }
-        return currentFacing;
-      }
-
-      function getCompassDirection(x, y) {
-        if (x === 0 && y === 0) return "At Starting Point";
-        if (x === 0 && y > 0) return "North";
-        if (x === 0 && y < 0) return "South";
-        if (x > 0 && y === 0) return "East";
-        if (x < 0 && y === 0) return "West";
-        if (x > 0 && y > 0) return "North-East";
-        if (x < 0 && y > 0) return "North-West";
-        if (x > 0 && y < 0) return "South-East";
-        if (x < 0 && y < 0) return "South-West";
-        return "Unknown";
-      }
-
-      /**
-       * Pure solver to trace an array of steps.
-       * @param {Object} input - { steps: Array of { dir, dist } | [{turn, dist}], trapAnswer: ... }
-       */
-      function tracePath(input) {
-        const rawSteps = input.steps || [];
-        let x = 0;
-        let y = 0;
-        let facing = "N"; // initial facing
-        let totalWalked = 0;
-        const waypoints = [{ x: 0, y: 0, facing: "N", stepNum: 0 }];
-        const stepTraces = [];
-
-        rawSteps.forEach((st, idx) => {
-          const dist = Number(st.dist) || 0;
-          let moveDir = st.dir;
-
-          // If turn specified instead of absolute cardinal
-          if (st.turn) {
-            facing = turnDirection(facing, st.turn);
-            moveDir = facing;
-          } else if (st.dir) {
-            if (st.dir === "L" || st.dir === "R") {
-              facing = turnDirection(facing, st.dir);
-              moveDir = facing;
-            } else {
-              facing = st.dir;
-              moveDir = st.dir;
-            }
-          }
-
-          if (moveDir === "N") y += dist;
-          else if (moveDir === "S") y -= dist;
-          else if (moveDir === "E") x += dist;
-          else if (moveDir === "W") x -= dist;
-
-          totalWalked += dist;
-          waypoints.push({ x, y, facing, stepNum: idx + 1 });
-
-          stepTraces.push({
-            title: `Step ${idx + 1}: Move ${dist} km ${moveDir === 'N' ? 'North' : moveDir === 'S' ? 'South' : moveDir === 'E' ? 'East' : 'West'}`,
-            explanation: `Facing: ${facing} | Current Coordinates: (${x}, ${y})`,
-            math: `Position = (${x}, ${y})`
-          });
-        });
-
-        const displacement = LabCommon.round(Math.sqrt(x * x + y * y), 2);
-        const dirFromStart = getCompassDirection(x, y);
-
-        // Trap detection
-        let commonTrap = null;
-        if (input.trapAnswer !== undefined) {
-          const userAns = String(input.trapAnswer);
-          if (userAns.includes(String(totalWalked)) && totalWalked !== displacement) {
-            commonTrap = {
-              type: "scalar_sum_trap",
-              answer: totalWalked,
-              explanation: `You added all the step distances together (${totalWalked} km). But the shortest distance from the start point is the straight line (displacement) via Pythagoras: √(${x}² + ${y}²) = ${displacement} km.`
-            };
-          } else if (rawSteps.some(s => s.dir === "S" || s.turn === "L") && userAns.includes("West") && dirFromStart.includes("East")) {
-            commonTrap = {
-              type: "south_left_trap",
-              answer: "West",
-              explanation: `Trap: When a person faces South, turning left points to the EAST (the right-hand side of your page). The person's left is mirrored relative to your perspective!`
-            };
-          }
-        }
-
-        if (!commonTrap && totalWalked > displacement && displacement > 0) {
-          commonTrap = {
-            type: "scalar_sum_trap",
-            answer: totalWalked,
-            explanation: `Common mistake: confusing total distance walked (${totalWalked} km) with the shortest straight-line distance from the start (${displacement} km).`
-          };
-        }
-
-        return {
-          valid: true,
-          answer: displacement,
-          answerDisplay: `${displacement} km, ${dirFromStart}`,
-          intermediates: {
-            x,
-            y,
-            displacement,
-            totalWalked,
-            dirFromStart,
-            finalFacing: facing,
-            waypoints
-          },
-          steps: stepTraces.length > 0 ? stepTraces : [
-            { title: "Starting Point", explanation: "Origin at (0, 0), facing North." }
-          ],
-          assumptions: [
-            "Flat 2D Cartesian plane with cardinal directions aligned to axes",
-            "Turns are exactly 90 degrees left or right relative to current facing orientation",
-            "Displacement calculated as straight line Euclidean distance"
-          ],
-          commonTrap
-        };
-      }
-
-      return {
-        CARDINALS,
-        turnDirection,
-        getCompassDirection,
-        tracePath
-      };
-    })();
-
-    if (typeof window !== "undefined") {
-      window.Model = Model;
-    }
-
-    /* ==========================================================================
-       2. DETERMINISTIC SELF-TESTS (Quality Gate)
-       ========================================================================== */
-    function runSelfTests() {
-      const results = { passed: 0, failed: 0, failures: [] };
-
-      function assert(condition, testName, details = "") {
-        if (condition) {
-          results.passed += 1;
-        } else {
-          results.failed += 1;
-          results.failures.push({ name: testName, details });
-        }
-      }
-
-      try {
-        // TC-01: Walk N 3, Turn Right, Walk E 4 -> (4, 3), 5.0 km, North-East
-        const t1 = Model.tracePath({ steps: [{ dir: "N", dist: 3 }, { turn: "R", dist: 4 }] });
-        assert(t1.valid === true && t1.intermediates.x === 4 && t1.intermediates.y === 3 && t1.intermediates.displacement === 5 && t1.intermediates.dirFromStart === "North-East",
-          "TC-01: 3N then 4E", `Expected (4, 3), 5km, North-East. Got (${t1.intermediates?.x}, ${t1.intermediates?.y}), ${t1.intermediates?.displacement}`);
-
-        // TC-02: Walk S 12, Turn Left, Walk E 5 -> (5, -12), 13.0 km, South-East
-        const t2 = Model.tracePath({ steps: [{ dir: "S", dist: 12 }, { turn: "L", dist: 5 }] });
-        assert(t2.valid === true && t2.intermediates.x === 5 && t2.intermediates.y === -12 && t2.intermediates.displacement === 13 && t2.intermediates.dirFromStart === "South-East",
-          "TC-02: 12S then Left 5km", `Expected (5, -12), 13km, South-East. Got (${t2.intermediates?.x}, ${t2.intermediates?.y})`);
-
-        // TC-03: Walk E 10, Turn Left, Walk N 10, Turn Left, Walk W 10 -> (0, 10), 10.0 km North
-        const t3 = Model.tracePath({ steps: [{ dir: "E", dist: 10 }, { turn: "L", dist: 10 }, { turn: "L", dist: 10 }] });
-        assert(t3.valid === true && t3.intermediates.x === 0 && t3.intermediates.y === 10 && t3.intermediates.displacement === 10 && t3.intermediates.dirFromStart === "North",
-          "TC-03: Three-turn loop", `Expected (0, 10), 10km North. Got (${t3.intermediates?.x}, ${t3.intermediates?.y})`);
-
-        // TC-04: Straight back N 8, S 8 -> (0, 0), 0.0 km
-        const t4 = Model.tracePath({ steps: [{ dir: "N", dist: 8 }, { dir: "S", dist: 8 }] });
-        assert(t4.valid === true && t4.intermediates.displacement === 0 && t4.intermediates.dirFromStart === "At Starting Point",
-          "TC-04: N 8 then S 8", `Expected 0km at start. Got ${t4.intermediates?.displacement}`);
-
-        // TC-05: Walk W 6, Turn Left (S), Walk 8 -> (-6, -8), 10.0 km South-West
-        const t5 = Model.tracePath({ steps: [{ dir: "W", dist: 6 }, { turn: "L", dist: 8 }] });
-        assert(t5.valid === true && t5.intermediates.displacement === 10 && t5.intermediates.dirFromStart === "South-West",
-          "TC-05: W 6 then Left 8", `Expected 10km South-West. Got ${t5.intermediates?.displacement}`);
-
-        // TC-06: Scalar sum trap detection (N 3, E 4, trap = 7)
-        const t6 = Model.tracePath({ steps: [{ dir: "N", dist: 3 }, { dir: "E", dist: 4 }], trapAnswer: 7 });
-        assert(t6.valid === true && t6.commonTrap && t6.commonTrap.type === "scalar_sum_trap",
-          "TC-06: Scalar sum trap detection", "Scalar sum trap was not flagged");
-
-        // TC-07: Facing-South Left turn test (S 10, turn L -> facing East)
-        const t7 = Model.tracePath({ steps: [{ dir: "S", dist: 10 }, { turn: "L", dist: 5 }], trapAnswer: "West" });
-        assert(t7.valid === true && t7.intermediates.finalFacing === "E",
-          "TC-07: South left-turn facing East", `Expected facing E, got ${t7.intermediates?.finalFacing}`);
-
-        // TC-08: Square loop: N 5, E 5, S 5, W 5 -> (0, 0)
-        const t8 = Model.tracePath({ steps: [{ dir: "N", dist: 5 }, { dir: "E", dist: 5 }, { dir: "S", dist: 5 }, { dir: "W", dist: 5 }] });
-        assert(t8.valid === true && t8.intermediates.displacement === 0,
-          "TC-08: Closed square loop", `Expected 0 displacement. Got ${t8.intermediates?.displacement}`);
-
-        // TC-09: Scaled Pythagorean 24E, 7S -> 25.0 km South-East
-        const t9 = Model.tracePath({ steps: [{ dir: "E", dist: 24 }, { dir: "S", dist: 7 }] });
-        assert(t9.valid === true && t9.intermediates.displacement === 25 && t9.intermediates.dirFromStart === "South-East",
-          "TC-09: 24E and 7S", `Expected 25km. Got ${t9.intermediates?.displacement}`);
-
-        // TC-10: Empty path handling
-        const t10 = Model.tracePath({ steps: [] });
-        assert(t10.valid === true && t10.intermediates.displacement === 0,
-          "TC-10: Empty path handling", "Empty path should return 0 displacement at origin");
-
-        // TC-11: Triangle inequality invariant (Displacement <= Total Walked)
-        const t11 = Model.tracePath({ steps: [{ dir: "N", dist: 10 }, { dir: "E", dist: 10 }, { dir: "S", dist: 5 }] });
-        assert(t11.intermediates.displacement <= t11.intermediates.totalWalked,
-          "TC-11: Triangle inequality invariant", "Displacement must be <= total distance walked");
-
-      } catch (err) {
-        results.failed += 1;
-        results.failures.push({ name: "Unexpected test execution error", details: err.message });
-      }
-
-      return results;
-    }
-
-    if (typeof window !== "undefined") {
-      window.runSelfTests = runSelfTests;
-    }
-
-    /* ==========================================================================
-       3. PRACTICE QUESTION BANK (12 Verified Exam-Style Questions)
-       ========================================================================== */
-    const PRACTICE_QUESTIONS = [
-      {
-        id: "DS1",
-        difficulty: "Easy",
-        stem: "A person starts from point A and walks 3 km North, then turns to his right and walks 4 km to reach point B. How far is he from point A and in which direction?",
-        options: ["5 km, North-East", "7 km, North-East", "5 km, East", "7 km, North"],
-        correctIndex: 0, // 5 km, North-East
-        trapOptionIndex: 1, // 7 km (3 + 4 scalar sum trap)
-        trapExplanation: "Scalar sum trap! 7 km is the total distance walked (3 + 4). The straight-line distance is the hypotenuse: √(3² + 4²) = √(9 + 16) = √25 = 5 km North-East.",
-        solution: "Coordinates from origin (0, 0): North 3 ⟹ (0, 3). Turn right (East) 4 ⟹ (4, 3). Displacement = √(4² + 3²) = 5 km. Both coordinates are positive, so direction is North-East."
-      },
-      {
-        id: "DS2",
-        difficulty: "Easy",
-        stem: "Rohan walks 12 km South, then turns to his left and walks 5 km. How far is he from his starting point and in which direction?",
-        options: ["13 km, South-East", "13 km, South-West", "17 km, South-East", "7 km, South"],
-        correctIndex: 0, // 13 km, South-East
-        trapOptionIndex: 1, // 13 km, South-West (Facing-South left turn trap)
-        trapExplanation: "Facing-South left turn trap! When walking South (facing downwards), your LEFT hand points towards the EAST (not West). Coordinates are (5, -12), giving 13 km South-East.",
-        solution: "Walking South ⟹ (0, -12), facing South. Turning left when facing South means turning EAST. Walking 5 km East ⟹ (5, -12). Shortest distance = √(5² + (-12)²) = √(25 + 144) = √169 = 13 km South-East."
-      },
-      {
-        id: "DS3",
-        difficulty: "Medium",
-        stem: "A man travels 10 km East, turns left and walks 10 km, then turns left again and walks 10 km. How far is he now from his starting point and which direction is he facing?",
-        options: ["10 km, Facing West", "10 km, Facing North", "30 km, Facing West", "0 km, Facing South"],
-        correctIndex: 0, // 10 km, Facing West
-        trapOptionIndex: 2, // 30 km (total distance)
-        trapExplanation: "He walked 10 E (10, 0), left N (10, 10), left W (0, 10). He is 10 km North of start, but is FACING WEST.",
-        solution: "Path: (0, 0) ⟹ (10, 0) facing E ⟹ (10, 10) facing N ⟹ (0, 10) facing W. His coordinates are (0, 10), so distance from start is 10 km (due North), and he is currently facing West."
-      },
-      {
-        id: "DS4",
-        difficulty: "Medium",
-        stem: "Deepa starts from her house and walks 4 km West, then turns right and walks 6 km, then turns right again and walks 4 km. How far is she from her house?",
-        options: ["6 km", "14 km", "8 km", "4 km"],
-        correctIndex: 0, // 6 km
-        trapOptionIndex: 1, // 14 km (4 + 6 + 4)
-        trapExplanation: "Notice the rectangle: 4 km West, then 6 km North, then 4 km East. The Eastward movement cancels out the Westward movement! She is exactly 6 km North of her house.",
-        solution: "Start (0, 0). West 4 ⟹ (-4, 0). Turn right (North) 6 ⟹ (-4, 6). Turn right (East) 4 ⟹ (0, 6). Distance = 6 km North."
-      },
-      {
-        id: "DS5",
-        difficulty: "Exam-Style",
-        stem: "A cyclist goes 16 km West, then turns to his right and rides 12 km, then turns to his right and rides 16 km. Finally, he turns to his left and rides 8 km. How far and in which direction is he from his starting point?",
-        options: ["20 km, North", "28 km, North", "20 km, North-East", "12 km, North"],
-        correctIndex: 0, // 20 km, North
-        trapOptionIndex: 1,
-        trapExplanation: "Track x and y: West 16 (-16, 0), right N 12 (-16, 12), right E 16 (0, 12), left N 8 (0, 20). Total North displacement = 12 + 8 = 20 km North.",
-        solution: "X coordinates: -16 + 16 = 0 km. Y coordinates: 0 + 12 + 8 = +20 km. Final position = (0, 20). Distance = 20 km due North."
-      },
-      {
-        id: "DS6",
-        difficulty: "Exam-Style",
-        stem: "One morning after sunrise, Suresh was standing facing a pole. The shadow of the pole fell exactly to his right. Which direction was Suresh facing?",
-        options: ["South", "North", "East", "West"],
-        correctIndex: 0, // South
-        trapOptionIndex: 1, // North
-        trapExplanation: "Shadow rule: In the morning, sun is in the East, so all shadows fall to the WEST. For the shadow to fall to Suresh's RIGHT, West must be to his right side. This means Suresh was facing SOUTH.",
-        solution: "Sunrise occurs in the East ⟹ Shadows fall towards the West. If the shadow is to his right, West is on his right. Standing facing South puts West to your right and East to your left. Therefore, Suresh is facing South."
-      },
-      {
-        id: "DS7",
-        difficulty: "Exam-Style",
-        stem: "One evening before sunset, Rekha and Hema were talking to each other face-to-face. If Hema's shadow fell exactly to the right of Hema, which direction was Rekha facing?",
-        options: ["North", "South", "East", "West"],
-        correctIndex: 0, // North
-        trapOptionIndex: 1, // South (Hema's direction)
-        trapExplanation: "At sunset, sun is in the West, so shadows fall to the EAST. Since the shadow is to Hema's right, East is to Hema's right, meaning Hema faces South. Since Rekha is talking face-to-face, Rekha must be facing NORTH.",
-        solution: "Sunset in West ⟹ Shadows fall to the East. East is to Hema's right ⟹ Hema is facing South. Since Rekha faces Hema: Rekha is facing North."
-      },
-      {
-        id: "DS8",
-        difficulty: "Medium",
-        stem: "A man is facing North-West. He turns 90° in the clockwise direction, then 180° in the counter-clockwise direction, and then another 90° in the same (counter-clockwise) direction. Which direction is he facing now?",
-        options: ["South-East", "North-East", "South-West", "East"],
-        correctIndex: 0, // South-East
-        trapOptionIndex: 1,
-        trapExplanation: "Net turn: +90° (CW) - 180° (CCW) - 90° (CCW) = -180° (net 180° turn). Exactly opposite of North-West is South-East.",
-        solution: "Starting: North-West. Clockwise = +90°. Counter-clockwise = -180° and -90°. Net rotation = +90° - 180° - 90° = -180°. A 180° turn points in the exact opposite direction: opposite of North-West is South-East."
-      },
-      {
-        id: "DS9",
-        difficulty: "Easy",
-        stem: "Kunal walks 10 km North, 6 km South, and then 3 km East. How far and in which direction is he with reference to his starting point?",
-        options: ["5 km, North-East", "7 km, North-East", "5 km, South-East", "19 km, North-East"],
-        correctIndex: 0, // 5 km, North-East
-        trapOptionIndex: 1,
-        trapExplanation: "Net North-South: 10 - 6 = 4 km North. Net East-West: 3 km East. Pythagorean triangle: √(4² + 3²) = 5 km North-East.",
-        solution: "Net Y = 10 - 6 = +4 km. Net X = +3 km. Distance = √(4² + 3²) = 5 km. Direction = North-East."
-      },
-      {
-        id: "DS10",
-        difficulty: "Medium",
-        stem: "A car travels 24 km East, turns right and drives 7 km. What is the shortest distance from the starting point?",
-        options: ["25 km", "31 km", "26 km", "17 km"],
-        correctIndex: 0, // 25 km
-        trapOptionIndex: 1, // 31 km (24 + 7)
-        trapExplanation: "Pythagorean triple (7, 24, 25): √(24² + 7²) = √(576 + 49) = √625 = 25 km.",
-        solution: "Coordinates = (24, -7). Shortest distance = √(24² + (-7)²) = √(576 + 49) = √625 = 25 km."
-      },
-      {
-        id: "DS11",
-        difficulty: "Easy",
-        stem: "If Village B is situated to the North-East of Village A, then in which direction is Village A situated with respect to Village B?",
-        options: ["South-West", "North-West", "South-East", "West"],
-        correctIndex: 0, // South-West
-        trapOptionIndex: 1,
-        trapExplanation: "Opposite direction rule: The opposite of North-East is South-West (North ↔ South, East ↔ West).",
-        solution: "Relative direction is symmetric and opposite: If B is North-East of A, then A is South-West of B."
-      },
-      {
-        id: "DS12",
-        difficulty: "Medium",
-        stem: "A man starts walking in the morning towards the sun. After walking 5 km, he turns right and walks 4 km. Then he turns left and walks 3 km. How far is he from his starting point?",
-        options: ["8.94 km (√80 km)", "12 km", "10 km", "8 km"],
-        correctIndex: 0, // √80 = 8.94 km
-        trapOptionIndex: 1, // 12 km (5 + 4 + 3)
-        trapExplanation: "Walking towards the morning sun means walking EAST. Path: East 5 (5, 0), right S 4 (5, -4), left E 3 (8, -4). Shortest distance = √(8² + (-4)²) = √(64 + 16) = √80 ≈ 8.94 km.",
-        solution: "Morning sun = East. East 5 ⟹ (5, 0). Turn right (South) 4 ⟹ (5, -4). Turn left (East) 3 ⟹ (8, -4). Distance = √(8² + (-4)²) = √(64 + 16) = √80 ≈ 8.94 km."
-      }
-    ];
-
-    if (typeof window !== "undefined") {
-      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
-    }
-
-    /* ==========================================================================
-       4. INTERACTIVE RENDERING & EVENT HANDLING
-       ========================================================================== */
-    let currentRouteSteps = [
-      { dir: "S", dist: 12 },
-      { turn: "L", dist: 5 }
-    ];
-
-    const svgEl = document.getElementById("grid-svg");
-    const readoutCoords = document.getElementById("readout-coords");
-    const readoutDisplacement = document.getElementById("readout-displacement");
-    const readoutTotalWalked = document.getElementById("readout-total-walked");
-    const readoutDirStart = document.getElementById("readout-dir-start");
-    const readoutFacing = document.getElementById("readout-facing");
-
-    const predictOptionsContainer = document.getElementById("predict-options-container");
-    const predictScenarioText = document.getElementById("predict-scenario-text");
-    const predictFeedback = document.getElementById("predict-feedback");
-    const btnRevealSolution = document.getElementById("btn-reveal-solution");
-    const workedSolutionPanel = document.getElementById("worked-solution-panel");
-    const solutionStepsContainer = document.getElementById("solution-steps-container");
-    const solutionTrapCallout = document.getElementById("solution-trap-callout");
-    const solutionTrapText = document.getElementById("solution-trap-text");
-
-    function updateModelAndVisual() {
-      const result = Model.tracePath({ steps: currentRouteSteps });
-
-      const { x, y, displacement, totalWalked, dirFromStart, finalFacing } = result.intermediates;
-
-      readoutCoords.textContent = `(${x}, ${y})`;
-      readoutDisplacement.textContent = `${displacement} km`;
-      readoutTotalWalked.textContent = `${totalWalked} km`;
-      readoutDirStart.textContent = dirFromStart;
-      readoutFacing.textContent = finalFacing === 'N' ? 'North' : finalFacing === 'S' ? 'South' : finalFacing === 'E' ? 'East' : 'West';
-
-      renderGridSvg(result);
-      updatePredictScenario(result);
-    }
-
-    function renderGridSvg(result) {
-      const waypoints = result.intermediates.waypoints;
-      const width = 620;
-      const height = 300;
-      const originX = 310;
-      const originY = 150;
-
-      // Find max coordinate excursion to auto-scale grid gracefully
-      let maxX = 5;
-      let maxY = 5;
-      waypoints.forEach(w => {
-        if (Math.abs(w.x) > maxX) maxX = Math.abs(w.x);
-        if (Math.abs(w.y) > maxY) maxY = Math.abs(w.y);
-      });
-      const maxRange = Math.max(maxX, maxY, 10) * 1.35;
-      const scale = 110 / maxRange;
-
-      function toSvgX(cx) { return originX + cx * scale; }
-      function toSvgY(cy) { return originY - cy * scale; } // SVG y is inverted
-
-      let pathD = `M ${originX} ${originY}`;
-      let waypointsSvg = `
-        <circle cx="${originX}" cy="${originY}" r="5" fill="var(--color-primary, #1e3a8a)" />
-        <text x="${originX + 8}" y="${originY - 8}" font-size="11" font-weight="700" fill="var(--color-primary, #1e3a8a)">Start (0,0)</text>
-      `;
-
-      for (let i = 1; i < waypoints.length; i++) {
-        const wx = toSvgX(waypoints[i].x);
-        const wy = toSvgY(waypoints[i].y);
-        pathD += ` L ${wx} ${wy}`;
-
-        const isFinal = i === waypoints.length - 1;
-        waypointsSvg += `
-          <circle cx="${wx}" cy="${wy}" r="${isFinal ? 6 : 4}" fill="${isFinal ? 'var(--color-danger, #b91c1c)' : 'var(--color-accent, #0284c7)'}" />
-          <text x="${wx + 8}" y="${wy + (isFinal ? 15 : -6)}" font-size="11" font-weight="700" fill="${isFinal ? 'var(--color-danger, #b91c1c)' : 'var(--color-accent, #0284c7)'}">
-            ${isFinal ? `End (${waypoints[i].x}, ${waypoints[i].y})` : `P${i}`}
-          </text>
-        `;
-      }
-
-      const finalW = waypoints[waypoints.length - 1];
-      const finalSvgX = toSvgX(finalW.x);
-      const finalSvgY = toSvgY(finalW.y);
-
-      svgEl.innerHTML = `
-        <rect x="0" y="0" width="${width}" height="${height}" fill="transparent" />
-
-        <!-- Grid Axis Lines -->
-        <line x1="20" y1="${originY}" x2="600" y2="${originY}" stroke="var(--color-border-subtle, #e2e8f0)" stroke-width="1.5" />
-        <line x1="${originX}" y1="20" x2="${originX}" y2="280" stroke="var(--color-border-subtle, #e2e8f0)" stroke-width="1.5" />
-
-        <!-- Compass Rose (Top Right) -->
-        <g transform="translate(560, 50)">
-          <circle cx="0" cy="0" r="28" fill="var(--color-surface, #ffffff)" stroke="var(--color-border, #cbd5e1)" stroke-width="1.5" />
-          <line x1="0" y1="-22" x2="0" y2="22" stroke="var(--color-text-main, #0f172a)" stroke-width="2" />
-          <line x1="-22" y1="0" x2="22" y2="0" stroke="var(--color-text-main, #0f172a)" stroke-width="2" />
-          <text x="0" y="-25" text-anchor="middle" font-size="11" font-weight="800" fill="var(--color-danger, #b91c1c)">N</text>
-          <text x="0" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="var(--color-text-muted, #475569)">S</text>
-          <text x="30" y="4" text-anchor="start" font-size="10" font-weight="700" fill="var(--color-text-muted, #475569)">E</text>
-          <text x="-30" y="4" text-anchor="end" font-size="10" font-weight="700" fill="var(--color-text-muted, #475569)">W</text>
-        </g>
-
-        <!-- Path polyline -->
-        <path d="${pathD}" fill="none" stroke="var(--color-primary, #1e3a8a)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-
-        <!-- Dashed Hypotenuse / Displacement Vector -->
-        ${(finalW.x !== 0 || finalW.y !== 0) ? `
-          <line x1="${originX}" y1="${originY}" x2="${finalSvgX}" y2="${finalSvgY}"
-                stroke="var(--color-success, #059669)" stroke-width="2" stroke-dasharray="4 3" />
-          <text x="${(originX + finalSvgX) / 2}" y="${(originY + finalSvgY) / 2 - 8}" text-anchor="middle" font-size="11" font-weight="800" fill="var(--color-success, #059669)">
-            ${result.intermediates.displacement} km (${result.intermediates.dirFromStart})
-          </text>
-        ` : ''}
-
-        ${waypointsSvg}
-      `;
-    }
-
-    function handleAddStep() {
-      const dir = document.getElementById("step-direction").value;
-      const dist = parseFloat(document.getElementById("step-distance").value) || 5;
-      currentRouteSteps.push({ dir, dist });
-      updateModelAndVisual();
-      LabCommon.announce(`Added step: ${dist} km ${dir}`);
-    }
-
-    function handleUndoStep() {
-      if (currentRouteSteps.length > 0) {
-        currentRouteSteps.pop();
-        updateModelAndVisual();
-        LabCommon.announce("Removed last path step");
-      }
-    }
-
-    function handleClearRoute() {
-      currentRouteSteps = [];
-      updateModelAndVisual();
-      LabCommon.announce("Cleared route");
-    }
-
-    function setPreset(key) {
-      if (key === '3N_4E') {
-        currentRouteSteps = [{ dir: "N", dist: 3 }, { dir: "E", dist: 4 }];
-      } else if (key === '12S_5E') {
-        currentRouteSteps = [{ dir: "S", dist: 12 }, { turn: "L", dist: 5 }];
-      } else if (key === '10E_10N_10W') {
-        currentRouteSteps = [{ dir: "E", dist: 10 }, { turn: "L", dist: 10 }, { turn: "L", dist: 10 }];
-      } else if (key === 'square_loop') {
-        currentRouteSteps = [{ dir: "N", dist: 5 }, { dir: "E", dist: 5 }, { dir: "S", dist: 5 }, { dir: "W", dist: 5 }];
-      } else if (key === 'multi_turn') {
-        currentRouteSteps = [{ dir: "N", dist: 4 }, { turn: "R", dist: 6 }, { turn: "R", dist: 4 }, { turn: "L", dist: 2 }];
-      }
-      updateModelAndVisual();
-      LabCommon.announce(`Loaded route preset: ${key}`);
-    }
-
-    /* ==========================================================================
-       5. PREDICT-FIRST LOGIC
-       ========================================================================== */
-    function updatePredictScenario(modelResult) {
-      const { x, y, displacement, dirFromStart, totalWalked } = modelResult.intermediates;
-
-      predictScenarioText.textContent = `A person traces this route to position (${x}, ${y}). How far is he from his starting point and in which direction?`;
-
-      const correctAns = `${displacement} km, ${dirFromStart}`;
-      const sumTrap = `${totalWalked} km, ${dirFromStart}`;
-      const flippedTrap = `${displacement} km, ${dirFromStart.includes('East') ? dirFromStart.replace('East', 'West') : dirFromStart.replace('West', 'East')}`;
-      const distractor = `${LabCommon.round(displacement + 3, 1)} km, ${dirFromStart}`;
-
-      const choices = [
-        { val: correctAns, type: "correct", label: correctAns },
-        { val: sumTrap, type: "trap_sum", label: sumTrap },
-        { val: flippedTrap, type: "trap_flip", label: flippedTrap },
-        { val: distractor, type: "distractor", label: distractor }
-      ];
-
-      // Remove duplicate labels
-      const uniqueChoices = [];
-      const seen = new Set();
-      choices.forEach(c => {
-        if (!seen.has(c.label)) {
-          seen.add(c.label);
-          uniqueChoices.push(c);
-        }
-      });
-
-      uniqueChoices.sort((a, b) => a.label.localeCompare(b.label));
-
-      predictOptionsContainer.innerHTML = "";
-      predictFeedback.className = "callout hidden";
-      workedSolutionPanel.classList.add("hidden");
-
-      uniqueChoices.forEach(c => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "option-btn";
-        btn.textContent = c.label;
-        btn.setAttribute("role", "radio");
-        btn.setAttribute("aria-checked", "false");
-        btn.onclick = () => handlePredictChoice(c, modelResult);
-        predictOptionsContainer.appendChild(btn);
-      });
-    }
-
-    function handlePredictChoice(choice, modelResult) {
-      predictFeedback.classList.remove("hidden");
-
-      const buttons = predictOptionsContainer.querySelectorAll(".option-btn");
-      buttons.forEach(b => {
-        b.classList.remove("correct", "trap", "incorrect", "selected");
-        if (b.textContent === choice.label) b.classList.add("selected");
-      });
-
-      if (choice.type === "correct") {
-        predictFeedback.className = "callout callout-success";
-        predictFeedback.innerHTML = `
-          <strong>✓ Outstanding deduction!</strong> You calculated the Euclidean displacement accurately using Pythagoras: ${choice.label}.
-        `;
-        LabCommon.announce("Prediction correct! You predicted the right displacement.");
-      } else if (choice.type === "trap_sum") {
-        predictFeedback.className = "callout callout-trap";
-        predictFeedback.innerHTML = `
-          <strong>⚠️ Distance vs. Displacement Trap!</strong> You added all the distances walked together (${modelResult.intermediates.totalWalked} km). The shortest distance from the start point is the straight line vector: √(${modelResult.intermediates.x}² + ${modelResult.intermediates.y}²) = ${modelResult.intermediates.displacement} km.
-        `;
-        LabCommon.announce("Trap encountered: Remember shortest distance via Pythagoras.");
-      } else if (choice.type === "trap_flip") {
-        predictFeedback.className = "callout callout-trap";
-        predictFeedback.innerHTML = `
-          <strong>⚠️ Mirrored Direction Trap!</strong> Check your left vs right orientation carefully. When facing South, turning left points towards the East!
-        `;
-        LabCommon.announce("Trap encountered: Mirrored direction trap.");
-      } else {
-        predictFeedback.className = "callout callout-warning";
-        predictFeedback.innerHTML = `
-          <strong>Not quite:</strong> Coordinates are (${modelResult.intermediates.x}, ${modelResult.intermediates.y}). Use Pythagoras to compute √(x² + y²).
-        `;
-      }
-
-      revealWorkedSteps(modelResult);
-    }
-
-    btnRevealSolution.addEventListener("click", () => {
-      const result = Model.tracePath({ steps: currentRouteSteps });
-      revealWorkedSteps(result);
-    });
-
-    function revealWorkedSteps(modelResult) {
-      if (!modelResult || !modelResult.valid) return;
-      workedSolutionPanel.classList.remove("hidden");
-
-      solutionStepsContainer.innerHTML = modelResult.steps.map((st, idx) => `
-        <div class="step-item">
-          <div class="step-num">Trace ${idx + 1}</div>
-          <div class="step-title">${st.title}</div>
-          <div>${st.explanation}</div>
-          ${st.math ? `<div class="step-detail">${st.math}</div>` : ''}
+    <div style="background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-md); padding:14px; margin-bottom:16px;">
+      <div style="display:flex; gap:.75rem; align-items:flex-end; flex-wrap:wrap;">
+        <div style="flex:1; min-width:150px;">
+          <label for="step-direction" class="control-label">Direction / Turn</label>
+          <select id="step-direction">
+            <option value="N">North (+y)</option>
+            <option value="S">South (−y)</option>
+            <option value="E">East (+x)</option>
+            <option value="W">West (−x)</option>
+            <option value="L">Turn Left (relative)</option>
+            <option value="R">Turn Right (relative)</option>
+          </select>
         </div>
-      `).join("");
+        <div style="width:130px;">
+          <label for="step-distance" class="control-label">Distance (km)</label>
+          <input type="number" id="step-distance" value="5" min="1" max="50" step="1">
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-add-step">+ Add Step</button>
+        <button type="button" class="btn btn-secondary" id="btn-undo-step">Undo</button>
+        <button type="button" class="btn btn-ghost" id="btn-clear-route">Reset</button>
+      </div>
+      <div id="route-pills" style="margin-top:12px; display:flex; gap:.4rem; flex-wrap:wrap;"></div>
+    </div>
 
-      if (modelResult.commonTrap) {
-        solutionTrapCallout.classList.remove("hidden");
-        solutionTrapText.textContent = modelResult.commonTrap.explanation;
-      }
-    }
+    <div class="vis-container">
+      <svg id="grid-svg" viewBox="0 0 760 400" width="100%" role="img" aria-label="Coordinate grid with path, facing arrow, and displacement">
+        <title>Path on a coordinate grid with a facing arrow that follows the walker</title>
+      </svg>
+      <p id="svg-live-desc" class="sr-only" aria-live="polite"></p>
+    </div>
 
-    /* ==========================================================================
-       6. PRACTICE LAB ENGINE
-       ========================================================================== */
-    let currentQIndex = 0;
-    let practiceMode = "hints";
-    let timerInstance = null;
-    let questionStartTime = 0;
-    const TOPIC_ID = "direction-sense";
+    <div class="score-bar" aria-live="polite">
+      <div class="score-stat"><span class="score-stat-label">Position</span><span class="score-stat-num" id="readout-coords">(0, 0)</span></div>
+      <div class="score-stat"><span class="score-stat-label">Displacement</span><span class="score-stat-num" id="readout-displacement">0 km</span></div>
+      <div class="score-stat"><span class="score-stat-label">Total walked</span><span class="score-stat-num" id="readout-walked">0 km</span></div>
+      <div class="score-stat"><span class="score-stat-label">Facing</span><span class="score-stat-num" id="readout-facing">North</span></div>
+    </div>
 
-    function setPracticeMode(mode) {
-      practiceMode = mode;
-      document.querySelectorAll(".mode-btn").forEach(b => {
-        b.classList.remove("active");
-        b.setAttribute("aria-selected", "false");
-      });
+    <!-- Scalar vs displacement mini-bar -->
+    <div style="margin-top:16px;">
+      <p style="font-size:.85rem; color:var(--text-dim); margin-bottom:8px;">
+        <strong>Walking ≠ reaching.</strong> The bar shows the gap:
+      </p>
+      <svg id="scalar-bar-svg" viewBox="0 0 760 100" width="100%" role="img" aria-label="Walked distance vs displacement bar comparison">
+        <title>Total walked vs displacement</title>
+      </svg>
+    </div>
+  </section>
 
-      const activeBtn = document.getElementById(`btn-mode-${mode}`);
-      if (activeBtn) {
-        activeBtn.classList.add("active");
-        activeBtn.setAttribute("aria-selected", "true");
-      }
+  <!-- ===== SECTION 2 — PREDICT ===== -->
+  <section class="card" aria-labelledby="s2">
+    <div class="card-header">
+      <h2 id="s2" class="section-title">Predict first</h2>
+      <p class="section-subtitle">Commit before the answer. If you pick the trap, the ghost path will show where your route would have gone.</p>
+    </div>
 
-      const timerContainer = document.getElementById("timer-container");
-      if (mode === "timed") {
-        timerContainer.classList.remove("hidden");
-        if (!timerInstance) {
-          timerInstance = new LabCommon.PracticeTimer((sec) => {
-            document.getElementById("timer-display").textContent = timerInstance.format();
-          });
-        }
-        timerInstance.start();
+    <div class="predict-box">
+      <div class="predict-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>Distance and direction from start?</span>
+      </div>
+      <p id="predict-scenario-text" style="font-size:1.05rem; font-weight:500; margin-bottom:1rem;"></p>
+      <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options"></div>
+      <div id="predict-feedback" class="callout hidden" role="alert"></div>
+
+      <div style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
+        <button type="button" id="btn-new-predict" class="btn btn-secondary">🎲 New scenario</button>
+        <span id="predict-lock-hint" style="font-size:.8rem; color:var(--text-muted);">
+          Route builder locked until you predict.
+        </span>
+      </div>
+    </div>
+
+    <div id="worked-solution-panel" class="hidden" style="margin-top:20px;">
+      <h3 style="margin-bottom:12px;">Step-by-step solution</h3>
+      <div class="steps-container" id="solution-steps-container"></div>
+      <div class="callout callout-trap" id="solution-trap-callout" style="margin-top:12px;">
+        <strong>⚠️ Trap:</strong> <span id="solution-trap-text"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3 — LEFT/RIGHT MINI-LAB ===== -->
+  <section class="card" aria-labelledby="s3">
+    <div class="card-header">
+      <h2 id="s3" class="section-title">Left and right depend on facing</h2>
+      <p class="section-subtitle">Click a compass point. Watch which way "left" and "right" point when facing that direction.</p>
+    </div>
+
+    <div class="mode-toggle-group" role="tablist" style="margin-bottom:14px; width:fit-content;">
+      <button type="button" class="mode-btn active" data-facing="N" role="tab" aria-selected="true">Facing N</button>
+      <button type="button" class="mode-btn" data-facing="E" role="tab" aria-selected="false">Facing E</button>
+      <button type="button" class="mode-btn" data-facing="S" role="tab" aria-selected="false">Facing S</button>
+      <button type="button" class="mode-btn" data-facing="W" role="tab" aria-selected="false">Facing W</button>
+    </div>
+
+    <div class="vis-container">
+      <svg id="facing-svg" viewBox="0 0 760 300" width="100%" role="img" aria-label="Compass showing left and right turns when facing the selected direction">
+        <title>Compass with left and right turn markers for the selected facing direction</title>
+      </svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Facing</span><span class="score-stat-num" id="facing-label">North</span></div>
+      <div class="score-stat"><span class="score-stat-label">Turn left →</span><span class="score-stat-num" id="facing-left" style="color:var(--primary)">West</span></div>
+      <div class="score-stat"><span class="score-stat-label">Turn right →</span><span class="score-stat-num" id="facing-right" style="color:var(--success)">East</span></div>
+      <div class="score-stat"><span class="score-stat-label">Turn around →</span><span class="score-stat-num" id="facing-back" style="color:var(--danger)">South</span></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4 — RULES ===== -->
+  <section class="card" aria-labelledby="s4">
+    <div class="card-header">
+      <h2 id="s4" class="section-title">Rules that save time</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1rem;">
+      <div style="background:var(--bg-elev); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <h3 style="color:var(--primary); margin-bottom:.4rem; font-size:.95rem;">Pythagorean triples</h3>
+        <p style="font-size:.85rem; color:var(--text-dim);">
+          Spot these instantly: <code>3-4-5</code>, <code>5-12-13</code>, <code>7-24-25</code>, <code>8-15-17</code>. Multiples also work.
+        </p>
+      </div>
+      <div style="background:var(--bg-elev); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <h3 style="color:var(--warn); margin-bottom:.4rem; font-size:.95rem;">Shadow rules</h3>
+        <p style="font-size:.85rem; color:var(--text-dim);">
+          Morning sun → shadows fall <strong>West</strong>. Evening sun → shadows fall <strong>East</strong>. If the shadow is to someone's right, that direction is East (morning) or West (evening).
+        </p>
+      </div>
+      <div style="background:var(--bg-elev); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <h3 style="color:var(--success); margin-bottom:.4rem; font-size:.95rem;">Opposite rule</h3>
+        <p style="font-size:.85rem; color:var(--text-dim);">
+          "A is NE of B" implies "B is SW of A." Both axes flip: N↔S, E↔W.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 5 — PRACTICE ===== -->
+  <section class="card" aria-labelledby="s5">
+    <div class="card-header">
+      <h2 id="s5" class="section-title">Practice</h2>
+      <p class="section-subtitle">Shuffled each session. Traps have real reasons.</p>
+    </div>
+
+    <div class="practice-header">
+      <div class="mode-toggle-group" role="tablist" aria-label="Practice mode">
+        <button type="button" class="mode-btn active" data-mode="hints" role="tab" aria-selected="true">Guided</button>
+        <button type="button" class="mode-btn" data-mode="independent" role="tab" aria-selected="false">Independent</button>
+        <button type="button" class="mode-btn" data-mode="timed" role="tab" aria-selected="false">Timed (90s)</button>
+      </div>
+      <div id="timer-container" class="timer-badge hidden" aria-live="off">
+        <span>⏱️</span><span id="timer-display">90</span><span>s</span>
+      </div>
+    </div>
+
+    <div class="score-bar" aria-label="Practice statistics">
+      <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Independent</span><span class="score-stat-num" id="stat-independent">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Accuracy</span><span class="score-stat-num" id="stat-accuracy">0%</span></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
+    </div>
+
+    <div id="practice-question-card" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span class="badge" id="practice-q-difficulty">Easy</span>
+      </div>
+      <p class="question-stem" id="practice-q-stem">Loading…</p>
+      <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
+      <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+      <div id="practice-error-categorizer" class="error-categorizer hidden">
+        <label for="select-error-category">What tripped you up? (optional)</label>
+        <select id="select-error-category">
+          <option value="left_right">Left/right when facing non-North</option>
+          <option value="scalar_sum">Added distances instead of using Pythagoras</option>
+          <option value="shadow">Shadow direction</option>
+          <option value="opposite">Opposite direction rule</option>
+          <option value="arithmetic">Arithmetic slip</option>
+          <option value="time_guess">Time-pressure guess</option>
+        </select>
+      </div>
+
+      <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:12px;">
+        <h4 style="margin-bottom:6px; font-size:.95rem;">Solution</h4>
+        <p id="practice-solution-text" style="font-size:.9rem; line-height:1.55; margin:0;"></p>
+      </div>
+
+      <div style="margin-top:18px; display:flex; gap:.75rem; justify-content:flex-end;">
+        <button type="button" id="btn-next-question" class="btn btn-primary" disabled>Next question →</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <strong>Aptitude &amp; Reasoning Lab</strong> — Reasoning stream
+        <div style="font-size:.8rem; margin-top:.25rem;">
+          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
+        </div>
+      </div>
+      <div style="font-size:.8rem;">
+        <a href="../docs/reviews/direction-sense.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
+      </div>
+    </div>
+    <div class="disclaimer-box">
+      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
+      Always check the latest official exam notification.
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   1. PURE MODEL
+   ===================================================================== */
+const Model = (() => {
+  const CARD = ["N", "E", "S", "W"];
+  const round = (x, d = 2) => Math.round(x * 10 ** d) / 10 ** d;
+
+  function turn(facing, turn) {
+    let idx = CARD.indexOf(facing);
+    if (idx === -1) idx = 0;
+    if (turn === "R") return CARD[(idx + 1) % 4];
+    if (turn === "L") return CARD[(idx + 3) % 4];
+    return facing;
+  }
+
+  function compass(x, y) {
+    if (x === 0 && y === 0) return "At start";
+    if (x === 0) return y > 0 ? "North" : "South";
+    if (y === 0) return x > 0 ? "East" : "West";
+    if (x > 0 && y > 0) return "North-East";
+    if (x < 0 && y > 0) return "North-West";
+    if (x > 0 && y < 0) return "South-East";
+    return "South-West";
+  }
+
+  function tracePath(steps) {
+    let x = 0, y = 0, facing = "N", walked = 0;
+    const waypoints = [{ x: 0, y: 0, facing: "N", stepNum: 0, dir: "N" }];
+    const traces = [];
+
+    steps.forEach((st, i) => {
+      const d = Number(st.dist) || 0;
+      let moveDir = st.dir;
+      if (st.dir === "L" || st.dir === "R") {
+        facing = turn(facing, st.dir);
+        moveDir = facing;
+      } else if (st.turn) {
+        facing = turn(facing, st.turn);
+        moveDir = facing;
       } else {
-        timerContainer.classList.add("hidden");
-        if (timerInstance) timerInstance.stop();
+        facing = st.dir;
+        moveDir = st.dir;
       }
 
-      const simSection = document.getElementById("interactive-model-title").closest(".card");
-      const refSection = document.getElementById("reference-title").closest(".card");
-      if (mode === "independent") {
-        simSection.style.display = "none";
-        refSection.style.display = "none";
-      } else {
-        simSection.style.display = "block";
-        refSection.style.display = "block";
-      }
+      if (moveDir === "N") y += d;
+      else if (moveDir === "S") y -= d;
+      else if (moveDir === "E") x += d;
+      else if (moveDir === "W") x -= d;
 
-      LabCommon.announce(`Switched to ${mode} practice mode.`);
-    }
-
-    function renderPracticeQuestion(index) {
-      const q = PRACTICE_QUESTIONS[index];
-      if (!q) return;
-
-      questionStartTime = Date.now();
-
-      document.getElementById("practice-q-num").textContent = `Question ${index + 1} of ${PRACTICE_QUESTIONS.length}`;
-      const diffBadge = document.getElementById("practice-q-difficulty");
-      diffBadge.textContent = q.difficulty;
-      diffBadge.className = `badge ${q.difficulty === 'Easy' ? 'badge-published' : q.difficulty === 'Medium' ? 'badge-draft' : 'badge-tag'}`;
-
-      document.getElementById("practice-q-stem").textContent = q.stem;
-
-      const feedback = document.getElementById("practice-feedback");
-      feedback.className = "callout hidden";
-      document.getElementById("practice-error-categorizer").classList.add("hidden");
-      document.getElementById("practice-solution-box").classList.add("hidden");
-
-      const optContainer = document.getElementById("practice-options-container");
-      optContainer.innerHTML = "";
-
-      q.options.forEach((optText, optIdx) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "option-btn practice-submit-btn";
-        btn.textContent = optText;
-        btn.setAttribute("role", "radio");
-        btn.setAttribute("aria-checked", "false");
-        btn.onclick = () => submitPracticeAnswer(optIdx, q);
-        optContainer.appendChild(btn);
+      walked += d;
+      waypoints.push({ x, y, facing, stepNum: i + 1, dir: moveDir, dist: d });
+      traces.push({
+        title: `Step ${i + 1}: ${d} km ${moveDir}`,
+        body: `Facing ${facing} after step. Position (${x}, ${y}).`,
+        math: `(${x}, ${y})`
       });
-    }
-
-    function submitPracticeAnswer(chosenIdx, question) {
-      const isCorrect = chosenIdx === question.correctIndex;
-      const isTrap = chosenIdx === question.trapOptionIndex;
-      const durationSec = Math.round((Date.now() - questionStartTime) / 1000);
-
-      const buttons = document.querySelectorAll("#practice-options-container .option-btn");
-      buttons.forEach((b, idx) => {
-        b.disabled = true;
-        if (idx === question.correctIndex) b.classList.add("correct");
-        if (idx === chosenIdx && !isCorrect) {
-          b.classList.add(isTrap ? "trap" : "incorrect");
-        }
-      });
-
-      const feedback = document.getElementById("practice-feedback");
-      feedback.classList.remove("hidden");
-
-      if (isCorrect) {
-        feedback.className = "callout callout-success";
-        feedback.innerHTML = `<strong>✓ Correct!</strong> Well deduced.`;
-        LabCommon.announce("Correct answer!");
-      } else if (isTrap && question.trapExplanation) {
-        feedback.className = "callout callout-trap";
-        feedback.innerHTML = `<strong>⚠️ Common Exam Trap:</strong> ${question.trapExplanation}`;
-        LabCommon.announce("Incorrect: Common trap encountered.");
-        document.getElementById("practice-error-categorizer").classList.remove("hidden");
-      } else {
-        feedback.className = "callout callout-danger";
-        feedback.innerHTML = `<strong>Incorrect:</strong> Review the worked solution below.`;
-        LabCommon.announce("Incorrect answer.");
-        document.getElementById("practice-error-categorizer").classList.remove("hidden");
-      }
-
-      const solBox = document.getElementById("practice-solution-box");
-      solBox.classList.remove("hidden");
-      document.getElementById("practice-solution-text").textContent = question.solution;
-
-      LabCommon.recordTopicAttempt(TOPIC_ID, {
-        isCorrect,
-        isIndependent: practiceMode === "independent" || practiceMode === "timed",
-        timeSec: durationSec,
-        errorCategory: isCorrect ? null : document.getElementById("select-error-category").value
-      });
-
-      renderStats();
-    }
-
-    function handleSaveErrorCategory(category) {
-      const p = LabCommon.getTopicProgress(TOPIC_ID);
-      if (p.errorsByCategory[category] !== undefined) {
-        p.errorsByCategory[category] += 1;
-        LabCommon.storage.set(`lab_progress_${TOPIC_ID}`, p);
-      }
-      LabCommon.announce(`Recorded mistake reason: ${category}`);
-    }
-
-    function loadNextQuestion() {
-      currentQIndex = (currentQIndex + 1) % PRACTICE_QUESTIONS.length;
-      renderPracticeQuestion(currentQIndex);
-    }
-
-    function renderStats() {
-      const p = LabCommon.getTopicProgress(TOPIC_ID);
-      document.getElementById("stat-attempts").textContent = p.attempts;
-      document.getElementById("stat-correct").textContent = p.correct;
-      document.getElementById("stat-independent").textContent = p.independentCorrect;
-      const acc = p.attempts > 0 ? Math.round((p.correct / p.attempts) * 100) : 0;
-      document.getElementById("stat-accuracy").textContent = `${acc}%`;
-    }
-
-    function handleResetStats() {
-      if (confirm("Reset local practice statistics for Direction Sense?")) {
-        LabCommon.resetTopicProgress(TOPIC_ID);
-        renderStats();
-        LabCommon.announce("Practice statistics reset.");
-      }
-    }
-
-    /* ==========================================================================
-       7. INITIALIZATION ON LOAD
-       ========================================================================== */
-    document.addEventListener("DOMContentLoaded", () => {
-      LabCommon.runAndRenderSelfTests(runSelfTests);
-      updateModelAndVisual();
-      renderPracticeQuestion(0);
-      renderStats();
     });
-  </script>
+
+    const displacement = round(Math.sqrt(x * x + y * y));
+    const dirFromStart = compass(x, y);
+
+    return {
+      valid: true,
+      intermediates: { x, y, displacement, walked, dirFromStart, facing, waypoints },
+      steps: traces.length ? traces : [{ title: "Start", body: "At origin, facing North." }]
+    };
+  }
+
+  return { tracePath, turn, compass, round };
+})();
+window.Model = Model;
+
+/* =====================================================================
+   2. SELF-TESTS
+   ===================================================================== */
+function runSelfTests() {
+  const results = { passed: 0, failed: 0, failures: [] };
+  const assert = (cond, name, detail = "") => {
+    if (cond) results.passed++;
+    else { results.failed++; results.failures.push({ name, detail }); }
+  };
+  try {
+    const t1 = Model.tracePath([{ dir: "N", dist: 3 }, { dir: "E", dist: 4 }]);
+    assert(t1.intermediates.x === 4 && t1.intermediates.y === 3 && t1.intermediates.displacement === 5 && t1.intermediates.dirFromStart === "North-East",
+      "3N 4E → (4,3) 5 NE", JSON.stringify(t1.intermediates));
+
+    const t2 = Model.tracePath([{ dir: "S", dist: 12 }, { dir: "L", dist: 5 }]);
+    assert(t2.intermediates.x === 5 && t2.intermediates.y === -12 && t2.intermediates.displacement === 13 && t2.intermediates.dirFromStart === "South-East",
+      "12S + left 5 → 13 SE", JSON.stringify(t2.intermediates));
+
+    const t3 = Model.tracePath([{ dir: "E", dist: 10 }, { dir: "L", dist: 10 }, { dir: "L", dist: 10 }]);
+    assert(t3.intermediates.x === 0 && t3.intermediates.y === 10 && t3.intermediates.displacement === 10 && t3.intermediates.facing === "W",
+      "10E L10 L10 → 10 N facing W", JSON.stringify(t3.intermediates));
+
+    const t4 = Model.tracePath([{ dir: "N", dist: 8 }, { dir: "S", dist: 8 }]);
+    assert(t4.intermediates.displacement === 0, "N8 S8 → 0", JSON.stringify(t4.intermediates));
+
+    const t5 = Model.tracePath([{ dir: "W", dist: 6 }, { dir: "L", dist: 8 }]);
+    assert(t5.intermediates.displacement === 10 && t5.intermediates.dirFromStart === "South-West",
+      "W6 L8 → 10 SW", JSON.stringify(t5.intermediates));
+
+    const t6 = Model.tracePath([{ dir: "E", dist: 24 }, { dir: "S", dist: 7 }]);
+    assert(t6.intermediates.displacement === 25, "24E 7S → 25", JSON.stringify(t6.intermediates));
+
+    const t7 = Model.tracePath([]);
+    assert(t7.intermediates.displacement === 0 && t7.intermediates.dirFromStart === "At start", "Empty → 0", JSON.stringify(t7.intermediates));
+
+    // Triangle inequality
+    const t8 = Model.tracePath([{ dir: "N", dist: 10 }, { dir: "E", dist: 10 }, { dir: "S", dist: 5 }]);
+    assert(t8.intermediates.displacement <= t8.intermediates.walked, "displacement ≤ walked", JSON.stringify(t8.intermediates));
+
+    // Facing-South left → East
+    const t9 = Model.tracePath([{ dir: "S", dist: 5 }, { dir: "L", dist: 3 }]);
+    assert(t9.intermediates.x === 3, "Facing S, left → East", JSON.stringify(t9.intermediates));
+
+    // Facing-West right → North
+    const t10 = Model.tracePath([{ dir: "W", dist: 5 }, { dir: "R", dist: 4 }]);
+    assert(t10.intermediates.y === 4, "Facing W, right → North", JSON.stringify(t10.intermediates));
+  } catch (err) {
+    results.failed++;
+    results.failures.push({ name: "Uncaught", detail: err.message });
+  }
+  return results;
+}
+window.runSelfTests = runSelfTests;
+
+/* =====================================================================
+   3. PRACTICE BANK
+   ===================================================================== */
+const PRACTICE_QUESTIONS = [
+  { id: "DS1", difficulty: "Easy",
+    stem: "Starts at A. Walks 3 km North, then turns right and walks 4 km. Distance and direction from A?",
+    options: ["5 km NE", "7 km NE", "5 km E", "7 km N"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "7 km = 3+4 scalar sum. Use Pythagoras: √(3²+4²) = 5.",
+    solution: "(0,3) then right → East (4,3). √(16+9) = 5. Both coords positive → NE." },
+  { id: "DS2", difficulty: "Easy",
+    stem: "Walks 12 km South, turns LEFT, walks 5 km. Distance and direction from start?",
+    options: ["13 km SE", "13 km SW", "17 km SE", "7 km S"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Facing S, LEFT = East, not West. Position (5, −12) → SE.",
+    solution: "Facing S, left → East. (0,−12) → (5,−12). √(25+144) = 13. SE." },
+  { id: "DS3", difficulty: "Medium",
+    stem: "10 km East, turns left, walks 10 km, turns left, walks 10 km. Position and facing?",
+    options: ["10 km N, facing W", "10 km N, facing N", "30 km, facing W", "0 km, facing S"], correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "30 km is the total distance walked. Net position is (0, 10) — 10 km North. Facing West.",
+    solution: "(10,0) → (10,10) → (0,10). 10 km North. Facing W." },
+  { id: "DS4", difficulty: "Medium",
+    stem: "Deepa walks 4 km West, right 6 km, right 4 km. Distance from house?",
+    options: ["6 km", "14 km", "8 km", "4 km"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "14 km = 4+6+4. The two horizontal legs cancel: −4 + 4 = 0. Net: 6 km North.",
+    solution: "(−4,0) → (−4,6) → (0,6). Distance = 6 km." },
+  { id: "DS5", difficulty: "Exam-Style",
+    stem: "16 km West, right 12 km, right 16 km, left 8 km. Distance and direction from start?",
+    options: ["20 km N", "28 km N", "20 km NE", "12 km N"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "28 forgets the cancellations. X: −16+16 = 0. Y: +12+8 = 20. Pure 20 N.",
+    solution: "(0, 20). Distance 20 km North." },
+  { id: "DS6", difficulty: "Exam-Style",
+    stem: "Morning after sunrise, shadow of a pole fell to Suresh's RIGHT. Which direction was Suresh facing?",
+    options: ["South", "North", "East", "West"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Morning shadows fall West. West is to his right ⟹ he faces South.",
+    solution: "Sun East → shadow West. West is right of Suresh → he faces South." },
+  { id: "DS7", difficulty: "Exam-Style",
+    stem: "Evening before sunset, Hema's shadow falls to her RIGHT. Rekha is talking to her face-to-face. Which way is Rekha facing?",
+    options: ["North", "South", "East", "West"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Evening shadows fall East. East is Hema's right → Hema faces South. Rekha faces the opposite: North.",
+    solution: "Sunset → shadows East. East is right of Hema → Hema faces South. Rekha faces North." },
+  { id: "DS8", difficulty: "Medium",
+    stem: "Facing North-West. Turn 90° clockwise, then 180° counter-clockwise, then 90° counter-clockwise. Which way now?",
+    options: ["South-East", "North-East", "South-West", "East"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Net = +90 − 180 − 90 = −180. Exactly opposite of NW = SE.",
+    solution: "Net rotation −180° → opposite of NW → SE." },
+  { id: "DS9", difficulty: "Easy",
+    stem: "Kunal walks 10 km N, 6 km S, 3 km E. Distance and direction from start?",
+    options: ["5 km NE", "7 km NE", "5 km SE", "19 km NE"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "7 forgets the S→N subtraction. Net N = 10−6 = 4. Then √(4²+3²) = 5.",
+    solution: "Net (3, 4). √(9+16) = 5. NE." },
+  { id: "DS10", difficulty: "Medium",
+    stem: "24 km East, right 7 km. Shortest distance from start?",
+    options: ["25 km", "31 km", "26 km", "17 km"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "31 = 24+7 scalar sum. Pythagorean triple: 24, 7, 25.",
+    solution: "(24, −7). √(576+49) = 25." },
+  { id: "DS11", difficulty: "Easy",
+    stem: "Village B is North-East of A. Where is A relative to B?",
+    options: ["South-West", "North-West", "South-East", "West"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Opposite rule: flip both axes. NE → SW.",
+    solution: "NE opposite is SW." },
+  { id: "DS12", difficulty: "Medium",
+    stem: "Walks toward the morning sun 5 km. Turns right 4 km. Turns left 3 km. Distance from start?",
+    options: ["√80 ≈ 8.94 km", "12 km", "10 km", "8 km"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "12 = 5+4+3 scalar sum. Use Pythagoras on net (8, −4).",
+    solution: "Morning = East. (5,0) right→S (5,−4) left→E (8,−4). √(64+16) = √80." }
+];
+window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+
+/* =====================================================================
+   4. STATE
+   ===================================================================== */
+const state = {
+  steps: [{ dir: "S", dist: 12 }, { dir: "L", dist: 5 }],
+  predictLocked: false,
+  predictScenario: null,
+  userPrediction: null,
+  facingLab: "N",
+  practiceMode: "hints",
+  currentQIndex: 0,
+  shuffled: [],
+  answered: false,
+  timer: { interval: null, remaining: 90 },
+  testsPassed: false,
+  stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
+};
+const TOPIC_ID = "direction-sense";
+const $ = (id) => document.getElementById(id);
+const DIRNAME = { N: "North", S: "South", E: "East", W: "West" };
+
+/* =====================================================================
+   5. RENDERERS
+   ===================================================================== */
+
+// Path grid with rotating facing arrow and dashed displacement
+function renderGrid(result) {
+  const svg = $("grid-svg");
+  if (!result.valid) {
+    svg.innerHTML = `<text x="380" y="200" text-anchor="middle" font-size="16" fill="#ef4444">⚠️</text>`;
+    return;
+  }
+  const { x, y, displacement, dirFromStart, walked, facing, waypoints } = result.intermediates;
+
+  const W = 760, H = 400;
+  const cx = W / 2, cy = H / 2;
+  // Auto-scale
+  let maxAbs = 5;
+  waypoints.forEach(w => { maxAbs = Math.max(maxAbs, Math.abs(w.x), Math.abs(w.y)); });
+  const span = maxAbs * 2 + 4;
+  const scale = 320 / span;
+  const X = (v) => cx + v * scale;
+  const Y = (v) => cy - v * scale;
+
+  // Grid lines
+  let gridLines = "";
+  for (let i = -Math.ceil(maxAbs) - 2; i <= Math.ceil(maxAbs) + 2; i++) {
+    if (i === 0) continue;
+    gridLines += `<line x1="${X(i)}" y1="20" x2="${X(i)}" y2="${H-20}" stroke="#1c2848" stroke-width="1"/>`;
+    gridLines += `<line x1="20" y1="${Y(i)}" x2="${W-20}" y2="${Y(i)}" stroke="#1c2848" stroke-width="1"/>`;
+  }
+
+  // Path polyline
+  let pathD = `M ${X(0)} ${Y(0)}`;
+  for (let i = 1; i < waypoints.length; i++) {
+    pathD += ` L ${X(waypoints[i].x)} ${Y(waypoints[i].y)}`;
+  }
+
+  // Waypoint dots
+  let dots = "";
+  waypoints.forEach((w, i) => {
+    const isEnd = i === waypoints.length - 1;
+    if (i === 0) {
+      dots += `<circle cx="${X(0)}" cy="${Y(0)}" r="6" fill="#38bdf8" stroke="#0ea5e9" stroke-width="2"/>
+               <text x="${X(0)+10}" y="${Y(0)-8}" font-size="11" fill="#38bdf8" font-weight="700">start</text>`;
+    } else {
+      dots += `<circle cx="${X(w.x)}" cy="${Y(w.y)}" r="${isEnd ? 7 : 4}" fill="${isEnd ? '#22c55e' : '#94a3b8'}" stroke="${isEnd ? '#15803d' : '#475569'}" stroke-width="2"/>`;
+      if (isEnd) {
+        dots += `<text x="${X(w.x)+10}" y="${Y(w.y)-8}" font-size="11" fill="#22c55e" font-weight="700">end (${w.x}, ${w.y})</text>`;
+      }
+    }
+  });
+
+  // Facing arrow at last waypoint
+  const last = waypoints[waypoints.length - 1];
+  const arrowLen = 32;
+  const dirVec = { N: [0, -1], S: [0, 1], E: [1, 0], W: [-1, 0] }[last.facing] || [0, -1];
+  const arrX = X(last.x) + dirVec[0] * arrowLen;
+  const arrY = Y(last.y) + dirVec[1] * arrowLen;
+
+  let facingArrow = "";
+  if (waypoints.length > 0) {
+    facingArrow = `
+      <line x1="${X(last.x)}" y1="${Y(last.y)}" x2="${arrX}" y2="${arrY}"
+        stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+      <polygon points="${arrX + dirVec[0]*10},${arrY + dirVec[1]*10}
+        ${arrX - dirVec[1]*6},${arrY + dirVec[0]*6}
+        ${arrX + dirVec[1]*6},${arrY - dirVec[0]*6}" fill="#f59e0b"/>
+      <text x="${arrX + dirVec[0]*16}" y="${arrY + dirVec[1]*16 + 4}" text-anchor="middle"
+        font-size="10" font-weight="800" fill="#f59e0b">${DIRNAME[last.facing]}</text>
+    `;
+  }
+
+  // Ghost path for wrong prediction
+  let ghost = "";
+  if (state.predictLocked && state.userPrediction && state.userPrediction !== `${displacement} km ${dirFromStart}`) {
+    // Draw a small dashed path from start pointing toward the *claimed* direction at displacement length
+    const claimed = state.userPrediction;
+    let gx = 0, gy = 0;
+    if (claimed.includes("North-East")) { gx = displacement/1.414; gy = displacement/1.414; }
+    else if (claimed.includes("South-East")) { gx = displacement/1.414; gy = -displacement/1.414; }
+    else if (claimed.includes("North-West")) { gx = -displacement/1.414; gy = displacement/1.414; }
+    else if (claimed.includes("South-West")) { gx = -displacement/1.414; gy = -displacement/1.414; }
+    else if (claimed.includes("North")) { gx = 0; gy = displacement; }
+    else if (claimed.includes("South")) { gx = 0; gy = -displacement; }
+    else if (claimed.includes("East")) { gx = displacement; gy = 0; }
+    else if (claimed.includes("West")) { gx = -displacement; gy = 0; }
+    ghost = `
+      <line x1="${X(0)}" y1="${Y(0)}" x2="${X(gx)}" y2="${Y(gy)}"
+        stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="${X(gx)+10}" y="${Y(gy)-8}" font-size="11" font-weight="700" fill="#f59e0b">
+        your answer: ${claimed}
+      </text>
+    `;
+  }
+
+  // Displacement vector
+  let dispVec = "";
+  if (x !== 0 || y !== 0) {
+    dispVec = `
+      <line x1="${X(0)}" y1="${Y(0)}" x2="${X(x)}" y2="${Y(y)}"
+        stroke="#22c55e" stroke-width="2.5" stroke-dasharray="6 4"/>
+      <text x="${(X(0)+X(x))/2 - 10}" y="${(Y(0)+Y(y))/2 - 8}" text-anchor="middle"
+        font-size="12" font-weight="800" fill="#22c55e">${displacement} km</text>
+    `;
+  }
+
+  svg.innerHTML = `
+    ${gridLines}
+    <line x1="20" y1="${cy}" x2="${W-20}" y2="${cy}" stroke="#2a3758" stroke-width="1.5"/>
+    <line x1="${cx}" y1="20" x2="${cx}" y2="${H-20}" stroke="#2a3758" stroke-width="1.5"/>
+    <text x="${W-30}" y="${cy-8}" text-anchor="end" font-size="10" fill="#64748b">E</text>
+    <text x="30" y="${cy-8}" font-size="10" fill="#64748b">W</text>
+    <text x="${cx+6}" y="30" font-size="10" fill="#64748b">N</text>
+    <text x="${cx+6}" y="${H-20}" font-size="10" fill="#64748b">S</text>
+
+    <path d="${pathD}" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linejoin="round"/>
+    ${dispVec}
+    ${facingArrow}
+    ${dots}
+    ${ghost}
+  `;
+
+  $("svg-live-desc").textContent =
+    `Path ${walked} km walked. Position (${x}, ${y}). Displacement ${displacement} km ${dirFromStart}. Facing ${DIRNAME[facing]}.`;
+}
+
+// Scalar vs displacement mini bar
+function renderScalarBar(result) {
+  const svg = $("scalar-bar-svg");
+  const { walked, displacement } = result.intermediates;
+  if (walked === 0) {
+    svg.innerHTML = `<text x="380" y="50" text-anchor="middle" font-size="12" fill="#64748b">Add steps to see the gap</text>`;
+    return;
+  }
+  const W = 760, padL = 130, padR = 40;
+  const plotW = W - padL - padR;
+  const max = Math.max(walked, displacement, 1);
+  const wWalked = (walked / max) * plotW;
+  const wDisp = (displacement / max) * plotW;
+  const y1 = 20, y2 = 60, barH = 24;
+
+  svg.innerHTML = `
+    <text x="${padL-10}" y="${y1+barH/2+4}" text-anchor="end" font-size="12" fill="#3b82f6" font-weight="700">walked</text>
+    <rect x="${padL}" y="${y1}" width="${wWalked}" height="${barH}" rx="3" fill="#3b82f6" opacity="0.6"/>
+    <text x="${padL + wWalked + 8}" y="${y1+barH/2+4}" font-size="12" font-weight="800" fill="#3b82f6">${walked} km</text>
+
+    <text x="${padL-10}" y="${y2+barH/2+4}" text-anchor="end" font-size="12" fill="#22c55e" font-weight="700">displacement</text>
+    <rect x="${padL}" y="${y2}" width="${wDisp}" height="${barH}" rx="3" fill="#22c55e" opacity="0.6"/>
+    <text x="${padL + wDisp + 8}" y="${y2+barH/2+4}" font-size="12" font-weight="800" fill="#22c55e">${displacement} km</text>
+  `;
+}
+
+// Facing mini-lab
+function renderFacingLab() {
+  const svg = $("facing-svg");
+  const f = state.facingLab;
+  const left = Model.turn(f, "L");
+  const right = Model.turn(f, "R");
+  const back = Model.turn(Model.turn(f, "R"), "R");
+
+  $("facing-label").textContent = DIRNAME[f];
+  $("facing-left").textContent = DIRNAME[left];
+  $("facing-right").textContent = DIRNAME[right];
+  $("facing-back").textContent = DIRNAME[back];
+
+  const W = 760, H = 300;
+  const cx = W / 2, cy = H / 2, R = 90;
+  const dirAngle = { N: -90, E: 0, S: 90, W: 180 };
+  const ang = dirAngle[f];
+  const rad = (ang * Math.PI) / 180;
+
+  // Arrow pointing in facing direction
+  const ax = cx + Math.cos(rad) * R;
+  const ay = cy + Math.sin(rad) * R;
+
+  // Left-turn arrow (90° counter-clockwise from facing)
+  const leftRad = rad - Math.PI/2;
+  const lx = cx + Math.cos(leftRad) * R;
+  const ly = cy + Math.sin(leftRad) * R;
+
+  // Right-turn arrow (90° clockwise from facing)
+  const rightRad = rad + Math.PI/2;
+  const rx = cx + Math.cos(rightRad) * R;
+  const ry = cy + Math.sin(rightRad) * R;
+
+  svg.innerHTML = `
+    <!-- Compass circle -->
+    <circle cx="${cx}" cy="${cy}" r="${R + 10}" fill="none" stroke="#2a3758" stroke-width="1.5"/>
+    <text x="${cx}" y="${cy - R - 16}" text-anchor="middle" font-size="12" font-weight="800" fill="#64748b">N</text>
+    <text x="${cx + R + 20}" y="${cy + 4}" text-anchor="middle" font-size="12" font-weight="800" fill="#64748b">E</text>
+    <text x="${cx}" y="${cy + R + 24}" text-anchor="middle" font-size="12" font-weight="800" fill="#64748b">S</text>
+    <text x="${cx - R - 20}" y="${cy + 4}" text-anchor="middle" font-size="12" font-weight="800" fill="#64748b">W</text>
+
+    <!-- Facing arrow -->
+    <line x1="${cx}" y1="${cy}" x2="${ax}" y2="${ay}" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="${ax}" cy="${ay}" r="6" fill="#f59e0b"/>
+    <text x="${ax + Math.cos(rad)*20}" y="${ay + Math.sin(rad)*20 + 4}" text-anchor="middle" font-size="13" font-weight="800" fill="#f59e0b">${DIRNAME[f]}</text>
+
+    <!-- Left arrow -->
+    <line x1="${cx}" y1="${cy}" x2="${lx}" y2="${ly}" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="5 4"/>
+    <text x="${lx + Math.cos(leftRad)*22}" y="${ly + Math.sin(leftRad)*22 + 4}" text-anchor="middle" font-size="12" font-weight="700" fill="#38bdf8">L → ${DIRNAME[left]}</text>
+
+    <!-- Right arrow -->
+    <line x1="${cx}" y1="${cy}" x2="${rx}" y2="${ry}" stroke="#22c55e" stroke-width="2.5" stroke-dasharray="5 4"/>
+    <text x="${rx + Math.cos(rightRad)*22}" y="${ry + Math.sin(rightRad)*22 + 4}" text-anchor="middle" font-size="12" font-weight="700" fill="#22c55e">R → ${DIRNAME[right]}</text>
+  `;
+}
+
+function renderRoutePills() {
+  const container = $("route-pills");
+  container.innerHTML = state.steps.map((s, i) => {
+    const label = s.dir === "L" ? "L" : s.dir === "R" ? "R" : s.dir;
+    return `<span class="route-step-pill">${i + 1}. ${label} ${s.dist} km</span>`;
+  }).join("");
+}
+
+function renderReadouts(result) {
+  const { x, y, displacement, walked, dirFromStart, facing } = result.intermediates;
+  $("readout-coords").textContent = `(${x}, ${y})`;
+  $("readout-displacement").textContent = `${displacement} km`;
+  $("readout-walked").textContent = `${walked} km`;
+  $("readout-facing").textContent = DIRNAME[facing];
+}
+
+function renderMain() {
+  const result = Model.tracePath(state.steps);
+  renderGrid(result);
+  renderScalarBar(result);
+  renderReadouts(result);
+  renderRoutePills();
+  if (!state.predictLocked) preparePredict(result);
+}
+
+/* =====================================================================
+   6. WIRING
+   ===================================================================== */
+function setRouteLocked(locked) {
+  ["step-direction", "step-distance", "btn-add-step", "btn-undo-step", "btn-clear-route"].forEach(id => {
+    if ($(id)) $(id).disabled = locked;
+  });
+  document.querySelectorAll("[data-preset]").forEach(b => b.disabled = locked);
+}
+
+$("btn-add-step").addEventListener("click", () => {
+  const dir = $("step-direction").value;
+  const dist = parseFloat($("step-distance").value) || 5;
+  state.steps.push({ dir, dist });
+  renderMain();
+});
+$("btn-undo-step").addEventListener("click", () => {
+  if (state.steps.length > 0) { state.steps.pop(); renderMain(); }
+});
+$("btn-clear-route").addEventListener("click", () => {
+  state.steps = [];
+  renderMain();
+});
+document.querySelectorAll("[data-preset]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (state.predictLocked) return;
+    const key = btn.dataset.preset;
+    if (key === "3N_4E") state.steps = [{ dir: "N", dist: 3 }, { dir: "E", dist: 4 }];
+    else if (key === "12S_5E") state.steps = [{ dir: "S", dist: 12 }, { dir: "L", dist: 5 }];
+    else if (key === "10E_10N_10W") state.steps = [{ dir: "E", dist: 10 }, { dir: "L", dist: 10 }, { dir: "L", dist: 10 }];
+    else if (key === "square_loop") state.steps = [{ dir: "N", dist: 5 }, { dir: "E", dist: 5 }, { dir: "S", dist: 5 }, { dir: "W", dist: 5 }];
+    renderMain();
+  });
+});
+
+/* =====================================================================
+   7. PREDICT
+   ===================================================================== */
+function preparePredict(result) {
+  if (state.predictLocked) return;
+  const { x, y, displacement, dirFromStart, walked } = result.intermediates;
+  if (walked === 0) return;
+
+  const pathStr = state.steps.map(s => {
+    const d = s.dir === "L" ? "left" : s.dir === "R" ? "right" : DIRNAME[s.dir];
+    return `${s.dist} km ${d}`;
+  }).join(", ");
+  $("predict-scenario-text").textContent = `Path: ${pathStr}. Where does the walker end up relative to start?`;
+
+  const correct = `${displacement} km ${dirFromStart}`;
+  const sumTrap = `${walked} km ${dirFromStart}`;
+  let flipped = dirFromStart;
+  if (dirFromStart.includes("East")) flipped = dirFromStart.replace("East", "West");
+  else if (dirFromStart.includes("West")) flipped = dirFromStart.replace("West", "East");
+  else if (dirFromStart === "North") flipped = "South";
+  else if (dirFromStart === "South") flipped = "North";
+  const flipTrap = `${displacement} km ${flipped}`;
+
+  const options = [
+    { value: correct, kind: "correct" },
+    { value: sumTrap, kind: "sum" },
+    { value: flipTrap, kind: "flip" }
+  ].filter((o, i, arr) => arr.findIndex(x => x.value === o.value) === i);
+
+  state.predictScenario = { correct, options };
+
+  const container = $("predict-options-container");
+  container.innerHTML = "";
+  options.forEach(o => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = o.value;
+    btn.dataset.kind = o.kind;
+    btn.dataset.value = o.value;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.addEventListener("click", () => commitPrediction(o));
+    container.appendChild(btn);
+  });
+
+  $("predict-feedback").className = "callout hidden";
+  $("worked-solution-panel").classList.add("hidden");
+  setRouteLocked(false);
+  state.userPrediction = null;
+}
+
+function commitPrediction(option) {
+  if (state.predictLocked) return;
+  state.predictLocked = true;
+  state.userPrediction = option.value;
+  setRouteLocked(true);
+  $("predict-lock-hint").textContent = "Locked. Click 🎲 New scenario to try again.";
+
+  document.querySelectorAll("#predict-options-container .option-btn").forEach(b => {
+    const kind = b.dataset.kind;
+    const chosen = b.dataset.value === option.value;
+    b.setAttribute("aria-checked", chosen ? "true" : "false");
+    if (kind === "correct") b.classList.add("correct");
+    else if (kind === "sum" || kind === "flip") b.classList.add("trap");
+    if (chosen && kind !== "correct") b.classList.add("incorrect");
+    b.disabled = true;
+  });
+
+  const fb = $("predict-feedback");
+  fb.classList.remove("hidden");
+  const r = Model.tracePath(state.steps);
+  const { displacement, walked, dirFromStart } = r.intermediates;
+
+  if (option.kind === "correct") {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong> Pythagoras on (${r.intermediates.x}, ${r.intermediates.y}) gives ${displacement} km ${dirFromStart}.`;
+  } else if (option.kind === "sum") {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Scalar-sum trap:</strong> ${walked} km is total walked. Shortest distance uses Pythagoras: √(${r.intermediates.x}² + ${r.intermediates.y}²) = ${displacement} km.`;
+  } else {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Mirrored direction.</strong> Left/right depend on facing. When facing South, left → East, not West. Correct: ${displacement} km ${dirFromStart}.`;
+  }
+
+  revealSteps(r);
+  renderGrid(r);
+}
+
+function revealSteps(r) {
+  if (!r.valid) return;
+  $("worked-solution-panel").classList.remove("hidden");
+  $("solution-steps-container").innerHTML = r.steps.map((s, i) => `
+    <div class="step-item">
+      <div class="step-num">Step ${i + 1}</div>
+      <div class="step-title">${s.title}</div>
+      <div>${s.body}</div>
+    </div>`).join("");
+
+  const { x, y, displacement, walked } = r.intermediates;
+  $("solution-trap-text").textContent =
+    `Walked ${walked} km ≠ reached ${displacement} km. Displacement uses Pythagoras: √(${x}² + ${y}²) = ${displacement}.`;
+}
+
+$("btn-new-predict").addEventListener("click", () => {
+  state.predictLocked = false;
+  state.userPrediction = null;
+  const presets = [
+    [{ dir: "N", dist: 3 }, { dir: "E", dist: 4 }],
+    [{ dir: "S", dist: 12 }, { dir: "L", dist: 5 }],
+    [{ dir: "E", dist: 10 }, { dir: "L", dist: 10 }, { dir: "L", dist: 10 }],
+    [{ dir: "N", dist: 8 }, { dir: "E", dist: 6 }],
+    [{ dir: "W", dist: 6 }, { dir: "L", dist: 8 }]
+  ];
+  state.steps = presets[Math.floor(Math.random() * presets.length)].map(s => ({ ...s }));
+  renderMain();
+});
+
+/* =====================================================================
+   8. FACING LAB
+   ===================================================================== */
+document.querySelectorAll("[data-facing]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.facingLab = btn.dataset.facing;
+    document.querySelectorAll("[data-facing]").forEach(b => {
+      b.classList.toggle("active", b === btn);
+      b.setAttribute("aria-selected", b === btn ? "true" : "false");
+    });
+    renderFacingLab();
+  });
+});
+
+/* =====================================================================
+   9. PRACTICE
+   ===================================================================== */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function setPracticeMode(mode) {
+  state.practiceMode = mode;
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+    const on = b.dataset.mode === mode;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  $("timer-container").classList.toggle("hidden", mode !== "timed");
+  if (mode === "timed") startTimer();
+  else stopTimer();
+  document.querySelectorAll("main > section").forEach((el, idx) => {
+    if (idx === 0 || idx === 2 || idx === 3) {
+      el.style.display = (mode === "hints") ? "" : "none";
+    }
+  });
+}
+document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+  b.addEventListener("click", () => setPracticeMode(b.dataset.mode));
+});
+function startTimer() {
+  stopTimer();
+  state.timer.remaining = 90;
+  $("timer-display").textContent = state.timer.remaining;
+  state.timer.interval = setInterval(() => {
+    state.timer.remaining--;
+    $("timer-display").textContent = Math.max(0, state.timer.remaining);
+    if (state.timer.remaining <= 0) {
+      stopTimer();
+      if (!state.answered) {
+        const q = state.shuffled[state.currentQIndex];
+        markAnswer(-1, q);
+      }
+    }
+  }, 1000);
+}
+function stopTimer() {
+  if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; }
+}
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
+    if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw));
+  } catch {}
+}
+function saveProgress() {
+  try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch {}
+}
+function renderStats() {
+  $("stat-attempts").textContent = state.stats.attempts;
+  $("stat-correct").textContent = state.stats.correct;
+  $("stat-independent").textContent = state.stats.independentCorrect;
+  const acc = state.stats.attempts ? Math.round(state.stats.correct / state.stats.attempts * 100) : 0;
+  $("stat-accuracy").textContent = acc + "%";
+}
+function renderQuestion() {
+  if (!state.testsPassed) {
+    $("practice-q-stem").textContent = "Practice is disabled because the model self-tests failed.";
+    return;
+  }
+  const q = state.shuffled[state.currentQIndex];
+  state.answered = false;
+  $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
+  const d = $("practice-q-difficulty");
+  d.textContent = q.difficulty;
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
+                             : q.difficulty === "Medium" ? "badge-draft"
+                             : "badge-tag");
+  $("practice-q-stem").textContent = q.stem;
+
+  $("practice-feedback").className = "callout hidden";
+  $("practice-error-categorizer").classList.add("hidden");
+  $("practice-solution-box").classList.add("hidden");
+  $("btn-next-question").disabled = true;
+
+  const container = $("practice-options-container");
+  container.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = opt;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.addEventListener("click", () => markAnswer(i, q));
+    container.appendChild(btn);
+  });
+
+  if (state.practiceMode === "timed") startTimer();
+}
+function markAnswer(chosenIdx, q) {
+  if (state.answered) return;
+  state.answered = true;
+  stopTimer();
+  const isCorrect = chosenIdx === q.correctIndex;
+  const isTrap = chosenIdx === q.trapOptionIndex;
+
+  document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
+    b.disabled = true;
+    b.setAttribute("aria-checked", i === chosenIdx ? "true" : "false");
+    if (i === q.correctIndex) b.classList.add("correct");
+    else if (i === chosenIdx) b.classList.add(isTrap ? "trap" : "incorrect");
+  });
+
+  const fb = $("practice-feedback");
+  fb.classList.remove("hidden");
+  if (isCorrect) {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong>`;
+  } else if (isTrap) {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  } else {
+    fb.className = "callout callout-danger";
+    fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  }
+
+  $("practice-solution-box").classList.remove("hidden");
+  $("practice-solution-text").textContent = q.solution;
+
+  state.stats.attempts++;
+  if (isCorrect) {
+    state.stats.correct++;
+    if (state.practiceMode !== "hints") state.stats.independentCorrect++;
+  }
+  saveProgress();
+  renderStats();
+  $("btn-next-question").disabled = false;
+}
+$("btn-next-question").addEventListener("click", () => {
+  state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
+  renderQuestion();
+});
+$("select-error-category").addEventListener("change", (e) => {
+  const cat = e.target.value;
+  state.stats.errorsByCat[cat] = (state.stats.errorsByCat[cat] || 0) + 1;
+  saveProgress();
+});
+function handleResetStats() {
+  if (!confirm("Reset local practice stats?")) return;
+  state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
+  saveProgress();
+  renderStats();
+}
+window.handleResetStats = handleResetStats;
+
+/* =====================================================================
+   10. INIT
+   ===================================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const results = runSelfTests();
+  state.testsPassed = results.failed === 0;
+  const banner = $("test-status-banner");
+  if (!state.testsPassed) {
+    banner.className = "test-banner";
+    banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong>
+      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
+    $("practice-options-container").innerHTML = "";
+  }
+
+  loadProgress();
+  state.shuffled = shuffle(PRACTICE_QUESTIONS);
+
+  renderMain();
+  renderFacingLab();
+  renderQuestion();
+  renderStats();
+  setPracticeMode("hints");
+});
+</script>
 </body>
 </html>

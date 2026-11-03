@@ -1,1191 +1,1428 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trains, Bridges & Relative Speed — Aptitude & Reasoning Lab</title>
-  <meta name="description" content="Master train crossing times, bridge clearance distance, km/h to m/s conversion, and relative speeds with interactive dynamic models and timed practice.">
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="../assets/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trains, Bridges &amp; Relative Speed — Aptitude Lab</title>
+<meta name="description" content="See why the train must travel its own length. Animated clearance, ghost-bar traps, 5/18 conversion lab, relative speed mini-lab, and predict-first practice." />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<style>
+:root {
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --purple: #a78bfa; --purple-soft: rgba(167,139,250,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: var(--font-sans);
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+}
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--primary); color: #001; padding: 12px 16px;
+  border-radius: 0 0 8px 0; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 0.75rem; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--surface-2); border: 1px solid var(--border);
+  padding: 0.15em 0.4em; border-radius: 4px;
+}
+.page-container { max-width: 1080px; margin: 0 auto; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 22px 22px 24px;
+  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+@media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
+.card-header { margin-bottom: 18px; }
+.section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.section-title::before {
+  content: counter(section-num); counter-increment: section-num;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%; font-size: 0.8rem; font-weight: 800;
+}
+main { counter-reset: section-num; }
+.section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
+.site-header {
+  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
+  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
+  margin: 0 -16px 24px; padding: 12px 16px;
+}
+.header-container {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
+.brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+.nav-link:hover { color: var(--text); }
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
+}
+.badge-published { background: var(--success-soft); color: var(--success); }
+.badge-draft { background: var(--warn-soft); color: var(--warn); }
+.badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #001824; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
+.btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
+.btn-secondary:hover:not(:disabled) { background: var(--border); }
+.btn-ghost { background: transparent; color: var(--text-dim); }
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
+.btn-sm { padding: 6px 11px; font-size: 0.8rem; }
+.btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.control-grid {
+  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
+}
+@media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .control-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; } }
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 0.85rem; font-weight: 600; color: var(--text);
+}
+input[type=number] {
+  background: var(--bg-elev); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-size: 0.95rem; font-family: var(--font-sans); width: 100%;
+  transition: border-color var(--transition);
+}
+input[type=number]:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+input[type=number]:disabled { opacity: 0.6; cursor: not-allowed; }
+input[type=range] { width: 100%; accent-color: var(--primary); height: 24px; }
+input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
+.vis-container {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
+}
+.vis-container svg { display: block; width: 100%; height: auto; }
+.score-bar {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
+}
+@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
+.score-stat {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.score-stat-label {
+  font-size: 0.72rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.score-stat-num {
+  font-size: 1.05rem; font-weight: 700;
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
+}
+.callout {
+  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
+  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
+}
+.callout.hidden { display: none; }
+.callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
+.callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
+.callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
+.callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.test-banner {
+  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
+  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
+}
+.test-banner.hidden { display: none; }
+.test-banner ul { margin: 8px 0 0 20px; padding: 0; }
+.predict-box {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md); padding: 18px 20px;
+}
+.predict-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
+}
+.predict-header svg { flex-shrink: 0; }
+.options-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.option-btn {
+  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  font-family: var(--font-mono); font-size: 0.98rem; font-weight: 700;
+  cursor: pointer; transition: all var(--transition); text-align: center;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
+.option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
+.option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
+.option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.steps-container { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.step-item {
+  background: var(--bg-elev); border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+}
+.step-num {
+  font-size: 0.72rem; color: var(--primary); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
+}
+.step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+.step-detail {
+  font-family: var(--font-mono); background: var(--surface-2);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 6px 10px; font-size: 0.85rem; margin-top: 6px;
+  color: var(--primary); overflow-x: auto;
+}
+.practice-header {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.mode-toggle-group {
+  display: inline-flex; background: var(--bg-elev);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 3px; gap: 2px;
+}
+.mode-btn {
+  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
+  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active { background: var(--primary-soft); color: var(--primary); }
+.mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.timer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
+}
+.timer-badge.hidden { display: none; }
+.question-stem {
+  font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500;
+}
+.site-footer {
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.85rem;
+}
+.footer-container { max-width: 1080px; margin: 0 auto; }
+.disclaimer-box {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+}
+.error-categorizer {
+  margin-top: 12px; padding: 12px;
+  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.error-categorizer.hidden { display: none; }
+.error-categorizer label {
+  font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;
+}
+.error-categorizer select {
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
+}
+</style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="header-container">
-      <a href="../index.html" class="brand-link" aria-label="Aptitude and Reasoning Lab Home">
-        <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-          <rect width="64" height="64" rx="14" fill="#0f172a" />
-          <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3" />
-          <circle cx="24" cy="24" r="4" fill="#38bdf8" />
-          <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4" />
-          <circle cx="40" cy="40" r="4" fill="#34d399" />
-          <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
-        </svg>
-        <span>Aptitude Lab</span>
-      </a>
+<header class="site-header">
+  <div class="header-container">
+    <a href="../index.html" class="brand-link">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f172a"/>
+        <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+        <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+        <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+        <circle cx="40" cy="40" r="4" fill="#34d399"/>
+        <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span>Aptitude Lab</span>
+    </a>
+    <nav aria-label="Topic navigation">
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+        <li><span class="badge badge-published">Published</span></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
-      <nav aria-label="Topic navigation">
-        <ul class="nav-links">
-          <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-          <li><span class="badge badge-published">Published</span></li>
-        </ul>
-      </nav>
+<main id="main-content" class="page-container">
+
+  <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+  <header class="card">
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.75rem;">
+      <span class="badge badge-tag">Quantitative Aptitude</span>
+      <span class="badge badge-tag">SEBI Gr A</span>
+      <span class="badge badge-tag">Banking &amp; SSC</span>
     </div>
+    <h1>Trains, Bridges &amp; Relative Speed</h1>
+    <p class="section-subtitle" style="margin-top:8px;">
+      <strong>The train is not clear until its tail clears.</strong> Watch it slide across the bridge — the extra distance is exactly the train's own length. Then use the 5/18 conversion lab and the relative-speed mini-lab to master the rest of the chapter.
+    </p>
   </header>
 
-  <!-- Main Content -->
-  <main id="main-content" class="page-container">
-    
-    <!-- Model Self-Test Banner -->
-    <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+  <!-- ===== SECTION 1 — ANIMATED CLEARANCE ===== -->
+  <section class="card" aria-labelledby="s1">
+    <div class="card-header">
+      <h2 id="s1" class="section-title">Watch the train cross</h2>
+      <p class="section-subtitle">The engine enters at t = 0. The tail clears at t = T. Between those moments the train covers L_train + L_bridge — the extra train-length is the whole point.</p>
+    </div>
 
-    <!-- Topic Hero -->
-    <header class="card" style="margin-bottom: 1.25rem;">
-      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
-        <span class="badge badge-tag">Quantitative Aptitude</span>
-        <span class="badge badge-tag">SEBI Gr A (IT & Gen)</span>
-        <span class="badge badge-tag">Banking & SSC</span>
-      </div>
-      <h1>Trains, Bridges & Relative Speed</h1>
-      <p class="section-subtitle">
-        Understand why a train crossing a platform must travel its own length plus the platform length ($L_{\text{train}} + L_{\text{platform}}$). Master unit conversions ($5/18$) and relative speed rules for same vs. opposite directions.
-      </p>
-    </header>
-
-    <!-- Section 1: Concept & Interactive Model -->
-    <section class="card" aria-labelledby="interactive-model-title">
-      <div class="card-header">
-        <div>
-          <h2 id="interactive-model-title" class="section-title">
-            <span>1. Interactive Clearance & Distance Model</span>
-          </h2>
-          <p class="section-subtitle">Adjust train length, bridge length, and speed to visualize the complete clearance vector.</p>
-        </div>
-      </div>
-
-      <!-- Quick Preset Buttons -->
-      <div style="margin-bottom: 1.25rem;">
-        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-muted); display: block; margin-bottom: 0.4rem;">
-          Standard Exam Presets:
-        </span>
-        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(200, 300, 72)">200m Train, 300m Bridge @ 72 km/h (25s)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(150, 0, 54)">150m Train, Pole (0m) @ 54 km/h (10s)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(120, 280, 36)">120m Train, 280m Platform @ 36 km/h (40s)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(250, 450, 90)">250m Train, 450m Tunnel @ 90 km/h (28s)</button>
-        </div>
-      </div>
-
-      <!-- Controls -->
-      <div class="control-grid">
-        <div class="control-group">
-          <label for="input-lt" class="control-label">
-            <span>Train Length (<span style="font-family: var(--font-mono);">L_t</span>)</span>
-            <span id="lt-display-badge" class="badge badge-tag">200 meters</span>
-          </label>
-          <input type="number" id="input-lt" value="200" min="20" max="600" step="10">
-          <input type="range" id="range-lt" min="50" max="500" value="200" step="10" aria-label="Train Length Slider">
-        </div>
-
-        <div class="control-group">
-          <label for="input-lb" class="control-label">
-            <span>Bridge / Platform (<span style="font-family: var(--font-mono);">L_b</span>)</span>
-            <span id="lb-display-badge" class="badge badge-tag">300 meters</span>
-          </label>
-          <input type="number" id="input-lb" value="300" min="0" max="1000" step="10">
-          <input type="range" id="range-lb" min="0" max="800" value="300" step="10" aria-label="Bridge Length Slider">
-        </div>
-
-        <div class="control-group">
-          <label for="input-speed" class="control-label">
-            <span>Train Speed (<span style="font-family: var(--font-mono);">S</span>)</span>
-            <span id="speed-display-badge" class="badge badge-tag">72 km/h = 20 m/s</span>
-          </label>
-          <input type="number" id="input-speed" value="72" min="18" max="180" step="1">
-          <input type="range" id="range-speed" min="18" max="144" value="72" step="6" aria-label="Speed Slider">
-        </div>
-      </div>
-
-      <!-- SVG Visualization -->
-      <div class="vis-container" aria-label="Visual track and bridge clearance diagram">
-        <svg id="train-svg" viewBox="0 0 620 180" width="100%" height="180" role="img" aria-labelledby="svg-desc">
-          <title id="svg-desc">Diagram showing train, bridge, and traversal distance from engine entry to tail clearance</title>
-          <!-- Populated by Model Renderer -->
-        </svg>
-      </div>
-
-      <!-- Computed Model Outputs Readout -->
-      <div class="score-bar" id="model-readout" aria-live="polite">
-        <div class="score-stat">
-          <span class="score-stat-label">Converted Speed</span>
-          <span class="score-stat-num" id="readout-speed-ms">20 m/s</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Total Distance to Clear</span>
-          <span class="score-stat-num" id="readout-total-dist">500 meters</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Time to Clear Bridge</span>
-          <span class="score-stat-num" id="readout-time-bridge">25.0 seconds</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Time to Cross Pole (0m)</span>
-          <span class="score-stat-num" id="readout-time-pole">10.0 seconds</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 2: Predict-First Worked Example -->
-    <section class="card" aria-labelledby="predict-title">
-      <div class="card-header">
-        <div>
-          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
-          <p class="section-subtitle">Predict the crossing time before revealing the mathematical steps.</p>
-        </div>
-      </div>
-
-      <div class="predict-box">
-        <div class="predict-header">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
-          </svg>
-          <span>Predict the bridge crossing time:</span>
-        </div>
-        <p id="predict-scenario-text" style="font-size: 1.05rem; font-weight: 500; margin-bottom: 1rem;">
-          A 200 m long train travelling at 72 km/h crosses a 300 m long bridge. How many seconds does it take to completely clear the bridge?
-        </p>
-
-        <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options">
-          <!-- Dynamically populated predict options -->
-        </div>
-
-        <div id="predict-feedback" class="callout hidden" role="alert"></div>
-
-        <div style="margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-          <button type="button" id="btn-reveal-solution" class="btn btn-secondary">
-            Inspect Worked Solution ↓
-          </button>
-          <span style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            (Clearance requires the tail of the train to clear the end of the bridge!)
-          </span>
-        </div>
-      </div>
-
-      <!-- Step-by-Step Worked Solution Trace -->
-      <div id="worked-solution-panel" class="hidden">
-        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Verified Step-by-Step Mathematical Trace</h3>
-        <div class="steps-container" id="solution-steps-container">
-          <!-- Populated from pure Model.solve() -->
-        </div>
-
-        <!-- Trap Callout -->
-        <div class="callout callout-trap" id="solution-trap-callout">
-          <strong>⚠️ Common Trap to Avoid:</strong>
-          <span id="solution-trap-text"></span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 3: Core Exam Rules Reference -->
-    <section class="card" aria-labelledby="reference-title">
-      <div class="card-header">
-        <div>
-          <h2 id="reference-title" class="section-title">3. Core Exam Rules & Fast Shortcuts</h2>
-          <p class="section-subtitle">Unit conversions, clearance formulas, and relative speed principles.</p>
-        </div>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The 5/18 Unit Conversion</h3>
-          <p style="font-size: 0.875rem;">Always harmonize units before calculating:</p>
-          <div class="step-detail" style="display: block; text-align: center; margin: 0.4rem 0;">
-            $S_{\text{m/s}} = S_{\text{km/h}} \times \frac{5}{18}$ &nbsp;|&nbsp; $S_{\text{km/h}} = S_{\text{m/s}} \times \frac{18}{5}$
-          </div>
-          <ul style="font-size: 0.8125rem; padding-left: 1.25rem; margin-top: 0.3rem;">
-            <li>36 km/h = 10 m/s &nbsp;•&nbsp; 54 km/h = 15 m/s</li>
-            <li>72 km/h = 20 m/s &nbsp;•&nbsp; 90 km/h = 25 m/s</li>
-          </ul>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The Clearance Distance Law</h3>
-          <p style="font-size: 0.875rem;">The distance depends on whether the object has physical length:</p>
-          <ul style="font-size: 0.875rem; padding-left: 1.25rem; margin-top: 0.3rem;">
-            <li><strong>Pole / Tree / Person (0 length):</strong> $D = L_{\text{train}}$</li>
-            <li><strong>Bridge / Platform / Tunnel:</strong> $D = L_{\text{train}} + L_{\text{bridge}}$</li>
-            <li><strong>Two Trains Crossing:</strong> $D = L_1 + L_2$</li>
-          </ul>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Relative Speed Directions</h3>
-          <p style="font-size: 0.875rem;">When both objects are in motion:</p>
-          <ul style="font-size: 0.875rem; padding-left: 1.25rem; margin-top: 0.3rem;">
-            <li><strong>Opposite Directions ($\to \leftarrow$):</strong> $S_{\text{rel}} = S_1 + S_2$</li>
-            <li><strong>Same Direction ($\to \to$):</strong> $S_{\text{rel}} = |S_1 - S_2|$</li>
-            <li><strong>Man in another train:</strong> $D = L_{\text{passing train}}$ only!</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 4: Practice Lab (Independent & Timed) -->
-    <section class="card" aria-labelledby="practice-title" id="practice-section">
-      <div class="card-header">
-        <div>
-          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
-          <p class="section-subtitle">Real competitive-exam questions. Unseen questions solved independently build genuine retrieval.</p>
-        </div>
-      </div>
-
-      <!-- Practice Controls & Mode Toggles -->
-      <div class="practice-header">
-        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
-          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
-            Guided Mode
-          </button>
-          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
-            Try Without Hints
-          </button>
-          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
-            Timed Practice
-          </button>
-        </div>
-
-        <div id="timer-container" class="timer-badge hidden" aria-live="off">
-          <span>⏱️</span>
-          <span id="timer-display">00:00</span>
-        </div>
-      </div>
-
-      <!-- Score & Accuracy Progress Bar -->
-      <div class="score-bar" aria-label="Current Practice Statistics">
-        <div class="score-stat">
-          <span class="score-stat-label">Questions Attempted</span>
-          <span class="score-stat-num" id="stat-attempts">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Total Correct</span>
-          <span class="score-stat-num" id="stat-correct">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Independent Correct</span>
-          <span class="score-stat-num" id="stat-independent">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Accuracy</span>
-          <span class="score-stat-num" id="stat-accuracy">0%</span>
-        </div>
-        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
-          Reset Local Progress
-        </button>
-      </div>
-
-      <!-- Question Box -->
-      <div id="practice-question-card" style="margin-top: 1.25rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
-            Question 1 of 12
-          </span>
-          <span class="badge" id="practice-q-difficulty">Easy</span>
-        </div>
-
-        <p class="question-stem" id="practice-q-stem">
-          Loading practice question...
-        </p>
-
-        <!-- Options container -->
-        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
-          <!-- Rendered dynamically -->
-        </div>
-
-        <!-- Practice Feedback Callout -->
-        <div id="practice-feedback" class="callout hidden" role="alert"></div>
-
-        <!-- Error Categorizer (appears on incorrect submission) -->
-        <div id="practice-error-categorizer" class="error-categorizer hidden">
-          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
-            Reflective Analysis: What was the primary reason for this mistake?
-          </label>
-          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
-            <option value="concept">Concept Misunderstanding (Forgot train length or added passenger's train)</option>
-            <option value="method">Wrong Setup / Method (Forgot 5/18 conversion or inverted relative speed)</option>
-            <option value="arithmetic">Arithmetic Slip (Setup was right, calculation erred)</option>
-            <option value="misread">Misread Condition (Solved for bridge length vs train length)</option>
-            <option value="time_guess">Time Pressure / Rushed Guess</option>
-          </select>
-        </div>
-
-        <!-- Practice Worked Solution Box (revealed upon answering) -->
-        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
-          <h4 style="margin-bottom: 0.4rem; font-size: 0.95rem;">Step-by-Step Solution:</h4>
-          <p id="practice-solution-text" style="font-size: 0.9rem; line-height: 1.5;"></p>
-        </div>
-
-        <!-- Practice Action Bar -->
-        <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem; justify-content: flex-end;">
-          <button type="button" id="btn-next-question" class="btn btn-primary" onclick="loadNextQuestion()">
-            Next Question →
-          </button>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <strong>Aptitude & Reasoning Lab</strong> — Quantitative Aptitude Stream
-          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
-            Topic Review Status: <span class="badge badge-published">published</span> • Last Reviewed: 2026-10-29
-          </div>
-        </div>
-        <div style="font-size: 0.8125rem;">
-          <a href="../docs/reviews/trains-bridge.md" style="color: var(--color-primary); text-decoration: none;">View Topic Review & Test Specification ↗</a>
-        </div>
-      </div>
-
-      <div class="disclaimer-box">
-        <strong>Educational Disclaimer:</strong> Educational tool. Check the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority. All questions and solvers are original or derived from public standard mathematical relationships.
+    <div style="margin-bottom:18px;">
+      <span style="font-size:.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:.5rem;">
+        Standard exam presets:
+      </span>
+      <div style="display:flex; gap:.4rem; flex-wrap:wrap;">
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="200,300,72">200m / 300m @ 72 km/h (25 s)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="150,0,54">150m / pole @ 54 km/h (10 s)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="120,280,36">120m / 280m @ 36 km/h (40 s)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="250,450,90">250m / 450m @ 90 km/h (28 s)</button>
       </div>
     </div>
-  </footer>
 
-  <!-- Scripts -->
-  <script src="../assets/common.js"></script>
-  <script>
-    /* ==========================================================================
-       1. PURE MODEL (Pure calculation functions: No DOM, no random calls)
-       ========================================================================== */
-    const Model = (() => {
-      function kmhToMs(kmh) {
-        return LabCommon.round(kmh * (5 / 18), 3);
-      }
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="input-lt" class="control-label">
+          <span>Train length L_t</span>
+          <span id="lt-badge" class="badge badge-tag">200 m</span>
+        </label>
+        <input type="range" id="range-lt" min="50" max="500" value="200" step="10">
+        <input type="number" id="input-lt" value="200" min="20" max="600" step="10">
+      </div>
+      <div class="control-group">
+        <label for="input-lb" class="control-label">
+          <span>Bridge / platform L_b</span>
+          <span id="lb-badge" class="badge badge-tag">300 m</span>
+        </label>
+        <input type="range" id="range-lb" min="0" max="800" value="300" step="10">
+        <input type="number" id="input-lb" value="300" min="0" max="1000" step="10">
+      </div>
+      <div class="control-group">
+        <label for="input-speed" class="control-label">
+          <span>Speed S (km/h)</span>
+          <span id="speed-badge" class="badge badge-tag">72 km/h</span>
+        </label>
+        <input type="range" id="range-speed" min="18" max="144" value="72" step="6">
+        <input type="number" id="input-speed" value="72" min="18" max="180" step="1">
+      </div>
+    </div>
 
-      function msToKmh(ms) {
-        return LabCommon.round(ms * (18 / 5), 2);
-      }
+    <div class="vis-container">
+      <svg id="crossing-svg" viewBox="0 0 760 340" width="100%" role="img" aria-label="Animated train crossing bridge">
+        <title>Train crossing a bridge, with engine entry and tail clearance moments marked</title>
+      </svg>
+      <p id="svg-live-desc" class="sr-only" aria-live="polite"></p>
+    </div>
 
-      /**
-       * Pure solver for single train crossing a stationary bridge, platform, or pole.
-       */
-      function solveSingleTrain(input) {
-        const lt = Number(input.lt);
-        const lb = Number(input.lb !== undefined ? input.lb : 0);
-        const s_kmh = Number(input.speed);
+    <div class="score-bar" aria-live="polite">
+      <div class="score-stat"><span class="score-stat-label">Speed in m/s</span><span class="score-stat-num" id="readout-speed-ms">20 m/s</span></div>
+      <div class="score-stat"><span class="score-stat-label">Total distance</span><span class="score-stat-num" id="readout-distance">500 m</span></div>
+      <div class="score-stat"><span class="score-stat-label">Cross time</span><span class="score-stat-num" id="readout-cross-time">25 s</span></div>
+      <div class="score-stat"><span class="score-stat-label">Pole-cross time</span><span class="score-stat-num" id="readout-pole-time">10 s</span></div>
+    </div>
+  </section>
 
-        // Validation
-        if (isNaN(lt) || isNaN(lb) || isNaN(s_kmh)) {
-          return { valid: false, error: "Inputs must be valid numbers" };
-        }
-        if (lt <= 0) {
-          return { valid: false, error: "Train length must be strictly greater than zero" };
-        }
-        if (lb < 0) {
-          return { valid: false, error: "Bridge length cannot be negative" };
-        }
-        if (s_kmh <= 0) {
-          return { valid: false, error: "Train speed must be strictly greater than zero" };
-        }
+  <!-- ===== SECTION 2 — PREDICT ===== -->
+  <section class="card" aria-labelledby="s2">
+    <div class="card-header">
+      <h2 id="s2" class="section-title">Predict first</h2>
+      <p class="section-subtitle">Commit to a time. If you pick the bridge-only trap, a ghost bar shows where you would have stopped — mid-bridge, tail still inside.</p>
+    </div>
 
-        const s_ms = kmhToMs(s_kmh);
-        const totalDistance = lt + lb;
-        const timeBridge = LabCommon.round(totalDistance / s_ms, 2);
-        const timePole = LabCommon.round(lt / s_ms, 2);
+    <div class="predict-box">
+      <div class="predict-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>How many seconds to fully clear?</span>
+      </div>
+      <p id="predict-scenario-text" style="font-size:1.05rem; font-weight:500; margin-bottom:1rem;"></p>
+      <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options"></div>
+      <div id="predict-feedback" class="callout hidden" role="alert"></div>
 
-        // Steps trace
-        const steps = [
-          {
-            title: "Given Parameters",
-            explanation: `Train Length = ${lt} m, Bridge Length = ${lb} m, Speed = ${s_kmh} km/h.`
-          },
-          {
-            title: "Convert Speed from km/h to m/s",
-            explanation: `Multiply by 5/18: ${s_kmh} × (5/18) = ${s_ms} m/s.`,
-            math: `S = ${s_ms} m/s`
-          },
-          {
-            title: "Determine Total Clearance Distance",
-            explanation: `The engine enters the bridge, but the train is only fully clear when its tail leaves the bridge: Total D = L_train + L_bridge = ${lt} + ${lb} = ${totalDistance} m.`,
-            math: `D = ${totalDistance} meters`
-          },
-          {
-            title: "Calculate Clearance Time",
-            explanation: `Time = Distance ÷ Speed = ${totalDistance} ÷ ${s_ms} = ${timeBridge} seconds.`,
-            math: `T = ${totalDistance} / ${s_ms} = ${timeBridge} seconds`
-          }
-        ];
+      <div style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
+        <button type="button" id="btn-new-predict" class="btn btn-secondary">🎲 New scenario</button>
+        <span id="predict-lock-hint" style="font-size:.8rem; color:var(--text-muted);">
+          Sliders locked until you predict.
+        </span>
+      </div>
+    </div>
 
-        // Pedagogical Trap Detection
-        let commonTrap = null;
-        const bridgeOnlyTime = LabCommon.round(lb / s_ms, 2);
-        const noConversionTime = LabCommon.round(totalDistance / s_kmh, 2);
+    <div id="worked-solution-panel" class="hidden" style="margin-top:20px;">
+      <h3 style="margin-bottom:12px;">Step-by-step solution</h3>
+      <div class="steps-container" id="solution-steps-container"></div>
+      <div class="callout callout-trap" id="solution-trap-callout" style="margin-top:12px;">
+        <strong>⚠️ Common trap:</strong> <span id="solution-trap-text"></span>
+      </div>
+    </div>
+  </section>
 
-        if (input.trapAnswer !== undefined) {
-          const userAns = Number(input.trapAnswer);
-          if (userAns === bridgeOnlyTime && lb > 0) {
-            commonTrap = {
-              type: "bridge_only_trap",
-              answer: bridgeOnlyTime,
-              explanation: `You used only the bridge length (${lb} m). But the train is NOT clear until its tail exits the bridge! The train must travel ${lt} + ${lb} = ${totalDistance} m.`
-            };
-          } else if (Math.abs(userAns - noConversionTime) < 0.1) {
-            commonTrap = {
-              type: "no_conversion_trap",
-              answer: noConversionTime,
-              explanation: `You divided meters directly by km/h (${totalDistance} / ${s_kmh}). You must convert ${s_kmh} km/h to ${s_ms} m/s by multiplying by 5/18 first!`
-            };
-          }
-        }
+  <!-- ===== SECTION 3 — 5/18 CONVERSION LAB ===== -->
+  <section class="card" aria-labelledby="s3">
+    <div class="card-header">
+      <h2 id="s3" class="section-title">5/18 conversion lab</h2>
+      <p class="section-subtitle">The second-biggest trap in this chapter is mixing km/h with metres. Slide and see both units at once.</p>
+    </div>
 
-        if (!commonTrap && lb > 0) {
-          commonTrap = {
-            type: "bridge_only_trap",
-            answer: bridgeOnlyTime,
-            explanation: `Common mistake: using only the bridge length (${lb} m) and getting ${bridgeOnlyTime}s. Total distance must include the train's own length (${lt} + ${lb} = ${totalDistance} m).`
-          };
-        }
+    <div class="control-group" style="max-width:480px;">
+      <label for="conv-slider" class="control-label">
+        <span>Speed slider</span>
+        <span id="conv-badge" class="badge badge-tag">72 km/h</span>
+      </label>
+      <input type="range" id="conv-slider" min="10" max="180" value="72" step="1">
+    </div>
 
-        return {
-          valid: true,
-          answer: timeBridge,
-          answerDisplay: `${timeBridge} seconds`,
-          intermediates: {
-            lt,
-            lb,
-            s_kmh,
-            s_ms,
-            totalDistance,
-            timeBridge,
-            timePole
-          },
-          steps,
-          assumptions: [
-            "Train travels at constant speed throughout the crossing",
-            "Clearance is measured from engine arrival to tail departure",
-            "No deceleration inside the bridge"
-          ],
-          commonTrap
-        };
-      }
+    <div class="vis-container">
+      <svg id="conv-svg" viewBox="0 0 760 180" width="100%" role="img" aria-label="Speed conversion dual scale">
+        <title>km/h and m/s shown on aligned scales</title>
+      </svg>
+    </div>
 
-      /**
-       * Pure solver for two trains crossing each other.
-       */
-      function solveTwoTrains(l1, l2, s1_kmh, s2_kmh, direction = "opposite") {
-        if (l1 <= 0 || l2 <= 0 || s1_kmh <= 0 || s2_kmh <= 0) {
-          return { valid: false, error: "Lengths and speeds must be strictly positive" };
-        }
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">km/h</span><span class="score-stat-num" id="conv-kmh">72</span></div>
+      <div class="score-stat"><span class="score-stat-label">m/s</span><span class="score-stat-num" id="conv-ms">20</span></div>
+      <div class="score-stat"><span class="score-stat-label">× 5/18</span><span class="score-stat-num" id="conv-factor">0.2778</span></div>
+      <div class="score-stat"><span class="score-stat-label">Distance in 10 s</span><span class="score-stat-num" id="conv-dist">200 m</span></div>
+    </div>
+  </section>
 
-        const isOpp = direction === "opposite";
-        const relSpeedKmh = isOpp ? s1_kmh + s2_kmh : Math.abs(s1_kmh - s2_kmh);
-        if (relSpeedKmh === 0) {
-          return { valid: false, error: "Speeds cannot be equal for same-direction overtaking" };
-        }
+  <!-- ===== SECTION 4 — RELATIVE SPEED MINI-LAB ===== -->
+  <section class="card" aria-labelledby="s4">
+    <div class="card-header">
+      <h2 id="s4" class="section-title">Relative speed — same vs opposite</h2>
+      <p class="section-subtitle">Two trains. Toggle direction. Watch how fast the gap closes.</p>
+    </div>
 
-        const relSpeedMs = kmhToMs(relSpeedKmh);
-        const totalDist = l1 + l2;
-        const timeCross = LabCommon.round(totalDist / relSpeedMs, 2);
+    <div class="control-grid" style="max-width:640px;">
+      <div class="control-group">
+        <label for="rel-s1" class="control-label">
+          <span>Train 1 speed</span>
+          <span id="rel-s1-badge" class="badge badge-tag">60 km/h</span>
+        </label>
+        <input type="range" id="rel-s1" min="10" max="120" value="60" step="5">
+      </div>
+      <div class="control-group">
+        <label for="rel-s2" class="control-label">
+          <span>Train 2 speed</span>
+          <span id="rel-s2-badge" class="badge badge-tag">48 km/h</span>
+        </label>
+        <input type="range" id="rel-s2" min="10" max="120" value="48" step="5">
+      </div>
+    </div>
+    <div class="control-group" style="max-width:320px;">
+      <label class="control-label"><span>Direction</span></label>
+      <div class="mode-toggle-group" role="tablist" style="width:fit-content;">
+        <button type="button" class="mode-btn active" data-dir="opposite" role="tab" aria-selected="true">Opposite → ←</button>
+        <button type="button" class="mode-btn" data-dir="same" role="tab" aria-selected="false">Same → →</button>
+      </div>
+    </div>
 
-        return {
-          valid: true,
-          relSpeedKmh,
-          relSpeedMs,
-          totalDist,
-          timeCross
-        };
-      }
+    <div class="vis-container">
+      <svg id="rel-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="Two trains and relative speed">
+        <title>Two trains closing the gap at relative speed</title>
+      </svg>
+    </div>
 
-      /**
-       * Pure solver for a train passing a passenger sitting in another moving train.
-       */
-      function solvePassingPassenger(lPassing, s1_kmh, s2_kmh, direction = "opposite") {
-        if (lPassing <= 0 || s1_kmh <= 0 || s2_kmh <= 0) {
-          return { valid: false, error: "Length and speeds must be strictly positive" };
-        }
-        const relSpeedKmh = direction === "opposite" ? s1_kmh + s2_kmh : Math.abs(s1_kmh - s2_kmh);
-        const relSpeedMs = kmhToMs(relSpeedKmh);
-        const timeCross = LabCommon.round(lPassing / relSpeedMs, 2);
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Relative speed</span><span class="score-stat-num" id="rel-out-ms">30 m/s</span></div>
+      <div class="score-stat"><span class="score-stat-label">In km/h</span><span class="score-stat-num" id="rel-out-kmh">108 km/h</span></div>
+      <div class="score-stat"><span class="score-stat-label">Gap after 2 s</span><span class="score-stat-num" id="rel-gap">60 m</span></div>
+      <div class="score-stat"><span class="score-stat-label">Formula</span><span class="score-stat-num" id="rel-formula" style="font-size:.9rem;">v₁ + v₂</span></div>
+    </div>
+  </section>
 
-        return {
-          valid: true,
-          distance: lPassing,
-          relSpeedKmh,
-          relSpeedMs,
-          timeCross
-        };
-      }
+  <!-- ===== SECTION 5 — PRACTICE ===== -->
+  <section class="card" aria-labelledby="s5">
+    <div class="card-header">
+      <h2 id="s5" class="section-title">Practice</h2>
+      <p class="section-subtitle">Shuffled each session. Traps have real reasons.</p>
+    </div>
 
-      return {
-        kmhToMs,
-        msToKmh,
-        solveSingleTrain,
-        solveTwoTrains,
-        solvePassingPassenger
-      };
-    })();
+    <div class="practice-header">
+      <div class="mode-toggle-group" role="tablist" aria-label="Practice mode">
+        <button type="button" class="mode-btn active" data-mode="hints" role="tab" aria-selected="true">Guided</button>
+        <button type="button" class="mode-btn" data-mode="independent" role="tab" aria-selected="false">Independent</button>
+        <button type="button" class="mode-btn" data-mode="timed" role="tab" aria-selected="false">Timed (90s)</button>
+      </div>
+      <div id="timer-container" class="timer-badge hidden" aria-live="off">
+        <span>⏱️</span><span id="timer-display">90</span><span>s</span>
+      </div>
+    </div>
 
-    if (typeof window !== "undefined") {
-      window.Model = Model;
-    }
+    <div class="score-bar" aria-label="Practice statistics">
+      <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Independent</span><span class="score-stat-num" id="stat-independent">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Accuracy</span><span class="score-stat-num" id="stat-accuracy">0%</span></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
+    </div>
 
-    /* ==========================================================================
-       2. DETERMINISTIC SELF-TESTS (Quality Gate)
-       ========================================================================== */
-    function runSelfTests() {
-      const results = { passed: 0, failed: 0, failures: [] };
+    <div id="practice-question-card" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span class="badge" id="practice-q-difficulty">Easy</span>
+      </div>
+      <p class="question-stem" id="practice-q-stem">Loading…</p>
+      <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
+      <div id="practice-feedback" class="callout hidden" role="alert"></div>
 
-      function assert(condition, testName, details = "") {
-        if (condition) {
-          results.passed += 1;
-        } else {
-          results.failed += 1;
-          results.failures.push({ name: testName, details });
-        }
-      }
+      <div id="practice-error-categorizer" class="error-categorizer hidden">
+        <label for="select-error-category">What tripped you up? (optional)</label>
+        <select id="select-error-category">
+          <option value="concept">Forgot train length / added passenger's train length</option>
+          <option value="method">Forgot 5/18 conversion / inverted relative speed</option>
+          <option value="arithmetic">Arithmetic slip</option>
+          <option value="misread">Solved for wrong quantity</option>
+          <option value="time_guess">Time-pressure guess</option>
+        </select>
+      </div>
 
-      try {
-        // TC-01: 200m train, 300m bridge at 72 km/h (20 m/s -> 25.0s)
-        const t1 = Model.solveSingleTrain({ lt: 200, lb: 300, speed: 72 });
-        assert(t1.valid === true && t1.intermediates.s_ms === 20 && t1.intermediates.totalDistance === 500 && t1.intermediates.timeBridge === 25,
-          "TC-01: 200m train & 300m bridge", `Expected 25s. Got ${t1.intermediates?.timeBridge}s`);
+      <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:12px;">
+        <h4 style="margin-bottom:6px; font-size:.95rem;">Solution</h4>
+        <p id="practice-solution-text" style="font-size:.9rem; line-height:1.55; margin:0;"></p>
+      </div>
 
-        // TC-02: 150m train, pole (0m bridge) at 54 km/h (15 m/s -> 10.0s)
-        const t2 = Model.solveSingleTrain({ lt: 150, lb: 0, speed: 54 });
-        assert(t2.valid === true && t2.intermediates.s_ms === 15 && t2.intermediates.timeBridge === 10,
-          "TC-02: Pole crossing (0m bridge)", `Expected 10s. Got ${t2.intermediates?.timeBridge}s`);
+      <div style="margin-top:18px; display:flex; gap:.75rem; justify-content:flex-end;">
+        <button type="button" id="btn-next-question" class="btn btn-primary" disabled>Next question →</button>
+      </div>
+    </div>
+  </section>
+</main>
 
-        // TC-03: 120m train, 280m platform at 36 km/h (10 m/s -> 40.0s)
-        const t3 = Model.solveSingleTrain({ lt: 120, lb: 280, speed: 36 });
-        assert(t3.valid === true && t3.intermediates.s_ms === 10 && t3.intermediates.timeBridge === 40,
-          "TC-03: Clean 36 km/h conversion", `Expected 40s. Got ${t3.intermediates?.timeBridge}s`);
+<footer class="site-footer">
+  <div class="footer-container">
+    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <strong>Aptitude &amp; Reasoning Lab</strong> — Quant stream
+        <div style="font-size:.8rem; margin-top:.25rem;">
+          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
+        </div>
+      </div>
+      <div style="font-size:.8rem;">
+        <a href="../docs/reviews/trains-bridge.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
+      </div>
+    </div>
+    <div class="disclaimer-box">
+      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
+      Always check the latest official exam notification.
+    </div>
+  </div>
+</footer>
 
-        // TC-04: Two trains opposite direction (120m & 180m, speeds 45 & 27 km/h -> 72 km/h = 20 m/s, 300m / 20 = 15.0s)
-        const t4 = Model.solveTwoTrains(120, 180, 45, 27, "opposite");
-        assert(t4.valid === true && t4.relSpeedMs === 20 && t4.timeCross === 15,
-          "TC-04: Two trains opposite", `Expected 15s. Got ${t4.timeCross}s`);
+<script>
+/* =====================================================================
+   1. PURE MODEL
+   ===================================================================== */
+const Model = (() => {
+  const round = (x, d = 2) => Math.round(x * 10 ** d) / 10 ** d;
+  const kmhToMs = (k) => round(k * 5 / 18, 3);
 
-        // TC-05: Two trains same direction (100m & 150m, speeds 72 & 54 km/h -> 18 km/h = 5 m/s, 250m / 5 = 50.0s)
-        const t5 = Model.solveTwoTrains(100, 150, 72, 54, "same");
-        assert(t5.valid === true && t5.relSpeedMs === 5 && t5.timeCross === 50,
-          "TC-05: Two trains same direction", `Expected 50s. Got ${t5.timeCross}s`);
+  function solveCross({ lt, lb, speed }) {
+    const L = Number(lt), B = Number(lb === undefined ? 0 : lb), S = Number(speed);
+    if (![L, B, S].every(Number.isFinite)) return { valid: false, error: "All inputs must be numbers." };
+    if (L <= 0) return { valid: false, error: "Train length must be > 0." };
+    if (B < 0) return { valid: false, error: "Bridge length cannot be negative." };
+    if (S <= 0) return { valid: false, error: "Speed must be > 0." };
 
-        // TC-06: Bridge-only trap detection (200m train, 300m bridge, trap 15s)
-        const t6 = Model.solveSingleTrain({ lt: 200, lb: 300, speed: 72, trapAnswer: 15 });
-        assert(t6.valid === true && t6.commonTrap && t6.commonTrap.type === "bridge_only_trap",
-          "TC-06: Bridge-only trap detection", "Bridge-only trap was not recognized");
+    const vMs = kmhToMs(S);
+    const totalDist = L + B;
+    const crossTime = round(totalDist / vMs);
+    const poleTime = round(L / vMs);
 
-        // TC-07: No-conversion trap detection (trap 6.94s)
-        const t7 = Model.solveSingleTrain({ lt: 200, lb: 300, speed: 72, trapAnswer: 6.94 });
-        assert(t7.valid === true && t7.commonTrap && t7.commonTrap.type === "no_conversion_trap",
-          "TC-07: No-conversion trap detection", "No-conversion trap was not recognized");
+    const traps = {
+      bridgeOnly: B > 0 ? round(B / vMs) : null,
+      noConversion: round(totalDist / S),
+      forgotTrain: round(totalDist / vMs) - round(L / vMs) // symbolic — same as bridgeOnly
+    };
 
-        // TC-08: Zero train length rejection
-        const t8 = Model.solveSingleTrain({ lt: 0, lb: 300, speed: 72 });
-        assert(t8.valid === false, "TC-08: Zero train length rejection", "Zero length should return valid: false");
-
-        // TC-09: Negative speed rejection
-        const t9 = Model.solveSingleTrain({ lt: 100, lb: 300, speed: -50 });
-        assert(t9.valid === false, "TC-09: Negative speed rejection", "Negative speed should return valid: false");
-
-        // TC-10: Passenger in another moving train (160m train passing person at 36 km/h, opp 54 km/h -> 25 m/s, 160/25 = 6.4s)
-        const t10 = Model.solvePassingPassenger(160, 54, 36, "opposite");
-        assert(t10.valid === true && t10.relSpeedMs === 25 && t10.timeCross === 6.4,
-          "TC-10: Passenger in moving train", `Expected 6.4s. Got ${t10.timeCross}s`);
-
-        // TC-11: Distance invariant (Total D == Lt + Lb)
-        const t11 = Model.solveSingleTrain({ lt: 240, lb: 460, speed: 90 });
-        assert(t11.valid === true && t11.intermediates.totalDistance === (240 + 460),
-          "TC-11: Distance clearance invariant", "Total distance must equal Lt + Lb");
-
-      } catch (err) {
-        results.failed += 1;
-        results.failures.push({ name: "Unexpected test execution error", details: err.message });
-      }
-
-      return results;
-    }
-
-    if (typeof window !== "undefined") {
-      window.runSelfTests = runSelfTests;
-    }
-
-    /* ==========================================================================
-       3. PRACTICE QUESTION BANK (12 Verified Exam-Style Questions)
-       ========================================================================== */
-    const PRACTICE_QUESTIONS = [
-      {
-        id: "TB1",
-        difficulty: "Easy",
-        stem: "A 240 m long train is running at a speed of 72 km/h. How many seconds will it take to cross a railway platform 360 m long?",
-        options: ["30 seconds", "18 seconds", "12 seconds", "25 seconds"],
-        correctIndex: 0, // 30 seconds
-        trapOptionIndex: 1, // 18 seconds (platform length only: 360 / 20 = 18s)
-        trapExplanation: "Bridge-only trap! The train is not clear until its tail exits the platform. Total distance = 240 + 360 = 600m. At 20 m/s, time = 600 / 20 = 30 seconds.",
-        solution: "Speed = 72 × (5/18) = 20 m/s. Total distance = Train + Platform = 240 + 360 = 600 m. Time = 600 / 20 = 30 seconds."
-      },
-      {
-        id: "TB2",
-        difficulty: "Easy",
-        stem: "A train 280 m long is moving at 63 km/h. What is the time taken by it to cross an electric pole?",
-        options: ["16 seconds", "14 seconds", "18 seconds", "12 seconds"],
-        correctIndex: 0, // 16 seconds
-        trapOptionIndex: 1,
-        trapExplanation: "An electric pole has negligible length (0m), so distance = train length = 280m. Speed = 63 × 5/18 = 17.5 m/s. 280 ÷ 17.5 = 16 seconds.",
-        solution: "Pole length = 0 m. Distance = 280 m. Speed = 63 × (5/18) = 17.5 m/s. Time = 280 / 17.5 = 16 seconds."
-      },
-      {
-        id: "TB3",
-        difficulty: "Medium",
-        stem: "A train 175 m long crosses a bridge in 27 seconds travelling at a uniform speed of 54 km/h. What is the length of the bridge?",
-        options: ["230 meters", "245 meters", "405 meters", "210 meters"],
-        correctIndex: 0, // 230 meters
-        trapOptionIndex: 2, // 405 meters (total distance without subtracting train length)
-        trapExplanation: "Trap: 405m is the TOTAL distance travelled. You must subtract the train's own length (175m) to get the bridge length: 405 - 175 = 230 m.",
-        solution: "Speed = 54 × (5/18) = 15 m/s. Total distance covered in 27 seconds = 15 × 27 = 405 m. Since Total D = Train + Bridge: Bridge length = 405 - 175 = 230 meters."
-      },
-      {
-        id: "TB4",
-        difficulty: "Medium",
-        stem: "A train crosses a stationary pole in 9 seconds and crosses a 150 m long platform in 15 seconds. What is the speed of the train in km/h?",
-        options: ["90 km/h", "72 km/h", "84 km/h", "100 km/h"],
-        correctIndex: 0, // 90 km/h
-        trapOptionIndex: 1,
-        trapExplanation: "The extra 6 seconds (15 - 9) are taken strictly to cover the 150m platform! Speed = 150 / 6 = 25 m/s. Converted to km/h: 25 × (18/5) = 90 km/h.",
-        solution: "In (15 - 9) = 6 seconds, the train covers exactly the length of the platform (150 m). Speed = 150 / 6 = 25 m/s. In km/h: 25 × (18/5) = 90 km/h."
-      },
-      {
-        id: "TB5",
-        difficulty: "Medium",
-        stem: "Two trains of lengths 140 m and 160 m are travelling towards each other on parallel tracks at speeds of 60 km/h and 48 km/h respectively. How long will they take to completely cross each other from the moment they meet?",
-        options: ["10 seconds", "12 seconds", "8 seconds", "15 seconds"],
-        correctIndex: 0, // 10 seconds
-        trapOptionIndex: 1,
-        trapExplanation: "Opposite directions: speeds ADD. Relative speed = 60 + 48 = 108 km/h = 108 × (5/18) = 30 m/s. Total distance = 140 + 160 = 300 m. Time = 300 / 30 = 10 seconds.",
-        solution: "Total distance = 140 + 160 = 300 m. Opposite direction ⟹ Relative Speed = 60 + 48 = 108 km/h = 108 × (5/18) = 30 m/s. Time = 300 / 30 = 10 seconds."
-      },
-      {
-        id: "TB6",
-        difficulty: "Exam-Style",
-        stem: "Two trains 120 m and 180 m long run on parallel tracks. When moving in the same direction, the faster train completely overtakes the slower train in 30 seconds. If the speed of the slower train is 36 km/h, what is the speed of the faster train?",
-        options: ["72 km/h", "64 km/h", "80 km/h", "54 km/h"],
-        correctIndex: 0, // 72 km/h
-        trapOptionIndex: 3,
-        trapExplanation: "Total distance = 120 + 180 = 300m. Relative speed = 300 / 30 = 10 m/s = 36 km/h. S_fast - S_slow = 36 km/h ⟹ S_fast = 36 + 36 = 72 km/h.",
-        solution: "Total distance = 120 + 180 = 300 m. Same direction ⟹ Relative speed = 300 / 30 = 10 m/s. In km/h: 10 × (18/5) = 36 km/h. Since S_fast - 36 = 36 ⟹ S_fast = 72 km/h."
-      },
-      {
-        id: "TB7",
-        difficulty: "Medium",
-        stem: "A train 150 m long passes a man walking at 6 km/h in the same direction in 10 seconds. What is the speed of the train in km/h?",
-        options: ["60 km/h", "54 km/h", "48 km/h", "66 km/h"],
-        correctIndex: 0, // 60 km/h
-        trapOptionIndex: 1, // 54 km/h (forgetting to add the man's speed)
-        trapExplanation: "Trap: 15 m/s = 54 km/h is the RELATIVE speed! Because the man is running in the SAME direction, S_train - 6 = 54 ⟹ S_train = 60 km/h.",
-        solution: "The man has negligible length (0m), so distance = 150 m. Relative speed = 150 / 10 = 15 m/s = 15 × (18/5) = 54 km/h. Since they move in the same direction: S_train - 6 = 54 ⟹ S_train = 60 km/h."
-      },
-      {
-        id: "TB8",
-        difficulty: "Medium",
-        stem: "A train 220 m long is moving at 54 km/h. A man is jogging at 6 km/h towards the train from the front. How many seconds will it take for the train to pass the man?",
-        options: ["13.2 seconds", "14.6 seconds", "12.0 seconds", "15.0 seconds"],
-        correctIndex: 0, // 13.2 seconds
-        trapOptionIndex: 1,
-        trapExplanation: "Moving towards each other (opposite direction) ⟹ relative speed ADDS: 54 + 6 = 60 km/h = 60 × (5/18) = 50/3 m/s. Time = 220 / (50/3) = 660 / 50 = 13.2 seconds.",
-        solution: "Opposite direction ⟹ Relative Speed = 54 + 6 = 60 km/h = 60 × (5/18) = 50/3 m/s. Man's length = 0 m. Time = 220 ÷ (50/3) = 220 × (3/50) = 13.2 seconds."
-      },
-      {
-        id: "TB9",
-        difficulty: "Exam-Style",
-        stem: "A 200 m long train moving at 54 km/h crosses a passenger sitting inside another train of length 250 m travelling in the opposite direction at 36 km/h. How much time does it take to cross the passenger?",
-        options: ["8 seconds", "18 seconds", "10 seconds", "12 seconds"],
-        correctIndex: 0, // 8 seconds
-        trapOptionIndex: 1, // 18 seconds (adding both train lengths: 450 / 25 = 18s)
-        trapExplanation: "Passenger trap! The object being crossed is the PASSENGER, not the second train. A passenger has 0 length! Distance = length of passing train only = 200m. Rel speed = 54 + 36 = 90 km/h = 25 m/s. Time = 200 / 25 = 8 seconds.",
-        solution: "The passenger is a point object (length = 0). Distance = length of the passing train = 200 m. Relative speed = 54 + 36 = 90 km/h = 25 m/s. Time taken = 200 / 25 = 8 seconds."
-      },
-      {
-        id: "TB10",
-        difficulty: "Exam-Style",
-        stem: "A train travelling at a uniform speed clears two bridges of lengths 210 m and 120 m in 25 seconds and 19 seconds respectively. What is the length of the train?",
-        options: ["165 meters", "150 meters", "175 meters", "180 meters"],
-        correctIndex: 0, // 165 meters
-        trapOptionIndex: 1,
-        trapExplanation: "Difference in distance = 210 - 120 = 90m. Difference in time = 25 - 19 = 6s. Speed = 90 / 6 = 15 m/s. In 19 seconds, total distance = 15 × 19 = 285m. Train length = 285 - 120 = 165 meters.",
-        solution: "Extra distance = 210 - 120 = 90 m. Extra time = 25 - 19 = 6 s. Speed = 90 / 6 = 15 m/s. Total distance in 19 s = 15 × 19 = 285 m. Since D = L_train + 120 ⟹ L_train = 285 - 120 = 165 meters."
-      },
-      {
-        id: "TB11",
-        difficulty: "Medium",
-        stem: "Two trains of equal length are running on parallel lines in the same direction at 46 km/h and 36 km/h. The faster train passes the slower train in 36 seconds. What is the length of each train?",
-        options: ["50 meters", "100 meters", "75 meters", "60 meters"],
-        correctIndex: 0, // 50 meters
-        trapOptionIndex: 1, // 100 meters (total distance for BOTH trains combined)
-        trapExplanation: "Trap: 100m is the combined length of BOTH trains (2L). Each train length is 100 / 2 = 50 meters.",
-        solution: "Relative speed = 46 - 36 = 10 km/h = 10 × (5/18) = 25/9 m/s. Total distance in 36 seconds = (25/9) × 36 = 100 m. Since both trains have equal length: 2L = 100 ⟹ L = 50 meters."
-      },
-      {
-        id: "TB12",
-        difficulty: "Easy",
-        stem: "A train 300 m long crosses a platform of length 200 m in 25 seconds. What is its speed in km/h?",
-        options: ["72 km/h", "20 km/h", "54 km/h", "90 km/h"],
-        correctIndex: 0, // 72 km/h
-        trapOptionIndex: 1, // 20 km/h (speed is 20 m/s, forgot conversion to km/h)
-        trapExplanation: "Trap: Speed is 20 m/s, not 20 km/h! Converted to km/h: 20 × (18/5) = 72 km/h.",
-        solution: "Total distance = 300 + 200 = 500 m. Speed in m/s = 500 / 25 = 20 m/s. Speed in km/h = 20 × (18/5) = 72 km/h."
-      }
+    const steps = [
+      { title: "Identify given", body: `Train L = ${L} m, bridge B = ${B} m, speed = ${S} km/h.` },
+      { title: "Convert speed to m/s", body: `Speed = ${S} × 5/18 = ${vMs} m/s.`,
+        math: `${S} × 5/18 = ${vMs}` },
+      { title: "Total distance to clear", body: `Front travels L + B; rear must clear the far end. So D = ${L} + ${B} = ${totalDist} m.`,
+        math: `D = L + B = ${totalDist}` },
+      { title: "Divide by speed", body: `t = ${totalDist} / ${vMs} = ${crossTime} s.`,
+        math: `t = ${totalDist} / ${vMs} = ${crossTime}` }
     ];
 
-    if (typeof window !== "undefined") {
-      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
-    }
+    return {
+      valid: true,
+      intermediates: { lt: L, lb: B, sKmh: S, vMs, totalDist, crossTime, poleTime },
+      traps, steps
+    };
+  }
 
-    /* ==========================================================================
-       4. INTERACTIVE RENDERING & EVENT HANDLING
-       ========================================================================== */
-    const inputLt = document.getElementById("input-lt");
-    const rangeLt = document.getElementById("range-lt");
-    const inputLb = document.getElementById("input-lb");
-    const rangeLb = document.getElementById("range-lb");
-    const inputSpeed = document.getElementById("input-speed");
-    const rangeSpeed = document.getElementById("range-speed");
+  function solveRelative({ l1, l2, s1, s2, direction }) {
+    const L1 = Number(l1), L2 = Number(l2), S1 = Number(s1), S2 = Number(s2);
+    if (![L1, L2, S1, S2].every(Number.isFinite)) return { valid: false, error: "All inputs must be numbers." };
+    if (L1 <= 0 || L2 <= 0 || S1 <= 0 || S2 <= 0) return { valid: false, error: "Lengths and speeds must be > 0." };
 
-    const ltBadge = document.getElementById("lt-display-badge");
-    const lbBadge = document.getElementById("lb-display-badge");
-    const speedBadge = document.getElementById("speed-display-badge");
+    const opposite = direction === "opposite";
+    const relKmh = opposite ? S1 + S2 : Math.abs(S1 - S2);
+    if (relKmh === 0) return { valid: false, error: "Same-direction speeds cannot be equal." };
 
-    const svgEl = document.getElementById("train-svg");
-    const readoutSpeedMs = document.getElementById("readout-speed-ms");
-    const readoutTotalDist = document.getElementById("readout-total-dist");
-    const readoutTimeBridge = document.getElementById("readout-time-bridge");
-    const readoutTimePole = document.getElementById("readout-time-pole");
+    const relMs = kmhToMs(relKmh);
+    const totalDist = L1 + L2;
+    const crossTime = round(totalDist / relMs);
+    return {
+      valid: true,
+      intermediates: { l1: L1, l2: L2, s1: S1, s2: S2, opposite, relKmh, relMs, totalDist, crossTime }
+    };
+  }
 
-    const predictOptionsContainer = document.getElementById("predict-options-container");
-    const predictScenarioText = document.getElementById("predict-scenario-text");
-    const predictFeedback = document.getElementById("predict-feedback");
-    const btnRevealSolution = document.getElementById("btn-reveal-solution");
-    const workedSolutionPanel = document.getElementById("worked-solution-panel");
-    const solutionStepsContainer = document.getElementById("solution-steps-container");
-    const solutionTrapCallout = document.getElementById("solution-trap-callout");
-    const solutionTrapText = document.getElementById("solution-trap-text");
+  return { solveCross, solveRelative, kmhToMs, round };
+})();
+window.Model = Model;
 
-    function updateModelAndVisual() {
-      const lt = parseFloat(inputLt.value) || 0;
-      const lb = parseFloat(inputLb.value) || 0;
-      const speed = parseFloat(inputSpeed.value) || 0;
+/* =====================================================================
+   2. SELF-TESTS
+   ===================================================================== */
+function runSelfTests() {
+  const results = { passed: 0, failed: 0, failures: [] };
+  const assert = (cond, name, detail = "") => {
+    if (cond) results.passed++;
+    else { results.failed++; results.failures.push({ name, detail }); }
+  };
+  try {
+    const t1 = Model.solveCross({ lt: 200, lb: 300, speed: 72 });
+    assert(t1.valid && t1.intermediates.vMs === 20 && t1.intermediates.totalDist === 500 && t1.intermediates.crossTime === 25,
+      "200m/300m @72 → 25s", JSON.stringify(t1.intermediates));
 
-      const result = Model.solveSingleTrain({ lt, lb, speed });
+    const t2 = Model.solveCross({ lt: 150, lb: 0, speed: 54 });
+    assert(t2.valid && t2.intermediates.vMs === 15 && t2.intermediates.crossTime === 10,
+      "150m/pole @54 → 10s", JSON.stringify(t2.intermediates));
 
-      if (!result.valid) {
-        readoutSpeedMs.textContent = "—";
-        readoutTotalDist.textContent = "—";
-        readoutTimeBridge.textContent = result.error;
-        readoutTimePole.textContent = "—";
-        renderErrorSvg(result.error);
-        return;
-      }
+    const t3 = Model.solveCross({ lt: 120, lb: 280, speed: 36 });
+    assert(t3.valid && t3.intermediates.crossTime === 40, "120/280 @36 → 40s", JSON.stringify(t3.intermediates));
 
-      const { s_ms, totalDistance, timeBridge, timePole } = result.intermediates;
+    assert(Model.solveCross({ lt: 0, lb: 300, speed: 72 }).valid === false, "L=0 rejected");
+    assert(Model.solveCross({ lt: 100, lb: -10, speed: 72 }).valid === false, "B<0 rejected");
+    assert(Model.solveCross({ lt: 100, lb: 100, speed: -5 }).valid === false, "S<0 rejected");
 
-      ltBadge.textContent = `${lt} meters`;
-      lbBadge.textContent = lb > 0 ? `${lb} meters` : `0 m (Pole)`;
-      speedBadge.textContent = `${speed} km/h = ${s_ms} m/s`;
+    const t4 = Model.solveCross({ lt: 200, lb: 300, speed: 72 });
+    assert(t4.traps.bridgeOnly === 15, "Bridge-only trap = 15", `got ${t4.traps.bridgeOnly}`);
 
-      readoutSpeedMs.textContent = `${s_ms} m/s (${speed} km/h)`;
-      readoutTotalDist.textContent = `${totalDistance} m (${lt}m + ${lb}m)`;
-      readoutTimeBridge.textContent = `${timeBridge} seconds`;
-      readoutTimePole.textContent = `${timePole} seconds`;
+    const t5 = Model.solveRelative({ l1: 120, l2: 180, s1: 60, s2: 48, direction: "opposite" });
+    assert(t5.valid && t5.intermediates.relKmh === 108 && t5.intermediates.crossTime === 10,
+      "Opposite 60/48 → 10s", JSON.stringify(t5.intermediates));
 
-      renderTrainSvg(result);
-      updatePredictScenario(result);
-    }
+    const t6 = Model.solveRelative({ l1: 100, l2: 150, s1: 72, s2: 54, direction: "same" });
+    assert(t6.valid && t6.intermediates.relKmh === 18 && t6.intermediates.crossTime === 50,
+      "Same 72/54 → 50s", JSON.stringify(t6.intermediates));
 
-    function renderTrainSvg(result) {
-      const { lt, lb, totalDistance, timeBridge } = result.intermediates;
+    assert(Model.solveRelative({ l1: 100, l2: 100, s1: 50, s2: 50, direction: "same" }).valid === false,
+      "Same equal speed rejected");
 
-      const trackY = 85;
-      const startX = 40;
-      const maxDist = Math.max(totalDistance, 500);
-      const scale = 540 / maxDist;
+    const t7 = Model.solveRelative({ l1: 200, l2: 250, s1: 54, s2: 36, direction: "opposite" });
+    assert(t7.valid && Math.abs(t7.intermediates.crossTime - 18) < 0.1,
+      "Passing passenger trap distance (450 → 18s)", JSON.stringify(t7.intermediates));
+  } catch (err) {
+    results.failed++;
+    results.failures.push({ name: "Uncaught", detail: err.message });
+  }
+  return results;
+}
+window.runSelfTests = runSelfTests;
 
-      const trainW = Math.max(lt * scale, 45);
-      const bridgeW = lb > 0 ? Math.max(lb * scale, 30) : 4;
-      const bridgeX = startX + 160;
+/* =====================================================================
+   3. PRACTICE BANK
+   ===================================================================== */
+const PRACTICE_QUESTIONS = [
+  { id: "TB1", difficulty: "Easy",
+    stem: "A 240 m train at 72 km/h crosses a 360 m platform. Time to fully clear?",
+    options: ["30 s", "18 s", "12 s", "25 s"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "18 = 360/20 (bridge only). Must be (240+360)/20 = 30 s — tail must clear.",
+    solution: "v = 20 m/s. D = 240+360 = 600 m. t = 600/20 = 30 s." },
+  { id: "TB2", difficulty: "Easy",
+    stem: "A 280 m train at 63 km/h passes an electric pole. Time?",
+    options: ["16 s", "14 s", "18 s", "12 s"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Pole = 0 m. D = 280. v = 17.5 m/s. t = 280/17.5 = 16 s.",
+    solution: "v = 63×5/18 = 17.5 m/s. t = 280/17.5 = 16 s." },
+  { id: "TB3", difficulty: "Medium",
+    stem: "A 175 m train crosses a bridge in 27 s at 54 km/h. Bridge length?",
+    options: ["230 m", "245 m", "405 m", "210 m"], correctIndex: 0,
+    trapOptionIndex: 2, trapExplanation: "405 is TOTAL distance. Bridge = 405 − 175 = 230 m.",
+    solution: "v = 15 m/s. D = 15×27 = 405 m. Bridge = 405 − 175 = 230 m." },
+  { id: "TB4", difficulty: "Medium",
+    stem: "Train crosses pole in 9 s, 150 m platform in 15 s. Speed in km/h?",
+    options: ["90 km/h", "72 km/h", "84 km/h", "100 km/h"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Extra time covers platform only. v = 150/6 = 25 m/s = 90 km/h.",
+    solution: "Extra 6 s covers 150 m. v = 25 m/s = 90 km/h." },
+  { id: "TB5", difficulty: "Medium",
+    stem: "Trains 140 m & 160 m opposite at 60 and 48 km/h. Time to cross?",
+    options: ["10 s", "12 s", "8 s", "15 s"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Opposite ⇒ speeds ADD. Rel = 108 km/h = 30 m/s. t = 300/30 = 10 s.",
+    solution: "Rel = 30 m/s. D = 300. t = 10 s." },
+  { id: "TB6", difficulty: "Exam-Style",
+    stem: "Two trains 120 m & 180 m, same direction, faster overtakes in 30 s. Slower = 36 km/h. Faster speed?",
+    options: ["72 km/h", "64 km/h", "80 km/h", "54 km/h"], correctIndex: 0,
+    trapOptionIndex: 3, trapExplanation: "Rel = 300/30 = 10 m/s = 36 km/h. Fast − 36 = 36 → 72 km/h.",
+    solution: "Rel speed = 36 km/h. Fast = 36 + 36 = 72 km/h." },
+  { id: "TB7", difficulty: "Medium",
+    stem: "150 m train passes a man walking 6 km/h same direction in 10 s. Train speed?",
+    options: ["60 km/h", "54 km/h", "48 km/h", "66 km/h"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "54 km/h = relative speed. Same direction ⇒ Train − 6 = 54 → 60 km/h.",
+    solution: "Rel = 15 m/s = 54 km/h. Train − 6 = 54 → Train = 60 km/h." },
+  { id: "TB8", difficulty: "Medium",
+    stem: "220 m train at 54 km/h, man jogging at 6 km/h toward front. Time to pass?",
+    options: ["13.2 s", "14.6 s", "12.0 s", "15.0 s"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Opposite ⇒ add. Rel = 60 km/h = 16.67 m/s. t = 220/16.67 = 13.2 s.",
+    solution: "Rel = 60 km/h = 50/3 m/s. t = 220 × 3/50 = 13.2 s." },
+  { id: "TB9", difficulty: "Exam-Style",
+    stem: "200 m train at 54 km/h crosses a passenger in another train (250 m long, opposite, 36 km/h). Time to pass passenger?",
+    options: ["8 s", "18 s", "10 s", "12 s"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Passenger has 0 length! Only the passing train's length matters. 200/25 = 8 s.",
+    solution: "D = 200 m only. Rel = 90 km/h = 25 m/s. t = 8 s." },
+  { id: "TB10", difficulty: "Exam-Style",
+    stem: "Train crosses 210 m and 120 m bridges in 25 s and 19 s. Train length?",
+    options: ["165 m", "150 m", "175 m", "180 m"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "Extra distance 90, extra time 6 → v = 15 m/s. Then train = 15×19 − 120 = 165 m.",
+    solution: "v = 90/6 = 15 m/s. D₂₅ = 285. L = 285 − 120 = 165 m." },
+  { id: "TB11", difficulty: "Medium",
+    stem: "Two equal trains, same direction, speeds 46 & 36 km/h. Faster passes slower in 36 s. Length of each?",
+    options: ["50 m", "100 m", "75 m", "60 m"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "100 m = both trains combined (2L). Each = 100/2 = 50 m.",
+    solution: "Rel = 10 km/h = 25/9 m/s. D = 100 m. Each L = 50 m." },
+  { id: "TB12", difficulty: "Easy",
+    stem: "300 m train crosses 200 m platform in 25 s. Speed in km/h?",
+    options: ["72 km/h", "20 km/h", "54 km/h", "90 km/h"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "20 is m/s, not km/h! Convert: 20 × 18/5 = 72 km/h.",
+    solution: "v = 500/25 = 20 m/s = 72 km/h." }
+];
+window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
 
-      svgEl.innerHTML = `
-        <rect x="0" y="0" width="620" height="180" fill="transparent" />
+/* =====================================================================
+   4. STATE
+   ===================================================================== */
+const state = {
+  lt: 200, lb: 300, speed: 72,
+  predictLocked: false,
+  predictScenario: null,
+  userPrediction: null,
+  convSpeed: 72,
+  rel: { s1: 60, s2: 48, direction: "opposite" },
+  practiceMode: "hints",
+  currentQIndex: 0,
+  shuffled: [],
+  answered: false,
+  timer: { interval: null, remaining: 90 },
+  testsPassed: false,
+  stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
+};
+const TOPIC_ID = "trains-bridge";
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => Number(n).toLocaleString("en-IN");
 
-        <!-- Track rails & ties -->
-        <line x1="20" y1="${trackY}" x2="600" y2="${trackY}" stroke="var(--color-border, #94a3b8)" stroke-width="4" />
-        <line x1="20" y1="${trackY + 8}" x2="600" y2="${trackY + 8}" stroke="var(--color-border, #94a3b8)" stroke-width="4" />
+/* =====================================================================
+   5. RENDERERS
+   ===================================================================== */
 
-        <!-- Bridge / Platform -->
-        ${lb > 0 ? `
-          <rect x="${bridgeX}" y="${trackY - 14}" width="${bridgeW}" height="28" rx="3"
-                fill="var(--color-surface-hover, #e2e8f0)" stroke="var(--color-accent, #0284c7)" stroke-width="2" stroke-dasharray="2 2" />
-          <text x="${bridgeX + bridgeW / 2}" y="${trackY - 22}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--color-accent, #0284c7)">
-            Bridge / Platform: ${lb}m
-          </text>
-        ` : `
-          <!-- Pole -->
-          <line x1="${bridgeX}" y1="${trackY - 35}" x2="${bridgeX}" y2="${trackY + 15}" stroke="var(--color-danger, #b91c1c)" stroke-width="4" />
-          <circle cx="${bridgeX}" cy="${trackY - 35}" r="5" fill="var(--color-danger, #b91c1c)" />
-          <text x="${bridgeX}" y="${trackY - 44}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--color-danger, #b91c1c)">
-            Pole (0m)
-          </text>
-        `}
+// Animated train crossing bridge
+function renderCrossing(result) {
+  const svg = $("crossing-svg");
+  if (!result.valid) {
+    svg.innerHTML = `<text x="380" y="170" text-anchor="middle" font-size="16" fill="#ef4444">⚠️ ${result.error}</text>`;
+    return;
+  }
+  const { lt, lb, vMs, crossTime } = result.intermediates;
+  const totalDist = lt + lb;
 
-        <!-- Train (Positioned approaching the bridge) -->
-        <g transform="translate(${startX}, ${trackY - 24})">
-          <!-- Main train body -->
-          <rect x="0" y="0" width="${trainW}" height="24" rx="4"
-                fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
-          <!-- Engine nose -->
-          <path d="M${trainW} 4 L${trainW + 8} 12 L${trainW} 20 Z" fill="var(--color-primary, #1e3a8a)" />
-          <!-- Tail lamp -->
-          <circle cx="4" cy="12" r="3" fill="var(--color-danger, #b91c1c)" />
-          <!-- Wheels -->
-          <circle cx="8" cy="24" r="3" fill="#0f172a" />
-          <circle cx="${trainW - 8}" cy="24" r="3" fill="#0f172a" />
-          <text x="${trainW / 2}" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="var(--color-primary, #1e3a8a)">
-            Train: ${lt}m
-          </text>
-        </g>
+  // World coordinates: x from 0 to totalDist
+  const W = 760, H = 340;
+  const padL = 60, padR = 60;
+  const plotW = W - padL - padR;
+  const X = (v) => padL + (Math.min(Math.max(v, 0), totalDist) / totalDist) * plotW;
 
-        <!-- Clearance Distance Indicator Bar below -->
-        <g transform="translate(0, 130)">
-          <line x1="${startX}" y1="0" x2="${bridgeX + bridgeW}" y2="0"
-                stroke="var(--color-success, #059669)" stroke-width="2" marker-end="url(#arrow)" />
-          <circle cx="${startX}" cy="0" r="3" fill="var(--color-success, #059669)" />
-          <circle cx="${bridgeX + bridgeW}" cy="0" r="3" fill="var(--color-success, #059669)" />
-          <text x="${(startX + bridgeX + bridgeW) / 2}" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="var(--color-success, #059669)">
-            Total Clearance Vector: ${totalDistance}m (${timeBridge}s)
-          </text>
-        </g>
-      `;
-    }
+  const trackY = 150;
+  const trainH = 28;
 
-    function renderErrorSvg(msg) {
-      svgEl.innerHTML = `
-        <rect x="20" y="30" width="580" height="110" rx="8" fill="var(--color-danger-bg, #fef2f2)" stroke="var(--color-danger, #b91c1c)" />
-        <text x="310" y="90" text-anchor="middle" font-size="14" font-weight="600" fill="var(--color-danger, #b91c1c)">
-          ⚠️ ${msg}
-        </text>
-      `;
-    }
+  // Bridge: from x = lt to x = lt + lb (train's front passes bridge at start when tail is at x=0)
+  const bridgeX1 = X(lt);
+  const bridgeX2 = X(lt + lb);
+  const bridgeW = bridgeX2 - bridgeX1;
 
-    function setPreset(lt, lb, speed) {
-      inputLt.value = lt;
-      rangeLt.value = lt;
-      inputLb.value = lb;
-      rangeLb.value = lb;
-      inputSpeed.value = speed;
-      rangeSpeed.value = speed;
-      updateModelAndVisual();
-      LabCommon.announce(`Loaded preset: ${lt}m train, ${lb}m bridge at ${speed} km/h.`);
-    }
+  // Two "snapshots": t = 0 (engine enters) and t = T (tail exits)
+  // Also draw the user's prediction as ghost if wrong
+  const snapY0 = 80;    // engine enters
+  const snapYT = 220;   // tail clears
 
-    // Input listeners
-    inputLt.addEventListener("input", (e) => { rangeLt.value = e.target.value; updateModelAndVisual(); });
-    rangeLt.addEventListener("input", (e) => { inputLt.value = e.target.value; updateModelAndVisual(); });
+  let ghost = "";
+  if (state.predictLocked && state.userPrediction !== null && Number(state.userPrediction) !== crossTime) {
+    const ghostDist = Number(state.userPrediction) * vMs;
+    const ghostFront = X(ghostDist);
+    const ghostRear = X(ghostDist - lt);
+    ghost = `
+      <text x="${padL}" y="${snapYT + 90}" font-size="11" font-weight="700" fill="#f59e0b">
+        Your answer at ${state.userPrediction} s: tail is still inside the bridge
+      </text>
+      <rect x="${Math.max(ghostRear, padL)}" y="${snapYT + 50}" width="${Math.max(ghostFront - ghostRear, 2)}" height="${trainH}"
+        rx="4" fill="#f59e0b" opacity="0.4" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <line x1="${ghostRear}" y1="${snapYT + 40}" x2="${ghostRear}" y2="${snapYT + 90}"
+        stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <text x="${ghostRear}" y="${snapYT + 40}" text-anchor="middle" font-size="10" fill="#f59e0b">tail here</text>
+    `;
+  }
 
-    inputLb.addEventListener("input", (e) => { rangeLb.value = e.target.value; updateModelAndVisual(); });
-    rangeLb.addEventListener("input", (e) => { inputLb.value = e.target.value; updateModelAndVisual(); });
+  // Train rectangle helper
+  function train(x1, y, color, opacity = 1) {
+    const w = X(lt) - X(0);
+    return `
+      <rect x="${x1}" y="${y}" width="${Math.max(w, 3)}" height="${trainH}" rx="4"
+        fill="${color}" opacity="${opacity}" stroke="#1e3a8a" stroke-width="2"/>
+      <text x="${x1 + w/2}" y="${y + trainH/2 + 5}" text-anchor="middle" font-size="11" font-weight="700" fill="#e8edf7">
+        ${lt} m
+      </text>
+    `;
+  }
 
-    inputSpeed.addEventListener("input", (e) => { rangeSpeed.value = e.target.value; updateModelAndVisual(); });
-    rangeSpeed.addEventListener("input", (e) => { inputSpeed.value = e.target.value; updateModelAndVisual(); });
+  svg.innerHTML = `
+    <!-- BRIDGE (spans both snapshots vertically) -->
+    <rect x="${bridgeX1}" y="${snapY0 - 10}" width="${Math.max(bridgeW, 2)}" height="${snapYT + 70}"
+      fill="#1e3a8a" opacity="0.25" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <text x="${(bridgeX1 + bridgeX2)/2}" y="${snapY0 - 20}" text-anchor="middle" font-size="12" font-weight="700" fill="#3b82f6">
+      Bridge ${lb} m
+    </text>
 
-    /* ==========================================================================
-       5. PREDICT-FIRST LOGIC
-       ========================================================================== */
-    function updatePredictScenario(modelResult) {
-      const { lt, lb, s_kmh, totalDistance, timeBridge, s_ms } = modelResult.intermediates;
+    <!-- Snapshot t = 0: engine at bridge start, tail behind -->
+    <text x="${padL}" y="${snapY0 - 4}" font-size="11" font-weight="700" fill="#94a3b8">t = 0 · engine enters bridge</text>
+    <line x1="${padL}" y1="${snapY0 + trainH + 10}" x2="${W - padR}" y2="${snapY0 + trainH + 10}" stroke="#334155" stroke-width="2"/>
+    ${train(bridgeX1 - (X(lt) - X(0)), snapY0, "#1e40af")}
+    <!-- markers: bridge start & train tail -->
+    <line x1="${bridgeX1}" y1="${snapY0 - 14}" x2="${bridgeX1}" y2="${snapY0 + trainH + 14}" stroke="#3b82f6" stroke-width="2"/>
+    <text x="${bridgeX1}" y="${snapY0 + trainH + 24}" text-anchor="middle" font-size="10" fill="#3b82f6">bridge start</text>
 
-      predictScenarioText.textContent = lb > 0
-        ? `A ${lt} m long train travelling at ${s_kmh} km/h crosses a ${lb} m long platform. How many seconds does it take to completely clear the platform?`
-        : `A ${lt} m long train travelling at ${s_kmh} km/h passes a stationary pole. How many seconds does it take to pass?`;
+    <!-- Snapshot t = T: tail exits bridge -->
+    <text x="${padL}" y="${snapYT - 4}" font-size="11" font-weight="700" fill="#94a3b8">t = T · tail exits bridge</text>
+    <line x1="${padL}" y1="${snapYT + trainH + 10}" x2="${W - padR}" y2="${snapYT + trainH + 10}" stroke="#334155" stroke-width="2"/>
+    ${train(bridgeX2, snapYT, "#22c55e")}
+    <!-- markers: bridge end & train tail at end -->
+    <line x1="${bridgeX2}" y1="${snapYT - 14}" x2="${bridgeX2}" y2="${snapYT + trainH + 14}" stroke="#22c55e" stroke-width="2"/>
+    <text x="${bridgeX2}" y="${snapYT + trainH + 24}" text-anchor="middle" font-size="10" fill="#22c55e">bridge end</text>
 
-      const correctAns = timeBridge;
-      const bridgeOnlyTrap = lb > 0 ? LabCommon.round(lb / s_ms, 2) : LabCommon.round(timeBridge * 1.5, 2);
-      const noConvTrap = LabCommon.round(totalDistance / s_kmh, 2);
-      const distractor = LabCommon.round(timeBridge + 5, 2);
+    <!-- Distance ruler -->
+    <text x="${padL}" y="${snapYT + trainH + 60}" font-size="12" font-weight="700" fill="#94a3b8">Distance the front travels:</text>
+    <!-- L_train portion -->
+    <line x1="${X(0)}" y1="${snapYT + trainH + 80}" x2="${X(lt)}" y2="${snapYT + trainH + 80}" stroke="#3b82f6" stroke-width="3"/>
+    <text x="${(X(0) + X(lt))/2}" y="${snapYT + trainH + 96}" text-anchor="middle" font-size="11" font-weight="700" fill="#3b82f6">
+      L = ${lt} m
+    </text>
+    <!-- L_bridge portion -->
+    <line x1="${X(lt)}" y1="${snapYT + trainH + 80}" x2="${X(lt + lb)}" y2="${snapYT + trainH + 80}" stroke="#f59e0b" stroke-width="3"/>
+    <text x="${(X(lt) + X(lt+lb))/2}" y="${snapYT + trainH + 96}" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">
+      B = ${lb} m
+    </text>
+    <text x="${X(totalDist) + 10}" y="${snapYT + trainH + 80}" font-size="11" font-weight="800" fill="#22c55e">
+      total ${totalDist} m → ${crossTime} s @ ${vMs} m/s
+    </text>
 
-      const choices = [
-        { val: correctAns, type: "correct", label: `${correctAns} s` },
-        { val: bridgeOnlyTrap, type: "trap_bridge", label: `${bridgeOnlyTrap} s` },
-        { val: noConvTrap, type: "trap_conv", label: `${noConvTrap} s` },
-        { val: distractor, type: "distractor", label: `${distractor} s` }
-      ];
+    ${ghost}
+  `;
 
-      // Remove duplicate labels
-      const uniqueChoices = [];
-      const seen = new Set();
-      choices.forEach(c => {
-        if (!seen.has(c.label)) {
-          seen.add(c.label);
-          uniqueChoices.push(c);
-        }
-      });
+  $("svg-live-desc").textContent =
+    `Train of ${lt} metres crosses a ${lb} metre bridge at ${vMs} metres per second. Cross time ${crossTime} seconds.`;
+}
 
-      uniqueChoices.sort((a, b) => a.val - b.val);
+function renderReadouts(result) {
+  if (!result.valid) {
+    ["readout-speed-ms","readout-distance","readout-cross-time","readout-pole-time"].forEach(id => $(id).textContent = "—");
+    return;
+  }
+  const { vMs, totalDist, crossTime, poleTime } = result.intermediates;
+  $("readout-speed-ms").textContent = `${vMs} m/s`;
+  $("readout-distance").textContent = `${totalDist} m`;
+  $("readout-cross-time").textContent = `${crossTime} s`;
+  $("readout-pole-time").textContent = `${poleTime} s`;
+}
 
-      predictOptionsContainer.innerHTML = "";
-      predictFeedback.className = "callout hidden";
-      workedSolutionPanel.classList.add("hidden");
+// Conversion lab: dual scale
+function renderConv() {
+  const svg = $("conv-svg");
+  const kmh = state.convSpeed;
+  const ms = Model.kmhToMs(kmh);
+  const dist10 = Math.round(ms * 10);
 
-      uniqueChoices.forEach(c => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "option-btn";
-        btn.textContent = c.label;
-        btn.setAttribute("role", "radio");
-        btn.setAttribute("aria-checked", "false");
-        btn.onclick = () => handlePredictChoice(c, modelResult);
-        predictOptionsContainer.appendChild(btn);
-      });
-    }
+  $("conv-badge").textContent = `${kmh} km/h`;
+  $("conv-kmh").textContent = kmh;
+  $("conv-ms").textContent = ms;
+  $("conv-factor").textContent = (5/18).toFixed(4);
+  $("conv-dist").textContent = `${dist10} m`;
 
-    function handlePredictChoice(choice, modelResult) {
-      predictFeedback.classList.remove("hidden");
+  const padL = 40, padR = 40, W = 760;
+  const plotW = W - padL - padR;
+  const maxKmh = 180;
+  const X = (k) => padL + (Math.min(k, maxKmh) / maxKmh) * plotW;
+  const y1 = 60, y2 = 120;
 
-      const buttons = predictOptionsContainer.querySelectorAll(".option-btn");
-      buttons.forEach(b => {
-        b.classList.remove("correct", "trap", "incorrect", "selected");
-        if (b.textContent === choice.label) b.classList.add("selected");
-      });
+  svg.innerHTML = `
+    <!-- km/h scale -->
+    <text x="${padL}" y="${y1 - 14}" font-size="12" font-weight="700" fill="#3b82f6">km/h</text>
+    <line x1="${padL}" y1="${y1}" x2="${padL + plotW}" y2="${y1}" stroke="#475569" stroke-width="2"/>
+    ${[0,45,90,135,180].map(k => `
+      <line x1="${X(k)}" y1="${y1 - 4}" x2="${X(k)}" y2="${y1 + 4}" stroke="#64748b" stroke-width="1"/>
+      <text x="${X(k)}" y="${y1 + 18}" text-anchor="middle" font-size="10" fill="#64748b">${k}</text>
+    `).join("")}
+    <!-- Current position marker -->
+    <circle cx="${X(kmh)}" cy="${y1}" r="6" fill="#3b82f6"/>
+    <text x="${X(kmh)}" y="${y1 - 24}" text-anchor="middle" font-size="12" font-weight="800" fill="#3b82f6">${kmh}</text>
 
-      if (choice.type === "correct") {
-        predictFeedback.className = "callout callout-success";
-        predictFeedback.innerHTML = `
-          <strong>✓ Outstanding deduction!</strong> You converted the speed to ${modelResult.intermediates.s_ms} m/s and added both lengths (${modelResult.intermediates.totalDistance} m), getting exactly ${choice.label}.
-        `;
-        LabCommon.announce("Prediction correct! You predicted the right time.");
-      } else if (choice.type === "trap_bridge") {
-        predictFeedback.className = "callout callout-trap";
-        predictFeedback.innerHTML = `
-          <strong>⚠️ Bridge-Only Trap!</strong> You used only the bridge length (${modelResult.intermediates.lb} m). But the train is NOT clear until its tail exits the bridge! The train must cover ${modelResult.intermediates.totalDistance} m.
-        `;
-        LabCommon.announce("Trap encountered: Remember to include train length.");
-      } else if (choice.type === "trap_conv") {
-        predictFeedback.className = "callout callout-trap";
-        predictFeedback.innerHTML = `
-          <strong>⚠️ Unit Conversion Omission!</strong> You divided meters directly by km/h (${modelResult.intermediates.totalDistance} / ${modelResult.intermediates.s_kmh}). You must multiply ${modelResult.intermediates.s_kmh} km/h by 5/18 to get ${modelResult.intermediates.s_ms} m/s first!
-        `;
-        LabCommon.announce("Trap encountered: Remember 5/18 conversion.");
-      } else {
-        predictFeedback.className = "callout callout-warning";
-        predictFeedback.innerHTML = `
-          <strong>Not quite:</strong> Distance = L_train + L_bridge (${modelResult.intermediates.totalDistance} m), Speed = ${modelResult.intermediates.s_ms} m/s.
-        `;
-      }
+    <!-- Conversion arrow -->
+    <text x="${padL + plotW/2}" y="${y1 + 44}" text-anchor="middle" font-size="12" font-weight="700" fill="#94a3b8">× 5/18 ↓</text>
 
-      revealWorkedSteps(modelResult);
-    }
+    <!-- m/s scale (aligned 0..50) -->
+    <text x="${padL}" y="${y2 - 14}" font-size="12" font-weight="700" fill="#22c55e">m/s</text>
+    <line x1="${padL}" y1="${y2}" x2="${padL + plotW}" y2="${y2}" stroke="#475569" stroke-width="2"/>
+    ${[0,12.5,25,37.5,50].map(m => `
+      <line x1="${padL + (m/50) * plotW}" y1="${y2 - 4}" x2="${padL + (m/50) * plotW}" y2="${y2 + 4}" stroke="#64748b" stroke-width="1"/>
+      <text x="${padL + (m/50) * plotW}" y="${y2 + 18}" text-anchor="middle" font-size="10" fill="#64748b">${m}</text>
+    `).join("")}
+    <circle cx="${padL + (ms/50) * plotW}" cy="${y2}" r="6" fill="#22c55e"/>
+    <text x="${padL + (ms/50) * plotW}" y="${y2 - 24}" text-anchor="middle" font-size="12" font-weight="800" fill="#22c55e">${ms}</text>
 
-    btnRevealSolution.addEventListener("click", () => {
-      const lt = parseFloat(inputLt.value) || 0;
-      const lb = parseFloat(inputLb.value) || 0;
-      const speed = parseFloat(inputSpeed.value) || 0;
-      const result = Model.solveSingleTrain({ lt, lb, speed });
-      revealWorkedSteps(result);
+    <!-- Distance annotation -->
+    <text x="${padL}" y="${y2 + 50}" font-size="12" fill="#94a3b8">
+      At ${ms} m/s, the train covers <tspan fill="#22c55e" font-weight="800">${dist10} m</tspan> in 10 s. Keep units consistent — this is why mixing km/h with metres fails.
+    </text>
+  `;
+}
+
+// Relative speed mini-lab
+function renderRelative() {
+  const svg = $("rel-svg");
+  const r = Model.solveRelative({ l1: 100, l2: 100, s1: state.rel.s1, s2: state.rel.s2, direction: state.rel.direction });
+  $("rel-s1-badge").textContent = `${state.rel.s1} km/h`;
+  $("rel-s2-badge").textContent = `${state.rel.s2} km/h`;
+
+  if (!r.valid) {
+    svg.innerHTML = `<text x="380" y="110" text-anchor="middle" font-size="14" fill="#ef4444">⚠️ ${r.error}</text>`;
+    $("rel-out-ms").textContent = "—";
+    $("rel-out-kmh").textContent = "—";
+    $("rel-gap").textContent = "—";
+    $("rel-formula").textContent = "—";
+    return;
+  }
+
+  const { s1, s2, opposite, relMs, relKmh } = r.intermediates;
+  $("rel-out-ms").textContent = `${relMs} m/s`;
+  $("rel-out-kmh").textContent = `${relKmh} km/h`;
+  $("rel-gap").textContent = `${Math.round(relMs * 2)} m`;
+  $("rel-formula").textContent = opposite ? "v₁ + v₂" : "|v₁ − v₂|";
+
+  const W = 760;
+  const padL = 40, padR = 40;
+  const plotW = W - padL - padR;
+  const X = (t) => padL + (t / 4) * plotW; // 4-second window
+  const y = 100;
+  const trainH = 24;
+  const trainW = 50;
+
+  // Draw two timelines: 4 seconds of motion
+  // For opposite: they approach from both sides, closing at relMs
+  // For same: they start same side, faster catches up
+  let train1Path = "", train2Path = "";
+  if (opposite) {
+    // Train 1 moves right from left at s1
+    train1Path = `
+      <line x1="${padL}" y1="${y + trainH + 30}" x2="${padL + plotW}" y2="${y + trainH + 30}" stroke="#334155"/>
+      <rect x="${padL}" y="${y}" width="${trainW}" height="${trainH}" fill="#3b82f6" opacity="0.3" stroke="#3b82f6" stroke-dasharray="3 2"/>
+      <rect x="${padL + trainW + 10}" y="${y}" width="${trainW}" height="${trainH}" fill="#3b82f6" stroke="#3b82f6"/>
+      <text x="${padL + trainW + 10 + trainW/2}" y="${y - 6}" text-anchor="middle" font-size="11" font-weight="700" fill="#3b82f6">
+        Train 1 → (${s1} km/h)
+      </text>
+      <text x="${padL + plotW - trainW/2}" y="${y - 6}" text-anchor="middle" font-size="11" font-weight="700" fill="#a78bfa">
+        ← Train 2 (${s2} km/h)
+      </text>
+      <rect x="${padL + plotW - trainW - 10}" y="${y}" width="${trainW}" height="${trainH}" fill="#a78bfa" stroke="#a78bfa"/>
+      <rect x="${padL + plotW - trainW - 40}" y="${y}" width="${trainW}" height="${trainH}" fill="#a78bfa" opacity="0.3" stroke="#a78bfa" stroke-dasharray="3 2"/>
+    `;
+  } else {
+    train1Path = `
+      <line x1="${padL}" y1="${y + trainH + 30}" x2="${padL + plotW}" y2="${y + trainH + 30}" stroke="#334155"/>
+      <rect x="${padL}" y="${y}" width="${trainW}" height="${trainH}" fill="#a78bfa" opacity="0.3" stroke="#a78bfa" stroke-dasharray="3 2"/>
+      <rect x="${padL + trainW + 10}" y="${y}" width="${trainW}" height="${trainH}" fill="#a78bfa" stroke="#a78bfa"/>
+      <text x="${padL + trainW + 10 + trainW/2}" y="${y - 6}" text-anchor="middle" font-size="11" font-weight="700" fill="#a78bfa">
+        Train 2 → (${s2} km/h)
+      </text>
+      <text x="${padL + plotW - trainW/2}" y="${y - 6}" text-anchor="middle" font-size="11" font-weight="700" fill="#3b82f6">
+        Train 1 → (${s1} km/h)
+      </text>
+      <rect x="${padL + plotW - trainW - 10}" y="${y}" width="${trainW}" height="${trainH}" fill="#3b82f6" stroke="#3b82f6"/>
+      <rect x="${padL + plotW - trainW - 40}" y="${y}" width="${trainW}" height="${trainH}" fill="#3b82f6" opacity="0.3" stroke="#3b82f6" stroke-dasharray="3 2"/>
+    `;
+  }
+
+  svg.innerHTML = `
+    ${train1Path}
+    <text x="${padL}" y="${y + trainH + 60}" font-size="12" font-weight="700" fill="#22c55e">
+      ${opposite ? "Gap closes at v₁ + v₂ = " : "Gap closes at |v₁ − v₂| = "}${relMs} m/s (${relKmh} km/h)
+    </text>
+    <text x="${padL}" y="${y + trainH + 82}" font-size="11" fill="#94a3b8">
+      ${opposite ? "Opposite directions: speeds add." : "Same direction: speeds subtract (only the difference matters)."}
+    </text>
+  `;
+}
+
+function renderMain() {
+  const r = Model.solveCross({ lt: state.lt, lb: state.lb, speed: state.speed });
+  renderCrossing(r);
+  renderReadouts(r);
+  if (!state.predictLocked && r.valid) preparePredict(r);
+}
+
+/* =====================================================================
+   6. SECTION 1 WIRING
+   ===================================================================== */
+function setControlsEnabled(enabled) {
+  ["input-lt","input-lb","input-speed","range-lt","range-lb","range-speed"].forEach(id => $(id).disabled = !enabled);
+  document.querySelectorAll("[data-preset]").forEach(b => b.disabled = !enabled);
+}
+
+$("range-lt").addEventListener("input", (e) => {
+  state.lt = Math.max(20, parseFloat(e.target.value));
+  $("input-lt").value = state.lt;
+  $("lt-badge").textContent = `${state.lt} m`;
+  renderMain();
+});
+$("input-lt").addEventListener("input", (e) => {
+  state.lt = Math.max(20, Math.min(600, parseFloat(e.target.value) || 20));
+  $("range-lt").value = Math.min(500, state.lt);
+  $("lt-badge").textContent = `${state.lt} m`;
+  renderMain();
+});
+$("range-lb").addEventListener("input", (e) => {
+  state.lb = Math.max(0, parseFloat(e.target.value));
+  $("input-lb").value = state.lb;
+  $("lb-badge").textContent = state.lb > 0 ? `${state.lb} m` : "0 m (pole)";
+  renderMain();
+});
+$("input-lb").addEventListener("input", (e) => {
+  state.lb = Math.max(0, Math.min(1000, parseFloat(e.target.value) || 0));
+  $("range-lb").value = Math.min(800, state.lb);
+  $("lb-badge").textContent = state.lb > 0 ? `${state.lb} m` : "0 m (pole)";
+  renderMain();
+});
+$("range-speed").addEventListener("input", (e) => {
+  state.speed = parseFloat(e.target.value);
+  $("input-speed").value = state.speed;
+  $("speed-badge").textContent = `${state.speed} km/h`;
+  renderMain();
+});
+$("input-speed").addEventListener("input", (e) => {
+  state.speed = Math.max(18, Math.min(180, parseFloat(e.target.value) || 18));
+  $("range-speed").value = Math.min(144, state.speed);
+  $("speed-badge").textContent = `${state.speed} km/h`;
+  renderMain();
+});
+document.querySelectorAll("[data-preset]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const [lt, lb, speed] = btn.dataset.preset.split(",").map(Number);
+    state.lt = lt; state.lb = lb; state.speed = speed;
+    $("input-lt").value = lt; $("range-lt").value = Math.min(500, lt);
+    $("input-lb").value = lb; $("range-lb").value = Math.min(800, lb);
+    $("input-speed").value = speed; $("range-speed").value = Math.min(144, speed);
+    $("lt-badge").textContent = `${lt} m`;
+    $("lb-badge").textContent = lb > 0 ? `${lb} m` : "0 m (pole)";
+    $("speed-badge").textContent = `${speed} km/h`;
+    renderMain();
+  });
+});
+
+/* =====================================================================
+   7. SECTION 2 — PREDICT
+   ===================================================================== */
+function preparePredict(result) {
+  if (state.predictLocked || !result.valid) return;
+  const { lt, lb, sKmh, crossTime, vMs } = result.intermediates;
+
+  $("predict-scenario-text").textContent = lb > 0
+    ? `A ${lt} m train at ${sKmh} km/h crosses a ${lb} m bridge. How many seconds to completely clear?`
+    : `A ${lt} m train at ${sKmh} km/h passes a stationary pole. Time to pass?`;
+
+  const correct = crossTime;
+  const bridgeOnly = result.traps.bridgeOnly;
+  const noConv = result.traps.noConversion;
+
+  const set = new Set([correct]);
+  if (bridgeOnly !== null && bridgeOnly !== correct) set.add(bridgeOnly);
+  if (noConv !== correct) set.add(noConv);
+
+  const options = [...set].map(v => ({
+    value: v,
+    kind: v === correct ? "correct"
+        : v === bridgeOnly ? "bridge_only"
+        : "no_conv"
+  })).sort((a, b) => a.value - b.value);
+
+  state.predictScenario = { lt, lb, sKmh, correct, options };
+
+  const container = $("predict-options-container");
+  container.innerHTML = "";
+  options.forEach(o => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = `${o.value} s`;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.dataset.kind = o.kind;
+    btn.dataset.value = o.value;
+    btn.addEventListener("click", () => commitPrediction(o));
+    container.appendChild(btn);
+  });
+
+  $("predict-feedback").className = "callout hidden";
+  $("worked-solution-panel").classList.add("hidden");
+  setControlsEnabled(true);
+  $("predict-lock-hint").textContent = "Sliders locked until you predict.";
+  state.userPrediction = null;
+}
+
+function commitPrediction(option) {
+  if (state.predictLocked) return;
+  state.predictLocked = true;
+  state.userPrediction = option.value;
+  setControlsEnabled(false);
+  $("predict-lock-hint").textContent = "Locked. Click 🎲 New scenario to try again.";
+
+  document.querySelectorAll("#predict-options-container .option-btn").forEach(b => {
+    const kind = b.dataset.kind;
+    const chosen = Number(b.dataset.value) === option.value;
+    b.setAttribute("aria-checked", chosen ? "true" : "false");
+    if (kind === "correct") b.classList.add("correct");
+    else if (kind === "bridge_only" || kind === "no_conv") b.classList.add("trap");
+    if (chosen && kind !== "correct") b.classList.add("incorrect");
+    b.disabled = true;
+  });
+
+  const fb = $("predict-feedback");
+  fb.classList.remove("hidden");
+  const r = Model.solveCross({ lt: state.lt, lb: state.lb, speed: state.speed });
+  const sc = state.predictScenario;
+
+  if (option.kind === "correct") {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong> D = ${r.intermediates.totalDist} m, v = ${r.intermediates.vMs} m/s → t = ${sc.correct} s.`;
+  } else if (option.kind === "bridge_only") {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Bridge-only trap:</strong> ${sc.lb}/${r.intermediates.vMs} = ${option.value} s only clears the engine. The tail is still on the bridge. Use ${sc.lt}+${sc.lb} = ${r.intermediates.totalDist} m.`;
+  } else {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Unit trap:</strong> you divided metres by km/h. Convert first: ${sc.sKmh}×5/18 = ${r.intermediates.vMs} m/s.`;
+  }
+
+  revealSteps(r);
+  renderCrossing(r);
+  renderReadouts(r);
+}
+
+function revealSteps(r) {
+  if (!r.valid) return;
+  $("worked-solution-panel").classList.remove("hidden");
+  $("solution-steps-container").innerHTML = r.steps.map((s, i) => `
+    <div class="step-item">
+      <div class="step-num">Step ${i + 1}</div>
+      <div class="step-title">${s.title}</div>
+      <div>${s.body}</div>
+      ${s.math ? `<div class="step-detail">${s.math}</div>` : ""}
+    </div>`).join("");
+  $("solution-trap-text").textContent = r.traps.bridgeOnly !== null
+    ? `Using only ${state.lb} m gives ${r.traps.bridgeOnly} s — engine-only. The train is still halfway across. The tail must also clear, so total distance is ${r.intermediates.totalDist} m.`
+    : `The pole has zero length, so distance equals the train's own length.`;
+}
+
+$("btn-new-predict").addEventListener("click", () => {
+  state.predictLocked = false;
+  state.userPrediction = null;
+  const presets = [[200,300,72],[150,0,54],[120,280,36],[250,450,90],[180,220,60]];
+  const [lt, lb, speed] = presets[Math.floor(Math.random() * presets.length)];
+  state.lt = lt; state.lb = lb; state.speed = speed;
+  $("input-lt").value = lt; $("range-lt").value = Math.min(500, lt);
+  $("input-lb").value = lb; $("range-lb").value = Math.min(800, lb);
+  $("input-speed").value = speed; $("range-speed").value = Math.min(144, speed);
+  $("lt-badge").textContent = `${lt} m`;
+  $("lb-badge").textContent = lb > 0 ? `${lb} m` : "0 m (pole)";
+  $("speed-badge").textContent = `${speed} km/h`;
+  renderMain();
+});
+
+/* =====================================================================
+   8. SECTION 3 — CONVERSION LAB
+   ===================================================================== */
+$("conv-slider").addEventListener("input", (e) => {
+  state.convSpeed = parseFloat(e.target.value);
+  renderConv();
+});
+
+/* =====================================================================
+   9. SECTION 4 — RELATIVE SPEED
+   ===================================================================== */
+$("rel-s1").addEventListener("input", (e) => {
+  state.rel.s1 = parseFloat(e.target.value);
+  renderRelative();
+});
+$("rel-s2").addEventListener("input", (e) => {
+  state.rel.s2 = parseFloat(e.target.value);
+  renderRelative();
+});
+document.querySelectorAll("[data-dir]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.rel.direction = btn.dataset.dir;
+    document.querySelectorAll("[data-dir]").forEach(b => {
+      b.classList.toggle("active", b === btn);
+      b.setAttribute("aria-selected", b === btn ? "true" : "false");
     });
+    renderRelative();
+  });
+});
 
-    function revealWorkedSteps(modelResult) {
-      if (!modelResult || !modelResult.valid) return;
-      workedSolutionPanel.classList.remove("hidden");
+/* =====================================================================
+   10. PRACTICE
+   ===================================================================== */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
-      solutionStepsContainer.innerHTML = modelResult.steps.map((st, idx) => `
-        <div class="step-item">
-          <div class="step-num">Step ${idx + 1}</div>
-          <div class="step-title">${st.title}</div>
-          <div>${st.explanation}</div>
-          ${st.math ? `<div class="step-detail">${st.math}</div>` : ''}
-        </div>
-      `).join("");
+function setPracticeMode(mode) {
+  state.practiceMode = mode;
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+    const on = b.dataset.mode === mode;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  $("timer-container").classList.toggle("hidden", mode !== "timed");
+  if (mode === "timed") startTimer();
+  else stopTimer();
 
-      if (modelResult.commonTrap) {
-        solutionTrapCallout.classList.remove("hidden");
-        solutionTrapText.textContent = modelResult.commonTrap.explanation;
+  document.querySelectorAll("main > section").forEach((el, idx) => {
+    if (idx === 0 || idx === 2 || idx === 3) {
+      el.style.display = (mode === "hints") ? "" : "none";
+    }
+  });
+}
+document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+  b.addEventListener("click", () => setPracticeMode(b.dataset.mode));
+});
+
+function startTimer() {
+  stopTimer();
+  state.timer.remaining = 90;
+  $("timer-display").textContent = state.timer.remaining;
+  state.timer.interval = setInterval(() => {
+    state.timer.remaining--;
+    $("timer-display").textContent = Math.max(0, state.timer.remaining);
+    if (state.timer.remaining <= 0) {
+      stopTimer();
+      if (!state.answered) {
+        const q = state.shuffled[state.currentQIndex];
+        markAnswer(-1, q);
       }
     }
+  }, 1000);
+}
+function stopTimer() {
+  if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; }
+}
 
-    /* ==========================================================================
-       6. PRACTICE LAB ENGINE
-       ========================================================================== */
-    let currentQIndex = 0;
-    let practiceMode = "hints";
-    let timerInstance = null;
-    let questionStartTime = 0;
-    const TOPIC_ID = "trains-bridge";
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
+    if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw));
+  } catch {}
+}
+function saveProgress() {
+  try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch {}
+}
 
-    function setPracticeMode(mode) {
-      practiceMode = mode;
-      document.querySelectorAll(".mode-btn").forEach(b => {
-        b.classList.remove("active");
-        b.setAttribute("aria-selected", "false");
-      });
+function renderStats() {
+  $("stat-attempts").textContent = state.stats.attempts;
+  $("stat-correct").textContent = state.stats.correct;
+  $("stat-independent").textContent = state.stats.independentCorrect;
+  const acc = state.stats.attempts ? Math.round(state.stats.correct / state.stats.attempts * 100) : 0;
+  $("stat-accuracy").textContent = acc + "%";
+}
 
-      const activeBtn = document.getElementById(`btn-mode-${mode}`);
-      if (activeBtn) {
-        activeBtn.classList.add("active");
-        activeBtn.setAttribute("aria-selected", "true");
-      }
+function renderQuestion() {
+  if (!state.testsPassed) {
+    $("practice-q-stem").textContent = "Practice is disabled because the model self-tests failed.";
+    return;
+  }
+  const q = state.shuffled[state.currentQIndex];
+  state.answered = false;
+  $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
+  const d = $("practice-q-difficulty");
+  d.textContent = q.difficulty;
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
+                             : q.difficulty === "Medium" ? "badge-draft"
+                             : "badge-tag");
+  $("practice-q-stem").textContent = q.stem;
 
-      const timerContainer = document.getElementById("timer-container");
-      if (mode === "timed") {
-        timerContainer.classList.remove("hidden");
-        if (!timerInstance) {
-          timerInstance = new LabCommon.PracticeTimer((sec) => {
-            document.getElementById("timer-display").textContent = timerInstance.format();
-          });
-        }
-        timerInstance.start();
-      } else {
-        timerContainer.classList.add("hidden");
-        if (timerInstance) timerInstance.stop();
-      }
+  $("practice-feedback").className = "callout hidden";
+  $("practice-error-categorizer").classList.add("hidden");
+  $("practice-solution-box").classList.add("hidden");
+  $("btn-next-question").disabled = true;
 
-      const simSection = document.getElementById("interactive-model-title").closest(".card");
-      const refSection = document.getElementById("reference-title").closest(".card");
-      if (mode === "independent") {
-        simSection.style.display = "none";
-        refSection.style.display = "none";
-      } else {
-        simSection.style.display = "block";
-        refSection.style.display = "block";
-      }
+  const container = $("practice-options-container");
+  container.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = opt;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.addEventListener("click", () => markAnswer(i, q));
+    container.appendChild(btn);
+  });
 
-      LabCommon.announce(`Switched to ${mode} practice mode.`);
-    }
+  if (state.practiceMode === "timed") startTimer();
+}
 
-    function renderPracticeQuestion(index) {
-      const q = PRACTICE_QUESTIONS[index];
-      if (!q) return;
+function markAnswer(chosenIdx, q) {
+  if (state.answered) return;
+  state.answered = true;
+  stopTimer();
 
-      questionStartTime = Date.now();
+  const isCorrect = chosenIdx === q.correctIndex;
+  const isTrap = chosenIdx === q.trapOptionIndex;
 
-      document.getElementById("practice-q-num").textContent = `Question ${index + 1} of ${PRACTICE_QUESTIONS.length}`;
-      const diffBadge = document.getElementById("practice-q-difficulty");
-      diffBadge.textContent = q.difficulty;
-      diffBadge.className = `badge ${q.difficulty === 'Easy' ? 'badge-published' : q.difficulty === 'Medium' ? 'badge-draft' : 'badge-tag'}`;
+  document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
+    b.disabled = true;
+    b.setAttribute("aria-checked", i === chosenIdx ? "true" : "false");
+    if (i === q.correctIndex) b.classList.add("correct");
+    else if (i === chosenIdx) b.classList.add(isTrap ? "trap" : "incorrect");
+  });
 
-      document.getElementById("practice-q-stem").textContent = q.stem;
+  const fb = $("practice-feedback");
+  fb.classList.remove("hidden");
+  if (isCorrect) {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong>`;
+  } else if (isTrap) {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  } else {
+    fb.className = "callout callout-danger";
+    fb.innerHTML = `<strong>Incorrect.</strong> Correct answer: <strong>${q.options[q.correctIndex]}</strong>.`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  }
 
-      const feedback = document.getElementById("practice-feedback");
-      feedback.className = "callout hidden";
-      document.getElementById("practice-error-categorizer").classList.add("hidden");
-      document.getElementById("practice-solution-box").classList.add("hidden");
+  $("practice-solution-box").classList.remove("hidden");
+  $("practice-solution-text").textContent = q.solution;
 
-      const optContainer = document.getElementById("practice-options-container");
-      optContainer.innerHTML = "";
+  state.stats.attempts++;
+  if (isCorrect) {
+    state.stats.correct++;
+    if (state.practiceMode !== "hints") state.stats.independentCorrect++;
+  }
+  saveProgress();
+  renderStats();
+  $("btn-next-question").disabled = false;
+}
 
-      q.options.forEach((optText, optIdx) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "option-btn practice-submit-btn";
-        btn.textContent = optText;
-        btn.setAttribute("role", "radio");
-        btn.setAttribute("aria-checked", "false");
-        btn.onclick = () => submitPracticeAnswer(optIdx, q);
-        optContainer.appendChild(btn);
-      });
-    }
+$("btn-next-question").addEventListener("click", () => {
+  state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
+  renderQuestion();
+});
 
-    function submitPracticeAnswer(chosenIdx, question) {
-      const isCorrect = chosenIdx === question.correctIndex;
-      const isTrap = chosenIdx === question.trapOptionIndex;
-      const durationSec = Math.round((Date.now() - questionStartTime) / 1000);
+$("select-error-category").addEventListener("change", (e) => {
+  const cat = e.target.value;
+  state.stats.errorsByCat[cat] = (state.stats.errorsByCat[cat] || 0) + 1;
+  saveProgress();
+});
 
-      const buttons = document.querySelectorAll("#practice-options-container .option-btn");
-      buttons.forEach((b, idx) => {
-        b.disabled = true;
-        if (idx === question.correctIndex) b.classList.add("correct");
-        if (idx === chosenIdx && !isCorrect) {
-          b.classList.add(isTrap ? "trap" : "incorrect");
-        }
-      });
+function handleResetStats() {
+  if (!confirm("Reset local practice stats for Trains?")) return;
+  state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
+  saveProgress();
+  renderStats();
+}
+window.handleResetStats = handleResetStats;
 
-      const feedback = document.getElementById("practice-feedback");
-      feedback.classList.remove("hidden");
+/* =====================================================================
+   11. INIT
+   ===================================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const results = runSelfTests();
+  state.testsPassed = results.failed === 0;
+  const banner = $("test-status-banner");
+  if (!state.testsPassed) {
+    banner.className = "test-banner";
+    banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong>
+      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
+    $("practice-options-container").innerHTML = "";
+  }
 
-      if (isCorrect) {
-        feedback.className = "callout callout-success";
-        feedback.innerHTML = `<strong>✓ Correct!</strong> Well reasoned.`;
-        LabCommon.announce("Correct answer!");
-      } else if (isTrap && question.trapExplanation) {
-        feedback.className = "callout callout-trap";
-        feedback.innerHTML = `<strong>⚠️ Common Exam Trap:</strong> ${question.trapExplanation}`;
-        LabCommon.announce("Incorrect: Common trap encountered.");
-        document.getElementById("practice-error-categorizer").classList.remove("hidden");
-      } else {
-        feedback.className = "callout callout-danger";
-        feedback.innerHTML = `<strong>Incorrect:</strong> Review the worked solution below.`;
-        LabCommon.announce("Incorrect answer.");
-        document.getElementById("practice-error-categorizer").classList.remove("hidden");
-      }
+  loadProgress();
+  state.shuffled = shuffle(PRACTICE_QUESTIONS);
 
-      const solBox = document.getElementById("practice-solution-box");
-      solBox.classList.remove("hidden");
-      document.getElementById("practice-solution-text").textContent = question.solution;
+  $("input-lt").value = state.lt; $("range-lt").value = Math.min(500, state.lt);
+  $("input-lb").value = state.lb; $("range-lb").value = Math.min(800, state.lb);
+  $("input-speed").value = state.speed; $("range-speed").value = Math.min(144, state.speed);
+  $("lt-badge").textContent = `${state.lt} m`;
+  $("lb-badge").textContent = `${state.lb} m`;
+  $("speed-badge").textContent = `${state.speed} km/h`;
 
-      LabCommon.recordTopicAttempt(TOPIC_ID, {
-        isCorrect,
-        isIndependent: practiceMode === "independent" || practiceMode === "timed",
-        timeSec: durationSec,
-        errorCategory: isCorrect ? null : document.getElementById("select-error-category").value
-      });
-
-      renderStats();
-    }
-
-    function handleSaveErrorCategory(category) {
-      const p = LabCommon.getTopicProgress(TOPIC_ID);
-      if (p.errorsByCategory[category] !== undefined) {
-        p.errorsByCategory[category] += 1;
-        LabCommon.storage.set(`lab_progress_${TOPIC_ID}`, p);
-      }
-      LabCommon.announce(`Recorded mistake reason: ${category}`);
-    }
-
-    function loadNextQuestion() {
-      currentQIndex = (currentQIndex + 1) % PRACTICE_QUESTIONS.length;
-      renderPracticeQuestion(currentQIndex);
-    }
-
-    function renderStats() {
-      const p = LabCommon.getTopicProgress(TOPIC_ID);
-      document.getElementById("stat-attempts").textContent = p.attempts;
-      document.getElementById("stat-correct").textContent = p.correct;
-      document.getElementById("stat-independent").textContent = p.independentCorrect;
-      const acc = p.attempts > 0 ? Math.round((p.correct / p.attempts) * 100) : 0;
-      document.getElementById("stat-accuracy").textContent = `${acc}%`;
-    }
-
-    function handleResetStats() {
-      if (confirm("Reset local practice statistics for Trains and Bridges?")) {
-        LabCommon.resetTopicProgress(TOPIC_ID);
-        renderStats();
-        LabCommon.announce("Practice statistics reset.");
-      }
-    }
-
-    /* ==========================================================================
-       7. INITIALIZATION ON LOAD
-       ========================================================================== */
-    document.addEventListener("DOMContentLoaded", () => {
-      LabCommon.runAndRenderSelfTests(runSelfTests);
-      updateModelAndVisual();
-      renderPracticeQuestion(0);
-      renderStats();
-    });
-  </script>
+  renderMain();
+  renderConv();
+  renderRelative();
+  renderQuestion();
+  renderStats();
+  setPracticeMode("hints");
+});
+</script>
 </body>
 </html>

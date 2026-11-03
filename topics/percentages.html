@@ -1,1162 +1,1491 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Percentages & Percentage Change — Aptitude & Reasoning Lab</title>
-  <meta name="description" content="Master percentages, multiplier methods, base shifts, and successive percentage changes with interactive visual models, predict-first steps, and timed practice.">
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="../assets/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Percentages &amp; Percentage Change — Aptitude Lab</title>
+<meta name="description" content="See percentages, not just calculate them. Interactive base model, real predict gate, ghost bar traps, and unified number line." />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<style>
+/* =====================================================================
+   DESIGN TOKENS
+   ===================================================================== */
+:root {
+  --bg: #0b1220;
+  --bg-elev: #111a2e;
+  --surface: #16213c;
+  --surface-2: #1c2848;
+  --border: #2a3758;
+  --border-strong: #3b4d78;
+  --text: #e8edf7;
+  --text-dim: #94a3b8;
+  --text-muted: #64748b;
+  --primary: #38bdf8;
+  --primary-dim: #0ea5e9;
+  --primary-soft: rgba(56, 189, 248, 0.12);
+  --success: #22c55e;
+  --success-soft: rgba(34, 197, 94, 0.12);
+  --warn: #f59e0b;
+  --warn-soft: rgba(245, 158, 11, 0.12);
+  --danger: #ef4444;
+  --danger-soft: rgba(239, 68, 68, 0.12);
+  --indigo: #818cf8;
+  --indigo-soft: rgba(129, 140, 248, 0.12);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.25);
+  --shadow-md: 0 4px 14px rgba(0,0,0,.35);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --transition: 180ms cubic-bezier(.4, 0, .2, 1);
+}
+
+/* =====================================================================
+   BASE
+   ===================================================================== */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  padding: 0 16px 64px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+}
+
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--primary); color: #001; padding: 12px 16px; border-radius: 0 0 8px 0; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 0.75rem; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+/* =====================================================================
+   LAYOUT
+   ===================================================================== */
+.page-container {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px 22px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+@media (min-width: 720px) {
+  .card { padding: 26px 28px 28px; }
+}
+
+.card-header { margin-bottom: 18px; }
+.section-title {
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;
+}
+.section-title::before {
+  content: counter(section-num);
+  counter-increment: section-num;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
+  background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%;
+  font-size: 0.8rem; font-weight: 800;
+}
+main { counter-reset: section-num; }
+.section-subtitle {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* =====================================================================
+   HEADER
+   ===================================================================== */
+.site-header {
+  position: sticky; top: 0; z-index: 40;
+  backdrop-filter: blur(12px);
+  background: rgba(11, 18, 32, 0.85);
+  border-bottom: 1px solid var(--border);
+  margin: 0 -16px 24px;
+  padding: 12px 16px;
+}
+.header-container {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand-link {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--text); text-decoration: none; font-weight: 700;
+}
+.brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+.nav-link:hover { color: var(--text); }
+
+/* =====================================================================
+   BADGES
+   ===================================================================== */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.02em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.badge-published { background: var(--success-soft); color: var(--success); }
+.badge-draft { background: var(--warn-soft); color: var(--warn); }
+.badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
+
+/* =====================================================================
+   BUTTONS
+   ===================================================================== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px;
+  font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #001824; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
+.btn-secondary {
+  background: var(--surface-2); color: var(--text); border-color: var(--border-strong);
+}
+.btn-secondary:hover:not(:disabled) { background: var(--border); }
+.btn-ghost { background: transparent; color: var(--text-dim); }
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
+.btn-sm { padding: 6px 11px; font-size: 0.8rem; }
+.btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* =====================================================================
+   INPUTS
+   ===================================================================== */
+.control-grid {
+  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
+}
+@media (min-width: 640px) {
+  .control-grid { grid-template-columns: 1fr 1fr; }
+}
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 0.85rem; font-weight: 600; color: var(--text);
+}
+.control-hint { font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
+
+input[type=number] {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  width: 100%;
+  transition: border-color var(--transition);
+}
+input[type=number]:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+input[type=number]:disabled { opacity: 0.6; cursor: not-allowed; }
+
+input[type=range] {
+  width: 100%;
+  accent-color: var(--primary);
+  height: 24px;
+}
+input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* =====================================================================
+   VISUAL
+   ===================================================================== */
+.vis-container {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin: 8px 0 16px;
+}
+.vis-container svg { display: block; width: 100%; height: auto; }
+
+/* =====================================================================
+   READOUTS
+   ===================================================================== */
+.score-bar {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+@media (min-width: 640px) {
+  .score-bar { grid-template-columns: repeat(4, 1fr); }
+}
+.score-stat {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.score-stat-label {
+  font-size: 0.72rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.score-stat-num {
+  font-size: 1.1rem; font-weight: 700;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+/* =====================================================================
+   CALLOUTS
+   ===================================================================== */
+.callout {
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+.callout.hidden { display: none; }
+.callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
+.callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
+.callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
+.callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+
+.test-banner {
+  background: var(--danger-soft);
+  border: 1px solid var(--danger);
+  color: #fca5a5;
+  padding: 12px 16px; border-radius: var(--radius-md);
+  margin-bottom: 20px;
+}
+.test-banner.hidden { display: none; }
+.test-banner ul { margin: 8px 0 0 20px; padding: 0; }
+
+/* =====================================================================
+   PREDICT BOX
+   ===================================================================== */
+.predict-box {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+}
+.predict-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; color: var(--primary); margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+.predict-header svg { flex-shrink: 0; }
+
+.options-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.option-btn {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: center;
+}
+.option-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+.option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
+.option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
+.option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
+.option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* =====================================================================
+   WORKED SOLUTION STEPS
+   ===================================================================== */
+.steps-container {
+  display: flex; flex-direction: column; gap: 10px; margin-top: 8px;
+}
+.step-item {
+  background: var(--bg-elev);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.step-num {
+  font-size: 0.72rem; color: var(--primary); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
+}
+.step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+.step-detail {
+  font-family: var(--font-mono);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  color: var(--primary);
+  overflow-x: auto;
+}
+
+/* =====================================================================
+   PRACTICE MODES
+   ===================================================================== */
+.practice-header {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.mode-toggle-group {
+  display: inline-flex;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 2px;
+}
+.mode-btn {
+  background: transparent; color: var(--text-dim);
+  border: 0; padding: 7px 12px;
+  border-radius: 6px;
+  font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active { background: var(--primary-soft); color: var(--primary); }
+.mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+.timer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--warn-soft);
+  border: 1px solid rgba(245,158,11,.35);
+  color: var(--warn);
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 0.9rem;
+  font-family: var(--font-mono);
+}
+.timer-badge.hidden { display: none; }
+
+.question-stem {
+  font-size: 1.05rem; line-height: 1.5;
+  margin: 12px 0 16px;
+  font-weight: 500;
+}
+
+/* =====================================================================
+   FOOTER
+   ===================================================================== */
+.site-footer {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+.footer-container { max-width: 1080px; margin: 0 auto; }
+.disclaimer-box {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-top: 16px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* =====================================================================
+   GHOST BAR / NUMBER LINE ANIMATIONS
+   ===================================================================== */
+.ghost-bar {
+  opacity: 0;
+  animation: fadeIn 400ms ease-out forwards;
+}
+@keyframes fadeIn { to { opacity: 1; } }
+
+.error-categorizer {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--bg-elev);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.error-categorizer.hidden { display: none; }
+.error-categorizer label {
+  font-size: 0.85rem; font-weight: 600;
+  display: block; margin-bottom: 6px;
+}
+.error-categorizer select {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  width: 100%;
+}
+</style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="header-container">
-      <a href="../index.html" class="brand-link" aria-label="Aptitude and Reasoning Lab Home">
-        <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-          <rect width="64" height="64" rx="14" fill="#0f172a" />
-          <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3" />
-          <circle cx="24" cy="24" r="4" fill="#38bdf8" />
-          <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4" />
-          <circle cx="40" cy="40" r="4" fill="#34d399" />
-          <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
-        </svg>
-        <span>Aptitude Lab</span>
-      </a>
+<header class="site-header">
+  <div class="header-container">
+    <a href="../index.html" class="brand-link">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f172a"/>
+        <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+        <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+        <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+        <circle cx="40" cy="40" r="4" fill="#34d399"/>
+        <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span>Aptitude Lab</span>
+    </a>
+    <nav aria-label="Topic navigation">
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+        <li><span class="badge badge-published">Published</span></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
-      <nav aria-label="Topic navigation">
-        <ul class="nav-links">
-          <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-          <li><span class="badge badge-published">Published</span></li>
-        </ul>
-      </nav>
+<main id="main-content" class="page-container">
+
+  <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+  <header class="card">
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.75rem;">
+      <span class="badge badge-tag">Quantitative Aptitude</span>
+      <span class="badge badge-tag">SEBI Gr A</span>
+      <span class="badge badge-tag">Banking &amp; SSC</span>
     </div>
+    <h1>Percentages &amp; Percentage Change</h1>
+    <p class="section-subtitle" style="margin-top:8px;">
+      A percentage is always a fraction of some <strong>base</strong>. Most exam traps come from
+      forgetting <em>which base</em>. See the base move, predict before you look, and learn from the
+      ghost bar when you miss.
+    </p>
   </header>
 
-  <!-- Main Content -->
-  <main id="main-content" class="page-container">
-    
-    <!-- Model Self-Test Banner -->
-    <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+  <!-- ===== SECTION 1 ===== -->
+  <section class="card" aria-labelledby="s1">
+    <div class="card-header">
+      <h2 id="s1" class="section-title">See the base change</h2>
+      <p class="section-subtitle">The top bar is the base. The bottom bar is the result. The shaded gap is the change.</p>
+    </div>
 
-    <!-- Topic Hero -->
-    <header class="card" style="margin-bottom: 1.25rem;">
-      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
-        <span class="badge badge-tag">Quantitative Aptitude</span>
-        <span class="badge badge-tag">SEBI Gr A (IT & Gen)</span>
-        <span class="badge badge-tag">Banking & SSC</span>
-      </div>
-      <h1>Percentages & Percentage Change</h1>
-      <p class="section-subtitle">
-        Understand percentage as a relationship to a base of 100. Master the multiplier method, recognize base-shift traps, and develop fast mental arithmetic for competitive exams.
-      </p>
-    </header>
-
-    <!-- Section 1: Concept & Interactive Model -->
-    <section class="card" aria-labelledby="interactive-model-title">
-      <div class="card-header">
-        <div>
-          <h2 id="interactive-model-title" class="section-title">
-            <span>1. Interactive Proportional Model</span>
-          </h2>
-          <p class="section-subtitle">Adjust the base quantity and percentage to visualize the exact relationship.</p>
-        </div>
-      </div>
-
-      <!-- Quick Fraction Presets -->
-      <div style="margin-bottom: 1.25rem;">
-        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-text-muted); display: block; margin-bottom: 0.4rem;">
-          Standard Exam Fraction Equivalents:
-        </span>
-        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(10, '1/10')">10% (1/10)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(12.5, '1/8')">12.5% (1/8)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(16.67, '1/6')">16.67% (1/6)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(20, '1/5')">20% (1/5)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(25, '1/4')">25% (1/4)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(33.33, '1/3')">33.33% (1/3)</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset(50, '1/2')">50% (1/2)</button>
-        </div>
-      </div>
-
-      <!-- Controls -->
-      <div class="control-grid">
-        <div class="control-group">
-          <label for="input-base" class="control-label">
-            <span>Base Value (<span style="font-family: var(--font-mono);">B</span>)</span>
-            <span class="control-hint">Original 100% quantity</span>
-          </label>
-          <input type="number" id="input-base" value="240" min="1" max="100000" step="1" aria-describedby="base-desc">
-          <span id="base-desc" class="sr-only">The starting reference amount representing 100 percent.</span>
-        </div>
-
-        <div class="control-group">
-          <label for="input-percent" class="control-label">
-            <span>Percentage (<span style="font-family: var(--font-mono);">P%</span>)</span>
-            <span id="percent-display-badge" class="badge badge-tag">+25%</span>
-          </label>
-          <input type="range" id="input-percent" min="-100" max="200" step="0.5" value="25" aria-describedby="percent-desc">
-          <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.25rem;">
-            <input type="number" id="input-percent-num" value="25" min="-100" max="1000" step="0.5" style="width: 110px;">
-            <span style="font-size: 0.8125rem; color: var(--color-text-muted);">% (negative = decrease)</span>
-          </div>
-          <span id="percent-desc" class="sr-only">Percentage value to calculate or change from base.</span>
-        </div>
-      </div>
-
-      <!-- SVG Visualization -->
-      <div class="vis-container" aria-label="Visual percentage proportional bar chart">
-        <svg id="proportional-svg" viewBox="0 0 620 140" width="100%" height="140" role="img" aria-labelledby="svg-desc">
-          <title id="svg-desc">Proportional representation of base and percentage portion</title>
-          <!-- SVG content rendered by Model Renderer -->
-        </svg>
-      </div>
-
-      <!-- Computed Model Outputs Readout -->
-      <div class="score-bar" id="model-readout" aria-live="polite">
-        <div class="score-stat">
-          <span class="score-stat-label">Calculated Portion (A)</span>
-          <span class="score-stat-num" id="readout-amount">60</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Multiplier Factor (M)</span>
-          <span class="score-stat-num" id="readout-multiplier">1.25×</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">New Total (B + A)</span>
-          <span class="score-stat-num" id="readout-total">300</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Fractional Form</span>
-          <span class="score-stat-num" id="readout-fraction">1/4 of Base</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 2: Predict-First Worked Example -->
-    <section class="card" aria-labelledby="predict-title">
-      <div class="card-header">
-        <div>
-          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
-          <p class="section-subtitle">Active prediction strengthens cognitive recall before inspecting the steps.</p>
-        </div>
-      </div>
-
-      <div class="predict-box">
-        <div class="predict-header">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
-          </svg>
-          <span id="predict-question-prompt">Predict the result:</span>
-        </div>
-        <p id="predict-scenario-text" style="font-size: 1.05rem; font-weight: 500; margin-bottom: 1rem;">
-          If an item costs ₹240 and is increased by 25%, what is its new price?
-        </p>
-
-        <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options">
-          <!-- Dynamically populated predict options -->
-        </div>
-
-        <div id="predict-feedback" class="callout hidden" role="alert"></div>
-
-        <div style="margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-          <button type="button" id="btn-reveal-solution" class="btn btn-secondary">
-            Inspect Worked Solution ↓
-          </button>
-          <span style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            (Predicting first improves retention by over 30%)
-          </span>
-        </div>
-      </div>
-
-      <!-- Step-by-Step Worked Solution Trace -->
-      <div id="worked-solution-panel" class="hidden">
-        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Verified Step-by-Step Mathematical Trace</h3>
-        <div class="steps-container" id="solution-steps-container">
-          <!-- Populated from pure Model.solve() -->
-        </div>
-
-        <!-- Trap Callout -->
-        <div class="callout callout-trap" id="solution-trap-callout">
-          <strong>⚠️ Common Trap to Avoid:</strong>
-          <span id="solution-trap-text"></span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 3: Exam Rules & Shortcuts Reference -->
-    <section class="card" aria-labelledby="reference-title">
-      <div class="card-header">
-        <div>
-          <h2 id="reference-title" class="section-title">3. Core Exam Rules & Fast Shortcuts</h2>
-          <p class="section-subtitle">Rules, boundaries, and when shortcuts are mathematically valid.</p>
-        </div>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The Multiplier Method</h3>
-          <p style="font-size: 0.875rem;">Instead of calculating the percentage and adding it separately, multiply directly by $(1 \pm \frac{P}{100})$:</p>
-          <ul style="font-size: 0.875rem; padding-left: 1.25rem; margin-top: 0.3rem;">
-            <li>Increase by 15% $\implies$ multiply by <strong>1.15</strong></li>
-            <li>Decrease by 20% $\implies$ multiply by <strong>0.80</strong></li>
-            <li>Increase by 125% $\implies$ multiply by <strong>2.25</strong></li>
-          </ul>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">The Base Shift Rule (Reversals)</h3>
-          <p style="font-size: 0.875rem;">If $A$ is $x\%$ more than $B$, then $B$ is less than $A$ by:</p>
-          <div class="step-detail" style="display: block; text-align: center; margin: 0.4rem 0;">
-            $\text{Percentage Less} = \frac{x}{100 + x} \times 100\%$
-          </div>
-          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            *Condition:* Valid when returning to the original base (e.g. price rises by 25%, consumption must fall by $\frac{25}{125} = 20\%$ to keep expenditure constant).
-          </p>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">Successive Percentage Changes</h3>
-          <p style="font-size: 0.875rem;">If a quantity changes by $a\%$ followed by $b\%$, the net effective change is:</p>
-          <div class="step-detail" style="display: block; text-align: center; margin: 0.4rem 0;">
-            $\text{Net Change} = a + b + \frac{a \times b}{100}\%$
-          </div>
-          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            *Caution:* Use negative signs for decreases. Valid only when $b$ is applied sequentially to the result of $a$, NOT on two separate quantities.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 4: Practice Lab (Independent & Timed) -->
-    <section class="card" aria-labelledby="practice-title" id="practice-section">
-      <div class="card-header">
-        <div>
-          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
-          <p class="section-subtitle">Real competitive-exam questions. Unseen questions solved independently build genuine retrieval.</p>
-        </div>
-      </div>
-
-      <!-- Practice Controls & Mode Toggles -->
-      <div class="practice-header">
-        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
-          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
-            Guided Mode
-          </button>
-          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
-            Try Without Hints
-          </button>
-          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
-            Timed Practice
-          </button>
-        </div>
-
-        <div id="timer-container" class="timer-badge hidden" aria-live="off">
-          <span>⏱️</span>
-          <span id="timer-display">00:00</span>
-        </div>
-      </div>
-
-      <!-- Score & Accuracy Progress Bar -->
-      <div class="score-bar" aria-label="Current Practice Statistics">
-        <div class="score-stat">
-          <span class="score-stat-label">Questions Attempted</span>
-          <span class="score-stat-num" id="stat-attempts">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Total Correct</span>
-          <span class="score-stat-num" id="stat-correct">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Independent Correct</span>
-          <span class="score-stat-num" id="stat-independent">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Accuracy</span>
-          <span class="score-stat-num" id="stat-accuracy">0%</span>
-        </div>
-        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
-          Reset Local Progress
-        </button>
-      </div>
-
-      <!-- Question Box -->
-      <div id="practice-question-card" style="margin-top: 1.25rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
-            Question 1 of 12
-          </span>
-          <span class="badge" id="practice-q-difficulty">Medium</span>
-        </div>
-
-        <p class="question-stem" id="practice-q-stem">
-          Loading practice question...
-        </p>
-
-        <!-- Options container -->
-        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
-          <!-- Rendered dynamically -->
-        </div>
-
-        <!-- Practice Feedback Callout -->
-        <div id="practice-feedback" class="callout hidden" role="alert"></div>
-
-        <!-- Error Categorizer (appears on incorrect submission) -->
-        <div id="practice-error-categorizer" class="error-categorizer hidden">
-          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
-            Reflective Analysis: What was the primary reason for this mistake?
-          </label>
-          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
-            <option value="concept">Concept Misunderstanding (Need to review rule)</option>
-            <option value="method">Wrong Setup / Method (Used the wrong formula)</option>
-            <option value="arithmetic">Arithmetic Slip (Setup was right, calculation erred)</option>
-            <option value="misread">Misread Condition (Answered for wrong variable)</option>
-            <option value="time_guess">Time Pressure / Rushed Guess</option>
-          </select>
-        </div>
-
-        <!-- Practice Worked Solution Box (revealed upon answering) -->
-        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
-          <h4 style="margin-bottom: 0.4rem; font-size: 0.95rem;">Step-by-Step Solution:</h4>
-          <p id="practice-solution-text" style="font-size: 0.9rem; line-height: 1.5;"></p>
-        </div>
-
-        <!-- Practice Action Bar -->
-        <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem; justify-content: flex-end;">
-          <button type="button" id="btn-next-question" class="btn btn-primary" onclick="loadNextQuestion()">
-            Next Question →
-          </button>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <strong>Aptitude & Reasoning Lab</strong> — Quantitative Aptitude Stream
-          <div style="font-size: 0.8125rem; margin-top: 0.25rem;">
-            Topic Review Status: <span class="badge badge-published">published</span> • Last Reviewed: 2026-10-29
-          </div>
-        </div>
-        <div style="font-size: 0.8125rem;">
-          <a href="../docs/reviews/percentages.md" style="color: var(--color-primary); text-decoration: none;">View Topic Review & Test Specification ↗</a>
-        </div>
-      </div>
-
-      <div class="disclaimer-box">
-        <strong>Educational Disclaimer:</strong> Educational tool. Check the latest official exam notifications. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority. All questions and solvers are original or derived from public standard mathematical relationships.
+    <div style="margin-bottom:18px;">
+      <span style="font-size:.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:.5rem;">
+        Common exam fractions (click to load):
+      </span>
+      <div style="display:flex; gap:.4rem; flex-wrap:wrap;">
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="10">10% = 1/10</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="12.5">12.5% = 1/8</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="16.67">16.67% = 1/6</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="20">20% = 1/5</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="25">25% = 1/4</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="33.33">33.33% = 1/3</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="50">50% = 1/2</button>
       </div>
     </div>
-  </footer>
 
-  <!-- Scripts -->
-  <script src="../assets/common.js"></script>
-  <script>
-    /* ==========================================================================
-       1. PURE MODEL (Separated from DOM, rendering, and UI state)
-       ========================================================================== */
-    const Model = (() => {
-      /**
-       * Pure solver for percentage calculations.
-       * @param {Object} input - { base, percent, trapAnswer }
-       * @returns {Object} Deterministic solver result
-       */
-      function solve(input) {
-        const base = Number(input.base);
-        const percent = Number(input.percent);
+    <div class="control-grid">
+      <div class="control-group">
+        <label for="input-base" class="control-label">
+          <span>Base value B</span>
+          <span class="control-hint">The "100%" reference</span>
+        </label>
+        <input type="number" id="input-base" value="240" min="1" max="100000" step="1">
+      </div>
+      <div class="control-group">
+        <label for="input-percent" class="control-label">
+          <span>Change P%</span>
+          <span id="percent-display-badge" class="badge badge-tag">+25%</span>
+        </label>
+        <input type="range" id="input-percent" min="-100" max="200" step="0.5" value="25">
+        <div style="display:flex; gap:.5rem; align-items:center;">
+          <input type="number" id="input-percent-num" value="25" min="-100" max="1000" step="0.5" style="width:110px;">
+          <span style="font-size:.8rem; color:var(--text-muted);">% (negative = decrease)</span>
+        </div>
+      </div>
+    </div>
 
-        // Validation & Boundary checks
-        if (isNaN(base) || isNaN(percent)) {
-          return {
-            valid: false,
-            error: "Base and percentage must be valid numbers"
-          };
-        }
+    <div class="vis-container">
+      <svg id="main-visual" viewBox="0 0 720 300" width="100%" role="img" aria-label="Before and after bars with change region and number line">
+        <title>Visual comparison of the base and the new total, with the change highlighted</title>
+      </svg>
+      <p id="svg-live-desc" class="sr-only" aria-live="polite"></p>
+    </div>
 
-        if (base <= 0) {
-          return {
-            valid: false,
-            error: "Base value must be greater than zero for percentage calculations"
-          };
-        }
+    <div class="score-bar" aria-live="polite">
+      <div class="score-stat">
+        <span class="score-stat-label">Change amount</span>
+        <span class="score-stat-num" id="readout-amount">+60</span>
+      </div>
+      <div class="score-stat">
+        <span class="score-stat-label">Multiplier</span>
+        <span class="score-stat-num" id="readout-multiplier">1.25×</span>
+      </div>
+      <div class="score-stat">
+        <span class="score-stat-label">New total</span>
+        <span class="score-stat-num" id="readout-total">300</span>
+      </div>
+      <div class="score-stat">
+        <span class="score-stat-label">Fraction</span>
+        <span class="score-stat-num" id="readout-fraction">1/4</span>
+      </div>
+    </div>
+  </section>
 
-        // Calculations
-        const fractionMultiplier = percent / 100;
-        const amount = LabCommon.round(base * fractionMultiplier, 2);
-        const multiplier = LabCommon.round(1 + fractionMultiplier, 4);
-        const newTotal = LabCommon.round(base + amount, 2);
+  <!-- ===== SECTION 2 ===== -->
+  <section class="card" aria-labelledby="s2">
+    <div class="card-header">
+      <h2 id="s2" class="section-title">Predict first</h2>
+      <p class="section-subtitle">Commit before you look. This is what builds the exam reflex — not watching the answer appear.</p>
+    </div>
 
-        // Fractional representation helper
-        let fractionStr = `${percent}/100`;
-        const absP = Math.abs(percent);
-        if (absP === 50) fractionStr = "1/2";
-        else if (absP === 25) fractionStr = "1/4";
-        else if (absP === 20) fractionStr = "1/5";
-        else if (absP === 12.5) fractionStr = "1/8";
-        else if (absP === 10) fractionStr = "1/10";
-        else if (Math.abs(absP - 33.33) < 0.05) fractionStr = "1/3";
-        else if (Math.abs(absP - 16.67) < 0.05) fractionStr = "1/6";
+    <div class="predict-box">
+      <div class="predict-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>Lock in your prediction:</span>
+      </div>
+      <p id="predict-scenario-text" style="font-size:1.05rem; font-weight:500; margin-bottom:1rem;"></p>
+      <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options"></div>
+      <div id="predict-feedback" class="callout hidden" role="alert"></div>
 
-        // Step-by-step trace
-        const steps = [
-          {
-            title: "Given Information",
-            explanation: `Original Base Quantity (B) = ${base}, Percentage (P) = ${percent}%`
-          },
-          {
-            title: "Convert Percentage to Multiplier",
-            explanation: `P% = ${percent} / 100 = ${fractionMultiplier} (Equivalent fraction: ${fractionStr})`,
-            math: `Multiplier M = 1 + (${percent} / 100) = ${multiplier}`
-          },
-          {
-            title: "Calculate Percentage Portion",
-            explanation: `Portion = Base × (P / 100) = ${base} × ${fractionMultiplier}`,
-            math: `Amount = ${amount >= 0 ? '+' : ''}${amount}`
-          },
-          {
-            title: "Determine Resulting Total",
-            explanation: `New Total = Base + Amount = ${base} + (${amount})`,
-            math: `Result = ${newTotal}`
-          }
-        ];
+      <div style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
+        <button type="button" id="btn-new-predict" class="btn btn-secondary">🎲 New scenario</button>
+        <span id="predict-lock-hint" style="font-size:.8rem; color:var(--text-muted);">
+          Sliders are locked until you predict.
+        </span>
+      </div>
+    </div>
 
-        // Pedagogical trap detection
-        let commonTrap = null;
-        if (percent > 0) {
-          // Trap: adding raw percent to base (e.g. 240 + 25 = 265)
-          const rawAddTrap = base + percent;
-          // Trap: calculating decrease instead of increase
-          const decreaseTrap = LabCommon.round(base - amount, 2);
+    <div id="worked-solution-panel" class="hidden" style="margin-top:20px;">
+      <h3 style="margin-bottom:12px;">Step-by-step solution</h3>
+      <div class="steps-container" id="solution-steps-container"></div>
+      <div class="callout callout-trap" id="solution-trap-callout" style="margin-top:12px;">
+        <strong>⚠️ Common trap:</strong> <span id="solution-trap-text"></span>
+      </div>
+    </div>
+  </section>
 
-          if (input.trapAnswer !== undefined) {
-            const userAns = Number(input.trapAnswer);
-            if (userAns === rawAddTrap) {
-              commonTrap = {
-                type: "raw_addition",
-                answer: rawAddTrap,
-                explanation: `You added ${percent} directly to ${base}. Remember that ${percent}% means ${percent} per 100 units of the base, not an absolute quantity of ${percent}.`
-              };
-            } else if (userAns === decreaseTrap) {
-              commonTrap = {
-                type: "wrong_direction",
-                answer: decreaseTrap,
-                explanation: `You subtracted the portion instead of adding it. An increase of ${percent}% requires adding ${amount} to the base.`
-              };
-            }
-          }
+  <!-- ===== SECTION 3 ===== -->
+  <section class="card" aria-labelledby="s3">
+    <div class="card-header">
+      <h2 id="s3" class="section-title">Base-shift — the #1 percentage trap</h2>
+      <p class="section-subtitle">
+        "A is x% more than B" does <em>not</em> mean "B is x% less than A." Slide and see why.
+      </p>
+    </div>
 
-          if (!commonTrap) {
-            commonTrap = {
-              type: "base_shift",
-              answer: rawAddTrap,
-              explanation: `Common error: adding ${percent} as a raw number (${base} + ${percent} = ${rawAddTrap}) instead of taking ${percent}% of ${base} (${amount}).`
-            };
-          }
-        }
+    <div class="control-group" style="max-width:460px;">
+      <label for="baseshift-x" class="control-label">
+        <span>A is <span id="baseshift-x-display" style="color:var(--primary); font-family:var(--font-mono);">25</span>% more than B</span>
+      </label>
+      <input type="range" id="baseshift-x" min="1" max="200" step="1" value="25">
+    </div>
 
-        return {
-          valid: true,
-          answer: newTotal,
-          answerDisplay: `${newTotal}`,
-          intermediates: {
-            base,
-            percent,
-            amount,
-            multiplier,
-            newTotal,
-            fractionStr
-          },
-          steps,
-          assumptions: [
-            "Base quantity is strictly positive",
-            "Percentage change is relative to the stated base",
-            "Standard rounding to 2 decimal places applies"
-          ],
-          commonTrap
-        };
-      }
+    <div class="vis-container">
+      <svg id="baseshift-visual" viewBox="0 0 720 260" width="100%" role="img" aria-label="Base-shift comparison with unified number line">
+        <title>Comparison of A (x percent more than B) and B, showing why B is less than A by a smaller percentage</title>
+      </svg>
+    </div>
 
-      /**
-       * Pure solver for base shift (if A is x% more than B, B is y% less than A).
-       */
-      function solveBaseShift(x) {
-        if (x <= 0) return { valid: false, error: "Percentage must be greater than zero" };
-        const reductionPercent = LabCommon.round((x / (100 + x)) * 100, 2);
-        return {
-          valid: true,
-          reductionPercent,
-          formula: `(${x} / (100 + ${x})) × 100% = ${reductionPercent}%`
-        };
-      }
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">A vs B</span><span class="score-stat-num" id="bs-a-value">125</span></div>
+      <div class="score-stat"><span class="score-stat-label">B vs A</span><span class="score-stat-num" id="bs-b-value">100</span></div>
+      <div class="score-stat"><span class="score-stat-label">B is less than A by</span><span class="score-stat-num" id="bs-less">20%</span></div>
+    </div>
 
-      /**
-       * Pure solver for successive percentage changes: a% and b%.
-       */
-      function solveSuccessive(a, b) {
-        const net = LabCommon.round(a + b + (a * b) / 100, 2);
-        return {
-          valid: true,
-          netChangePercent: net,
-          multiplier: LabCommon.round((1 + a/100) * (1 + b/100), 4)
-        };
-      }
+    <p style="font-size:.85rem; color:var(--text-muted); margin-top:14px; line-height:1.6;">
+      Formula: <code>% less = x / (100 + x) × 100</code>. This is why a 25% price rise needs only a
+      20% cut in consumption to keep spend unchanged.
+    </p>
+  </section>
 
-      return {
-        solve,
-        solveBaseShift,
-        solveSuccessive
-      };
-    })();
+  <!-- ===== SECTION 4 ===== -->
+  <section class="card" aria-labelledby="s4">
+    <div class="card-header">
+      <h2 id="s4" class="section-title">Practice</h2>
+      <p class="section-subtitle">Shuffled each session. In Independent/Timed, the solution is hidden until after you commit.</p>
+    </div>
 
-    if (typeof window !== "undefined") {
-      window.Model = Model;
+    <div class="practice-header">
+      <div class="mode-toggle-group" role="tablist" aria-label="Practice mode">
+        <button type="button" class="mode-btn active" data-mode="hints" role="tab" aria-selected="true">Guided</button>
+        <button type="button" class="mode-btn" data-mode="independent" role="tab" aria-selected="false">Independent</button>
+        <button type="button" class="mode-btn" data-mode="timed" role="tab" aria-selected="false">Timed (60s)</button>
+      </div>
+      <div id="timer-container" class="timer-badge hidden" aria-live="off">
+        <span>⏱️</span><span id="timer-display">60</span><span>s</span>
+      </div>
+    </div>
+
+    <div class="score-bar" aria-label="Practice statistics">
+      <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Independent</span><span class="score-stat-num" id="stat-independent">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Accuracy</span><span class="score-stat-num" id="stat-accuracy">0%</span></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
+    </div>
+
+    <div id="practice-question-card" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span class="badge" id="practice-q-difficulty">Medium</span>
+      </div>
+
+      <p class="question-stem" id="practice-q-stem">Loading…</p>
+      <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
+      <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+      <div id="practice-error-categorizer" class="error-categorizer hidden">
+        <label for="select-error-category">What tripped you up? (optional)</label>
+        <select id="select-error-category">
+          <option value="concept">Concept not clear</option>
+          <option value="method">Wrong method</option>
+          <option value="arithmetic">Arithmetic slip</option>
+          <option value="misread">Misread question</option>
+          <option value="time_guess">Time-pressure guess</option>
+        </select>
+      </div>
+
+      <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:12px;">
+        <h4 style="margin-bottom:6px; font-size:.95rem;">Solution</h4>
+        <p id="practice-solution-text" style="font-size:.9rem; line-height:1.55; margin:0;"></p>
+      </div>
+
+      <div style="margin-top:18px; display:flex; gap:.75rem; justify-content:flex-end;">
+        <button type="button" id="btn-next-question" class="btn btn-primary" disabled>Next question →</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <strong>Aptitude &amp; Reasoning Lab</strong> — Quant stream
+        <div style="font-size:.8rem; margin-top:.25rem;">
+          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
+        </div>
+      </div>
+      <div style="font-size:.8rem;">
+        <a href="../docs/reviews/percentages.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
+      </div>
+    </div>
+    <div class="disclaimer-box">
+      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
+      Always check the latest official exam notification.
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   1. PURE MODEL
+   ===================================================================== */
+const Model = (() => {
+  const round = (x, d = 2) => Math.round(x * 10 ** d) / 10 ** d;
+
+  function solve({ base, percent }) {
+    const b = Number(base);
+    const p = Number(percent);
+    if (!Number.isFinite(b) || !Number.isFinite(p)) {
+      return { valid: false, error: "Base and percentage must be numbers." };
     }
+    if (b <= 0) return { valid: false, error: "Base must be greater than 0." };
 
-    /* ==========================================================================
-       2. DETERMINISTIC SELF-TESTS (Required Quality Gate)
-       ========================================================================== */
-    function runSelfTests() {
-      const results = { passed: 0, failed: 0, failures: [] };
+    const frac = p / 100;
+    const amount = round(b * frac);
+    const multiplier = round(1 + frac, 4);
+    const newTotal = round(b + amount);
 
-      function assert(condition, testName, details = "") {
-        if (condition) {
-          results.passed += 1;
-        } else {
-          results.failed += 1;
-          results.failures.push({ name: testName, details });
-        }
-      }
+    const traps = {
+      rawAdd: round(b + p),
+      wrongDirection: round(b - amount),
+      addedOnNew: round(newTotal + p)
+    };
 
-      try {
-        // TC-01: Standard 25% of 200 (fractional 1/4)
-        const t1 = Model.solve({ base: 200, percent: 25 });
-        assert(t1.valid === true && t1.intermediates.amount === 50 && t1.answer === 250,
-          "TC-01: 25% of 200", `Expected amount=50, total=250. Got ${t1.intermediates?.amount}, ${t1.answer}`);
-
-        // TC-02: 12.5% of 80 (fractional 1/8)
-        const t2 = Model.solve({ base: 80, percent: 12.5 });
-        assert(t2.valid === true && t2.intermediates.amount === 10 && t2.answer === 90,
-          "TC-02: 12.5% of 80", `Expected amount=10, total=90. Got ${t2.intermediates?.amount}, ${t2.answer}`);
-
-        // TC-03: Boundary 0%
-        const t3 = Model.solve({ base: 500, percent: 0 });
-        assert(t3.valid === true && t3.intermediates.amount === 0 && t3.answer === 500,
-          "TC-03: 0% boundary", `Expected amount=0, total=500. Got ${t3.intermediates?.amount}`);
-
-        // TC-04: Boundary 100% (doubling)
-        const t4 = Model.solve({ base: 360, percent: 100 });
-        assert(t4.valid === true && t4.intermediates.amount === 360 && t4.answer === 720,
-          "TC-04: 100% doubling", `Expected amount=360, total=720. Got ${t4.intermediates?.amount}`);
-
-        // TC-05: Negative change -20% of 450 (reduction)
-        const t5 = Model.solve({ base: 450, percent: -20 });
-        assert(t5.valid === true && t5.intermediates.amount === -90 && t5.answer === 360,
-          "TC-05: -20% reduction", `Expected amount=-90, total=360. Got ${t5.intermediates?.amount}, ${t5.answer}`);
-
-        // TC-06: Percentage > 100% (150% of 120)
-        const t6 = Model.solve({ base: 120, percent: 150 });
-        assert(t6.valid === true && t6.intermediates.amount === 180 && t6.answer === 300,
-          "TC-06: 150% extension", `Expected amount=180, total=300. Got ${t6.intermediates?.amount}`);
-
-        // TC-07: Invalid base 0
-        const t7 = Model.solve({ base: 0, percent: 25 });
-        assert(t7.valid === false, "TC-07: Zero base rejection", "Zero base should return valid: false");
-
-        // TC-08: Invalid negative base
-        const t8 = Model.solve({ base: -100, percent: 10 });
-        assert(t8.valid === false, "TC-08: Negative base rejection", "Negative base should return valid: false");
-
-        // TC-09: Common trap detection (raw addition: 240 + 25 = 265)
-        const t9 = Model.solve({ base: 240, percent: 25, trapAnswer: 265 });
-        assert(t9.valid === true && t9.commonTrap && t9.commonTrap.type === "raw_addition",
-          "TC-09: Common trap recognition", "Raw addition trap was not detected");
-
-        // TC-10: Successive change invariant (20% followed by -20% = -4%)
-        const t10 = Model.solveSuccessive(20, -20);
-        assert(t10.valid === true && t10.netChangePercent === -4,
-          "TC-10: Successive net formula", `Expected net=-4. Got ${t10.netChangePercent}`);
-
-        // TC-11: Base shift invariant (25% increase -> 20% decrease to reverse)
-        const t11 = Model.solveBaseShift(25);
-        assert(t11.valid === true && t11.reductionPercent === 20,
-          "TC-11: Base shift reversal", `Expected 20%. Got ${t11.reductionPercent}%`);
-
-      } catch (err) {
-        results.failed += 1;
-        results.failures.push({ name: "Unexpected test execution error", details: err.message });
-      }
-
-      return results;
-    }
-
-    if (typeof window !== "undefined") {
-      window.runSelfTests = runSelfTests;
-    }
-
-    /* ==========================================================================
-       3. PRACTICE QUESTION BANK (12 Verified Exam-Style Questions)
-       ========================================================================== */
-    const PRACTICE_QUESTIONS = [
-      {
-        id: "P1",
-        difficulty: "Easy",
-        stem: "What is 16.67% (or 1/6) of ₹450?",
-        options: ["₹65", "₹75", "₹80", "₹90"],
-        correctIndex: 1, // ₹75
-        trapOptionIndex: 0,
-        trapExplanation: "Common trap: estimating 1/6 incorrectly. 450 ÷ 6 = exactly 75.",
-        solution: "16.67% is the fractional equivalent of 1/6. Amount = 450 × (1/6) = ₹75."
-      },
-      {
-        id: "P2",
-        difficulty: "Easy",
-        stem: "A shopkeeper marks an article up by 25% above its cost price of ₹640. What is the marked price?",
-        options: ["₹665", "₹800", "₹760", "₹840"],
-        correctIndex: 1, // ₹800
-        trapOptionIndex: 0, // ₹665 (raw addition 640 + 25)
-        trapExplanation: "Trap: adding 25 directly to 640. 25% of 640 is 160, so marked price is 640 + 160 = ₹800.",
-        solution: "Multiplier method: 640 × (1 + 0.25) = 640 × 1.25 = ₹800."
-      },
-      {
-        id: "P3",
-        difficulty: "Medium",
-        stem: "If the price of petrol increases by 25%, by what percentage must a motorist reduce consumption so that total expenditure remains unchanged?",
-        options: ["25%", "20%", "16.67%", "33.33%"],
-        correctIndex: 1, // 20%
-        trapOptionIndex: 0, // 25%
-        trapExplanation: "Base shift trap! The reduction is on the NEW higher price (125), not the original 100. (25 / 125) × 100% = 20%.",
-        solution: "Using the base shift formula: % Reduction = [x / (100 + x)] × 100% = [25 / 125] × 100% = 20%."
-      },
-      {
-        id: "P4",
-        difficulty: "Medium",
-        stem: "A worker's salary was first increased by 20% and later decreased by 20%. What is the net change in his salary?",
-        options: ["0% (No change)", "4% decrease", "2% decrease", "4% increase"],
-        correctIndex: 1, // 4% decrease
-        trapOptionIndex: 0, // 0%
-        trapExplanation: "Successive trap: The 20% decrease is applied to the HIGHER increased salary, not the original base. 1.20 × 0.80 = 0.96 (4% loss).",
-        solution: "Net effective change = a + b + (ab/100) = 20 - 20 + [(20 × -20) / 100] = -400/100 = -4% (a 4% decrease)."
-      },
-      {
-        id: "P5",
-        difficulty: "Exam-Style",
-        stem: "In an election between two candidates, the winner received 58% of the valid votes and won by a majority of 2,400 votes. What was the total number of valid votes cast?",
-        options: ["12,000", "15,000", "16,000", "18,500"],
-        correctIndex: 1, // 15,000
-        trapOptionIndex: 2,
-        trapExplanation: "Careful: The margin is the difference between winner (58%) and loser (42%), which is 16%, NOT 58%.",
-        solution: "Winner = 58%, Loser = 100% - 58% = 42%. Margin = 58% - 42% = 16%. 16% of Total = 2,400. Total = 2,400 / 0.16 = 15,000 votes."
-      },
-      {
-        id: "P6",
-        difficulty: "Medium",
-        stem: "A student needs 40% marks to pass an exam. He scores 178 marks and fails by 22 marks. What are the maximum marks for the exam?",
-        options: ["450", "500", "550", "600"],
-        correctIndex: 1, // 500
-        trapOptionIndex: 0,
-        trapExplanation: "Passing marks = scored marks + deficit = 178 + 22 = 200 marks. 40% of Maximum = 200.",
-        solution: "Pass marks = 178 + 22 = 200. Since 40% of Max = 200, Max = 200 / 0.40 = 500."
-      },
-      {
-        id: "P7",
-        difficulty: "Exam-Style",
-        stem: "The population of a city increases by 10% in the first year and decreases by 10% in the second year. If the current population is 99,000, what was the population 2 years ago?",
-        options: ["99,000", "1,00,000", "1,01,000", "98,010"],
-        correctIndex: 1, // 1,00,000
-        trapOptionIndex: 3, // 98,010 (applying changes backward)
-        trapExplanation: "Trap: applying changes to current value instead of original base P. Net change is 10 - 10 - 1 = -1% (99% of original).",
-        solution: "Multiplier = 1.10 × 0.90 = 0.99. Population 2 years ago = 99,000 / 0.99 = 1,00,000."
-      },
-      {
-        id: "P8",
-        difficulty: "Easy",
-        stem: "If A's income is 50% more than B's income, by what percentage is B's income less than A's income?",
-        options: ["50%", "33.33%", "25%", "20%"],
-        correctIndex: 1, // 33.33%
-        trapOptionIndex: 0, // 50%
-        trapExplanation: "Base shift trap: Let B = 100, then A = 150. B is 50 less than A. % less = (50 / 150) × 100% = 33.33%.",
-        solution: "% Less = [50 / (100 + 50)] × 100% = 50 / 150 = 1/3 = 33.33%."
-      },
-      {
-        id: "P9",
-        difficulty: "Medium",
-        stem: "A trader offers two successive discounts of 20% and 10% on a laptop priced at ₹50,000. What is the net selling price?",
-        options: ["₹35,000", "₹36,000", "₹34,500", "₹38,000"],
-        correctIndex: 1, // ₹36,000
-        trapOptionIndex: 0, // ₹35,000 (adding discounts: 20 + 10 = 30%)
-        trapExplanation: "Trap: Successive discounts are NOT 30%. Net discount = 20 + 10 - (200/100) = 28%. Multiplier = 0.8 × 0.9 = 0.72.",
-        solution: "Selling Price = 50,000 × 0.80 × 0.90 = 50,000 × 0.72 = ₹36,000."
-      },
-      {
-        id: "P10",
-        difficulty: "Exam-Style",
-        stem: "A man spends 35% of his income on food, 25% of the remaining on children's education, and still saves ₹5,850. What is his total monthly income?",
-        options: ["₹11,000", "₹12,000", "₹13,000", "₹14,500"],
-        correctIndex: 1, // ₹12,000
-        trapOptionIndex: 0,
-        trapExplanation: "Careful: 25% was spent of the REMAINING, not the total. After food, 65% remains. After education, 75% of 65% remains.",
-        solution: "Remaining after food = 65% (0.65). Remaining after education = 0.65 × (1 - 0.25) = 0.65 × 0.75 = 0.4875 of Total. Total = 5,850 / 0.4875 = ₹12,000."
-      },
-      {
-        id: "P11",
-        difficulty: "Easy",
-        stem: "30% of a number is 120 more than 15% of the same number. What is the number?",
-        options: ["600", "750", "800", "900"],
-        correctIndex: 2, // 800
-        trapOptionIndex: 0,
-        trapExplanation: "The difference between 30% and 15% is 15%. 15% of N = 120.",
-        solution: "(30% - 15%) of N = 120 ⟹ 15% of N = 120 ⟹ N = 120 / 0.15 = 800."
-      },
-      {
-        id: "P12",
-        difficulty: "Exam-Style",
-        stem: "Due to a 20% reduction in the price of sugar, a customer can buy 4 kg more sugar for ₹320. What is the reduced price per kg?",
-        options: ["₹16", "₹20", "₹18", "₹24"],
-        correctIndex: 0, // ₹16
-        trapOptionIndex: 1, // ₹20 (original price)
-        trapExplanation: "Trap: ₹20 is the ORIGINAL price per kg. The question specifically asked for the REDUCED price.",
-        solution: "20% of ₹320 = ₹64 saved. This ₹64 buys 4 kg extra. Reduced price = 64 ÷ 4 = ₹16/kg. (Original price was 16 ÷ 0.8 = ₹20/kg)."
-      }
+    const steps = [
+      { title: "Identify base", body: `The base is B = ${b}. This is the "100%".` },
+      { title: "Convert percent to multiplier", body: `P = ${p}% → multiplier = 1 + (${p}/100) = ${multiplier}.`,
+        math: `1 + ${p}/100 = ${multiplier}` },
+      { title: "Find the change", body: `Change = B × (P/100) = ${b} × (${p}/100).`,
+        math: `${b} × ${frac} = ${amount}` },
+      { title: "Add to base", body: `New total = B + change = ${b} + (${amount}).`,
+        math: `${b} + (${amount}) = ${newTotal}` }
     ];
 
-    if (typeof window !== "undefined") {
-      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+    return {
+      valid: true,
+      answer: newTotal,
+      intermediates: { base: b, percent: p, amount, multiplier, newTotal, frac },
+      traps,
+      steps
+    };
+  }
+
+  function solveBaseShift(x) {
+    const n = Number(x);
+    if (!Number.isFinite(n) || n <= 0) return { valid: false, error: "x must be > 0." };
+    const lessPercent = round((n / (100 + n)) * 100);
+    return { valid: true, lessPercent, aValue: round(100 + n), bValue: 100 };
+  }
+
+  return { solve, solveBaseShift, round };
+})();
+window.Model = Model;
+
+/* =====================================================================
+   2. SELF-TESTS
+   ===================================================================== */
+function runSelfTests() {
+  const results = { passed: 0, failed: 0, failures: [] };
+  const assert = (cond, name, detail = "") => {
+    if (cond) results.passed++;
+    else { results.failed++; results.failures.push({ name, detail }); }
+  };
+  try {
+    const a = Model.solve({ base: 200, percent: 25 });
+    assert(a.valid && a.intermediates.amount === 50 && a.answer === 250, "25% of 200", JSON.stringify(a));
+
+    const b = Model.solve({ base: 80, percent: 12.5 });
+    assert(b.valid && b.intermediates.amount === 10 && b.answer === 90, "12.5% of 80", JSON.stringify(b));
+
+    const c = Model.solve({ base: 500, percent: 0 });
+    assert(c.valid && c.answer === 500, "0% change", JSON.stringify(c));
+
+    const d = Model.solve({ base: 360, percent: 100 });
+    assert(d.valid && d.answer === 720, "100% doubling", JSON.stringify(d));
+
+    const e = Model.solve({ base: 450, percent: -20 });
+    assert(e.valid && e.intermediates.amount === -90 && e.answer === 360, "-20% reduction", JSON.stringify(e));
+
+    const f = Model.solve({ base: 120, percent: 150 });
+    assert(f.valid && f.intermediates.amount === 180 && f.answer === 300, "150% extension", JSON.stringify(f));
+
+    assert(Model.solve({ base: 0, percent: 25 }).valid === false, "base=0 rejected");
+    assert(Model.solve({ base: -100, percent: 10 }).valid === false, "base=-100 rejected");
+
+    const g = Model.solve({ base: 240, percent: 25 });
+    assert(g.traps.rawAdd === 265, "raw-add trap value", `got ${g.traps.rawAdd}`);
+
+    const bs = Model.solveBaseShift(25);
+    assert(bs.valid && bs.lessPercent === 20, "base-shift 25% → 20%", JSON.stringify(bs));
+
+    const bs2 = Model.solveBaseShift(50);
+    assert(bs2.valid && bs2.lessPercent === 33.33, "base-shift 50% → 33.33%", JSON.stringify(bs2));
+  } catch (err) {
+    results.failed++;
+    results.failures.push({ name: "Uncaught test error", detail: err.message });
+  }
+  return results;
+}
+window.runSelfTests = runSelfTests;
+
+/* =====================================================================
+   3. PRACTICE BANK
+   ===================================================================== */
+const PRACTICE_QUESTIONS = [
+  { id: "P1", difficulty: "Easy",
+    stem: "What is 16.67% (≈ 1/6) of ₹450?",
+    options: ["₹65", "₹75", "₹80", "₹90"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "1/6 of 450 is exactly 75. Estimate first: 450/6 = 75.",
+    solution: "16.67% ≈ 1/6. Amount = 450 × 1/6 = ₹75." },
+  { id: "P2", difficulty: "Easy",
+    stem: "A shopkeeper marks an article 25% above its cost of ₹640. What is the marked price?",
+    options: ["₹665", "₹800", "₹760", "₹840"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "Adding 25 as a raw number (640 + 25 = 665) ignores that 25% means 25 per 100, i.e. 160 on 640.",
+    solution: "640 × 1.25 = ₹800." },
+  { id: "P3", difficulty: "Medium",
+    stem: "Petrol price rises 25%. By what % must consumption drop so total spend is unchanged?",
+    options: ["25%", "20%", "16.67%", "33.33%"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "25% is the base-shift trap. The reduction is on the NEW price: 25/125 = 20%.",
+    solution: "Reduction = 25/(100+25) × 100 = 20%." },
+  { id: "P4", difficulty: "Medium",
+    stem: "Salary increases 20%, then decreases 20%. Net change?",
+    options: ["0% (no change)", "4% decrease", "2% decrease", "4% increase"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "0% assumes the two changes cancel. They don't — the second 20% is on the higher amount.",
+    solution: "Multiplier 1.20 × 0.80 = 0.96 → 4% net decrease." },
+  { id: "P5", difficulty: "Exam-Style",
+    stem: "Winner gets 58% of valid votes, wins by 2,400. Total valid votes?",
+    options: ["12,000", "15,000", "16,000", "18,500"], correctIndex: 1,
+    trapOptionIndex: 2, trapExplanation: "16,000 confuses 58% with the margin. Margin = 58% − 42% = 16%, not 58%.",
+    solution: "16% of T = 2,400 → T = 15,000." },
+  { id: "P6", difficulty: "Medium",
+    stem: "Pass mark = 40%. Student scores 178 and fails by 22. Maximum marks?",
+    options: ["450", "500", "550", "600"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "450 comes from dividing 178/0.4 — but 178 alone isn't the pass mark; add the 22 deficit.",
+    solution: "Pass = 178 + 22 = 200. 40% of max = 200 → max = 500." },
+  { id: "P7", difficulty: "Exam-Style",
+    stem: "Population rises 10%, then falls 10%. Current = 99,000. Population 2 years ago?",
+    options: ["99,000", "1,00,000", "1,01,000", "98,010"], correctIndex: 1,
+    trapOptionIndex: 3, trapExplanation: "98,010 comes from applying changes backward. Net multiplier is 1.10 × 0.90 = 0.99, so 99,000 is 99% of the original.",
+    solution: "P × 0.99 = 99,000 → P = 1,00,000." },
+  { id: "P8", difficulty: "Easy",
+    stem: "A's income is 50% more than B's. B's income is what % less than A's?",
+    options: ["50%", "33.33%", "25%", "20%"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "50% is the base-shift trap. B is 50 less than 150, i.e. 50/150 = 33.33%, not 50%.",
+    solution: "B = 100, A = 150. Less = 50/150 × 100 = 33.33%." },
+  { id: "P9", difficulty: "Medium",
+    stem: "Successive discounts of 20% then 10% on ₹50,000. Selling price?",
+    options: ["₹35,000", "₹36,000", "₹34,500", "₹38,000"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "35,000 = 30% off. Successive discounts don't add — the second is on the reduced amount.",
+    solution: "50,000 × 0.80 × 0.90 = ₹36,000." },
+  { id: "P10", difficulty: "Exam-Style",
+    stem: "35% on food, then 25% of the remaining on education, saves ₹5,850. Monthly income?",
+    options: ["₹11,000", "₹12,000", "₹13,000", "₹14,500"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "₹11,000 comes from treating 35% + 25% = 60% spent. But 25% is on the REMAINING, not total.",
+    solution: "Remaining = 0.65 × 0.75 = 0.4875. Income = 5,850 / 0.4875 = ₹12,000." },
+  { id: "P11", difficulty: "Easy",
+    stem: "30% of a number is 120 more than 15% of it. Number?",
+    options: ["600", "750", "800", "900"], correctIndex: 2,
+    trapOptionIndex: 0, trapExplanation: "600 comes from dividing 120 by 0.20 — using the wrong difference. The gap is 30% − 15% = 15%.",
+    solution: "15% of N = 120 → N = 800." },
+  { id: "P12", difficulty: "Exam-Style",
+    stem: "Sugar price falls 20%. A customer can buy 4 kg more for ₹320. Reduced price/kg?",
+    options: ["₹16", "₹20", "₹18", "₹24"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "₹20 is the ORIGINAL price/kg. The question asks for the reduced price.",
+    solution: "20% of 320 = 64 saved buys 4 kg → reduced price = 64/4 = ₹16/kg." }
+];
+window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
+
+/* =====================================================================
+   4. STATE
+   ===================================================================== */
+const state = {
+  base: 240, percent: 25,
+  predictLocked: false,
+  predictScenario: null,
+  userPredictionValue: null,   // used to draw ghost bar
+  baseShiftX: 25,
+  practiceMode: "hints",
+  currentQIndex: 0,
+  shuffled: [],
+  answered: false,
+  timer: { interval: null, remaining: 60 },
+  testsPassed: false,
+  stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
+};
+const TOPIC_ID = "percentages";
+
+/* =====================================================================
+   5. HELPERS
+   ===================================================================== */
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => Number(n).toLocaleString("en-IN");
+const fmtSign = (n) => (n >= 0 ? "+" : "") + fmt(n);
+
+/* =====================================================================
+   6. RENDERERS
+   ===================================================================== */
+
+// Draws the main before/after visual with:
+//   - BEFORE bar (with fraction subdivision if percent is a clean fraction)
+//   - AFTER bar
+//   - GHOST bar of wrong answer (if user predicted wrong)
+//   - Unified number line at bottom
+function renderMainVisual(r) {
+  const svg = $("main-visual");
+  if (!r.valid) {
+    svg.innerHTML = `<text x="360" y="150" text-anchor="middle" font-size="16" fill="#ef4444">⚠️ ${r.error}</text>`;
+    return;
+  }
+  const { base, percent, amount, newTotal } = r.intermediates;
+  const isUp = percent >= 0;
+
+  // Scale: represent up to 2× base for headroom on the number line.
+  const axisMax = Math.max(base * 2, newTotal * 1.1, 100);
+  const padL = 60, padR = 40;
+  const plotW = 720 - padL - padR;
+  const X = (val) => padL + (Math.max(0, val) / axisMax) * plotW;
+
+  const yBefore = 60;
+  const yAfter = 130;
+  const barH = 32;
+
+  // Fraction subdivision of the base bar (only when percent is a clean fraction)
+  const absP = Math.abs(percent);
+  const knownFractions = { 10: 10, 12.5: 8, 16.67: 6, 20: 5, 25: 4, 33.33: 3, 50: 2, 100: 1 };
+  const divisor = knownFractions[absP];
+
+  const xBase0 = X(0), xBase1 = X(base);
+
+  // Draw the BEFORE bar + optional subdivision
+  let subdivisions = "";
+  if (divisor && divisor > 1) {
+    for (let i = 1; i < divisor; i++) {
+      const xLine = xBase0 + (i / divisor) * (xBase1 - xBase0);
+      subdivisions += `<line x1="${xLine}" y1="${yBefore}" x2="${xLine}" y2="${yBefore + barH}"
+        stroke="#1e3a8a" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>`;
     }
+  }
 
-    /* ==========================================================================
-       4. INTERACTIVE RENDERING & EVENT HANDLING
-       ========================================================================== */
-    // DOM Elements
-    const inputBase = document.getElementById("input-base");
-    const inputPercent = document.getElementById("input-percent");
-    const inputPercentNum = document.getElementById("input-percent-num");
-    const percentDisplayBadge = document.getElementById("percent-display-badge");
+  const xNew0 = X(0), xNew1 = X(newTotal);
+  const changeX0 = isUp ? xBase1 : xNew1;
+  const changeX1 = isUp ? xNew1 : xBase1;
+  const changeW = Math.abs(changeX1 - changeX0);
+  const changeColor = isUp ? "#22c55e" : "#ef4444";
 
-    const svgEl = document.getElementById("proportional-svg");
-    const readoutAmount = document.getElementById("readout-amount");
-    const readoutMultiplier = document.getElementById("readout-multiplier");
-    const readoutTotal = document.getElementById("readout-total");
-    const readoutFraction = document.getElementById("readout-fraction");
+  // Ghost bar of user's wrong answer
+  let ghostBar = "";
+  if (state.userPredictionValue !== null && state.userPredictionValue !== newTotal) {
+    const xGhost = X(state.userPredictionValue);
+    const ghostColor = "#f59e0b";
+    // Draw ghost below the AFTER bar
+    ghostBar = `
+      <text x="${padL}" y="${yAfter + barH + 24}" font-size="11" font-weight="700" fill="${ghostColor}">
+        Your answer
+      </text>
+      <rect x="${xNew0}" y="${yAfter + barH + 32}" width="${Math.max(xGhost - xNew0, 2)}" height="${barH - 6}"
+        rx="4" fill="${ghostColor}" opacity="0.35" stroke="${ghostColor}" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="${xGhost + 6}" y="${yAfter + barH + 50}" font-size="11" font-weight="700" fill="${ghostColor}">
+        ${fmt(state.userPredictionValue)}
+      </text>
+    `;
+  }
 
-    const predictOptionsContainer = document.getElementById("predict-options-container");
-    const predictScenarioText = document.getElementById("predict-scenario-text");
-    const predictFeedback = document.getElementById("predict-feedback");
-    const btnRevealSolution = document.getElementById("btn-reveal-solution");
-    const workedSolutionPanel = document.getElementById("worked-solution-panel");
-    const solutionStepsContainer = document.getElementById("solution-steps-container");
-    const solutionTrapCallout = document.getElementById("solution-trap-callout");
-    const solutionTrapText = document.getElementById("solution-trap-text");
+  svg.innerHTML = `
+    <!-- BEFORE label and bar -->
+    <text x="${padL}" y="${yBefore - 12}" font-size="12" font-weight="700" fill="#94a3b8">BEFORE — base</text>
+    <rect x="${xBase0}" y="${yBefore}" width="${xBase1 - xBase0}" height="${barH}"
+      rx="6" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+    ${subdivisions}
+    <text x="${xBase1 + 8}" y="${yBefore + barH/2 + 5}" font-size="14" font-weight="800" fill="#93c5fd">
+      ${fmt(base)}
+    </text>
 
-    let currentPredictSelection = null;
+    <!-- AFTER label and bar -->
+    <text x="${padL}" y="${yAfter - 12}" font-size="12" font-weight="700" fill="#94a3b8">
+      AFTER — ${fmtSign(percent)}%
+    </text>
+    <rect x="${xNew0}" y="${yAfter}" width="${xNew1 - xNew0}" height="${barH}"
+      rx="6" fill="#312e81" stroke="#6366f1" stroke-width="2"/>
+    <!-- Change segment -->
+    <rect x="${changeX0}" y="${yAfter}" width="${changeW}" height="${barH}"
+      rx="6" fill="${changeColor}" opacity="0.85"/>
+    <text x="${xNew1 + 8}" y="${yAfter + barH/2 + 5}" font-size="14" font-weight="800" fill="#c7d2fe">
+      ${fmt(newTotal)}
+    </text>
 
-    /**
-     * Update the visual and calculated model outputs based on current inputs.
-     */
-    function updateModelAndVisual() {
-      const baseVal = parseFloat(inputBase.value) || 0;
-      const percentVal = parseFloat(inputPercent.value) || 0;
+    <!-- Change bracket -->
+    <line x1="${changeX0 + changeW/2}" y1="${yAfter + barH}" x2="${changeX0 + changeW/2}" y2="${yAfter + barH + 12}"
+      stroke="${changeColor}" stroke-width="2"/>
+    <text x="${changeX0 + changeW/2}" y="${yAfter + barH + 26}" text-anchor="middle"
+      font-size="12" font-weight="800" fill="${changeColor}">
+      ${fmtSign(amount)}
+    </text>
 
-      percentDisplayBadge.textContent = (percentVal >= 0 ? "+" : "") + percentVal + "%";
+    ${ghostBar}
 
-      const result = Model.solve({ base: baseVal, percent: percentVal });
+    <!-- UNIFIED NUMBER LINE -->
+    <line x1="${X(0)}" y1="255" x2="${X(axisMax)}" y2="255"
+      stroke="#475569" stroke-width="2"/>
+    <!-- Base tick -->
+    <line x1="${X(base)}" y1="250" x2="${X(base)}" y2="260"
+      stroke="#3b82f6" stroke-width="2"/>
+    <text x="${X(base)}" y="278" text-anchor="middle" font-size="10" fill="#93c5fd" font-weight="700">B=${fmt(base)}</text>
+    <!-- New total tick -->
+    <line x1="${X(newTotal)}" y1="250" x2="${X(newTotal)}" y2="260"
+      stroke="${changeColor}" stroke-width="2"/>
+    <text x="${X(newTotal)}" y="278" text-anchor="middle" font-size="10" fill="${changeColor}" font-weight="700">
+      ${fmt(newTotal)}
+    </text>
+    <!-- Zero mark -->
+    <line x1="${X(0)}" y1="250" x2="${X(0)}" y2="260" stroke="#64748b" stroke-width="1.5"/>
+    <text x="${X(0)}" y="278" text-anchor="middle" font-size="10" fill="#64748b">0</text>
+    <!-- 2× base anchor -->
+    <line x1="${X(base*2)}" y1="250" x2="${X(base*2)}" y2="260" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
+    <text x="${X(base*2)}" y="278" text-anchor="middle" font-size="10" fill="#475569">2B</text>
+  `;
 
-      if (!result.valid) {
-        readoutAmount.textContent = "—";
-        readoutMultiplier.textContent = "—";
-        readoutTotal.textContent = "—";
-        readoutFraction.textContent = result.error;
-        renderErrorSvg(result.error);
-        return;
+  $("svg-live-desc").textContent =
+    `Base ${fmt(base)}, changed by ${fmtSign(percent)} percent, new total ${fmt(newTotal)}.`;
+}
+
+function renderReadouts(r) {
+  if (!r.valid) {
+    ["readout-amount","readout-multiplier","readout-total","readout-fraction"]
+      .forEach(id => $(id).textContent = "—");
+    return;
+  }
+  const { amount, multiplier, newTotal, frac } = r.intermediates;
+  $("readout-amount").textContent = fmtSign(amount);
+  $("readout-multiplier").textContent = multiplier.toFixed(2).replace(/\.?0+$/, "") + "×";
+  $("readout-total").textContent = fmt(newTotal);
+
+  const absP = Math.abs(Number((frac * 100).toFixed(2)));
+  const map = { 50:"1/2", 33.33:"1/3", 25:"1/4", 20:"1/5", 16.67:"1/6", 12.5:"1/8", 10:"1/10", 100:"1/1" };
+  $("readout-fraction").textContent = map[absP] || `${absP}/100`;
+}
+
+function renderBaseShift() {
+  const x = state.baseShiftX;
+  const res = Model.solveBaseShift(x);
+  $("baseshift-x-display").textContent = x;
+  if (!res.valid) return;
+  $("bs-a-value").textContent = fmt(res.aValue);
+  $("bs-b-value").textContent = fmt(res.bValue);
+  $("bs-less").textContent = res.lessPercent + "%";
+
+  const svg = $("baseshift-visual");
+  const padL = 60, padR = 40;
+  const plotW = 720 - padL - padR;
+  const axisMax = res.aValue * 1.3;
+  const X = (val) => padL + (val / axisMax) * plotW;
+
+  const yB = 60, yA = 130, barH = 32;
+
+  svg.innerHTML = `
+    <text x="${padL}" y="${yB - 12}" font-size="12" font-weight="700" fill="#94a3b8">B — the base (100%)</text>
+    <rect x="${X(0)}" y="${yB}" width="${X(res.bValue) - X(0)}" height="${barH}"
+      rx="6" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+    <text x="${X(res.bValue) + 8}" y="${yB + barH/2 + 5}" font-size="14" font-weight="800" fill="#93c5fd">B=100</text>
+
+    <text x="${padL}" y="${yA - 12}" font-size="12" font-weight="700" fill="#94a3b8">A — "${x}% more than B"</text>
+    <rect x="${X(0)}" y="${yA}" width="${X(res.aValue) - X(0)}" height="${barH}"
+      rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="2"/>
+    <rect x="${X(res.bValue)}" y="${yA}" width="${X(res.aValue) - X(res.bValue)}" height="${barH}"
+      rx="6" fill="#f59e0b" opacity="0.85"/>
+    <text x="${X(res.aValue) + 8}" y="${yA + barH/2 + 5}" font-size="14" font-weight="800" fill="#fcd34d">
+      A=${fmt(res.aValue)}
+    </text>
+
+    <!-- UNIFIED NUMBER LINE -->
+    <line x1="${X(0)}" y1="215" x2="${X(axisMax)}" y2="215" stroke="#475569" stroke-width="2"/>
+    <line x1="${X(res.bValue)}" y1="210" x2="${X(res.bValue)}" y2="220" stroke="#3b82f6" stroke-width="2"/>
+    <text x="${X(res.bValue)}" y="238" text-anchor="middle" font-size="10" fill="#93c5fd" font-weight="700">B</text>
+    <line x1="${X(res.aValue)}" y1="210" x2="${X(res.aValue)}" y2="220" stroke="#f59e0b" stroke-width="2"/>
+    <text x="${X(res.aValue)}" y="238" text-anchor="middle" font-size="10" fill="#fcd34d" font-weight="700">A</text>
+    <line x1="${X(0)}" y1="210" x2="${X(0)}" y2="220" stroke="#64748b" stroke-width="1.5"/>
+    <text x="${X(0)}" y="238" text-anchor="middle" font-size="10" fill="#64748b">0</text>
+
+    <text x="${padL}" y="180" font-size="12" fill="#fcd34d" font-weight="700">
+      B is ${res.lessPercent}% less than A — note it's not ${x}%
+    </text>
+  `;
+}
+
+/* =====================================================================
+   7. SECTION 1 WIRING
+   ===================================================================== */
+function syncAndRender() {
+  const r = Model.solve({ base: state.base, percent: state.percent });
+  renderMainVisual(r);
+  renderReadouts(r);
+  if (!state.predictLocked) preparePredictScenario(r);
+}
+
+function setControlsEnabled(enabled) {
+  ["input-percent","input-percent-num","input-base"].forEach(id => {
+    $(id).disabled = !enabled;
+  });
+  document.querySelectorAll("[data-preset]").forEach(b => b.disabled = !enabled);
+}
+
+$("input-percent").addEventListener("input", (e) => {
+  state.percent = parseFloat(e.target.value) || 0;
+  $("input-percent-num").value = state.percent;
+  $("percent-display-badge").textContent = fmtSign(state.percent) + "%";
+  syncAndRender();
+});
+$("input-percent-num").addEventListener("input", (e) => {
+  state.percent = parseFloat(e.target.value) || 0;
+  $("input-percent").value = state.percent;
+  $("percent-display-badge").textContent = fmtSign(state.percent) + "%";
+  syncAndRender();
+});
+$("input-base").addEventListener("input", (e) => {
+  state.base = parseFloat(e.target.value) || 1;
+  syncAndRender();
+});
+document.querySelectorAll("[data-preset]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.percent = parseFloat(btn.dataset.preset);
+    $("input-percent").value = state.percent;
+    $("input-percent-num").value = state.percent;
+    $("percent-display-badge").textContent = fmtSign(state.percent) + "%";
+    syncAndRender();
+  });
+});
+
+/* =====================================================================
+   8. SECTION 2 — PREDICT
+   ===================================================================== */
+function preparePredictScenario(r) {
+  if (!r.valid || state.predictLocked) return;
+  const { base, percent, newTotal } = r.intermediates;
+  const isUp = percent >= 0;
+
+  const correct = newTotal;
+  const trapRaw = r.traps.rawAdd;
+  const trapWrongDir = r.traps.wrongDirection;
+
+  const set = new Set([correct]);
+  if (!set.has(trapRaw)) set.add(trapRaw);
+  if (!set.has(trapWrongDir) && set.size < 3) set.add(trapWrongDir);
+  if (set.size < 3) set.add(r.traps.addedOnNew);
+
+  const options = [...set].map(v => ({
+    value: v,
+    kind: v === correct ? "correct"
+        : v === trapRaw ? "raw_add"
+        : v === trapWrongDir ? "wrong_dir"
+        : "distractor"
+  })).sort((a, b) => a.value - b.value);
+
+  state.predictScenario = { base, percent, correct, options };
+
+  $("predict-scenario-text").textContent = isUp
+    ? `₹${fmt(base)} increases by ${percent}%. What is the new total?`
+    : `₹${fmt(base)} decreases by ${Math.abs(percent)}%. What is the new total?`;
+
+  const container = $("predict-options-container");
+  container.innerHTML = "";
+  options.forEach((o) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = "₹" + fmt(o.value);
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.dataset.kind = o.kind;
+    btn.dataset.value = o.value;
+    btn.addEventListener("click", () => commitPrediction(o));
+    container.appendChild(btn);
+  });
+
+  $("predict-feedback").className = "callout hidden";
+  $("worked-solution-panel").classList.add("hidden");
+  setControlsEnabled(true);
+  $("predict-lock-hint").textContent = "Sliders are locked until you predict.";
+  state.userPredictionValue = null;
+  renderMainVisual(r);
+}
+
+function commitPrediction(option) {
+  if (state.predictLocked) return;
+  state.predictLocked = true;
+  state.userPredictionValue = option.value;
+  setControlsEnabled(false);
+  $("predict-lock-hint").textContent = "Locked. Click 🎲 New scenario to try again.";
+
+  document.querySelectorAll("#predict-options-container .option-btn").forEach(b => {
+    const kind = b.dataset.kind;
+    const chosen = Number(b.dataset.value) === option.value;
+    b.setAttribute("aria-checked", chosen ? "true" : "false");
+    if (kind === "correct") b.classList.add("correct");
+    else if (kind === "raw_add" || kind === "wrong_dir") b.classList.add("trap");
+    if (chosen && kind !== "correct") b.classList.add("incorrect");
+    b.disabled = true;
+  });
+
+  const fb = $("predict-feedback");
+  fb.classList.remove("hidden");
+  const sc = state.predictScenario;
+  if (option.kind === "correct") {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong> ${fmtSign(sc.percent)}% of ${fmt(sc.base)} is ${fmtSign(sc.base * sc.percent / 100)}, so the total is ${fmt(sc.correct)}.`;
+  } else if (option.kind === "raw_add") {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Trap:</strong> you added the percent as a raw number. ${sc.percent}% of ${fmt(sc.base)} is ${fmt(sc.base * sc.percent / 100)}, not ${sc.percent}.`;
+  } else if (option.kind === "wrong_dir") {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Trap:</strong> wrong direction. A ${sc.percent}% increase means <em>adding</em> ${fmt(sc.base * sc.percent / 100)}, not subtracting.`;
+  } else {
+    fb.className = "callout callout-warning";
+    fb.innerHTML = `<strong>Close, but not exact.</strong> Recompute: ${fmt(sc.base)} × (1 + ${sc.percent}/100).`;
+  }
+
+  revealSteps();
+  // Re-render main visual with ghost bar
+  const r = Model.solve({ base: state.base, percent: state.percent });
+  if (r.valid) renderMainVisual(r);
+}
+
+function revealSteps() {
+  const r = Model.solve({ base: state.base, percent: state.percent });
+  if (!r.valid) return;
+  $("worked-solution-panel").classList.remove("hidden");
+  $("solution-steps-container").innerHTML = r.steps.map((s, i) => `
+    <div class="step-item">
+      <div class="step-num">Step ${i + 1}</div>
+      <div class="step-title">${s.title}</div>
+      <div>${s.body}</div>
+      ${s.math ? `<div class="step-detail">${s.math}</div>` : ""}
+    </div>`).join("");
+
+  $("solution-trap-text").textContent =
+    `Adding ${state.percent} directly to ${fmt(state.base)} gives ${fmt(r.traps.rawAdd)} — a common error. ${state.percent}% of ${fmt(state.base)} is ${fmtSign(r.intermediates.amount)}.`;
+}
+
+$("btn-new-predict").addEventListener("click", () => {
+  state.predictLocked = false;
+  state.base = 100 + Math.floor(Math.random() * 900);
+  state.percent = Math.round((Math.random() * 100 - 30) * 2) / 2;
+  $("input-base").value = state.base;
+  $("input-percent").value = state.percent;
+  $("input-percent-num").value = state.percent;
+  $("percent-display-badge").textContent = fmtSign(state.percent) + "%";
+  state.userPredictionValue = null;
+  syncAndRender();
+});
+
+/* =====================================================================
+   9. SECTION 3 — BASE SHIFT
+   ===================================================================== */
+$("baseshift-x").addEventListener("input", (e) => {
+  state.baseShiftX = parseFloat(e.target.value);
+  renderBaseShift();
+});
+
+/* =====================================================================
+   10. SECTION 4 — PRACTICE
+   ===================================================================== */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setPracticeMode(mode) {
+  state.practiceMode = mode;
+  document.querySelectorAll(".mode-btn").forEach(b => {
+    const on = b.dataset.mode === mode;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  $("timer-container").classList.toggle("hidden", mode !== "timed");
+  if (mode === "timed") startTimer();
+  else stopTimer();
+
+  // Hide the visual sections in exam-like modes so learner can't peep
+  document.querySelectorAll("main > section").forEach((el, idx) => {
+    if (idx === 0 || idx === 2) {
+      el.style.display = (mode === "hints") ? "" : "none";
+    }
+  });
+}
+document.querySelectorAll(".mode-btn").forEach(b => {
+  b.addEventListener("click", () => setPracticeMode(b.dataset.mode));
+});
+
+function startTimer() {
+  stopTimer();
+  state.timer.remaining = 60;
+  $("timer-display").textContent = state.timer.remaining;
+  state.timer.interval = setInterval(() => {
+    state.timer.remaining--;
+    $("timer-display").textContent = Math.max(0, state.timer.remaining);
+    if (state.timer.remaining <= 0) {
+      stopTimer();
+      if (!state.answered) {
+        const q = state.shuffled[state.currentQIndex];
+        markAnswer(-1, q);
       }
-
-      // Update numeric readouts
-      readoutAmount.textContent = (result.intermediates.amount >= 0 ? "+" : "") + result.intermediates.amount;
-      readoutMultiplier.textContent = result.intermediates.multiplier + "×";
-      readoutTotal.textContent = result.intermediates.newTotal;
-      readoutFraction.textContent = result.intermediates.fractionStr + " of Base";
-
-      // Render proportional SVG
-      renderProportionalSvg(result);
-
-      // Refresh Predict scenario to stay in sync with the primary model
-      updatePredictScenario(result);
     }
+  }, 1000);
+}
+function stopTimer() {
+  if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; }
+}
 
-    /**
-     * Render responsive SVG proportional bars.
-     */
-    function renderProportionalSvg(result) {
-      const { base, percent, amount, newTotal } = result.intermediates;
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
+    if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw));
+  } catch {}
+}
+function saveProgress() {
+  try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch {}
+}
 
-      // Base bar takes 360 width out of 620 viewBox
-      const baseBarX = 40;
-      const baseBarY = 40;
-      const baseBarW = 340;
-      const barH = 34;
+function renderStats() {
+  $("stat-attempts").textContent = state.stats.attempts;
+  $("stat-correct").textContent = state.stats.correct;
+  $("stat-independent").textContent = state.stats.independentCorrect;
+  const acc = state.stats.attempts ? Math.round(state.stats.correct / state.stats.attempts * 100) : 0;
+  $("stat-accuracy").textContent = acc + "%";
+}
 
-      // Calculate portion width
-      const portionRatio = percent / 100;
-      let portionW = Math.abs(portionRatio) * baseBarW;
-      if (portionW > 200) portionW = 200; // clamp visual bounds gracefully
+function renderQuestion() {
+  if (!state.testsPassed) {
+    $("practice-q-stem").textContent = "Practice is disabled because the model self-tests failed. See banner above.";
+    return;
+  }
+  const q = state.shuffled[state.currentQIndex];
+  state.answered = false;
+  $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
+  const d = $("practice-q-difficulty");
+  d.textContent = q.difficulty;
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
+                             : q.difficulty === "Medium" ? "badge-draft"
+                             : "badge-tag");
+  $("practice-q-stem").textContent = q.stem;
 
-      let portionX = baseBarX + baseBarW;
-      let portionColor = "var(--color-success, #059669)";
+  $("practice-feedback").className = "callout hidden";
+  $("practice-error-categorizer").classList.add("hidden");
+  $("practice-solution-box").classList.add("hidden");
+  $("btn-next-question").disabled = true;
 
-      if (percent < 0) {
-        portionX = baseBarX + baseBarW - portionW;
-        portionColor = "var(--color-danger, #b91c1c)";
-      }
+  const container = $("practice-options-container");
+  container.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = opt;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.addEventListener("click", () => markAnswer(i, q));
+    container.appendChild(btn);
+  });
 
-      svgEl.innerHTML = `
-        <!-- Background guide -->
-        <rect x="0" y="0" width="620" height="140" fill="transparent" />
+  if (state.practiceMode === "timed") startTimer();
+}
 
-        <!-- Base bar (100%) -->
-        <rect x="${baseBarX}" y="${baseBarY}" width="${baseBarW}" height="${barH}" rx="6"
-              fill="var(--color-primary-bg, #eff6ff)" stroke="var(--color-primary, #1e3a8a)" stroke-width="2" />
-        <text x="${baseBarX + 12}" y="${baseBarY + 22}" font-size="13" font-weight="700" fill="var(--color-primary, #1e3a8a)">
-          Base (100%): ${base}
-        </text>
+function markAnswer(chosenIdx, q) {
+  if (state.answered) return;
+  state.answered = true;
+  stopTimer();
 
-        <!-- Portion Segment -->
-        ${percent !== 0 ? `
-          <rect x="${portionX}" y="${baseBarY}" width="${Math.max(portionW, 4)}" height="${barH}" rx="4"
-                fill="${portionColor}" opacity="0.85" />
-          <text x="${portionX + (portionW / 2)}" y="${baseBarY - 10}" text-anchor="middle" font-size="12" font-weight="700" fill="${portionColor}">
-            ${percent >= 0 ? '+' : ''}${amount} (${percent}%)
-          </text>
-        ` : ''}
+  const isCorrect = chosenIdx === q.correctIndex;
+  const isTrap = chosenIdx === q.trapOptionIndex;
 
-        <!-- Total indicator line below -->
-        <line x1="${baseBarX}" y1="${baseBarY + barH + 25}" x2="${percent >= 0 ? baseBarX + baseBarW + portionW : baseBarX + baseBarW - portionW}"
-              y2="${baseBarY + barH + 25}" stroke="var(--color-text-muted, #475569)" stroke-width="2" stroke-dasharray="4 4" />
-        <text x="${baseBarX}" y="${baseBarY + barH + 42}" font-size="13" font-weight="700" fill="var(--color-text-main, #0f172a)">
-          Resulting Total: ${newTotal}
-        </text>
-      `;
-    }
+  document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
+    b.disabled = true;
+    b.setAttribute("aria-checked", i === chosenIdx ? "true" : "false");
+    if (i === q.correctIndex) b.classList.add("correct");
+    else if (i === chosenIdx) b.classList.add(isTrap ? "trap" : "incorrect");
+  });
 
-    function renderErrorSvg(msg) {
-      svgEl.innerHTML = `
-        <rect x="20" y="20" width="580" height="90" rx="8" fill="var(--color-danger-bg, #fef2f2)" stroke="var(--color-danger, #b91c1c)" />
-        <text x="310" y="70" text-anchor="middle" font-size="14" font-weight="600" fill="var(--color-danger, #b91c1c)">
-          ⚠️ ${msg}
-        </text>
-      `;
-    }
+  const fb = $("practice-feedback");
+  fb.classList.remove("hidden");
+  if (isCorrect) {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong>`;
+  } else if (isTrap) {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  } else {
+    fb.className = "callout callout-danger";
+    fb.innerHTML = `<strong>Incorrect.</strong> The correct answer is: <strong>${q.options[q.correctIndex]}</strong>.`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  }
 
-    function setPreset(percent, fractionLabel) {
-      inputPercent.value = percent;
-      inputPercentNum.value = percent;
-      updateModelAndVisual();
-      LabCommon.announce(`Set percentage to ${percent}% (${fractionLabel})`);
-    }
+  $("practice-solution-box").classList.remove("hidden");
+  $("practice-solution-text").textContent = q.solution;
 
-    // Wiring input changes
-    inputPercent.addEventListener("input", (e) => {
-      inputPercentNum.value = e.target.value;
-      updateModelAndVisual();
-    });
+  state.stats.attempts++;
+  if (isCorrect) {
+    state.stats.correct++;
+    if (state.practiceMode !== "hints") state.stats.independentCorrect++;
+  }
+  saveProgress();
+  renderStats();
+  $("btn-next-question").disabled = false;
+}
 
-    inputPercentNum.addEventListener("input", (e) => {
-      inputPercent.value = e.target.value;
-      updateModelAndVisual();
-    });
+$("btn-next-question").addEventListener("click", () => {
+  state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
+  renderQuestion();
+});
 
-    inputBase.addEventListener("input", () => {
-      updateModelAndVisual();
-    });
+$("select-error-category").addEventListener("change", (e) => {
+  const cat = e.target.value;
+  state.stats.errorsByCat[cat] = (state.stats.errorsByCat[cat] || 0) + 1;
+  saveProgress();
+});
 
-    /* ==========================================================================
-       5. PREDICT-FIRST LOGIC & WORKED SOLUTION WIRING
-       ========================================================================== */
-    function updatePredictScenario(modelResult) {
-      const { base, percent, newTotal } = modelResult.intermediates;
-      const isIncrease = percent >= 0;
+function handleResetStats() {
+  if (!confirm("Reset local practice stats for Percentages?")) return;
+  state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
+  saveProgress();
+  renderStats();
+}
+window.handleResetStats = handleResetStats;
 
-      predictScenarioText.textContent = isIncrease
-        ? `If an amount of ₹${base} is increased by ${percent}%, what is the new total?`
-        : `If an amount of ₹${base} is decreased by ${Math.abs(percent)}%, what is the new total?`;
+/* =====================================================================
+   11. INIT
+   ===================================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const results = runSelfTests();
+  state.testsPassed = results.failed === 0;
+  const banner = $("test-status-banner");
+  if (!state.testsPassed) {
+    banner.className = "test-banner";
+    banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong>
+      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
+    $("practice-options-container").innerHTML = "";
+  }
 
-      // Formulate 3 distinct choices: Correct, Common Trap, and Plausible Distractor
-      const correctAns = newTotal;
-      const rawAddTrap = base + percent;
-      const distractor = LabCommon.round(base + (base * (percent + (isIncrease ? 5 : -5)) / 100), 2);
+  loadProgress();
+  state.shuffled = shuffle(PRACTICE_QUESTIONS);
 
-      const choices = [
-        { val: correctAns, type: "correct", label: `₹${correctAns}` },
-        { val: rawAddTrap, type: "trap", label: `₹${rawAddTrap}` },
-        { val: distractor, type: "distractor", label: `₹${distractor}` }
-      ];
-
-      // Shuffle deterministically based on values so order is not always identical
-      choices.sort((a, b) => a.val - b.val);
-
-      predictOptionsContainer.innerHTML = "";
-      predictFeedback.className = "callout hidden";
-      workedSolutionPanel.classList.add("hidden");
-
-      choices.forEach((c) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "option-btn";
-        btn.textContent = c.label;
-        btn.setAttribute("role", "radio");
-        btn.setAttribute("aria-checked", "false");
-        btn.onclick = () => handlePredictChoice(c, modelResult);
-        predictOptionsContainer.appendChild(btn);
-      });
-    }
-
-    function handlePredictChoice(choice, modelResult) {
-      predictFeedback.classList.remove("hidden");
-
-      // Mark buttons
-      const buttons = predictOptionsContainer.querySelectorAll(".option-btn");
-      buttons.forEach(b => {
-        b.classList.remove("correct", "trap", "incorrect", "selected");
-        if (b.textContent === choice.label) b.classList.add("selected");
-      });
-
-      if (choice.type === "correct") {
-        predictFeedback.className = "callout callout-success";
-        predictFeedback.innerHTML = `
-          <strong>✓ Excellent prediction!</strong> You recognized that ${modelResult.intermediates.percent}% corresponds to an amount of ${modelResult.intermediates.amount}, giving exactly ${choice.label}.
-        `;
-        LabCommon.announce("Prediction correct! You predicted the right total.");
-      } else if (choice.type === "trap") {
-        predictFeedback.className = "callout callout-trap";
-        predictFeedback.innerHTML = `
-          <strong>⚠️ Common Trap Alert!</strong> ${modelResult.commonTrap ? modelResult.commonTrap.explanation : 'Avoid adding percentage directly as an absolute quantity.'}
-        `;
-        LabCommon.announce("Trap encountered: Remember to calculate percentage of the base.");
-      } else {
-        predictFeedback.className = "callout callout-warning";
-        predictFeedback.innerHTML = `
-          <strong>Not quite:</strong> Check the multiplier or fractional conversion. ${modelResult.intermediates.percent}% of ${modelResult.intermediates.base} is ${modelResult.intermediates.amount}.
-        `;
-      }
-
-      revealWorkedSteps(modelResult);
-    }
-
-    btnRevealSolution.addEventListener("click", () => {
-      const baseVal = parseFloat(inputBase.value) || 0;
-      const percentVal = parseFloat(inputPercent.value) || 0;
-      const result = Model.solve({ base: baseVal, percent: percentVal });
-      revealWorkedSteps(result);
-    });
-
-    function revealWorkedSteps(modelResult) {
-      if (!modelResult || !modelResult.valid) return;
-      workedSolutionPanel.classList.remove("hidden");
-
-      solutionStepsContainer.innerHTML = modelResult.steps.map((st, idx) => `
-        <div class="step-item">
-          <div class="step-num">Step ${idx + 1}</div>
-          <div class="step-title">${st.title}</div>
-          <div>${st.explanation}</div>
-          ${st.math ? `<div class="step-detail">${st.math}</div>` : ''}
-        </div>
-      `).join("");
-
-      if (modelResult.commonTrap) {
-        solutionTrapCallout.classList.remove("hidden");
-        solutionTrapText.textContent = modelResult.commonTrap.explanation;
-      } else {
-        solutionTrapCallout.classList.add("hidden");
-      }
-    }
-
-    /* ==========================================================================
-       6. PRACTICE LAB ENGINE (Modes, Timer, Scoring, Error Tracking)
-       ========================================================================== */
-    let currentQIndex = 0;
-    let practiceMode = "hints"; // 'hints' | 'independent' | 'timed'
-    let timerInstance = null;
-    let questionStartTime = 0;
-    const TOPIC_ID = "percentages";
-
-    function setPracticeMode(mode) {
-      practiceMode = mode;
-      document.querySelectorAll(".mode-btn").forEach(b => {
-        b.classList.remove("active");
-        b.setAttribute("aria-selected", "false");
-      });
-
-      const activeBtn = document.getElementById(`btn-mode-${mode}`);
-      if (activeBtn) {
-        activeBtn.classList.add("active");
-        activeBtn.setAttribute("aria-selected", "true");
-      }
-
-      const timerContainer = document.getElementById("timer-container");
-      if (mode === "timed") {
-        timerContainer.classList.remove("hidden");
-        if (!timerInstance) {
-          timerInstance = new LabCommon.PracticeTimer((sec) => {
-            document.getElementById("timer-display").textContent = timerInstance.format();
-          });
-        }
-        timerInstance.start();
-      } else {
-        timerContainer.classList.add("hidden");
-        if (timerInstance) timerInstance.stop();
-      }
-
-      // Hide or show visual reference based on independent mode
-      const simSection = document.getElementById("interactive-model-title").closest(".card");
-      const refSection = document.getElementById("reference-title").closest(".card");
-      if (mode === "independent") {
-        simSection.style.display = "none";
-        refSection.style.display = "none";
-      } else {
-        simSection.style.display = "block";
-        refSection.style.display = "block";
-      }
-
-      LabCommon.announce(`Switched to ${mode} practice mode.`);
-    }
-
-    function renderPracticeQuestion(index) {
-      const q = PRACTICE_QUESTIONS[index];
-      if (!q) return;
-
-      questionStartTime = Date.now();
-
-      document.getElementById("practice-q-num").textContent = `Question ${index + 1} of ${PRACTICE_QUESTIONS.length}`;
-      const diffBadge = document.getElementById("practice-q-difficulty");
-      diffBadge.textContent = q.difficulty;
-      diffBadge.className = `badge ${q.difficulty === 'Easy' ? 'badge-published' : q.difficulty === 'Medium' ? 'badge-draft' : 'badge-tag'}`;
-
-      document.getElementById("practice-q-stem").textContent = q.stem;
-
-      const feedback = document.getElementById("practice-feedback");
-      feedback.className = "callout hidden";
-      document.getElementById("practice-error-categorizer").classList.add("hidden");
-      document.getElementById("practice-solution-box").classList.add("hidden");
-
-      const optContainer = document.getElementById("practice-options-container");
-      optContainer.innerHTML = "";
-
-      q.options.forEach((optText, optIdx) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "option-btn practice-submit-btn";
-        btn.textContent = optText;
-        btn.setAttribute("role", "radio");
-        btn.setAttribute("aria-checked", "false");
-        btn.onclick = () => submitPracticeAnswer(optIdx, q);
-        optContainer.appendChild(btn);
-      });
-    }
-
-    function submitPracticeAnswer(chosenIdx, question) {
-      const isCorrect = chosenIdx === question.correctIndex;
-      const isTrap = chosenIdx === question.trapOptionIndex;
-      const durationSec = Math.round((Date.now() - questionStartTime) / 1000);
-
-      // Disable buttons
-      const buttons = document.querySelectorAll("#practice-options-container .option-btn");
-      buttons.forEach((b, idx) => {
-        b.disabled = true;
-        if (idx === question.correctIndex) b.classList.add("correct");
-        if (idx === chosenIdx && !isCorrect) {
-          b.classList.add(isTrap ? "trap" : "incorrect");
-        }
-      });
-
-      const feedback = document.getElementById("practice-feedback");
-      feedback.classList.remove("hidden");
-
-      if (isCorrect) {
-        feedback.className = "callout callout-success";
-        feedback.innerHTML = `<strong>✓ Correct!</strong> Well reasoned.`;
-        LabCommon.announce("Correct answer!");
-      } else if (isTrap && question.trapExplanation) {
-        feedback.className = "callout callout-trap";
-        feedback.innerHTML = `<strong>⚠️ Common Exam Trap:</strong> ${question.trapExplanation}`;
-        LabCommon.announce("Incorrect: Common trap encountered.");
-        document.getElementById("practice-error-categorizer").classList.remove("hidden");
-      } else {
-        feedback.className = "callout callout-danger";
-        feedback.innerHTML = `<strong>Incorrect:</strong> Review the worked solution below.`;
-        LabCommon.announce("Incorrect answer.");
-        document.getElementById("practice-error-categorizer").classList.remove("hidden");
-      }
-
-      // Show worked solution
-      const solBox = document.getElementById("practice-solution-box");
-      solBox.classList.remove("hidden");
-      document.getElementById("practice-solution-text").textContent = question.solution;
-
-      // Update statistics
-      LabCommon.recordTopicAttempt(TOPIC_ID, {
-        isCorrect,
-        isIndependent: practiceMode === "independent" || practiceMode === "timed",
-        timeSec: durationSec,
-        errorCategory: isCorrect ? null : document.getElementById("select-error-category").value
-      });
-
-      renderStats();
-    }
-
-    function handleSaveErrorCategory(category) {
-      // Re-save with updated category
-      const p = LabCommon.getTopicProgress(TOPIC_ID);
-      if (p.errorsByCategory[category] !== undefined) {
-        p.errorsByCategory[category] += 1;
-        LabCommon.storage.set(`lab_progress_${TOPIC_ID}`, p);
-      }
-      LabCommon.announce(`Recorded mistake reason: ${category}`);
-    }
-
-    function loadNextQuestion() {
-      currentQIndex = (currentQIndex + 1) % PRACTICE_QUESTIONS.length;
-      renderPracticeQuestion(currentQIndex);
-    }
-
-    function renderStats() {
-      const p = LabCommon.getTopicProgress(TOPIC_ID);
-      document.getElementById("stat-attempts").textContent = p.attempts;
-      document.getElementById("stat-correct").textContent = p.correct;
-      document.getElementById("stat-independent").textContent = p.independentCorrect;
-      const acc = p.attempts > 0 ? Math.round((p.correct / p.attempts) * 100) : 0;
-      document.getElementById("stat-accuracy").textContent = `${acc}%`;
-    }
-
-    function handleResetStats() {
-      if (confirm("Reset local practice statistics for Percentages?")) {
-        LabCommon.resetTopicProgress(TOPIC_ID);
-        renderStats();
-        LabCommon.announce("Practice statistics reset.");
-      }
-    }
-
-    /* ==========================================================================
-       7. INITIALIZATION ON LOAD
-       ========================================================================== */
-    document.addEventListener("DOMContentLoaded", () => {
-      // 1. Run and render self-tests
-      LabCommon.runAndRenderSelfTests(runSelfTests);
-
-      // 2. Initialize Model and Visual
-      updateModelAndVisual();
-
-      // 3. Render first practice question
-      renderPracticeQuestion(0);
-
-      // 4. Render progress stats
-      renderStats();
-    });
-  </script>
+  $("percent-display-badge").textContent = fmtSign(state.percent) + "%";
+  syncAndRender();
+  renderBaseShift();
+  renderQuestion();
+  renderStats();
+  setPracticeMode("hints");
+});
+</script>
 </body>
 </html>

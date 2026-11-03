@@ -1,1084 +1,1362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Averages, Mixtures &amp; Alligation — Aptitude &amp; Reasoning Lab</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="../assets/style.css">
-  <style>
-    .lever-vis-container {
-      background: var(--color-surface-subtle);
-      border: 1px solid var(--color-border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-      position: relative;
-    }
-
-    .lever-svg {
-      width: 100%;
-      height: 220px;
-      overflow: visible;
-    }
-
-    .alligation-cross-grid {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 1rem;
-      align-items: center;
-      background: var(--color-surface);
-      border: 1px solid var(--color-border-subtle);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-      margin: 1.25rem 0;
-    }
-
-    .alligation-node {
-      border: 2px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: 0.75rem;
-      text-align: center;
-      background: var(--color-surface-subtle);
-    }
-
-    .alligation-node.highlight {
-      border-color: var(--color-primary);
-      background: rgba(59, 130, 246, 0.08);
-    }
-
-    .alligation-node-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--color-text-muted);
-      margin-bottom: 0.25rem;
-    }
-
-    .alligation-node-val {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--color-primary);
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Averages, Mixtures &amp; Alligation — Aptitude Lab</title>
+<meta name="description" content="See alligation as a lever. Same-basis trap lab, weighted-average mini-lab, ghost-beam predictions, and shuffled practice." />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<style>
+:root {
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --purple: #a78bfa; --purple-soft: rgba(167,139,250,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: var(--font-sans);
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+}
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--primary); color: #001; padding: 12px 16px;
+  border-radius: 0 0 8px 0; font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 0.75rem; }
+code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--surface-2); border: 1px solid var(--border);
+  padding: 0.15em 0.4em; border-radius: 4px;
+}
+.page-container { max-width: 1080px; margin: 0 auto; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 22px 22px 24px;
+  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+@media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
+.card-header { margin-bottom: 18px; }
+.section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.section-title::before {
+  content: counter(section-num); counter-increment: section-num;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%; font-size: 0.8rem; font-weight: 800;
+}
+main { counter-reset: section-num; }
+.section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
+.site-header {
+  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
+  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
+  margin: 0 -16px 24px; padding: 12px 16px;
+}
+.header-container {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
+.brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+.nav-link:hover { color: var(--text); }
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
+}
+.badge-published { background: var(--success-soft); color: var(--success); }
+.badge-draft { background: var(--warn-soft); color: var(--warn); }
+.badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #001824; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
+.btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
+.btn-secondary:hover:not(:disabled) { background: var(--border); }
+.btn-ghost { background: transparent; color: var(--text-dim); }
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
+.btn-sm { padding: 6px 11px; font-size: 0.8rem; }
+.btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.control-grid {
+  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
+}
+@media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .control-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; } }
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 0.85rem; font-weight: 600; color: var(--text);
+}
+input[type=number] {
+  background: var(--bg-elev); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-size: 0.95rem; font-family: var(--font-sans); width: 100%;
+  transition: border-color var(--transition);
+}
+input[type=number]:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+input[type=number]:disabled { opacity: 0.6; cursor: not-allowed; }
+input[type=range] { width: 100%; accent-color: var(--primary); height: 24px; }
+input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
+.vis-container {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
+}
+.vis-container svg { display: block; width: 100%; height: auto; }
+.score-bar {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
+}
+@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
+.score-stat {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.score-stat-label {
+  font-size: 0.72rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+}
+.score-stat-num {
+  font-size: 1.05rem; font-weight: 700;
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
+}
+.callout {
+  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
+  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
+}
+.callout.hidden { display: none; }
+.callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
+.callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
+.callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
+.callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
+.test-banner {
+  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
+  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
+}
+.test-banner.hidden { display: none; }
+.test-banner ul { margin: 8px 0 0 20px; padding: 0; }
+.predict-box {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md); padding: 18px 20px;
+}
+.predict-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
+}
+.predict-header svg { flex-shrink: 0; }
+.options-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px; margin: 14px 0;
+}
+.option-btn {
+  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  font-family: var(--font-mono); font-size: 0.98rem; font-weight: 700;
+  cursor: pointer; transition: all var(--transition); text-align: center;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
+.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
+.option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
+.option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
+.option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
+.option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.steps-container { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.step-item {
+  background: var(--bg-elev); border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+}
+.step-num {
+  font-size: 0.72rem; color: var(--primary); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
+}
+.step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+.step-detail {
+  font-family: var(--font-mono); background: var(--surface-2);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 6px 10px; font-size: 0.85rem; margin-top: 6px;
+  color: var(--primary); overflow-x: auto;
+}
+.practice-header {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.mode-toggle-group {
+  display: inline-flex; background: var(--bg-elev);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 3px; gap: 2px;
+}
+.mode-btn {
+  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
+  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active { background: var(--primary-soft); color: var(--primary); }
+.mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.timer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
+}
+.timer-badge.hidden { display: none; }
+.question-stem {
+  font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500;
+}
+.site-footer {
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+  color: var(--text-dim); font-size: 0.85rem;
+}
+.footer-container { max-width: 1080px; margin: 0 auto; }
+.disclaimer-box {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+}
+.error-categorizer {
+  margin-top: 12px; padding: 12px;
+  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.error-categorizer.hidden { display: none; }
+.error-categorizer label {
+  font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;
+}
+.error-categorizer select {
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
+}
+</style>
 </head>
 <body>
-  <!-- Header / Navigation Hub -->
-  <header class="app-header">
-    <div class="header-container">
-      <a href="../index.html" class="brand" aria-label="Aptitude and Reasoning Lab Home">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-          <path d="M2 12h20" />
-        </svg>
-        <span>Aptitude &amp; Reasoning Lab</span>
-      </a>
-      <nav class="nav-links" aria-label="Breadcrumb">
-        <a href="../index.html" class="nav-link">Hub</a>
-        <span style="color: var(--color-text-muted);">/</span>
-        <span style="color: var(--color-text-main); font-weight: 600;">Averages &amp; Alligation</span>
-      </nav>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-container">
+    <a href="../index.html" class="brand-link">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f172a"/>
+        <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="4" stroke-dasharray="3 3"/>
+        <circle cx="24" cy="24" r="4" fill="#38bdf8"/>
+        <circle cx="40" cy="40" r="10" stroke="#34d399" stroke-width="4"/>
+        <circle cx="40" cy="40" r="4" fill="#34d399"/>
+        <line x1="24" y1="24" x2="40" y2="40" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span>Aptitude Lab</span>
+    </a>
+    <nav aria-label="Topic navigation">
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
+        <li><span class="badge badge-published">Published</span></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-container">
+
+  <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
+
+  <header class="card">
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.75rem;">
+      <span class="badge badge-tag">Quantitative Aptitude</span>
+      <span class="badge badge-tag">SEBI Gr A</span>
+      <span class="badge badge-tag">Banking &amp; SSC</span>
     </div>
+    <h1>Averages, Mixtures &amp; Alligation</h1>
+    <p class="section-subtitle" style="margin-top:8px;">
+      <strong>Alligation is a balance beam.</strong> The mixture mean sits where the two masses balance. Most traps come from putting the wrong values on the beam — especially a selling price against cost prices. This page makes the lever, the weighted-average pull, and the same-basis trap all visible.
+    </p>
   </header>
 
-  <main class="main-container">
-    <!-- Breadcrumb / Topic Metadata Header -->
-    <div style="margin-bottom: 1.5rem;">
-      <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
-        <span class="badge badge-tag">Quantitative Aptitude</span>
-        <span class="badge badge-published">Module 11</span>
-        <span class="badge badge-outline">SEBI Grade A &bull; SBI PO &bull; SSC CGL</span>
-      </div>
-      <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--color-text-main);">
-        Averages, Mixtures &amp; Alligation
-      </h1>
-      <p style="font-size: 1.05rem; color: var(--color-text-muted); max-width: 820px;">
-        Harness the physical <strong>balance-beam lever model</strong> to solve weighted averages in seconds.
-        Master the alligation cross-rule, repeated dilution formulas, and avoid common traps in bowling and speed-time mixtures.
-      </p>
+  <!-- ===== SECTION 1 — LEVER ===== -->
+  <section class="card" aria-labelledby="s1">
+    <div class="card-header">
+      <h2 id="s1" class="section-title">The balance beam</h2>
+      <p class="section-subtitle">Move the mean. The pivot slides. The masses stay proportional to the ratio — that's Archimedes, not a formula.</p>
     </div>
 
-    <!-- Quality Gate Fail-Visibly Alert Container -->
-    <div id="quality-alert" class="callout callout-error hidden" role="alert" style="margin-bottom: 1.5rem;">
-      <strong>Quality Gate Alert:</strong> One or more deterministic logic invariants failed. Practice submissions are locked until solver integrity is restored.
-      <div id="quality-alert-details" style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.8125rem;"></div>
+    <div style="margin-bottom:18px;">
+      <span style="font-size:.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:.5rem;">
+        Presets:
+      </span>
+      <div style="display:flex; gap:.4rem; flex-wrap:wrap;">
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="40,60,54">₹40/₹60 mean ₹54 (3:7)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="15,20,18">₹15/₹20 mean ₹18 (2:3)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="30,50,40">₹30/₹50 mean ₹40 (1:1)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="10,50,20">₹10/₹50 mean ₹20 (3:1)</button>
+      </div>
     </div>
 
-    <!-- Section 1: Concept & Interactive Alligation Lever Visualizer -->
-    <section class="card" aria-labelledby="model-title">
-      <div class="card-header">
-        <div>
-          <h2 id="model-title" class="section-title">1. Interactive Alligation Balance-Beam</h2>
-          <p class="section-subtitle">Adjust the component values and desired mixture mean to see Archimedes' law of the lever determine the exact mixing ratio.</p>
-        </div>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="input-c1" class="control-label">
+          <span>Cheaper component A₁</span>
+          <span id="badge-c1" class="badge badge-tag">₹40</span>
+        </label>
+        <input type="range" id="range-c1" min="1" max="100" value="40">
+        <input type="number" id="input-c1" value="40" min="1" max="500">
       </div>
-
-      <!-- Controls Grid -->
-      <div class="control-grid">
-        <div class="control-group">
-          <label class="control-label" for="input-c1">
-            <span>Cheaper Component ($A_1$)</span>
-            <span id="badge-c1" class="badge badge-tag">₹40/kg</span>
-          </label>
-          <input type="number" id="input-c1" class="control-input" value="40" min="1" max="500" oninput="handleModelParamsChange()">
-          <input type="range" id="range-c1" min="1" max="100" value="40" oninput="document.getElementById('input-c1').value=this.value; handleModelParamsChange()">
-        </div>
-
-        <div class="control-group">
-          <label class="control-label" for="input-c2">
-            <span>Dearer Component ($A_2$)</span>
-            <span id="badge-c2" class="badge badge-tag">₹60/kg</span>
-          </label>
-          <input type="number" id="input-c2" class="control-input" value="60" min="1" max="500" oninput="handleModelParamsChange()">
-          <input type="range" id="range-c2" min="1" max="100" value="60" oninput="document.getElementById('input-c2').value=this.value; handleModelParamsChange()">
-        </div>
-
-        <div class="control-group">
-          <label class="control-label" for="input-mean">
-            <span>Target Mixture Mean ($A_m$)</span>
-            <span id="badge-mean" class="badge badge-tag" style="background:rgba(59,130,246,0.12); color:#1d4ed8;">₹54/kg</span>
-          </label>
-          <input type="number" id="input-mean" class="control-input" value="54" min="1" max="500" oninput="handleModelParamsChange()">
-          <input type="range" id="range-mean" min="1" max="100" value="54" oninput="document.getElementById('input-mean').value=this.value; handleModelParamsChange()">
-        </div>
+      <div class="control-group">
+        <label for="input-c2" class="control-label">
+          <span>Dearer component A₂</span>
+          <span id="badge-c2" class="badge badge-tag">₹60</span>
+        </label>
+        <input type="range" id="range-c2" min="2" max="120" value="60">
+        <input type="number" id="input-c2" value="60" min="2" max="500">
       </div>
+      <div class="control-group">
+        <label for="input-mean" class="control-label">
+          <span>Mixture mean Aₘ</span>
+          <span id="badge-mean" class="badge badge-tag">₹54</span>
+        </label>
+        <input type="range" id="range-mean" min="1" max="120" value="54">
+        <input type="number" id="input-mean" value="54" min="1" max="500">
+      </div>
+    </div>
 
-      <!-- SVG Seesaw / Lever Visualizer -->
-      <div class="lever-vis-container" aria-label="Balance-beam seesaw representation of alligation">
-        <svg id="lever-svg" class="lever-svg" viewBox="0 0 720 220" role="img" aria-labelledby="svg-desc">
-          <title id="svg-desc">Archimedes lever diagram showing mass1 * arm1 = mass2 * arm2</title>
-          <!-- Injected dynamically by Model.renderLever -->
+    <div class="vis-container">
+      <svg id="lever-svg" viewBox="0 0 760 320" width="100%" role="img" aria-label="Balance-beam lever visualisation">
+        <title>Archimedes lever: mass₁ × arm₁ = mass₂ × arm₂</title>
+      </svg>
+      <p id="svg-live-desc" class="sr-only" aria-live="polite"></p>
+    </div>
+
+    <div class="score-bar" aria-live="polite">
+      <div class="score-stat"><span class="score-stat-label">Ratio A₁ : A₂</span><span class="score-stat-num" id="readout-ratio">3 : 7</span></div>
+      <div class="score-stat"><span class="score-stat-label">A₁ fraction</span><span class="score-stat-num" id="readout-frac-a1">30%</span></div>
+      <div class="score-stat"><span class="score-stat-label">A₂ fraction</span><span class="score-stat-num" id="readout-frac-a2">70%</span></div>
+      <div class="score-stat"><span class="score-stat-label">Arms d₁ / d₂</span><span class="score-stat-num" id="readout-arms">14 / 6</span></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2 — PREDICT ===== -->
+  <section class="card" aria-labelledby="s2">
+    <div class="card-header">
+      <h2 id="s2" class="section-title">Predict first</h2>
+      <p class="section-subtitle">The classic trap: mixing a selling price against cost prices. Commit to a ratio, then see the ghost beam.</p>
+    </div>
+
+    <div class="predict-box">
+      <div class="predict-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
         </svg>
+        <span>The pulses problem:</span>
+      </div>
+      <p style="font-size:1.05rem; margin-bottom:1rem;">
+        A grocer mixes two pulse varieties costing <strong>₹15/kg</strong> and <strong>₹20/kg</strong>. He sells the mixture at <strong>₹19.80/kg</strong> with a <strong>10% profit</strong>. What is the mixing ratio?
+      </p>
+      <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options"></div>
+      <div id="predict-feedback" class="callout hidden" role="alert"></div>
 
-        <div id="lever-caption" style="margin-top: 0.75rem; font-size: 0.8125rem; color: var(--color-text-muted); text-align: center;">
-          <!-- Dynamically populated -->
-        </div>
+      <div style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
+        <button type="button" id="btn-new-predict" class="btn btn-secondary">🎲 New scenario</button>
+        <span id="predict-lock-hint" style="font-size:.8rem; color:var(--text-muted);"></span>
+      </div>
+    </div>
+
+    <div id="worked-solution-panel" class="hidden" style="margin-top:20px;">
+      <h3 style="margin-bottom:12px;">Step-by-step solution</h3>
+      <div class="steps-container" id="solution-steps-container"></div>
+      <div class="callout callout-trap" id="solution-trap-callout" style="margin-top:12px;">
+        <strong>⚠️ Trap:</strong> <span id="solution-trap-text"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3 — SAME-BASIS LAB ===== -->
+  <section class="card" aria-labelledby="s3">
+    <div class="card-header">
+      <h2 id="s3" class="section-title">Same-basis trap — SP vs CP</h2>
+      <p class="section-subtitle">Toggle "use SP" and watch the beam shift to the wrong ratio. The trap isn't explained — it's *drawn*.</p>
+    </div>
+
+    <div class="control-grid" style="max-width:520px;">
+      <div class="control-group">
+        <label for="lab-sp" class="control-label">
+          <span>Selling price of mixture</span>
+          <span id="badge-sp" class="badge badge-tag">₹19.80</span>
+        </label>
+        <input type="range" id="lab-sp" min="10" max="40" value="19.80" step="0.1">
+      </div>
+      <div class="control-group">
+        <label for="lab-profit" class="control-label">
+          <span>Profit %</span>
+          <span id="badge-profit" class="badge badge-tag">10%</span>
+        </label>
+        <input type="range" id="lab-profit" min="0" max="50" value="10" step="1">
+      </div>
+    </div>
+
+    <div class="mode-toggle-group" role="tablist" style="margin-bottom:14px; width:fit-content;">
+      <button type="button" class="mode-btn active" data-basis="cp" role="tab" aria-selected="true">Use CP (correct)</button>
+      <button type="button" class="mode-btn" data-basis="sp" role="tab" aria-selected="false">Use SP (trap)</button>
+    </div>
+
+    <div class="vis-container">
+      <svg id="basis-svg" viewBox="0 0 760 260" width="100%" role="img" aria-label="Same-basis comparison lever">
+        <title>Two levers: correct CP basis vs trap SP basis</title>
+      </svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">CP of mixture</span><span class="score-stat-num" id="basis-cp">₹18.00</span></div>
+      <div class="score-stat"><span class="score-stat-label">Correct ratio</span><span class="score-stat-num" id="basis-correct" style="color:var(--success)">2 : 3</span></div>
+      <div class="score-stat"><span class="score-stat-label">Trap ratio</span><span class="score-stat-num" id="basis-trap" style="color:var(--danger)">1 : 24</span></div>
+      <div class="score-stat"><span class="score-stat-label">Which do you trust?</span><span class="score-stat-num" id="basis-status" style="font-size:.85rem;">—</span></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4 — WEIGHTED AVERAGE ===== -->
+  <section class="card" aria-labelledby="s4">
+    <div class="card-header">
+      <h2 id="s4" class="section-title">Weighted average — why simple averaging lies</h2>
+      <p class="section-subtitle">Two classes with different sizes and averages. The balance point sits closer to the larger group.</p>
+    </div>
+
+    <div class="control-grid" style="max-width:640px;">
+      <div class="control-group">
+        <label for="wa-n1" class="control-label">
+          <span>Class A size</span>
+          <span id="wa-n1-badge" class="badge badge-tag">30</span>
+        </label>
+        <input type="range" id="wa-n1" min="1" max="100" value="30">
+      </div>
+      <div class="control-group">
+        <label for="wa-n2" class="control-label">
+          <span>Class B size</span>
+          <span id="wa-n2-badge" class="badge badge-tag">20</span>
+        </label>
+        <input type="range" id="wa-n2" min="1" max="100" value="20">
+      </div>
+    </div>
+
+    <div class="vis-container">
+      <svg id="wa-svg" viewBox="0 0 760 200" width="100%" role="img" aria-label="Weighted average pull">
+        <title>Two weighted bars with a balance point</title>
+      </svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Class A avg</span><span class="score-stat-num" id="wa-avg-a">70</span></div>
+      <div class="score-stat"><span class="score-stat-label">Class B avg</span><span class="score-stat-num" id="wa-avg-b">80</span></div>
+      <div class="score-stat"><span class="score-stat-label">Weighted mean</span><span class="score-stat-num" id="wa-mean" style="color:var(--success)">74</span></div>
+      <div class="score-stat"><span class="score-stat-label">Naive average (wrong)</span><span class="score-stat-num" id="wa-naive" style="color:var(--danger)">75</span></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 5 — PRACTICE ===== -->
+  <section class="card" aria-labelledby="s5">
+    <div class="card-header">
+      <h2 id="s5" class="section-title">Practice</h2>
+      <p class="section-subtitle">Shuffled each session. Traps have real reasons.</p>
+    </div>
+
+    <div class="practice-header">
+      <div class="mode-toggle-group" role="tablist" aria-label="Practice mode">
+        <button type="button" class="mode-btn active" data-mode="hints" role="tab" aria-selected="true">Guided</button>
+        <button type="button" class="mode-btn" data-mode="independent" role="tab" aria-selected="false">Independent</button>
+        <button type="button" class="mode-btn" data-mode="timed" role="tab" aria-selected="false">Timed (90s)</button>
+      </div>
+      <div id="timer-container" class="timer-badge hidden" aria-live="off">
+        <span>⏱️</span><span id="timer-display">90</span><span>s</span>
+      </div>
+    </div>
+
+    <div class="score-bar" aria-label="Practice statistics">
+      <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Independent</span><span class="score-stat-num" id="stat-independent">0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Accuracy</span><span class="score-stat-num" id="stat-accuracy">0%</span></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
+    </div>
+
+    <div id="practice-question-card" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span class="badge" id="practice-q-difficulty">Easy</span>
+      </div>
+      <p class="question-stem" id="practice-q-stem">Loading…</p>
+      <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
+      <div id="practice-feedback" class="callout hidden" role="alert"></div>
+
+      <div id="practice-error-categorizer" class="error-categorizer hidden">
+        <label for="select-error-category">What tripped you up? (optional)</label>
+        <select id="select-error-category">
+          <option value="sp_alligation">Alligated with SP instead of CP</option>
+          <option value="speed_time_base">Speed/time ratio confusion</option>
+          <option value="dilution_formula">Dilution formula error</option>
+          <option value="bowling_direction">Bowling average direction</option>
+          <option value="simple_vs_weighted">Simple vs weighted average</option>
+          <option value="time_guess">Time-pressure guess</option>
+        </select>
       </div>
 
-      <!-- Cross Alligation Layout Grid -->
-      <div class="alligation-cross-grid">
-        <div class="alligation-node" id="node-a1">
-          <div class="alligation-node-title">Cheaper ($A_1$)</div>
-          <div class="alligation-node-val" id="val-a1">40</div>
-        </div>
-        <div style="text-align: center; font-weight: 800; color: var(--color-text-muted); font-size: 1.5rem;">
-          \ &nbsp; /
-        </div>
-        <div class="alligation-node" id="node-a2">
-          <div class="alligation-node-title">Dearer ($A_2$)</div>
-          <div class="alligation-node-val" id="val-a2">60</div>
-        </div>
-
-        <div></div>
-        <div class="alligation-node highlight" id="node-mean">
-          <div class="alligation-node-title">Mean Price ($A_m$)</div>
-          <div class="alligation-node-val" id="val-mean">54</div>
-        </div>
-        <div></div>
-
-        <div class="alligation-node" style="border-color: #3b82f6;">
-          <div class="alligation-node-title">Quantity 1 ($d_2 = A_2 - A_m$)</div>
-          <div class="alligation-node-val" id="val-q1">6</div>
-        </div>
-        <div style="text-align: center; font-weight: 800; color: var(--color-text-muted); font-size: 1.5rem;">
-          / &nbsp; \
-        </div>
-        <div class="alligation-node" style="border-color: #10b981;">
-          <div class="alligation-node-title">Quantity 2 ($d_1 = A_m - A_1$)</div>
-          <div class="alligation-node-val" id="val-q2">14</div>
-        </div>
+      <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:12px;">
+        <h4 style="margin-bottom:6px; font-size:.95rem;">Solution</h4>
+        <p id="practice-solution-text" style="font-size:.9rem; line-height:1.55; margin:0;"></p>
       </div>
 
-      <!-- Readout Stats -->
-      <div class="score-bar" id="model-readout" aria-live="polite">
-        <div class="score-stat">
-          <span class="score-stat-label">Ratio (Q1 : Q2)</span>
-          <span class="score-stat-num" id="readout-ratio">3 : 7</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Fraction Cheaper</span>
-          <span class="score-stat-num" id="readout-frac-c1">30% (3/10)</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Fraction Dearer</span>
-          <span class="score-stat-num" id="readout-frac-c2">70% (7/10)</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Fulcrum Distance</span>
-          <span class="score-stat-num" id="readout-fulcrum">d₁ = 14, d₂ = 6</span>
+      <div style="margin-top:18px; display:flex; gap:.75rem; justify-content:flex-end;">
+        <button type="button" id="btn-next-question" class="btn btn-primary" disabled>Next question →</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <strong>Aptitude &amp; Reasoning Lab</strong> — Quant stream
+        <div style="font-size:.8rem; margin-top:.25rem;">
+          Review status: <span class="badge badge-published">published</span> · Reviewed: 2026-10-29
         </div>
       </div>
-    </section>
-
-    <!-- Section 2: Predict-First Worked Example -->
-    <section class="card" aria-labelledby="predict-title">
-      <div class="card-header">
-        <div>
-          <h2 id="predict-title" class="section-title">2. Predict Before You Reveal</h2>
-          <p class="section-subtitle">Avoid the #1 Alligation Trap: Mixing Cost Prices with a Selling Price.</p>
-        </div>
+      <div style="font-size:.8rem;">
+        <a href="../docs/reviews/averages-alligation.md" style="color:var(--primary); text-decoration:none;">View review &amp; test spec ↗</a>
       </div>
+    </div>
+    <div class="disclaimer-box">
+      <strong>Educational tool.</strong> Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC.
+      Always check the latest official exam notification.
+    </div>
+  </div>
+</footer>
 
-      <div class="predict-box">
-        <div class="predict-header">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
-          </svg>
-          <span style="font-weight: 700; font-size: 0.9375rem;">Challenge: The Commercial Profit Mixture</span>
-        </div>
-        <p style="margin-bottom: 0.75rem; font-size: 0.9375rem;">
-          A grocer mixes two varieties of pulses costing <strong>₹15/kg</strong> and <strong>₹20/kg</strong>.<br>
-          He sells the resulting mixture at <strong>₹19.80/kg</strong>, earning a <strong>10% profit</strong>.<br>
-          <em>In what ratio must the two varieties be mixed?</em>
-        </p>
+<script>
+/* =====================================================================
+   1. PURE MODEL
+   ===================================================================== */
+const Model = (() => {
+  const round = (x, d = 2) => Math.round(x * 10 ** d) / 10 ** d;
+  const gcd = (a, b) => {
+    a = Math.abs(Math.round(a)); b = Math.abs(Math.round(b));
+    while (b) { [a, b] = [b, a % b]; }
+    return a || 1;
+  };
+  const lcm = (a, b) => Math.abs(Math.round((a * b) / gcd(a, b)));
 
-        <!-- Predict Radio Options -->
-        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;" role="radiogroup" aria-label="Predict answer">
-          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
-            <input type="radio" name="predict-radio" value="raw_sp">
-            <strong>1 : 24</strong> — Raw alligation using ₹19.80 directly as the mean: $(20 - 19.80) : (19.80 - 15) = 0.20 : 4.80 = 1 : 24$.
-          </label>
-          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
-            <input type="radio" name="predict-radio" value="cp_convert">
-            <strong>2 : 3</strong> — Converting SP to Cost Price first: $CP = 19.80 / 1.10 = 18$, then $(20 - 18) : (18 - 15) = 2 : 3$.
-          </label>
-          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
-            <input type="radio" name="predict-radio" value="invert">
-            <strong>3 : 2</strong> — Inverting the ratio.
-          </label>
-        </div>
+  function solveAlligation(c1, c2, mean) {
+    const a = Number(c1), b = Number(c2), m = Number(mean);
+    if (![a, b, m].every(Number.isFinite)) return { valid: false, error: "All inputs must be numbers." };
+    if (!(a < m && m < b)) return { valid: false, error: "Need A₁ < mean < A₂." };
 
-        <button type="button" class="btn btn-primary btn-sm" id="btn-reveal-predict" onclick="handleRevealPredict()">
-          Reveal Set-Theoretic Proof
-        </button>
+    const arm1 = round(m - a);
+    const arm2 = round(b - m);
+    // Simplify ratio arm2 : arm1 (opposite arm to same side)
+    // Ratio cheaper : dearer = arm2 : arm1
+    const g = gcd(arm1 * 100, arm2 * 100);
+    const q1 = Math.round(arm2 * 100 / g);
+    const q2 = Math.round(arm1 * 100 / g);
 
-        <!-- Revealed Solution Callout -->
-        <div id="predict-solution" class="callout callout-info hidden" style="margin-top: 1rem;">
-          <h4 style="font-size: 0.9375rem; margin-bottom: 0.5rem; color: #1e40af;">Mathematical Resolution:</h4>
-          <p style="font-size: 0.875rem; line-height: 1.5; margin-bottom: 0.5rem;">
-            <strong>Correct Answer: 2 : 3.</strong>
-          </p>
-          <p style="font-size: 0.875rem; line-height: 1.5; margin-bottom: 0.5rem;">
-            <strong>The Fundamental Law of Alligation:</strong> All three values entered into the alligation cross <strong>must belong to the same cost basis</strong>.<br>
-            ₹15 and ₹20 are <em>Cost Prices</em>. ₹19.80 is a <em>Selling Price</em> with a 10% profit margin included.<br>
-            $$\text{Cost Price of Mixture} = \frac{\text{SP}}{1 + \text{Profit}\%} = \frac{19.80}{1.10} = ₹18\text{/kg}$$
-          </p>
-          <p style="font-size: 0.875rem; line-height: 1.5; color: var(--color-text-muted);">
-            Applying alligation with the true mean CP ($18$):<br>
-            $$\text{Ratio} = (20 - 18) : (18 - 15) = 2 : 3$$
-            <em>Why 1 : 24 is wrong:</em> Using ₹19.80 treats the grocer's profit margin as if it were actual raw pulse cost!
-          </p>
-        </div>
-      </div>
-    </section>
+    return {
+      valid: true,
+      intermediates: { c1: a, c2: b, mean: m, arm1, arm2, q1, q2 },
+      ratioStr: `${q1} : ${q2}`
+    };
+  }
 
-    <!-- Section 3: Comprehensive Rules & Trap Encyclopedia -->
-    <section class="card" aria-labelledby="rules-title">
-      <div class="card-header">
-        <div>
-          <h2 id="rules-title" class="section-title">3. Core Deduction Axioms &amp; Exam Traps</h2>
-          <p class="section-subtitle">Speed rules that turn 3-minute algebra into 15-second alligations.</p>
-        </div>
-      </div>
+  function solveSameBasis(sp, profitPct) {
+    const s = Number(sp), p = Number(profitPct);
+    if (![s, p].every(Number.isFinite)) return { valid: false, error: "Inputs must be numbers." };
+    const cp = round(s / (1 + p / 100));
+    // Use the two cost prices from the classic problem: 15 and 20
+    const a = 15, b = 20;
+    if (!(a < cp && cp < b)) return { valid: false, error: "CP of mixture must lie between 15 and 20." };
+    const correct = solveAlligation(a, b, cp);
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">1. Repeated Dilution Formula</h3>
-          <p style="font-size: 0.875rem;">
-            From container with capacity $C$ of pure liquid, $x$ liters are drawn and replaced with water, repeated $n$ times:
-          </p>
-          <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); text-align: center; margin: 0.5rem 0; font-size: 0.9375rem;">
-            Q_rem = C × (1 - x / C)ⁿ
-          </div>
-          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            Water present $= C - Q_{\text{rem}}$. Pure liquid fraction decreases geometrically.
-          </p>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">2. Group Replacement Shift</h3>
-          <p style="font-size: 0.875rem;">
-            When one member of weight $W_{\text{old}}$ is replaced by $W_{\text{new}}$ in a group of $N$ persons:
-          </p>
-          <div style="font-family: var(--font-mono); font-weight: 700; color: var(--color-primary); text-align: center; margin: 0.5rem 0; font-size: 0.9375rem;">
-            W_new = W_old + (N × Δ)
-          </div>
-          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            If average decreases, $\Delta$ is negative. No need to calculate the grand sum!
-          </p>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">3. Speed-Time Alligation Base</h3>
-          <p style="font-size: 0.875rem;">
-            When applying alligation to speeds ($S_1, S_2$) and average speed ($S_m$):
-          </p>
-          <p style="font-size: 0.8125rem; color: var(--color-danger); margin-top: 0.35rem; font-weight: 600;">
-            ⚠ The resulting ratio is the ratio of TIMES taken, NOT distances!
-          </p>
-          <p style="font-size: 0.8125rem; color: var(--color-text-muted);">
-            Speed has units $\text{km}/\text{hour}$. Denominator is time, so alligation weights time.
-          </p>
-        </div>
-
-        <div style="background: var(--color-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-          <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 0.4rem;">4. Bowling Average Dynamics</h3>
-          <p style="font-size: 0.875rem;">
-            $$\text{Bowling Average} = \frac{\text{Runs Conceded}}{\text{Wickets Taken}}$$
-          </p>
-          <p style="font-size: 0.8125rem; color: var(--color-text-muted); margin-top: 0.35rem;">
-            *Caution:* A "reduction" or "improvement" in bowling average means the number becomes <em>smaller</em> (e.g. 12.4 improving by 0.4 becomes 12.0). Alligation weights by wickets.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 4: Independent Practice Lab (12 Verified Questions) -->
-    <section class="card" aria-labelledby="practice-title" id="practice-section">
-      <div class="card-header">
-        <div>
-          <h2 id="practice-title" class="section-title">4. Independent Practice Lab</h2>
-          <p class="section-subtitle">12 hand-verified competitive exam questions covering weighted averages, alligation cross, dilutions, and replacements.</p>
-        </div>
-      </div>
-
-      <!-- Practice Controls & Mode Toggles -->
-      <div class="practice-header">
-        <div class="mode-toggle-group" role="tablist" aria-label="Practice Mode Selection">
-          <button type="button" class="mode-btn active" id="btn-mode-hints" role="tab" aria-selected="true" onclick="setPracticeMode('hints')">
-            Guided Mode
-          </button>
-          <button type="button" class="mode-btn" id="btn-mode-independent" role="tab" aria-selected="false" onclick="setPracticeMode('independent')">
-            Try Without Hints
-          </button>
-          <button type="button" class="mode-btn" id="btn-mode-timed" role="tab" aria-selected="false" onclick="setPracticeMode('timed')">
-            Timed Practice
-          </button>
-        </div>
-
-        <div id="timer-container" class="timer-badge hidden" aria-live="off">
-          <span>⏱️</span>
-          <span id="timer-display">00:00</span>
-        </div>
-      </div>
-
-      <!-- Score & Accuracy Progress Bar -->
-      <div class="score-bar" aria-label="Current Practice Statistics">
-        <div class="score-stat">
-          <span class="score-stat-label">Questions Attempted</span>
-          <span class="score-stat-num" id="stat-attempts">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Total Correct</span>
-          <span class="score-stat-num" id="stat-correct">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Independent Correct</span>
-          <span class="score-stat-num" id="stat-independent">0</span>
-        </div>
-        <div class="score-stat">
-          <span class="score-stat-label">Accuracy</span>
-          <span class="score-stat-num" id="stat-accuracy">0%</span>
-        </div>
-        <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()" style="margin-left: auto;">
-          Reset Local Progress
-        </button>
-      </div>
-
-      <!-- Question Box -->
-      <div id="practice-question-card" style="margin-top: 1.25rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-          <span style="font-size: 0.8125rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;" id="practice-q-num">
-            Question 1 of 12
-          </span>
-          <span class="badge" id="practice-q-difficulty">Easy</span>
-        </div>
-
-        <p class="question-stem" id="practice-q-stem">
-          Loading practice question...
-        </p>
-
-        <!-- Options container -->
-        <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Question options">
-          <!-- Rendered dynamically -->
-        </div>
-
-        <!-- Practice Feedback Callout -->
-        <div id="practice-feedback" class="callout hidden" role="alert"></div>
-
-        <!-- Error Categorizer (appears on incorrect submission) -->
-        <div id="practice-error-categorizer" class="error-categorizer hidden">
-          <label for="select-error-category" style="font-size: 0.8125rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">
-            Reflective Analysis: What was the primary root cause of this error?
-          </label>
-          <select id="select-error-category" onchange="handleSaveErrorCategory(this.value)">
-            <option value="sp_alligation">Alligation on SP (Forgot to convert selling price to cost price)</option>
-            <option value="speed_time_base">Speed Alligation Base (Treated time ratio as distance ratio)</option>
-            <option value="dilution_formula">Dilution Formula Error (Wrong power or denominator in replacement)</option>
-            <option value="bowling_avg_dir">Bowling Average Inversion (Treated improvement as addition instead of subtraction)</option>
-            <option value="simple_vs_weighted">Simple vs Weighted (Averaged two averages without weighting group sizes)</option>
-            <option value="time_guess">Rushed / Guess under time pressure</option>
-          </select>
-        </div>
-
-        <!-- Practice Worked Solution Box (revealed upon answering) -->
-        <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top: 1rem;">
-          <h4 style="font-size: 0.9375rem; margin-bottom: 0.5rem; color: #1e40af;">Mathematical Solution:</h4>
-          <div id="practice-solution-text" style="font-size: 0.875rem; line-height: 1.6;"></div>
-          <div id="practice-trap-analysis" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed rgba(30, 64, 175, 0.2); font-size: 0.8125rem; color: #1e3a8a;"></div>
-        </div>
-
-        <!-- Question Navigation Controls -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
-          <button type="button" class="btn btn-secondary btn-sm" id="btn-prev-q" onclick="navigateQuestion(-1)">
-            ← Previous Question
-          </button>
-          <span style="font-size: 0.8125rem; color: var(--color-text-muted);" id="q-counter-text">
-            1 / 12
-          </span>
-          <button type="button" class="btn btn-primary btn-sm" id="btn-next-q" onclick="navigateQuestion(1)">
-            Next Question →
-          </button>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script src="../assets/common.js"></script>
-  <script>
-    /* ==========================================================================
-       1. PURE DETERMINISTIC AVERAGES & ALLIGATION MODEL
-       ========================================================================== */
-    const Model = (function () {
-      function gcd(a, b) {
-        a = Math.abs(Math.round(a));
-        b = Math.abs(Math.round(b));
-        while (b) { let t = b; b = a % b; a = t; }
-        return a || 1;
-      }
-
-      /**
-       * Pure solver for alligation ratio between c1 (cheaper) and c2 (dearer) with mean
-       */
-      function solveAlligation(c1, c2, mean) {
-        if (c1 >= c2 || mean <= c1 || mean >= c2) {
-          return { valid: false, error: "Must satisfy: c1 < mean < c2" };
-        }
-        const d1 = LabCommon.round(mean - c1, 4);
-        const d2 = LabCommon.round(c2 - mean, 4);
-        const g = gcd(Math.round(d2 * 100), Math.round(d1 * 100));
-        const simQ1 = Math.round((d2 * 100) / g);
-        const simQ2 = Math.round((d1 * 100) / g);
-
-        return {
-          valid: true,
-          d1,
-          d2,
-          ratio: [simQ1, simQ2],
-          ratioStr: `${simQ1} : ${simQ2}`,
-          formula: `(A₂ - A_m) : (A_m - A₁) = (${c2} - ${mean}) : (${mean} - ${c1}) = ${d2} : ${d1} = ${simQ1} : ${simQ2}`
-        };
-      }
-
-      /**
-       * Pure solver for weighted average
-       */
-      function solveWeightedAverage(n1, a1, n2, a2) {
-        if (n1 <= 0 || n2 <= 0) return { valid: false, error: "Weights must be positive" };
-        const mean = LabCommon.round((n1 * a1 + n2 * a2) / (n1 + n2), 4);
-        return {
-          valid: true,
-          mean,
-          totalWeight: n1 + n2,
-          formula: `A_m = (${n1}×${a1} + ${n2}×${a2}) / (${n1}+${n2}) = ${mean}`
-        };
-      }
-
-      /**
-       * Group replacement solver: W_new = W_old + N * delta
-       */
-      function solveReplacement(n, oldVal, deltaAvg) {
-        if (n <= 0) return { valid: false, error: "Group size must be positive" };
-        const newVal = LabCommon.round(oldVal + n * deltaAvg, 4);
-        return {
-          valid: true,
-          newVal,
-          formula: `W_new = ${oldVal} + (${n} × ${deltaAvg}) = ${newVal}`
-        };
-      }
-
-      /**
-       * Group inclusion solver
-       */
-      function solveInclusion(n, oldAvg, newAvg) {
-        if (n <= 0) return { valid: false, error: "Group size must be positive" };
-        const delta = newAvg - oldAvg;
-        const newcomerVal = LabCommon.round(newAvg + n * delta, 4);
-        return {
-          valid: true,
-          newcomerVal,
-          formula: `Value = ${newAvg} + (${n} × ${delta}) = ${newcomerVal}`
-        };
-      }
-
-      /**
-       * Repeated dilution formula: Q = C * (1 - x/C)^n
-       */
-      function solveDilution(capacity, drawn, repetitions) {
-        if (capacity <= 0 || drawn <= 0 || drawn > capacity || repetitions < 1) {
-          return { valid: false, error: "Invalid dilution parameters" };
-        }
-        const fractionRemaining = Math.pow(1 - drawn / capacity, repetitions);
-        const remLiquid = LabCommon.round(capacity * fractionRemaining, 4);
-        const water = LabCommon.round(capacity - remLiquid, 4);
-
-        return {
-          valid: true,
-          remLiquid,
-          water,
-          formula: `Q = ${capacity} × (1 - ${drawn}/${capacity})^${repetitions} = ${remLiquid}`
-        };
-      }
-
-      return {
-        solveAlligation,
-        solveWeightedAverage,
-        solveReplacement,
-        solveInclusion,
-        solveDilution
-      };
-    })();
-
-    if (typeof window !== "undefined") {
-      window.Model = Model;
+    // The trap: alligate with SP directly against 15 and 20
+    let trapRatio = null;
+    if (s > a && s < b) {
+      const t = solveAlligation(a, b, s);
+      if (t.valid) trapRatio = t.ratioStr;
     }
+    return { valid: true, cp, correct, trapRatio };
+  }
 
-    /* ==========================================================================
-       2. DETERMINISTIC SELF-TEST SUITE (Quality Gate)
-       ========================================================================== */
-    function runSelfTests() {
-      const results = { passed: 0, failed: 0, failures: [] };
-
-      function assert(condition, testName) {
-        if (condition) {
-          results.passed++;
-        } else {
-          results.failed++;
-          results.failures.push(testName);
-        }
-      }
-
-      // Test 1: Simple Alligation ratio 40, 60, mean 54 => 3 : 7
-      const t1 = Model.solveAlligation(40, 60, 54);
-      assert(t1.valid && t1.ratio[0] === 3 && t1.ratio[1] === 7, "Test 1: Alligation (40, 60, 54) yields 3 : 7");
-
-      // Test 2: Weighted Average (30@70, 20@80 => 74)
-      const t2 = Model.solveWeightedAverage(30, 70, 20, 80);
-      assert(t2.valid && t2.mean === 74, "Test 2: Weighted average (30@70 + 20@80) yields 74");
-
-      // Test 3: Group Replacement (10 people, 60kg replaced, delta +1.5 => 75kg)
-      const t3 = Model.solveReplacement(10, 60, 1.5);
-      assert(t3.valid && t3.newVal === 75, "Test 3: Replacement 60kg with +1.5kg avg yields 75kg");
-
-      // Test 4: Group Inclusion (24 students avg 14, new avg 15 => teacher 39)
-      const t4 = Model.solveInclusion(24, 14, 15);
-      assert(t4.valid && t4.newcomerVal === 39, "Test 4: Inclusion (24@14 -> 15) yields 39");
-
-      // Test 5: Repeated Dilution (80L, 8L drawn, 2 times => 64.8L milk, 15.2L water)
-      const t5 = Model.solveDilution(80, 8, 2);
-      assert(t5.valid && Math.abs(t5.remLiquid - 64.8) < 0.001 && Math.abs(t5.water - 15.2) < 0.001, "Test 5: Dilution 80L -8L x2 yields 64.8L");
-
-      // Test 6: Strict bound invariant: mean must lie strictly between extremes
-      const t6 = Model.solveAlligation(50, 40, 45); // c1 > c2 invalid
-      assert(!t6.valid, "Test 6: Reject when c1 >= c2");
-
-      const t6b = Model.solveAlligation(40, 60, 70); // mean > c2 invalid
-      assert(!t6b.valid, "Test 6b: Reject when mean > c2");
-
-      // Test 7: Lever Balance Invariant: n1 * (mean - c1) === n2 * (c2 - mean)
-      const t7 = Model.solveAlligation(15, 20, 18);
-      assert(t7.valid && t7.ratio[0] === 2 && t7.ratio[1] === 3, "Test 7: Alligation (15, 20, 18) yields 2 : 3");
-      const balance1 = t7.ratio[0] * (18 - 15); // 2 * 3 = 6
-      const balance2 = t7.ratio[1] * (20 - 18); // 3 * 2 = 6
-      assert(balance1 === balance2, "Test 7b: Fulcrum torque balance w1*d1 === w2*d2");
-
-      // Test 8: Dilution 1 repetition identity
-      const t8 = Model.solveDilution(100, 10, 1);
-      assert(t8.valid && t8.remLiquid === 90 && t8.water === 10, "Test 8: Dilution 1 rep 100 -10 = 90L");
-
-      // Test 9: Negative delta in replacement (weight drops)
-      const t9 = Model.solveReplacement(8, 70, -2);
-      assert(t9.valid && t9.newVal === 54, "Test 9: Negative delta replacement 70 - 16 = 54kg");
-
-      // Test 10: Symmetry check on equal deviations (mean exactly halfway)
-      const t10 = Model.solveAlligation(30, 50, 40);
-      assert(t10.valid && t10.ratio[0] === 1 && t10.ratio[1] === 1, "Test 10: Equal deviation yields 1 : 1");
-
-      // Test 11: Speed alligation time weighting consistency
-      // 90km in 9h (avg 10km/h), foot 8, bike 17 => time ratio (17-10):(10-8) = 7:2 => total 9h
-      const t11 = Model.solveAlligation(8, 17, 10);
-      assert(t11.valid && t11.ratio[0] === 7 && t11.ratio[1] === 2, "Test 11: Speed alligation yields 7 : 2 time ratio");
-
-      return results;
+  function solveWeighted(n1, a1, n2, a2) {
+    const w1 = Number(n1), v1 = Number(a1), w2 = Number(n2), v2 = Number(a2);
+    if (![w1, v1, w2, v2].every(Number.isFinite) || w1 <= 0 || w2 <= 0) {
+      return { valid: false, error: "Weights must be positive." };
     }
+    const mean = round((w1 * v1 + w2 * v2) / (w1 + w2), 4);
+    return { valid: true, mean, weights: { w1, v1, w2, v2 } };
+  }
 
-    if (typeof window !== "undefined") {
-      window.runSelfTests = runSelfTests;
+  return { solveAlligation, solveSameBasis, solveWeighted, gcd, lcm, round };
+})();
+window.Model = Model;
+
+/* =====================================================================
+   2. SELF-TESTS
+   ===================================================================== */
+function runSelfTests() {
+  const results = { passed: 0, failed: 0, failures: [] };
+  const assert = (cond, name, detail = "") => {
+    if (cond) results.passed++;
+    else { results.failed++; results.failures.push({ name, detail }); }
+  };
+  try {
+    const t1 = Model.solveAlligation(40, 60, 54);
+    assert(t1.valid && t1.ratioStr === "3 : 7", "40/60/54 → 3:7", JSON.stringify(t1));
+
+    const t2 = Model.solveAlligation(15, 20, 18);
+    assert(t2.valid && t2.ratioStr === "2 : 3", "15/20/18 → 2:3", JSON.stringify(t2));
+
+    const t3 = Model.solveAlligation(30, 50, 40);
+    assert(t3.valid && t3.ratioStr === "1 : 1", "30/50/40 → 1:1", JSON.stringify(t3));
+
+    const t4 = Model.solveAlligation(50, 40, 45);
+    assert(t4.valid === false, "c1 ≥ c2 rejected");
+
+    const t5 = Model.solveAlligation(40, 60, 70);
+    assert(t5.valid === false, "mean > c2 rejected");
+
+    const t6 = Model.solveWeighted(30, 70, 20, 80);
+    assert(t6.valid && t6.mean === 74, "30@70 + 20@80 → 74", JSON.stringify(t6));
+
+    const t7 = Model.solveSameBasis(19.80, 10);
+    assert(t7.valid && t7.cp === 18, "SP 19.80 @ 10% → CP 18", JSON.stringify(t7));
+
+    // Torque balance
+    const t8 = Model.solveAlligation(15, 20, 18);
+    if (t8.valid) {
+      const q1 = Number(t8.ratioStr.split(':')[0].trim());
+      const q2 = Number(t8.ratioStr.split(':')[1].trim());
+      assert(q1 * t8.intermediates.arm1 === q2 * t8.intermediates.arm2,
+        "Torque balance q1·d1 = q2·d2", JSON.stringify(t8));
     }
+  } catch (err) {
+    results.failed++;
+    results.failures.push({ name: "Uncaught", detail: err.message });
+  }
+  return results;
+}
+window.runSelfTests = runSelfTests;
 
-    /* ==========================================================================
-       3. 12 VERIFIED HIGH-QUALITY PRACTICE QUESTIONS
-       ========================================================================== */
-    const PRACTICE_QUESTIONS = [
-      {
-        id: "avg_q1",
-        difficulty: "Easy",
-        stem: `Rice A costing <strong>₹40 per kg</strong> is mixed with Rice B costing <strong>₹60 per kg</strong> to produce a mixture worth <strong>₹54 per kg</strong>. In what ratio must they be mixed?`,
-        options: ["3 : 7", "7 : 3", "2 : 5", "4 : 7"],
-        correctIndex: 0,
-        solution: `<strong>Alligation Cross-Rule:</strong><br>
-                   Deviation on cheaper: $54 - 40 = 14$.<br>
-                   Deviation on dearer: $60 - 54 = 6$.<br>
-                   $$\\text{Ratio (Cheaper : Dearer)} = (60 - 54) : (54 - 40) = 6 : 14 = \\mathbf{3 : 7}$$<br>
-                   <em>Verification:</em> $\\frac{3 \\times 40 + 7 \\times 60}{10} = \\frac{120 + 420}{10} = ₹54$.`,
-        trap: `<strong>Trap Avoidance:</strong> Reversing the ratio to 7 : 3. Because ₹54 is closer to ₹60, the heavier proportion must be the ₹60 variety (7 parts).`
-      },
-      {
-        id: "avg_q2",
-        difficulty: "Easy",
-        stem: `Class A has <strong>30 students</strong> with an average score of <strong>70</strong>. Class B has <strong>20 students</strong> with an average score of <strong>80</strong>. What is the combined average score of both classes?`,
-        options: ["75", "74", "76", "73.5"],
-        correctIndex: 1,
-        solution: `<strong>Weighted Average Formula:</strong><br>
-                   $$A_m = \\frac{n_1 A_1 + n_2 A_2}{n_1 + n_2} = \\frac{30 \\times 70 + 20 \\times 80}{30 + 20}$$
-                   $$A_m = \\frac{2100 + 1600}{50} = \\frac{3700}{50} = \\mathbf{74}$$`,
-        trap: `<strong>Trap Avoidance:</strong> Simple average $(70 + 80)/2 = 75$ assumes equal student counts. Since Class A has more students (30 vs 20), the mean is pulled closer to 70.`
-      },
-      {
-        id: "avg_q3",
-        difficulty: "Medium",
-        stem: `In a group of <strong>10 people</strong>, a person weighing <strong>60 kg</strong> is replaced by a newcomer. As a result, the average weight of the group increases by <strong>1.5 kg</strong>. What is the weight of the newcomer?`,
-        options: ["75 kg", "70 kg", "72.5 kg", "80 kg"],
-        correctIndex: 0,
-        solution: `<strong>Replacement Shortcut:</strong><br>
-                   $$W_{\\text{new}} = W_{\\text{old}} + (N \\times \\Delta) = 60 + (10 \\times 1.5) = 60 + 15 = \\mathbf{75\\text{ kg}}$$`,
-        trap: `<strong>Trap Avoidance:</strong> Adding 1.5 only once ($60 + 1.5 = 61.5$). The newcomer must supply +1.5 kg to all 10 members of the group.`
-      },
-      {
-        id: "avg_q4",
-        difficulty: "Medium",
-        stem: `The average age of <strong>24 students</strong> in a class is <strong>14 years</strong>. When the teacher's age is included, the average age of the whole group increases by <strong>1 year</strong>. What is the teacher's age?`,
-        options: ["39 years", "38 years", "40 years", "35 years"],
-        correctIndex: 0,
-        solution: `<strong>Group Inclusion Method:</strong><br>
-                   Total people after inclusion $= 24 + 1 = 25$.<br>
-                   New average age $= 14 + 1 = 15$ years.<br>
-                   $$\\text{Teacher's Age} = \\text{New Avg} + N_{\\text{old}} \\times \\Delta = 15 + (24 \\times 1) = \\mathbf{39\\text{ years}}$$
-                   <em>Alternative:</em> $25 \\times 15 - 24 \\times 14 = 375 - 336 = 39$.`,
-        trap: `<strong>Trap Avoidance:</strong> Using 24 instead of 25 in total sum, or forgetting to raise the teacher's own baseline to the new average.`
-      },
-      {
-        id: "avg_q5",
-        difficulty: "Medium",
-        stem: `A container has <strong>80 liters of pure milk</strong>. <strong>8 liters</strong> of milk is drawn out and replaced with water. This process is repeated <strong>one more time</strong> (total 2 times). How much pure milk remains in the container?`,
-        options: ["64.8 liters", "64 liters", "65.2 liters", "60 liters"],
-        correctIndex: 0,
-        solution: `<strong>Repeated Replacement Formula:</strong><br>
-                   $$Q_{\\text{rem}} = C \\times \\left(1 - \\frac{x}{C}\\right)^n$$
-                   $$Q_{\\text{rem}} = 80 \\times \\left(1 - \\frac{8}{80}\\right)^2 = 80 \\times (0.9)^2 = 80 \\times 0.81 = \\mathbf{64.8\\text{ liters}}$$`,
-        trap: `<strong>Linear Subtraction Trap:</strong> Simply subtracting $8 + 8 = 16$ gives 64 liters. In the second draw, some of the 8 liters drawn is water, so LESS than 8 liters of milk is lost!`
-      },
-      {
-        id: "avg_q6",
-        difficulty: "Hard",
-        stem: `A merchant mixes two varieties of pulses costing <strong>₹15/kg</strong> and <strong>₹20/kg</strong> and sells the resulting mixture at <strong>₹19.80/kg</strong>, making a <strong>10% profit</strong>. In what ratio are the two varieties mixed?`,
-        options: ["2 : 3", "3 : 2", "1 : 2", "4 : 5"],
-        correctIndex: 0,
-        solution: `1. Convert SP to CP of mixture:<br>
-                   $$CP = \\frac{SP}{1 + \\text{Profit}} = \\frac{19.80}{1.10} = ₹18\\text{/kg}$$
-                   2. Apply alligation with mean CP $= 18$:<br>
-                   $$\\text{Ratio} = (20 - 18) : (18 - 15) = \\mathbf{2 : 3}$$`,
-        trap: `<strong>The Selling Price Trap:</strong> Alligating with 19.80 directly yields $(20 - 19.80) : (19.80 - 15) = 0.20 : 4.80 = 1 : 24$. Alligation MUST use the same cost basis (Cost Price)!`
-      },
-      {
-        id: "avg_q7",
-        difficulty: "Medium",
-        stem: `The average marks of <strong>50 students</strong> in an exam was calculated as <strong>40</strong>. It was later discovered that a score of <strong>83 was misread as 33</strong>. What is the corrected average?`,
-        options: ["41", "40.5", "42", "39"],
-        correctIndex: 0,
-        solution: `$$\\text{Net Error} = 83 - 33 = +50\\text{ marks}$$
-                   $$\\text{Correction per student} = \\frac{+50}{50} = +1\\text{ mark}$$
-                   $$\\text{Corrected Average} = 40 + 1 = \\mathbf{41}$$`,
-        trap: `<strong>Trap Avoidance:</strong> Subtracting 50 instead of adding. The actual score (83) was higher than the misread score (33), so the average must increase.`
-      },
-      {
-        id: "avg_q8",
-        difficulty: "Easy",
-        stem: `The average of <strong>5 consecutive even numbers</strong> is <strong>28</strong>. What is the <strong>largest</strong> of these numbers?`,
-        options: ["32", "30", "34", "36"],
-        correctIndex: 0,
-        solution: `For an arithmetic progression with an odd number of terms (5 terms), the average is exactly the <strong>middle term</strong>.<br>
-                   Middle term (3rd term) $= 28$.<br>
-                   The 5 consecutive even numbers are: $24, 26, 28, 30, 32$.<br>
-                   Largest number $= \\mathbf{32}$.`,
-        trap: `<strong>Trap Avoidance:</strong> Setting up lengthy equations ($x + x+2 + \\dots$). For consecutive numbers, symmetry directly places the mean at the exact middle term.`
-      },
-      {
-        id: "avg_q9",
-        difficulty: "Hard",
-        stem: `A cricket bowler's average was <strong>12.4 runs per wicket</strong>. In his next match, he took <strong>5 wickets for 26 runs</strong>, which reduced (improved) his overall average by <strong>0.4</strong>. How many wickets had he taken before this match?`,
-        options: ["85", "90", "80", "75"],
-        correctIndex: 0,
-        solution: `1. Match average $= 26 / 5 = 5.2$ runs/wicket.<br>
-                   2. New overall average $= 12.4 - 0.4 = 12.0$ runs/wicket.<br>
-                   3. Alligation on bowling averages (weights are wickets):<br>
-                   $$\\text{Old Average: } 12.4 \\quad \\text{Match Average: } 5.2$$
-                   $$\\text{New Combined Average: } 12.0$$
-                   $$\\text{Ratio of Wickets} = (12.0 - 5.2) : (12.4 - 12.0) = 6.8 : 0.4 = 17 : 1$$
-                   4. Since Match Wickets $= 5$ (1 part), Previous Wickets $= 17 \\times 5 = \\mathbf{85\\text{ wickets}}$.`,
-        trap: `<strong>Bowling Improvement Trap:</strong> In cricket, improving a bowling average means REDUCING it ($12.4 - 0.4 = 12.0$), not increasing it to 12.8!`
-      },
-      {
-        id: "avg_q10",
-        difficulty: "Hard",
-        stem: `A person travels a total distance of <strong>90 km in 9 hours</strong> partly on foot at <strong>8 km/h</strong> and partly on bicycle at <strong>17 km/h</strong>. What distance did he travel on foot?`,
-        options: ["56 km", "34 km", "45 km", "60 km"],
-        correctIndex: 0,
-        solution: `1. Overall average speed $= 90 / 9 = 10\\text{ km/h}$.<br>
-                   2. Alligation on speeds yields the <strong>ratio of times taken</strong>:<br>
-                   $$\\text{Time Ratio (Foot : Bike)} = (17 - 10) : (10 - 8) = 7 : 2$$
-                   3. Total time $= 9$ hours $\\implies 7$ hours on foot, $2$ hours on bicycle.<br>
-                   4. $\\text{Distance on foot} = 7\\text{ hours} \\times 8\\text{ km/h} = \\mathbf{56\\text{ km}}$.`,
-        trap: `<strong>Quantity Base Trap:</strong> Speed = Distance/Time. Because Time is the denominator, alligation yields the ratio of TIMES (7h : 2h), NOT distances! Distance requires multiplying time by speed.`
-      },
-      {
-        id: "avg_q11",
-        difficulty: "Medium",
-        stem: `In what ratio must water be mixed with milk costing <strong>₹48 per liter</strong> so that selling the mixture at <strong>₹48 per liter</strong> yields a <strong>profit of 20%</strong>? (Assume water is free).`,
-        options: ["1 : 5", "1 : 6", "1 : 4", "2 : 5"],
-        correctIndex: 0,
-        solution: `When a mixture with free water is sold at the cost price of pure milk, the entire profit percentage comes exclusively from the water added.<br>
-                   $$\\frac{\\text{Quantity of Water}}{\\text{Quantity of Milk}} = \\frac{\\text{Profit}\\%}{100} = \\frac{20}{100} = \\mathbf{1 : 5}$$`,
-        trap: `<strong>Trap Avoidance:</strong> $1 : 6$ is the ratio of water to total mixture. The question asks for the ratio of water to milk ($1 : 5$).`
-      },
-      {
-        id: "avg_q12",
-        difficulty: "Hard",
-        stem: `A vessel contains milk and water in the ratio <strong>7 : 5</strong>. When <strong>9 liters</strong> of the mixture is drawn off and replaced with water, the ratio becomes <strong>7 : 9</strong>. How many liters of milk was in the vessel initially?`,
-        options: ["21 liters", "20 liters", "24 liters", "18 liters"],
-        correctIndex: 0,
-        solution: `1. Drawing 9 liters does not change the ratio of the remaining mixture, which remains $7 : 5$.<br>
-                   2. After replacing with 9 liters of water, the ratio becomes $7 : 9$.<br>
-                   3. Notice the milk ratio unit is unchanged ($7$). Water units increased from $5$ to $9$ ($+4$ units).<br>
-                   $$4\\text{ units} = 9\\text{ liters} \\implies 1\\text{ unit} = 2.25\\text{ liters}$$
-                   4. Remaining mixture volume $= (7 + 5) \\times 2.25 = 12 \\times 2.25 = 27\\text{ liters}$.<br>
-                   5. Initial total volume $= 27 + 9 = 36\\text{ liters}$.<br>
-                   $$\\text{Initial Milk} = 36 \\times \\frac{7}{12} = \\mathbf{21\\text{ liters}}$$`,
-        trap: `<strong>Trap Avoidance:</strong> $27 \\times 7/12 = 15.75$ is the milk in the remaining mixture, not the initial vessel. You must add back the 9 liters drawn.`
-      }
-    ];
+/* =====================================================================
+   3. PRACTICE BANK
+   ===================================================================== */
+const PRACTICE_QUESTIONS = [
+  { id: "avg1", difficulty: "Easy",
+    stem: "Rice A ₹40/kg mixed with rice B ₹60/kg to give a mixture worth ₹54/kg. What ratio?",
+    options: ["3 : 7", "7 : 3", "2 : 5", "4 : 7"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "7:3 reverses the ratio. Since 54 is closer to 60, more B is needed. Correct: (60−54):(54−40) = 6:14 = 3:7.",
+    solution: "Ratio = (A₂ − Aₘ) : (Aₘ − A₁) = (60−54):(54−40) = 6:14 = 3:7." },
+  { id: "avg2", difficulty: "Easy",
+    stem: "Class A: 30 students avg 70. Class B: 20 students avg 80. Combined average?",
+    options: ["75", "74", "76", "73.5"], correctIndex: 1,
+    trapOptionIndex: 0, trapExplanation: "75 is the naive (70+80)/2. Must be weighted: larger class (30) pulls mean closer to 70.",
+    solution: "(30·70 + 20·80) / 50 = 3700/50 = 74." },
+  { id: "avg3", difficulty: "Medium",
+    stem: "10 people group. Replacing a 60 kg person raises average by 1.5 kg. New person's weight?",
+    options: ["75 kg", "70 kg", "72.5 kg", "80 kg"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "70 ignores that +1.5 must be supplied to all 10 people. W = 60 + 10×1.5 = 75.",
+    solution: "W_new = W_old + N·Δ = 60 + 15 = 75 kg." },
+  { id: "avg4", difficulty: "Medium",
+    stem: "24 students avg age 14. Adding teacher raises overall avg by 1. Teacher's age?",
+    options: ["39 years", "38 years", "40 years", "35 years"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "38 forgets the teacher is also in the new average. New avg 15 with 25 people total.",
+    solution: "25·15 − 24·14 = 375 − 336 = 39." },
+  { id: "avg5", difficulty: "Medium",
+    stem: "80 L pure milk. 8 L drawn, replaced with water, twice. Pure milk remaining?",
+    options: ["64.8 L", "64 L", "65.2 L", "60 L"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "64 is naive linear (80−8−8). Second draw contains water too, so less milk is lost.",
+    solution: "80 × (1−8/80)² = 80 × 0.81 = 64.8 L." },
+  { id: "avg6", difficulty: "Hard",
+    stem: "Mix ₹15/kg and ₹20/kg pulses. Sell mixture at ₹19.80/kg with 10% profit. Ratio?",
+    options: ["2 : 3", "3 : 2", "1 : 2", "1 : 24"], correctIndex: 0,
+    trapOptionIndex: 3, trapExplanation: "1:24 uses SP 19.80 as the mean. Alligation must use COST basis. CP = 19.80/1.10 = 18.",
+    solution: "CP = 18. Ratio = (20−18):(18−15) = 2:3." },
+  { id: "avg7", difficulty: "Medium",
+    stem: "Avg of 50 students was 40. Score of 83 misread as 33. Corrected average?",
+    options: ["41", "40.5", "42", "39"], correctIndex: 0,
+    trapOptionIndex: 3, trapExplanation: "39 subtracts the error. But 83 > 33, so the average must INCREASE.",
+    solution: "Error = +50. Correction per student = +1. New avg = 41." },
+  { id: "avg8", difficulty: "Easy",
+    stem: "Average of 5 consecutive even numbers is 28. Largest number?",
+    options: ["32", "30", "34", "36"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "30 forgets that 28 is the MIDDLE of 5 terms. Largest = 28 + 4 = 32.",
+    solution: "Middle term = 28. Terms: 24,26,28,30,32. Largest = 32." },
+  { id: "avg9", difficulty: "Hard",
+    stem: "Bowler avg 12.4. Next match: 5 wickets for 26 runs. New avg 12.0. Wickets before match?",
+    options: ["85", "90", "80", "75"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "90 reverses the alligation. Improvement means SMALLER avg, so 12.4 − 0.4 = 12.0.",
+    solution: "Match avg = 5.2. Ratio (old:new) = (12.0−5.2):(12.4−12.0) = 6.8:0.4 = 17:1. 17 × 5 = 85." },
+  { id: "avg10", difficulty: "Hard",
+    stem: "Travel 90 km in 9 h. Some at 8 km/h walking, rest at 17 km/h cycling. Distance walked?",
+    options: ["56 km", "34 km", "45 km", "60 km"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "34 assumes alligation gives distance ratio. Actually gives TIME ratio: 7:2 hours.",
+    solution: "Avg speed = 10. Time ratio (walk:bike) = (17−10):(10−8) = 7:2. 7h × 8 = 56 km." },
+  { id: "avg11", difficulty: "Medium",
+    stem: "Water mixed with ₹48/L milk so mixture sold at ₹48/L yields 20% profit. Water:milk ratio?",
+    options: ["1 : 5", "1 : 6", "1 : 4", "2 : 5"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "1:6 is water:TOTAL. Question asks water:milk. Water/(water+milk)=20/100 → water/milk = 20/80 = 1:4? No — recheck: profit 20%, milk 100 units, water 20 units → water:milk = 1:5.",
+    solution: "Profit fraction = water fraction of total. Water:milk = 20:100 = 1:5." },
+  { id: "avg12", difficulty: "Hard",
+    stem: "Milk:water = 7:5. Draw 9 L, replace with water → ratio 7:9. Initial milk?",
+    options: ["21 L", "20 L", "24 L", "18 L"], correctIndex: 0,
+    trapOptionIndex: 1, trapExplanation: "20 forgets to scale by the +4-unit jump in water (5→9), which equals 9 L.",
+    solution: "Water units 5→9 (+4) = 9 L → 1 unit = 2.25 L. Remaining mix = 12×2.25 = 27 L. Initial = 27+9 = 36. Milk = 36·7/12 = 21 L." }
+];
+window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
 
-    if (typeof window !== "undefined") {
-      window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
-    }
+/* =====================================================================
+   4. STATE
+   ===================================================================== */
+const state = {
+  c1: 40, c2: 60, mean: 54,
+  predictLocked: false,
+  predictScenario: null,
+  userPrediction: null,
+  basisMode: "cp",
+  labSp: 19.80, labProfit: 10,
+  waN1: 30, waN2: 20, waA1: 70, waA2: 80,
+  practiceMode: "hints",
+  currentQIndex: 0,
+  shuffled: [],
+  answered: false,
+  timer: { interval: null, remaining: 90 },
+  testsPassed: false,
+  stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
+};
+const TOPIC_ID = "averages-alligation";
+const $ = (id) => document.getElementById(id);
 
-    /* ==========================================================================
-       4. INTERACTIVE VIEW CONTROLLER & SVG RENDERER
-       ========================================================================== */
-    function handleModelParamsChange() {
-      const c1 = Math.max(1, Number(document.getElementById('input-c1').value) || 40);
-      const c2 = Math.max(c1 + 1, Number(document.getElementById('input-c2').value) || 60);
-      const mean = Math.max(c1 + 0.1, Math.min(c2 - 0.1, Number(document.getElementById('input-mean').value) || 54));
+/* =====================================================================
+   5. RENDERERS
+   ===================================================================== */
 
-      document.getElementById('badge-c1').textContent = `₹${c1}/kg`;
-      document.getElementById('badge-c2').textContent = `₹${c2}/kg`;
-      document.getElementById('badge-mean').textContent = `₹${mean}/kg`;
+// Lever with tilted beam proportional to ratio, torque equation drawn
+function renderLever() {
+  const svg = $("lever-svg");
+  const r = Model.solveAlligation(state.c1, state.c2, state.mean);
+  if (!r.valid) {
+    svg.innerHTML = `<text x="380" y="160" text-anchor="middle" font-size="16" fill="#ef4444">⚠️ ${r.error}</text>`;
+    return;
+  }
+  const { c1, c2, mean, arm1, arm2, q1, q2 } = r.intermediates;
 
-      document.getElementById('val-a1').textContent = c1;
-      document.getElementById('val-a2').textContent = c2;
-      document.getElementById('val-mean').textContent = mean;
+  const W = 760, H = 320;
+  const beamY = 150;
+  const leftX = 80, rightX = 680;
+  const beamW = rightX - leftX;
+  const totalRatio = q1 + q2;
+  const frac1 = q1 / totalRatio;   // position from left (closer to 1 = mean near c1)
+  const fulcrumX = leftX + frac1 * beamW;
 
-      const res = Model.solveAlligation(c1, c2, mean);
+  // Tilt: heavier side drops. Mass1 heavier → left drops.
+  // ratio q1:q2 — if q1 > q2, left side heavier, beam tilts left down.
+  const tiltRad = ((q2 - q1) / totalRatio) * 0.12; // max ~0.12 rad
+  const halfW = beamW / 2;
 
-      if (res.valid) {
-        document.getElementById('val-q1').textContent = res.d2;
-        document.getElementById('val-q2').textContent = res.d1;
+  // Beam endpoints rotated around fulcrum
+  // Position: fulcrum at fulcrumX. Left end at fulcrumX - halfW (approx), right at + halfW.
+  // For proper pivoting we rotate the whole beam about the fulcrum.
+  const leftXp = fulcrumX - halfW * Math.cos(tiltRad);
+  const leftYp = beamY + halfW * Math.sin(tiltRad);
+  const rightXp = fulcrumX + halfW * Math.cos(tiltRad);
+  const rightYp = beamY - halfW * Math.sin(tiltRad);
 
-        document.getElementById('readout-ratio').textContent = res.ratioStr;
-        const totalParts = res.ratio[0] + res.ratio[1];
-        const pct1 = LabCommon.round((res.ratio[0] / totalParts) * 100, 1);
-        const pct2 = LabCommon.round((res.ratio[1] / totalParts) * 100, 1);
-        document.getElementById('readout-frac-c1').textContent = `${pct1}% (${res.ratio[0]}/${totalParts})`;
-        document.getElementById('readout-frac-c2').textContent = `${pct2}% (${res.ratio[1]}/${totalParts})`;
-        document.getElementById('readout-fulcrum').textContent = `d₁ = ${res.d1}, d₂ = ${res.d2}`;
+  // Mass ball radii proportional to ratio but capped
+  const maxRatio = Math.max(q1, q2);
+  const r1 = 14 + (q1 / maxRatio) * 14;
+  const r2 = 14 + (q2 / maxRatio) * 14;
 
-        renderLever(c1, c2, mean, res);
-      }
-    }
+  // Ghost beam (user prediction if wrong)
+  let ghost = "";
+  if (state.predictLocked && state.userPrediction && state.userPrediction !== r.ratioStr) {
+    const [gq1, gq2] = state.userPrediction.split(':').map(s => Number(s.trim()));
+    const gFrac = gq1 / (gq1 + gq2);
+    const gX = leftX + gFrac * beamW;
+    ghost = `
+      <line x1="${gX}" y1="${beamY - 40}" x2="${gX}" y2="${beamY + 60}"
+        stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="${gX + 6}" y="${beamY - 30}" font-size="11" font-weight="700" fill="#f59e0b">
+        your answer: ${state.userPrediction} (pivot here → unbalanced)
+      </text>
+    `;
+  }
 
-    function renderLever(c1, c2, mean, res) {
-      const svg = document.getElementById('lever-svg');
-      const span = c2 - c1;
-      const fulcrumFraction = (mean - c1) / span; // 0 to 1
+  svg.innerHTML = `
+    <!-- Ground -->
+    <line x1="40" y1="260" x2="720" y2="260" stroke="#475569" stroke-width="2"/>
 
-      const beamLeftX = 80;
-      const beamRightX = 640;
-      const beamY = 110;
-      const fulcrumX = beamLeftX + fulcrumFraction * (beamRightX - beamLeftX);
+    <!-- Beam -->
+    <line x1="${leftXp}" y1="${leftYp}" x2="${rightXp}" y2="${rightYp}" stroke="#e8edf7" stroke-width="6" stroke-linecap="round"/>
 
-      // Mass indicators proportional to quantities
-      const r1 = Math.min(35, Math.max(16, 12 + res.ratio[0] * 2.5));
-      const r2 = Math.min(35, Math.max(16, 12 + res.ratio[1] * 2.5));
+    <!-- Fulcrum triangle -->
+    <polygon points="${fulcrumX},${beamY} ${fulcrumX - 22},260 ${fulcrumX + 22},260"
+      fill="#38bdf8" opacity="0.8" stroke="#0ea5e9" stroke-width="2"/>
+    <text x="${fulcrumX}" y="280" text-anchor="middle" font-size="12" font-weight="800" fill="#38bdf8">
+      Mean ₹${mean}
+    </text>
 
-      const svgContent = `
-        <!-- Base Ground -->
-        <line x1="40" y1="180" x2="680" y2="180" stroke="var(--color-border)" stroke-width="3" stroke-linecap="round" />
+    <!-- Mass A₁ (cheaper, left) -->
+    <circle cx="${leftXp}" cy="${leftYp - r1}" r="${r1}" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+    <text x="${leftXp}" y="${leftYp - r1 + 5}" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">${q1}</text>
+    <text x="${leftXp}" y="${leftYp + 30}" text-anchor="middle" font-size="11" font-weight="700" fill="#3b82f6">
+      A₁ ₹${c1} · arm d₁=${arm1}
+    </text>
 
-        <!-- Fulcrum Triangle -->
-        <polygon points="${fulcrumX},${beamY} ${fulcrumX - 24},180 ${fulcrumX + 24},180" fill="var(--color-primary)" opacity="0.85" />
-        <circle cx="${fulcrumX}" cy="${beamY}" r="5" fill="#ffffff" />
-        <text x="${fulcrumX}" y="200" font-size="12" font-weight="800" fill="var(--color-primary)" text-anchor="middle">
-          Mean Fulcrum: ₹${mean}
-        </text>
+    <!-- Mass A₂ (dearer, right) -->
+    <circle cx="${rightXp}" cy="${rightYp - r2}" r="${r2}" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+    <text x="${rightXp}" y="${rightYp - r2 + 5}" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">${q2}</text>
+    <text x="${rightXp}" y="${rightYp + 30}" text-anchor="middle" font-size="11" font-weight="700" fill="#22c55e">
+      A₂ ₹${c2} · arm d₂=${arm2}
+    </text>
 
-        <!-- Balance Beam -->
-        <line x1="${beamLeftX}" y1="${beamY}" x2="${beamRightX}" y2="${beamY}" stroke="#1e293b" stroke-width="6" stroke-linecap="round" />
+    <!-- Torque equation -->
+    <text x="${W/2}" y="30" text-anchor="middle" font-size="14" font-weight="800" fill="#e8edf7">
+      ${q1} × ${arm1} = ${q2} × ${arm2} = ${q1 * arm1}
+    </text>
+    <text x="${W/2}" y="52" text-anchor="middle" font-size="11" fill="#94a3b8">
+      Mass₁ × arm₁ = Mass₂ × arm₂ (Archimedes' lever law)
+    </text>
 
-        <!-- Mass 1 (Cheaper) on Left -->
-        <circle cx="${beamLeftX}" cy="${beamY - r1}" r="${r1}" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2.5" />
-        <text x="${beamLeftX}" y="${beamY - r1 + 5}" font-size="12" font-weight="800" fill="#ffffff" text-anchor="middle">
-          ${res.ratio[0]}p
-        </text>
-        <text x="${beamLeftX}" y="${beamY + 25}" font-size="11" font-weight="700" fill="#3b82f6" text-anchor="middle">
-          A₁ = ₹${c1}
-        </text>
+    ${ghost}
+  `;
 
-        <!-- Mass 2 (Dearer) on Right -->
-        <circle cx="${beamRightX}" cy="${beamY - r2}" r="${r2}" fill="#10b981" stroke="#047857" stroke-width="2.5" />
-        <text x="${beamRightX}" y="${beamY - r2 + 5}" font-size="12" font-weight="800" fill="#ffffff" text-anchor="middle">
-          ${res.ratio[1]}p
-        </text>
-        <text x="${beamRightX}" y="${beamY + 25}" font-size="11" font-weight="700" fill="#047857" text-anchor="middle">
-          A₂ = ₹${c2}
-        </text>
+  // Update readouts
+  const totalParts = q1 + q2;
+  $("readout-ratio").textContent = r.ratioStr;
+  $("readout-frac-a1").textContent = Math.round((q1 / totalParts) * 100) + "%";
+  $("readout-frac-a2").textContent = Math.round((q2 / totalParts) * 100) + "%";
+  $("readout-arms").textContent = `${arm1} / ${arm2}`;
 
-        <!-- Torque Arm Indicators -->
-        <line x1="${beamLeftX}" y1="50" x2="${fulcrumX}" y2="50" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3 3" />
-        <text x="${(beamLeftX + fulcrumX) / 2}" y="42" font-size="11" font-weight="700" fill="#3b82f6" text-anchor="middle">
-          Arm d₁ = ${res.d1}
-        </text>
+  $("svg-live-desc").textContent =
+    `Ratio ${r.ratioStr}. Cheaper ₹${c1} at ${q1} parts, dearer ₹${c2} at ${q2} parts. Mean ₹${mean} sits at fulcrum.`;
+}
 
-        <line x1="${fulcrumX}" y1="50" x2="${beamRightX}" y2="50" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3 3" />
-        <text x="${(fulcrumX + beamRightX) / 2}" y="42" font-size="11" font-weight="700" fill="#047857" text-anchor="middle">
-          Arm d₂ = ${res.d2}
-        </text>
-      `;
+// Same-basis lab: two levers side by side
+function renderBasisLab() {
+  const svg = $("basis-svg");
+  const r = Model.solveSameBasis(state.labSp, state.labProfit);
+  if (!r.valid) {
+    svg.innerHTML = `<text x="380" y="130" text-anchor="middle" font-size="14" fill="#ef4444">⚠️ ${r.error}</text>`;
+    $("basis-cp").textContent = "—";
+    $("basis-correct").textContent = "—";
+    $("basis-trap").textContent = "—";
+    return;
+  }
 
-      svg.innerHTML = svgContent;
-      document.getElementById('lever-caption').textContent = 
-        `Archimedes Lever Balance: Mass₁ × Arm₁ = ${res.ratio[0]} × ${res.d1} = ${LabCommon.round(res.ratio[0] * res.d1, 2)} | Mass₂ × Arm₂ = ${res.ratio[1]} × ${res.d2} = ${LabCommon.round(res.ratio[1] * res.d2, 2)}. Equilibrium achieved!`;
-    }
+  const { cp, correct, trapRatio } = r;
+  $("basis-cp").textContent = "₹" + cp;
+  $("basis-correct").textContent = correct.ratioStr;
+  $("basis-trap").textContent = trapRatio || "—";
 
-    function handleRevealPredict() {
-      document.getElementById('predict-solution').classList.remove('hidden');
-      LabCommon.announce("Revealed resolution for commercial pulse mixture.");
-    }
+  // Draw two small levers stacked vertically
+  function miniLever(y0, label, ratio, color) {
+    if (!ratio) return `<text x="40" y="${y0 + 20}" font-size="12" fill="#94a3b8">(no valid trap ratio)</text>`;
+    const parts = ratio.split(':').map(s => Number(s.trim()));
+    const total = parts[0] + parts[1];
+    const frac = parts[0] / total;
+    const leftX = 260, rightX = 540;
+    const fulcrumX = leftX + frac * (rightX - leftX);
+    const beamY = y0 + 20;
+    return `
+      <text x="40" y="${y0 + 8}" font-size="12" font-weight="700" fill="${color}">${label}</text>
+      <line x1="${leftX}" y1="${beamY}" x2="${rightX}" y2="${beamY}" stroke="${color}" stroke-width="4"/>
+      <polygon points="${fulcrumX},${beamY} ${fulcrumX - 14},${beamY + 30} ${fulcrumX + 14},${beamY + 30}"
+        fill="${color}" opacity="0.7"/>
+      <text x="${leftX}" y="${beamY + 46}" text-anchor="middle" font-size="11" fill="${color}">₹15</text>
+      <text x="${rightX}" y="${beamY + 46}" text-anchor="middle" font-size="11" fill="${color}">₹20</text>
+      <text x="${fulcrumX}" y="${beamY + 46}" text-anchor="middle" font-size="11" font-weight="800" fill="${color}">
+        ${label.includes("SP") ? "₹" + state.labSp : "₹" + cp} (${ratio})
+      </text>
+    `;
+  }
 
-    /* ==========================================================================
-       5. PRACTICE LAB INTERACTION & PROGRESS LOGIC
-       ========================================================================== */
-    let currentQIndex = 0;
-    let practiceMode = 'hints';
-    let timerInstance = null;
-    let selectedOptionIndex = null;
+  svg.innerHTML = `
+    ${miniLever(20, "Using CP (correct)", correct.ratioStr, "#22c55e")}
+    ${miniLever(140, "Using SP (trap)", trapRatio, "#ef4444")}
+  `;
 
-    const STORAGE_KEY = 'lab_averages_alligation_stats';
+  $("basis-status").textContent = state.basisMode === "cp"
+    ? "CP → " + correct.ratioStr
+    : "SP → " + (trapRatio || "invalid");
+  $("basis-status").style.color = state.basisMode === "cp" ? "var(--success)" : "var(--danger)";
+}
 
-    function getStoredStats() {
-      return LabCommon.safeStorage.getItem(STORAGE_KEY, {
-        attempts: 0,
-        correct: 0,
-        independentCorrect: 0,
-        history: {}
-      });
-    }
+// Weighted average: two bars with a balance point marker
+function renderWeighted() {
+  const svg = $("wa-svg");
+  const r = Model.solveWeighted(state.waN1, state.waA1, state.waN2, state.waA2);
+  if (!r.valid) {
+    svg.innerHTML = `<text x="380" y="100" text-anchor="middle" font-size="14" fill="#ef4444">⚠️ ${r.error}</text>`;
+    return;
+  }
+  const { mean, weights } = r;
+  const { w1, v1, w2, v2 } = weights;
+  const naive = (v1 + v2) / 2;
 
-    function saveStats(stats) {
-      LabCommon.safeStorage.setItem(STORAGE_KEY, stats);
-      updateStatsDisplay();
-    }
+  $("wa-avg-a").textContent = v1;
+  $("wa-avg-b").textContent = v2;
+  $("wa-mean").textContent = mean;
+  $("wa-naive").textContent = naive;
 
-    function updateStatsDisplay() {
-      const stats = getStoredStats();
-      document.getElementById('stat-attempts').textContent = stats.attempts;
-      document.getElementById('stat-correct').textContent = stats.correct;
-      document.getElementById('stat-independent').textContent = stats.independentCorrect;
-      const acc = stats.attempts > 0 ? Math.round((stats.correct / stats.attempts) * 100) : 0;
-      document.getElementById('stat-accuracy').textContent = `${acc}%`;
-    }
+  const W = 760;
+  const padL = 60, padR = 60;
+  const plotW = W - padL - padR;
+  const axisY = 100;
+  const totalW = w1 + w2;
+  const w1Px = (w1 / totalW) * plotW;
+  const w2Px = (w2 / totalW) * plotW;
 
-    function handleResetStats() {
-      if (confirm("Reset all local practice statistics for this module?")) {
-        LabCommon.safeStorage.removeItem(STORAGE_KEY);
-        updateStatsDisplay();
-        renderQuestion(currentQIndex);
-      }
-    }
+  const totalV = w1 * v1 + w2 * v2;
+  const meanPx = padL + (v1 === v2 ? 0.5 : ((mean - Math.min(v1, v2)) / (Math.max(v1, v2) - Math.min(v1, v2))) * plotW);
 
-    function setPracticeMode(mode) {
-      practiceMode = mode;
-      document.getElementById('btn-mode-hints').classList.toggle('active', mode === 'hints');
-      document.getElementById('btn-mode-independent').classList.toggle('active', mode === 'independent');
-      document.getElementById('btn-mode-timed').classList.toggle('active', mode === 'timed');
+  svg.innerHTML = `
+    <!-- axis -->
+    <line x1="${padL}" y1="${axisY + 60}" x2="${padL + plotW}" y2="${axisY + 60}" stroke="#475569" stroke-width="2"/>
+    <text x="${padL}" y="${axisY + 80}" font-size="11" fill="#64748b">min</text>
+    <text x="${padL + plotW - 20}" y="${axisY + 80}" font-size="11" fill="#64748b">max</text>
 
-      const timerContainer = document.getElementById('timer-container');
-      if (mode === 'timed') {
-        timerContainer.classList.remove('hidden');
-        if (!timerInstance) {
-          timerInstance = new LabCommon.PracticeTimer((seconds, formatted) => {
-            document.getElementById('timer-display').textContent = formatted;
-          });
-        }
-        timerInstance.start();
-      } else {
-        timerContainer.classList.add('hidden');
-        if (timerInstance) {
-          timerInstance.stop();
-        }
-      }
+    <!-- Bar 1 (A) -->
+    <rect x="${padL}" y="${axisY}" width="${w1Px}" height="40" fill="#3b82f6" opacity="0.6" stroke="#3b82f6" stroke-width="2"/>
+    <text x="${padL + w1Px/2}" y="${axisY + 26}" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">A · n=${w1} avg ${v1}</text>
 
-      renderQuestion(currentQIndex);
-    }
+    <!-- Bar 2 (B) -->
+    <rect x="${padL + w1Px}" y="${axisY}" width="${w2Px}" height="40" fill="#a78bfa" opacity="0.6" stroke="#a78bfa" stroke-width="2"/>
+    <text x="${padL + w1Px + w2Px/2}" y="${axisY + 26}" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">B · n=${w2} avg ${v2}</text>
 
-    function renderQuestion(idx) {
-      currentQIndex = idx;
-      const q = PRACTICE_QUESTIONS[idx];
-      selectedOptionIndex = null;
+    <!-- Combined mean marker -->
+    <circle cx="${meanPx}" cy="${axisY + 60}" r="8" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+    <text x="${meanPx}" y="${axisY + 100}" text-anchor="middle" font-size="13" font-weight="800" fill="#22c55e">mean ${mean}</text>
+    <text x="${meanPx}" y="${axisY - 15}" text-anchor="middle" font-size="11" fill="#22c55e">balance point</text>
 
-      document.getElementById('practice-q-num').textContent = `Question ${idx + 1} of ${PRACTICE_QUESTIONS.length}`;
-      document.getElementById('q-counter-text').textContent = `${idx + 1} / ${PRACTICE_QUESTIONS.length}`;
-      document.getElementById('practice-q-difficulty').textContent = q.difficulty;
-      document.getElementById('practice-q-stem').innerHTML = q.stem;
+    <!-- Naive marker -->
+    <line x1="${meanPx + 20}" y1="${axisY + 60}" x2="${padL + plotW * 0.85}" y2="${axisY + 60}"
+      stroke="#ef4444" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="${padL + plotW * 0.85}" y="${axisY + 80}" font-size="11" fill="#ef4444" text-anchor="end">
+      naive (${naive}) — only right if n equal
+    </text>
+  `;
+}
 
-      const fb = document.getElementById('practice-feedback');
-      fb.className = 'callout hidden';
-      fb.innerHTML = '';
+// =====================================================================
+// 6. WIRING
+// =====================================================================
+function setControlsEnabled(enabled) {
+  ["input-c1","input-c2","input-mean","range-c1","range-c2","range-mean"].forEach(id => {
+    if ($(id)) $(id).disabled = !enabled;
+  });
+  document.querySelectorAll("[data-preset]").forEach(b => b.disabled = !enabled);
+}
 
-      document.getElementById('practice-error-categorizer').classList.add('hidden');
-      document.getElementById('practice-solution-box').classList.add('hidden');
-
-      const optContainer = document.getElementById('practice-options-container');
-      optContainer.innerHTML = q.options.map((opt, i) => `
-        <button type="button" class="option-btn" id="opt-btn-${i}" onclick="handleOptionSelect(${i})">
-          <span style="font-weight: 700; margin-right: 0.5rem; color: var(--color-primary);">${String.fromCharCode(65 + i)}.</span>
-          <span>${opt}</span>
-        </button>
-      `).join('');
-
-      const stats = getStoredStats();
-      if (stats.history && stats.history[q.id]) {
-        const hist = stats.history[q.id];
-        revealQuestionOutcome(hist.chosenIndex, false);
-      }
-    }
-
-    function handleOptionSelect(optIdx) {
-      const q = PRACTICE_QUESTIONS[currentQIndex];
-      const stats = getStoredStats();
-
-      if (stats.history && stats.history[q.id]) return;
-
-      const isCorrect = (optIdx === q.correctIndex);
-
-      stats.attempts++;
-      if (isCorrect) {
-        stats.correct++;
-        if (practiceMode === 'independent' || practiceMode === 'timed') {
-          stats.independentCorrect++;
-        }
-      }
-
-      if (!stats.history) stats.history = {};
-      stats.history[q.id] = {
-        chosenIndex: optIdx,
-        correct: isCorrect,
-        timestamp: Date.now()
-      };
-
-      saveStats(stats);
-      revealQuestionOutcome(optIdx, true);
-    }
-
-    function revealQuestionOutcome(optIdx, isNewAnswer) {
-      const q = PRACTICE_QUESTIONS[currentQIndex];
-      const isCorrect = (optIdx === q.correctIndex);
-
-      q.options.forEach((_, i) => {
-        const btn = document.getElementById(`opt-btn-${i}`);
-        if (btn) {
-          btn.disabled = true;
-          if (i === q.correctIndex) {
-            btn.classList.add('correct');
-          } else if (i === optIdx) {
-            btn.classList.add('incorrect');
-          }
-        }
-      });
-
-      const fb = document.getElementById('practice-feedback');
-      fb.classList.remove('hidden');
-      if (isCorrect) {
-        fb.className = 'callout callout-success';
-        fb.innerHTML = `<strong>Correct!</strong> Well calculated. You balanced the deviations cleanly.`;
-      } else {
-        fb.className = 'callout callout-error';
-        fb.innerHTML = `<strong>Incorrect.</strong> You chose (${String.fromCharCode(65 + optIdx)}). The correct answer is (${String.fromCharCode(65 + q.correctIndex)}). Inspect the alligation steps below.`;
-        document.getElementById('practice-error-categorizer').classList.remove('hidden');
-      }
-
-      const solBox = document.getElementById('practice-solution-box');
-      solBox.classList.remove('hidden');
-      document.getElementById('practice-solution-text').innerHTML = q.solution;
-      document.getElementById('practice-trap-analysis').innerHTML = q.trap;
-
-      if (isNewAnswer) {
-        LabCommon.announce(isCorrect ? "Correct answer submitted." : "Incorrect answer. Solution revealed.");
-      }
-    }
-
-    function handleSaveErrorCategory(category) {
-      LabCommon.announce("Reflective error reason recorded.");
-    }
-
-    function navigateQuestion(step) {
-      const nextIdx = currentQIndex + step;
-      if (nextIdx >= 0 && nextIdx < PRACTICE_QUESTIONS.length) {
-        renderQuestion(nextIdx);
-      }
-    }
-
-    /* ==========================================================================
-       6. INITIALIZATION & SELF-TEST GATE ENFORCEMENT
-       ========================================================================== */
-    document.addEventListener("DOMContentLoaded", () => {
-      const testReport = LabCommon.runAndRenderSelfTests(runSelfTests, 'quality-alert', 'quality-alert-details');
-
-      if (testReport.failed > 0) {
-        console.error("Quality gate triggered! Practice disabled.");
-        const optContainer = document.getElementById('practice-options-container');
-        if (optContainer) {
-          optContainer.innerHTML = `<div class="callout callout-error">Practice locked due to logic invariant test failure. Check developer console.</div>`;
-        }
-        return;
-      }
-
-      handleModelParamsChange();
-      updateStatsDisplay();
-      renderQuestion(0);
+// c1/c2/mean
+function wireTriplet() {
+  ["input-c1", "input-c2", "input-mean"].forEach(id => {
+    $(id).addEventListener("input", () => {
+      state.c1 = Math.max(1, parseFloat($("input-c1").value) || 1);
+      state.c2 = Math.max(state.c1 + 1, parseFloat($("input-c2").value) || state.c1 + 1);
+      state.mean = Math.min(state.c2 - 0.1, Math.max(state.c1 + 0.1, parseFloat($("input-mean").value) || state.c1 + 1));
+      $("range-c1").value = Math.min(100, state.c1);
+      $("range-c2").value = Math.min(120, state.c2);
+      $("range-mean").value = Math.min(120, state.mean);
+      $("badge-c1").textContent = "₹" + state.c1;
+      $("badge-c2").textContent = "₹" + state.c2;
+      $("badge-mean").textContent = "₹" + state.mean;
+      renderLever();
+      if (!state.predictLocked) preparePredict();
     });
-  </script>
+  });
+  ["range-c1", "range-c2", "range-mean"].forEach(id => {
+    $(id).addEventListener("input", () => {
+      const target = id.replace("range-", "input-");
+      $(target).value = $(id).value;
+      $(target).dispatchEvent(new Event("input"));
+    });
+  });
+}
+
+document.querySelectorAll("[data-preset]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (state.predictLocked) return;
+    const [a, b, m] = btn.dataset.preset.split(",").map(Number);
+    state.c1 = a; state.c2 = b; state.mean = m;
+    $("input-c1").value = a; $("input-c2").value = b; $("input-mean").value = m;
+    $("range-c1").value = Math.min(100, a);
+    $("range-c2").value = Math.min(120, b);
+    $("range-mean").value = Math.min(120, m);
+    $("badge-c1").textContent = "₹" + a;
+    $("badge-c2").textContent = "₹" + b;
+    $("badge-mean").textContent = "₹" + m;
+    renderLever();
+    preparePredict();
+  });
+});
+
+// Predict
+function preparePredict() {
+  if (state.predictLocked) return;
+  const r = Model.solveAlligation(state.c1, state.c2, state.mean);
+  if (!r.valid) return;
+
+  $("predict-lock-hint").textContent = "Inputs locked until you predict.";
+
+  const correct = r.ratioStr;
+  const reversed = r.intermediates.q2 + " : " + r.intermediates.q1;
+  const eq = "1 : 1";
+
+  const options = [
+    { value: correct, kind: "correct" },
+    { value: reversed, kind: "reversed" },
+    { value: eq, kind: "equal" }
+  ].filter((o, i, arr) => arr.findIndex(x => x.value === o.value) === i);
+
+  state.predictScenario = { options, correct };
+
+  const container = $("predict-options-container");
+  container.innerHTML = "";
+  options.forEach(o => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = o.value;
+    btn.dataset.kind = o.kind;
+    btn.dataset.value = o.value;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.addEventListener("click", () => commitPrediction(o));
+    container.appendChild(btn);
+  });
+  $("predict-feedback").className = "callout hidden";
+  $("worked-solution-panel").classList.add("hidden");
+  state.userPrediction = null;
+}
+
+function commitPrediction(option) {
+  if (state.predictLocked) return;
+  state.predictLocked = true;
+  state.userPrediction = option.value;
+  setControlsEnabled(false);
+  $("predict-lock-hint").textContent = "Locked. Click 🎲 New scenario to try again.";
+
+  document.querySelectorAll("#predict-options-container .option-btn").forEach(b => {
+    const kind = b.dataset.kind;
+    const chosen = b.dataset.value === option.value;
+    b.setAttribute("aria-checked", chosen ? "true" : "false");
+    if (kind === "correct") b.classList.add("correct");
+    else if (kind === "reversed" || kind === "equal") b.classList.add("trap");
+    if (chosen && kind !== "correct") b.classList.add("incorrect");
+    b.disabled = true;
+  });
+
+  const fb = $("predict-feedback");
+  fb.classList.remove("hidden");
+  if (option.kind === "correct") {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong> (${state.c2} − ${state.mean}) : (${state.mean} − ${state.c1}) = ${option.value}.`;
+  } else if (option.kind === "reversed") {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Reversed ratio.</strong> Since the mean is closer to ${state.c2}, the dearer mass has the bigger share. Correct: ${state.predictScenario.correct}.`;
+  } else {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Not equal.</strong> The pivot is only at the midpoint if the mean equals the arithmetic average of the extremes.`;
+  }
+
+  revealSteps();
+  renderLever();
+}
+
+function revealSteps() {
+  const r = Model.solveAlligation(state.c1, state.c2, state.mean);
+  if (!r.valid) return;
+  $("worked-solution-panel").classList.remove("hidden");
+  const { arm1, arm2, q1, q2 } = r.intermediates;
+  const steps = [
+    { title: "Compute the arms", body: `d₁ = mean − c₁ = ${state.mean} − ${state.c1} = ${arm1}. d₂ = c₂ − mean = ${state.c2} − ${state.mean} = ${arm2}.` },
+    { title: "Alligation cross rule", body: `Ratio cheaper:dearer = arm₂ : arm₁ = ${arm2} : ${arm1} = ${q1} : ${q2}.` },
+    { title: "Balance check", body: `${q1} × ${arm1} = ${q2} × ${arm2} = ${q1 * arm1}. Lever is balanced.` }
+  ];
+  $("solution-steps-container").innerHTML = steps.map((s, i) => `
+    <div class="step-item">
+      <div class="step-num">Step ${i + 1}</div>
+      <div class="step-title">${s.title}</div>
+      <div>${s.body}</div>
+    </div>`).join("");
+  $("solution-trap-text").textContent =
+    `The classic trap is reversing the ratio (${q2}:${q1}) — but the mean is closer to the value with the bigger share.`;
+}
+
+$("btn-new-predict").addEventListener("click", () => {
+  state.predictLocked = false;
+  state.userPrediction = null;
+  const presets = [[40,60,54],[15,20,18],[30,50,40],[10,50,20]];
+  const [a, b, m] = presets[Math.floor(Math.random() * presets.length)];
+  state.c1 = a; state.c2 = b; state.mean = m;
+  $("input-c1").value = a; $("input-c2").value = b; $("input-mean").value = m;
+  $("range-c1").value = Math.min(100, a);
+  $("range-c2").value = Math.min(120, b);
+  $("range-mean").value = Math.min(120, m);
+  $("badge-c1").textContent = "₹" + a;
+  $("badge-c2").textContent = "₹" + b;
+  $("badge-mean").textContent = "₹" + m;
+  renderLever();
+  preparePredict();
+});
+
+// Same-basis lab
+$("lab-sp").addEventListener("input", (e) => {
+  state.labSp = parseFloat(e.target.value);
+  $("badge-sp").textContent = "₹" + state.labSp.toFixed(2);
+  renderBasisLab();
+});
+$("lab-profit").addEventListener("input", (e) => {
+  state.labProfit = parseFloat(e.target.value);
+  $("badge-profit").textContent = state.labProfit + "%";
+  renderBasisLab();
+});
+document.querySelectorAll("[data-basis]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.basisMode = btn.dataset.basis;
+    document.querySelectorAll("[data-basis]").forEach(b => {
+      b.classList.toggle("active", b === btn);
+      b.setAttribute("aria-selected", b === btn ? "true" : "false");
+    });
+    renderBasisLab();
+  });
+});
+
+// Weighted average lab
+["wa-n1", "wa-n2"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    if (id === "wa-n1") { state.waN1 = parseInt(e.target.value); $("wa-n1-badge").textContent = state.waN1; }
+    else { state.waN2 = parseInt(e.target.value); $("wa-n2-badge").textContent = state.waN2; }
+    renderWeighted();
+  });
+});
+
+// =====================================================================
+// 7. PRACTICE
+// =====================================================================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function setPracticeMode(mode) {
+  state.practiceMode = mode;
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+    const on = b.dataset.mode === mode;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  $("timer-container").classList.toggle("hidden", mode !== "timed");
+  if (mode === "timed") startTimer();
+  else stopTimer();
+  document.querySelectorAll("main > section").forEach((el, idx) => {
+    if (idx === 0 || idx === 2 || idx === 3) {
+      el.style.display = (mode === "hints") ? "" : "none";
+    }
+  });
+}
+document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
+  b.addEventListener("click", () => setPracticeMode(b.dataset.mode));
+});
+function startTimer() {
+  stopTimer();
+  state.timer.remaining = 90;
+  $("timer-display").textContent = state.timer.remaining;
+  state.timer.interval = setInterval(() => {
+    state.timer.remaining--;
+    $("timer-display").textContent = Math.max(0, state.timer.remaining);
+    if (state.timer.remaining <= 0) {
+      stopTimer();
+      if (!state.answered) {
+        const q = state.shuffled[state.currentQIndex];
+        markAnswer(-1, q);
+      }
+    }
+  }, 1000);
+}
+function stopTimer() {
+  if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; }
+}
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
+    if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw));
+  } catch {}
+}
+function saveProgress() {
+  try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch {}
+}
+function renderStats() {
+  $("stat-attempts").textContent = state.stats.attempts;
+  $("stat-correct").textContent = state.stats.correct;
+  $("stat-independent").textContent = state.stats.independentCorrect;
+  const acc = state.stats.attempts ? Math.round(state.stats.correct / state.stats.attempts * 100) : 0;
+  $("stat-accuracy").textContent = acc + "%";
+}
+function renderQuestion() {
+  if (!state.testsPassed) {
+    $("practice-q-stem").textContent = "Practice is disabled because the model self-tests failed.";
+    return;
+  }
+  const q = state.shuffled[state.currentQIndex];
+  state.answered = false;
+  $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
+  const d = $("practice-q-difficulty");
+  d.textContent = q.difficulty;
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
+                             : q.difficulty === "Medium" ? "badge-draft"
+                             : "badge-tag");
+  $("practice-q-stem").innerHTML = q.stem;
+
+  $("practice-feedback").className = "callout hidden";
+  $("practice-error-categorizer").classList.add("hidden");
+  $("practice-solution-box").classList.add("hidden");
+  $("btn-next-question").disabled = true;
+
+  const container = $("practice-options-container");
+  container.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.textContent = String.fromCharCode(65 + i) + ". " + opt;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.addEventListener("click", () => markAnswer(i, q));
+    container.appendChild(btn);
+  });
+  if (state.practiceMode === "timed") startTimer();
+}
+function markAnswer(chosenIdx, q) {
+  if (state.answered) return;
+  state.answered = true;
+  stopTimer();
+  const isCorrect = chosenIdx === q.correctIndex;
+  const isTrap = chosenIdx === q.trapOptionIndex;
+  document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
+    b.disabled = true;
+    b.setAttribute("aria-checked", i === chosenIdx ? "true" : "false");
+    if (i === q.correctIndex) b.classList.add("correct");
+    else if (i === chosenIdx) b.classList.add(isTrap ? "trap" : "incorrect");
+  });
+  const fb = $("practice-feedback");
+  fb.classList.remove("hidden");
+  if (isCorrect) {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong>`;
+  } else if (isTrap) {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  } else {
+    fb.className = "callout callout-danger";
+    fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`;
+    $("practice-error-categorizer").classList.remove("hidden");
+  }
+  $("practice-solution-box").classList.remove("hidden");
+  $("practice-solution-text").textContent = q.solution;
+  state.stats.attempts++;
+  if (isCorrect) {
+    state.stats.correct++;
+    if (state.practiceMode !== "hints") state.stats.independentCorrect++;
+  }
+  saveProgress();
+  renderStats();
+  $("btn-next-question").disabled = false;
+}
+$("btn-next-question").addEventListener("click", () => {
+  state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
+  renderQuestion();
+});
+$("select-error-category").addEventListener("change", (e) => {
+  const cat = e.target.value;
+  state.stats.errorsByCat[cat] = (state.stats.errorsByCat[cat] || 0) + 1;
+  saveProgress();
+});
+function handleResetStats() {
+  if (!confirm("Reset local practice stats?")) return;
+  state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
+  saveProgress();
+  renderStats();
+}
+window.handleResetStats = handleResetStats;
+
+// =====================================================================
+// 8. INIT
+// =====================================================================
+document.addEventListener("DOMContentLoaded", () => {
+  const results = runSelfTests();
+  state.testsPassed = results.failed === 0;
+  const banner = $("test-status-banner");
+  if (!state.testsPassed) {
+    banner.className = "test-banner";
+    banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong>
+      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
+    $("practice-options-container").innerHTML = "";
+  }
+
+  loadProgress();
+  state.shuffled = shuffle(PRACTICE_QUESTIONS);
+
+  $("input-c1").value = state.c1; $("range-c1").value = Math.min(100, state.c1);
+  $("input-c2").value = state.c2; $("range-c2").value = Math.min(120, state.c2);
+  $("input-mean").value = state.mean; $("range-mean").value = Math.min(120, state.mean);
+  $("badge-c1").textContent = "₹" + state.c1;
+  $("badge-c2").textContent = "₹" + state.c2;
+  $("badge-mean").textContent = "₹" + state.mean;
+
+  wireTriplet();
+  renderLever();
+  renderBasisLab();
+  renderWeighted();
+  preparePredict();
+  renderQuestion();
+  renderStats();
+  setPracticeMode("hints");
+});
+</script>
 </body>
 </html>
