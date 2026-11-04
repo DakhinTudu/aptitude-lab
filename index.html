@@ -146,18 +146,14 @@ code {
 .hero {
   position: relative;
   z-index: 1;
-  max-width: 1160px;
+  max-width: 720px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 36px 40px;
-  align-items: center;
-  padding: 36px 8px 20px;
-  text-align: left;
+  padding: 48px 8px 28px;
+  text-align: center;
 }
-.hero-copy { max-width: 34rem; }
+.hero-copy { max-width: 36rem; margin: 0 auto; }
 .hero-brand {
-  display: inline-flex; align-items: center; gap: 10px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   margin-bottom: 18px;
   font-size: clamp(1.35rem, 3vw, 1.75rem);
   font-weight: 800;
@@ -187,12 +183,12 @@ code {
 .hero .sub {
   font-size: 1.02rem;
   color: var(--text-dim);
-  max-width: 36rem;
-  margin: 0 0 22px;
+  max-width: 34rem;
+  margin: 0 auto 22px;
   line-height: 1.55;
 }
 .hero-cta {
-  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center;
 }
 .btn-hero {
   display: inline-flex; align-items: center; gap: 8px;
@@ -212,57 +208,38 @@ code {
 }
 .btn-hero-ghost:hover { border-color: var(--primary); transform: translateY(-2px); }
 
-/* Live demo panel */
+/* Demo sits below the hero — quiet, not a dashboard */
+.demo-section {
+  max-width: 640px;
+  margin: 8px auto 28px;
+  padding: 0 4px;
+  text-align: center;
+}
+.demo-section-head {
+  margin-bottom: 16px;
+}
+.demo-section-head h2 {
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.demo-section-head p {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.45;
+}
 .demo-panel {
-  position: relative;
-  background: linear-gradient(165deg, rgba(22,33,60,.92), rgba(17,26,46,.88));
-  border: 1px solid var(--border-strong);
-  border-radius: 18px;
-  padding: 18px 18px 16px;
-  box-shadow:
-    0 0 0 1px rgba(56,189,248,.06),
-    0 20px 50px rgba(0,0,0,.35);
-  overflow: hidden;
-}
-.demo-panel::before {
-  content: "";
-  position: absolute; inset: 0 auto auto 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--primary), var(--success), transparent);
-  background-size: 200% 100%;
-  animation: demoSheen 4.5s linear infinite;
-}
-@keyframes demoSheen {
-  from { background-position: 100% 0; }
-  to { background-position: -100% 0; }
-}
-.demo-kicker {
-  display: flex; justify-content: space-between; align-items: center; gap: 10px;
-  margin-bottom: 10px;
-}
-.demo-kicker-label {
-  font-size: 0.72rem; font-weight: 800; letter-spacing: .08em;
-  text-transform: uppercase; color: var(--primary);
-}
-.demo-live {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 0.72rem; font-weight: 700; color: var(--success);
-}
-.demo-live i {
-  width: 7px; height: 7px; border-radius: 50%; background: var(--success);
-  display: block; animation: liveBlink 1.6s ease infinite;
-}
-@keyframes liveBlink {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
-  50% { opacity: .55; box-shadow: 0 0 0 5px rgba(34,197,94,0); }
-}
-.demo-title {
-  font-size: 1.05rem; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.02em;
-}
-.demo-sub {
-  font-size: 0.84rem; color: var(--text-dim); margin: 0 0 14px; line-height: 1.45;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  padding: 18px 0 0;
+  box-shadow: none;
 }
 .demo-control {
-  display: grid; gap: 6px; margin-bottom: 14px;
+  display: grid; gap: 6px; margin-bottom: 12px;
 }
 .demo-control label {
   display: flex; justify-content: space-between; align-items: baseline;
@@ -275,39 +252,19 @@ code {
   width: 100%; accent-color: var(--primary); height: 28px; cursor: pointer;
 }
 .demo-svg-wrap {
-  background: rgba(11,18,32,.55);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 8px 6px 4px;
-  margin-bottom: 12px;
+  padding: 4px 0 8px;
+  margin-bottom: 4px;
 }
 .demo-svg-wrap svg { display: block; width: 100%; height: auto; }
 .demo-bars rect, .demo-bars text { transition: all 320ms var(--ease-out); }
-.demo-readout {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
+.demo-result {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin: 0 0 12px;
 }
-.demo-stat {
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px 12px;
-}
-.demo-stat-label {
-  display: block; font-size: 0.68rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted);
-  margin-bottom: 2px;
-}
-.demo-stat-val {
-  font-family: var(--font-mono); font-weight: 600; font-size: 0.95rem;
-  color: var(--text); font-variant-numeric: tabular-nums;
-}
-.demo-stat-val.warn { color: var(--warn); }
-.demo-stat-val.ok { color: var(--success); }
-.demo-trap {
-  font-size: 0.8rem; color: var(--text-dim); line-height: 1.45;
-  margin: 0 0 12px; min-height: 2.6em;
-}
-.demo-trap strong { color: var(--warn); }
+.demo-result strong { color: var(--text); }
+.demo-result .net { color: var(--warn); font-family: var(--font-mono); font-weight: 600; }
 .demo-link {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 0.84rem; font-weight: 700; color: var(--primary);
@@ -328,14 +285,12 @@ code {
 .hero-enter .hero-brand,
 .hero-enter .hero h1,
 .hero-enter .hero .sub,
-.hero-enter .hero-cta,
-.hero-enter .demo-panel {
+.hero-enter .hero-cta {
   animation: riseIn .8s var(--ease-out) both;
 }
 .hero-enter .hero h1 { animation-delay: .08s; }
 .hero-enter .hero .sub { animation-delay: .16s; }
 .hero-enter .hero-cta { animation-delay: .24s; }
-.hero-enter .demo-panel { animation-delay: .18s; }
 @keyframes riseIn {
   from { opacity: 0; transform: translateY(22px); }
   to { opacity: 1; transform: none; }
@@ -390,14 +345,12 @@ code {
 .howto-arrow { color: var(--text-muted); font-size: 0.85rem; }
 
 @media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 24px; text-align: left; }
-  .hero-copy { max-width: none; }
   .nav-links { gap: 12px; }
 }
 @media (max-width: 720px) {
   body { padding: 0 12px 56px; background-attachment: scroll; }
   .site-header { margin: 0 -12px; padding: 10px 12px; }
-  .header-container { gap: 10px; }
+  .header-container { gap: 10px; flex-wrap: wrap; }
   .brand-link span { font-size: 0.92rem; }
   .nav-links {
     width: 100%;
@@ -410,7 +363,6 @@ code {
     padding-bottom: 2px;
   }
   .nav-links::-webkit-scrollbar { display: none; }
-  .header-container { flex-wrap: wrap; }
   .nav-link {
     flex: 0 0 auto;
     font-size: 0.78rem;
@@ -424,31 +376,25 @@ code {
   .nav-link .nav-full { display: none; }
   .nav-link .nav-short { display: inline; }
 
-  .hero-stage { margin: 0 -12px 8px; padding: 12px 12px 4px; }
-  .hero { gap: 20px; padding: 12px 0 8px; }
-  .hero-brand { display: none; } /* brand already in sticky header */
-  .hero h1 { font-size: clamp(1.55rem, 7vw, 2rem); margin-bottom: 10px; }
-  .hero .sub { font-size: 0.92rem; margin-bottom: 16px; }
-  .hero-cta { width: 100%; }
+  /* First screen: only brand + line + CTA */
+  .hero-stage { margin: 0 -12px 0; padding: 28px 12px 8px; min-height: auto; }
+  .hero { padding: 20px 0 12px; }
+  .hero-brand { display: none; }
+  .hero h1 { font-size: clamp(1.7rem, 8vw, 2.15rem); margin-bottom: 12px; }
+  .hero .sub { font-size: 0.95rem; margin-bottom: 20px; }
+  .hero-cta { width: 100%; flex-direction: column; }
   .btn-hero {
-    flex: 1 1 auto;
+    width: 100%;
     justify-content: center;
-    min-height: 46px;
+    min-height: 48px;
     padding: 12px 14px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 
-  .demo-panel { padding: 14px 12px 12px; border-radius: 14px; }
-  .demo-title { font-size: 0.98rem; }
-  .demo-sub { font-size: 0.8rem; }
+  .howto-strip { display: none; } /* less chrome on phones */
+  .demo-section { margin: 20px auto 24px; }
+  .demo-section-head h2 { font-size: 1.05rem; }
   .demo-control input[type="range"] { min-height: 36px; }
-  .demo-readout { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .demo-trap { font-size: 0.76rem; min-height: 0; }
-  .demo-svg-wrap { padding: 6px 2px 2px; overflow-x: auto; }
-
-  .howto-strip { gap: 6px; margin: 4px auto 4px; }
-  .howto-pill { font-size: 0.7rem; padding: 7px 9px; }
-  .howto-arrow { display: none; }
 
   .stats-strip {
     gap: 10px 0;
@@ -492,10 +438,6 @@ code {
 
   .lab-footer-row { flex-direction: column; gap: 10px; }
   .site-footer { margin-top: 32px; }
-}
-@media (max-width: 400px) {
-  .demo-readout { grid-template-columns: 1fr; }
-  .btn-hero { flex: 1 1 100%; }
 }
 
 /* Start-here strip */
@@ -772,7 +714,7 @@ code {
 
 <main id="main-content" class="page-container">
 
-  <!-- ===== HERO + LIVE DEMO ===== -->
+  <!-- ===== HERO (clean first screen) ===== -->
   <div class="hero-stage hero-enter">
     <div class="hero-glow" aria-hidden="true"></div>
     <section class="hero" aria-label="Welcome">
@@ -790,51 +732,13 @@ code {
         </div>
         <h1>See the idea.<br>Then make it <em>fast</em>.</h1>
         <p class="sub">
-          Interactive aptitude &amp; reasoning for SEBI / banking / SSC — change a value, watch the diagram, predict, then practise against the clock.
+          Interactive aptitude &amp; reasoning for SEBI / banking / SSC — change a value, watch the diagram, predict, then practise.
         </p>
         <div class="hero-cta">
           <a href="#start-here" class="btn-hero btn-hero-primary">Start learning →</a>
-          <a href="#demo" class="btn-hero btn-hero-ghost">Try the demo</a>
+          <a href="#demo" class="btn-hero btn-hero-ghost">Try one move</a>
         </div>
       </div>
-
-      <aside class="demo-panel" id="demo" aria-label="Live percentage demo">
-        <div class="demo-kicker">
-          <span class="demo-kicker-label">Live demo</span>
-          <span class="demo-live"><i aria-hidden="true"></i> Drag to play</span>
-        </div>
-        <h2 class="demo-title">+x% then −x% — what’s the net?</h2>
-        <p class="demo-sub">Most aspirants say “zero”. Move the slider and watch the bars — the lab way.</p>
-
-        <div class="demo-control">
-          <label for="demo-pct">
-            <span>Change each step</span>
-            <strong id="demo-pct-label">20%</strong>
-          </label>
-          <input type="range" id="demo-pct" min="5" max="40" step="1" value="20" aria-valuetext="20 percent" />
-        </div>
-
-        <div class="demo-svg-wrap">
-          <svg id="demo-svg" class="demo-bars" viewBox="0 0 520 168" role="img" aria-label="Bars showing original, after rise, and after fall">
-            <title>Percentage rise then fall</title>
-          </svg>
-        </div>
-
-        <div class="demo-readout">
-          <div class="demo-stat">
-            <span class="demo-stat-label">Trap guess</span>
-            <span class="demo-stat-val warn" id="demo-trap-val">0% net</span>
-          </div>
-          <div class="demo-stat">
-            <span class="demo-stat-label">Actual net</span>
-            <span class="demo-stat-val ok" id="demo-net-val">−4%</span>
-          </div>
-        </div>
-        <p class="demo-trap" id="demo-explain">
-          <strong>Trap:</strong> adding +20 and −20. <strong>Truth:</strong> 1.20 × 0.80 = 0.96 → down 4%.
-        </p>
-        <a class="demo-link" href="topics/percentages.html">Open full Percentages lab →</a>
-      </aside>
     </section>
   </div>
 
@@ -846,9 +750,33 @@ code {
     <span class="howto-pill"><strong>3</strong> Predict</span>
     <span class="howto-arrow" aria-hidden="true">→</span>
     <span class="howto-pill"><strong>4</strong> Practice</span>
-    <span class="howto-arrow" aria-hidden="true">→</span>
-    <span class="howto-pill"><strong>5</strong> Shortcuts</span>
   </div>
+
+  <!-- ===== QUIET DEMO (below fold on phones) ===== -->
+  <section class="demo-section reveal" id="demo" aria-label="Try a percentage move">
+    <div class="demo-section-head">
+      <h2>+x% then −x% — what’s the net?</h2>
+      <p>Most people say zero. Drag once and see why it isn’t.</p>
+    </div>
+    <div class="demo-panel">
+      <div class="demo-control">
+        <label for="demo-pct">
+          <span>Each step</span>
+          <strong id="demo-pct-label">20%</strong>
+        </label>
+        <input type="range" id="demo-pct" min="5" max="40" step="1" value="20" aria-valuetext="20 percent" />
+      </div>
+      <div class="demo-svg-wrap">
+        <svg id="demo-svg" class="demo-bars" viewBox="0 0 520 168" role="img" aria-label="Bars showing original, after rise, and after fall">
+          <title>Percentage rise then fall</title>
+        </svg>
+      </div>
+      <p class="demo-result" id="demo-explain">
+        Trap says <strong>0%</strong>. Truth: 1.20 × 0.80 = 0.96 → <span class="net">−4%</span>.
+      </p>
+      <a class="demo-link" href="topics/percentages.html">Open Percentages lab →</a>
+    </div>
+  </section>
 
   <!-- ===== STATS STRIP ===== -->
   <div class="stats-strip reveal">
@@ -1255,8 +1183,6 @@ filterBtns.forEach(btn => {
   const range = document.getElementById("demo-pct");
   const svg = document.getElementById("demo-svg");
   const label = document.getElementById("demo-pct-label");
-  const trapEl = document.getElementById("demo-trap-val");
-  const netEl = document.getElementById("demo-net-val");
   const explain = document.getElementById("demo-explain");
   if (!range || !svg) return;
 
@@ -1272,38 +1198,33 @@ filterBtns.forEach(btn => {
     const x0 = narrow ? 52 : 70;
     const maxBar = narrow ? 250 : 420;
     const fs = narrow ? 10 : 11;
-    const note = narrow
-      ? "Baseline — final bar shorter when x ≠ 0"
-      : "Original baseline — final bar is shorter when x ≠ 0";
 
     label.textContent = p + "%";
     range.setAttribute("aria-valuetext", p + " percent");
-    trapEl.textContent = "0% net";
-    netEl.textContent = (netPct > 0 ? "+" : "") + netPct + "%";
-    netEl.className = "demo-stat-val " + (netPct === 0 ? "ok" : "warn");
+    const netLabel = (netPct > 0 ? "+" : "") + netPct + "%";
     explain.innerHTML =
-      `<strong>Trap:</strong> +${p} and −${p} cancel. <strong>Truth:</strong> ${(1 + p / 100).toFixed(2)} × ${(1 - p / 100).toFixed(2)} = ${(down / BASE).toFixed(2)} → net <strong>${netPct}%</strong>.`;
+      `Trap says <strong>0%</strong>. Truth: ${(1 + p / 100).toFixed(2)} × ${(1 - p / 100).toFixed(2)} = ${(down / BASE).toFixed(2)} → <span class="net">${netLabel}</span>.`;
 
     const w0 = (BASE / 160) * maxBar;
     const w1 = (up / 160) * maxBar;
     const w2 = (down / 160) * maxBar;
 
-    svg.setAttribute("viewBox", `0 0 ${vbW} 168`);
+    svg.setAttribute("viewBox", `0 0 ${vbW} 148`);
     svg.innerHTML = `
-      <text x="6" y="28" fill="#94a3b8" font-size="${fs}" font-weight="600">Start</text>
-      <rect x="${x0}" y="12" width="${w0}" height="22" rx="5" fill="#38bdf8"/>
-      <text x="${x0 + w0 + 6}" y="28" fill="#e8edf7" font-size="${fs + 1}" font-family="IBM Plex Mono, monospace" font-weight="600">${BASE}</text>
+      <text x="6" y="26" fill="#94a3b8" font-size="${fs}" font-weight="600">Start</text>
+      <rect x="${x0}" y="10" width="${w0}" height="20" rx="5" fill="#38bdf8"/>
+      <text x="${x0 + w0 + 6}" y="26" fill="#e8edf7" font-size="${fs + 1}" font-family="IBM Plex Mono, monospace" font-weight="600">${BASE}</text>
 
-      <text x="6" y="72" fill="#94a3b8" font-size="${fs}" font-weight="600">+${p}%</text>
-      <rect x="${x0}" y="56" width="${w1}" height="22" rx="5" fill="#22c55e"/>
-      <text x="${x0 + w1 + 6}" y="72" fill="#e8edf7" font-size="${fs + 1}" font-family="IBM Plex Mono, monospace" font-weight="600">${up.toFixed(0)}</text>
+      <text x="6" y="66" fill="#94a3b8" font-size="${fs}" font-weight="600">+${p}%</text>
+      <rect x="${x0}" y="50" width="${w1}" height="20" rx="5" fill="#22c55e"/>
+      <text x="${x0 + w1 + 6}" y="66" fill="#e8edf7" font-size="${fs + 1}" font-family="IBM Plex Mono, monospace" font-weight="600">${up.toFixed(0)}</text>
 
-      <text x="6" y="116" fill="#94a3b8" font-size="${fs}" font-weight="600">−${p}%</text>
-      <rect x="${x0}" y="100" width="${w2}" height="22" rx="5" fill="#f59e0b"/>
-      <text x="${x0 + w2 + 6}" y="116" fill="#e8edf7" font-size="${fs + 1}" font-family="IBM Plex Mono, monospace" font-weight="600">${down.toFixed(1)}</text>
+      <text x="6" y="106" fill="#94a3b8" font-size="${fs}" font-weight="600">−${p}%</text>
+      <rect x="${x0}" y="90" width="${w2}" height="20" rx="5" fill="#f59e0b"/>
+      <text x="${x0 + w2 + 6}" y="106" fill="#e8edf7" font-size="${fs + 1}" font-family="IBM Plex Mono, monospace" font-weight="600">${down.toFixed(1)}</text>
 
-      <line x1="${x0}" y1="140" x2="${x0 + w0}" y2="140" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3"/>
-      <text x="${x0}" y="158" fill="#64748b" font-size="${fs}">${note}</text>
+      <line x1="${x0}" y1="128" x2="${x0 + w0}" y2="128" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3"/>
+      <text x="${x0}" y="144" fill="#64748b" font-size="${fs}">Baseline</text>
     `;
   }
 
