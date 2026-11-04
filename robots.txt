@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dakhintudu.github.io/aptitute-lab/sitemap.xml
