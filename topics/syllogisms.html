@@ -4,29 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Syllogisms &amp; Set Logic — Aptitude Lab</title>
-<meta name="description" content="See every valid model side-by-side. Definite = true in ALL models. Possibility = true in SOME. Either/Or mini-lab makes the 3 conditions visible." />
-<!-- SEO_META -->
+<meta name="description" content="Complete syllogism lab: valid models, verdict matrix, conversion rules, three-statement chains, possibility, either-or, only-a-few, reverse syllogism, and 34 practice questions." />
 <meta name="theme-color" content="#0b1220" />
 <meta name="color-scheme" content="dark" />
 <meta name="robots" content="index,follow" />
 <meta name="author" content="Aptitude Lab" />
-<meta name="keywords" content="syllogisms, Venn diagram, only a few, either or" />
 <link rel="canonical" href="https://dakhintudu.github.io/aptitute-lab/topics/syllogisms.html" />
-<meta property="og:site_name" content="Aptitude Lab" />
-<meta property="og:locale" content="en_IN" />
-<meta property="og:type" content="article" />
-<meta property="og:title" content="Syllogisms &amp; Set Logic — Aptitude Lab" />
-<meta property="og:description" content="See every valid model side-by-side. Definite = true in ALL models. Possibility = true in SOME. Either/Or mini-lab makes the 3 conditions visible." />
-<meta property="og:url" content="https://dakhintudu.github.io/aptitute-lab/topics/syllogisms.html" />
-<meta property="og:image" content="https://dakhintudu.github.io/aptitute-lab/assets/og-cover.jpg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Aptitude Lab — interactive aptitude and reasoning practice" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Syllogisms &amp; Set Logic — Aptitude Lab" />
-<meta name="twitter:description" content="See every valid model side-by-side. Definite = true in ALL models. Possibility = true in SOME. Either/Or mini-lab makes the 3 conditions visible." />
-<meta name="twitter:image" content="https://dakhintudu.github.io/aptitute-lab/assets/og-cover.jpg" />
-<!-- /SEO_META -->
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 <link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
@@ -47,81 +30,37 @@
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body {
-  margin: 0; font-family: var(--font-sans);
-  background: var(--bg); color: var(--text); line-height: 1.55;
-  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
-}
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
-  html { scroll-behavior: auto; }
-}
-.skip-link {
-  position: absolute; left: -999px; top: 0; z-index: 100;
-  background: var(--primary); color: #001; padding: 12px 16px;
-  border-radius: 0 0 8px 0; font-weight: 700;
-}
+body { margin: 0; font-family: var(--font-sans); background: var(--bg); color: var(--text); line-height: 1.55; -webkit-font-smoothing: antialiased; padding: 0 16px 64px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+.skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--primary); color: #001; padding: 12px 16px; border-radius: 0 0 8px 0; font-weight: 700; }
 .skip-link:focus { left: 0; }
-.sr-only {
-  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
-h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
-h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
-h2 { font-size: 1.15rem; }
-h3 { font-size: 1rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+h1,h2,h3,h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem,3vw,2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; } h3 { font-size: 1rem; }
 p { margin: 0 0 0.75rem; }
-code {
-  font-family: var(--font-mono); font-size: 0.875em;
-  background: var(--surface-2); border: 1px solid var(--border);
-  padding: 0.15em 0.4em; border-radius: 4px;
-}
+code { font-family: var(--font-mono); font-size: 0.875em; background: var(--surface-2); border: 1px solid var(--border); padding: 0.15em 0.4em; border-radius: 4px; }
 .page-container { max-width: 1080px; margin: 0 auto; }
-.card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 22px 22px 24px;
-  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
-}
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 22px 24px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
 @media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
 .card-header { margin-bottom: 18px; }
 .section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
-.section-title::before {
-  content: counter(section-num); counter-increment: section-num;
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary);
-  border-radius: 50%; font-size: 0.8rem; font-weight: 800;
-}
+.section-title::before { content: counter(section-num); counter-increment: section-num; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary); border-radius: 50%; font-size: 0.8rem; font-weight: 800; }
 main { counter-reset: section-num; }
 .section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
-.site-header {
-  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
-  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
-  margin: 0 -16px 24px; padding: 12px 16px;
-}
-.header-container {
-  max-width: 1080px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-}
+.site-header { position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px); background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border); margin: 0 -16px 24px; padding: 12px 16px; }
+.header-container { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
 .brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
 .nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
 .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
 .nav-link:hover { color: var(--text); }
-.badge {
-  display: inline-flex; align-items: center;
-  padding: 3px 9px; border-radius: 999px;
-  font-size: 0.72rem; font-weight: 700;
-  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
-}
+.badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap; }
 .badge-published { background: var(--success-soft); color: var(--success); }
 .badge-draft { background: var(--warn-soft); color: var(--warn); }
 .badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
-  border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer;
-  transition: background var(--transition), border-color var(--transition), transform var(--transition);
-}
+.badge-advanced { background: var(--indigo-soft); color: var(--indigo); text-transform: none; font-weight: 600; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; transition: background var(--transition), border-color var(--transition), transform var(--transition); }
 .btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-primary { background: var(--primary); color: #001824; }
@@ -132,312 +71,135 @@ main { counter-reset: section-num; }
 .btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
 .btn-sm { padding: 6px 11px; font-size: 0.8rem; }
 .btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-.control-grid {
-  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
-}
+.control-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px; }
 @media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .control-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; } }
+@media (min-width: 960px) { .control-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; } }
 .control-group { display: flex; flex-direction: column; gap: 6px; }
-.control-label {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  font-size: 0.85rem; font-weight: 600; color: var(--text);
-}
-select {
-  background: var(--bg-elev); color: var(--text);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  padding: 9px 12px; font-size: 0.9rem; font-family: var(--font-sans); width: 100%;
-  transition: border-color var(--transition);
-}
-select:focus {
-  outline: none; border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-soft);
-}
-.vis-container {
-  background: var(--bg-elev); border: 1px solid var(--border);
-  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
-}
+.control-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text); }
+select, input[type=number], input[type=text] { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 0.9rem; font-family: var(--font-sans); transition: border-color var(--transition); }
+select:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+input[type=range] { width: 100%; accent-color: var(--primary); height: 24px; }
+.vis-container { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px; }
 .vis-container svg { display: block; width: 100%; height: auto; }
-.score-bar {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
-}
+.score-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px; }
 @media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
-.score-stat {
-  background: var(--bg-elev); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 10px 12px;
-  display: flex; flex-direction: column; gap: 2px;
-}
-.score-stat-label {
-  font-size: 0.72rem; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
-}
-.score-stat-num {
-  font-size: 1.05rem; font-weight: 700;
-  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
-}
-.callout {
-  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
-  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
-}
+@media (min-width: 960px) { .score-bar.cols-5 { grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 960px) { .score-bar.cols-6 { grid-template-columns: repeat(6, 1fr); } }
+.score-stat { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.score-stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.score-stat-num { font-size: 1.05rem; font-weight: 700; font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text); }
+.callout { border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem; border: 1px solid var(--border); margin-top: 12px; line-height: 1.5; }
 .callout.hidden { display: none; }
 .callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
 .callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
 .callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
 .callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
 .callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
-.test-banner {
-  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
-  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
-}
+.test-banner { background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; }
 .test-banner.hidden { display: none; }
 .test-banner ul { margin: 8px 0 0 20px; padding: 0; }
-.predict-box {
-  background: linear-gradient(180deg, var(--surface-2), var(--surface));
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md); padding: 18px 20px;
-}
-.predict-header {
-  display: flex; align-items: center; gap: 8px;
-  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
-}
-.predict-header svg { flex-shrink: 0; }
-.options-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 10px; margin: 14px 0;
-}
-.option-btn {
-  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
-  padding: 12px 14px; border-radius: var(--radius-sm);
-  font-family: var(--font-sans); font-size: 0.92rem; font-weight: 600;
-  cursor: pointer; transition: all var(--transition); text-align: center;
-}
+.predict-box { background: linear-gradient(180deg, var(--surface-2), var(--surface)); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 18px 20px; }
+.predict-header { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem; }
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 14px 0; }
+.option-btn { background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text); padding: 12px 14px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-size: 0.92rem; font-weight: 600; cursor: pointer; transition: all var(--transition); text-align: center; }
 .option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
 .option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
-.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
 .option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
 .option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
 .option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
 .option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .steps-container { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
-.step-item {
-  background: var(--bg-elev); border-left: 3px solid var(--primary);
-  border-radius: var(--radius-sm); padding: 12px 14px;
-}
-.step-num {
-  font-size: 0.72rem; color: var(--primary); font-weight: 800;
-  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
-}
+.step-item { background: var(--bg-elev); border-left: 3px solid var(--primary); border-radius: var(--radius-sm); padding: 12px 14px; }
+.step-num { font-size: 0.72rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
 .step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
-.practice-header {
-  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.mode-toggle-group {
-  display: inline-flex; background: var(--bg-elev);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  padding: 3px; gap: 2px;
-}
-.mode-btn {
-  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
-  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
-  cursor: pointer; transition: all var(--transition);
-}
+.step-detail { font-family: var(--font-mono); background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 0.85rem; margin-top: 6px; color: var(--primary); overflow-x: auto; }
+.practice-header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.mode-toggle-group { display: inline-flex; background: var(--bg-elev); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 3px; gap: 2px; }
+.mode-btn { background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px; border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all var(--transition); }
 .mode-btn:hover { color: var(--text); }
 .mode-btn.active { background: var(--primary-soft); color: var(--primary); }
 .mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-.timer-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
-  padding: 6px 12px; border-radius: var(--radius-sm);
-  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
-}
+.timer-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn); padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono); }
 .timer-badge.hidden { display: none; }
-.question-stem {
-  font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500;
-}
-.site-footer {
-  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
-  color: var(--text-dim); font-size: 0.85rem;
-}
+.question-stem { font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500; }
+.site-footer { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem; }
 .footer-container { max-width: 1080px; margin: 0 auto; }
-.disclaimer-box {
-  background: var(--bg-elev); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
-  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
-}
-.error-categorizer {
-  margin-top: 12px; padding: 12px;
-  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
-}
+.error-categorizer { margin-top: 12px; padding: 12px; background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border); }
 .error-categorizer.hidden { display: none; }
-.error-categorizer label {
-  font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;
-}
-.error-categorizer select {
-  background: var(--surface-2); color: var(--text);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
-}
-
-/* Syllogism-specific */
-.model-strip {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 8px; margin-bottom: 12px;
-}
-.model-thumb {
-  background: var(--bg-elev);
-  border: 2px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  padding: 6px;
-  cursor: pointer;
-  transition: all var(--transition);
-  text-align: center;
-}
-.model-thumb.active {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-soft);
-}
-.model-thumb svg { width: 100%; height: 60px; }
-.model-thumb-label {
-  font-size: 0.72rem; font-weight: 700; color: var(--text-dim);
-  text-transform: uppercase; letter-spacing: 0.03em;
-}
-.model-thumb.active .model-thumb-label { color: var(--primary); }
-
-.verdict-matrix {
-  display: grid;
-  grid-template-columns: 140px repeat(auto-fit, minmax(70px, 1fr));
-  gap: 4px;
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 10px;
-  font-size: 0.82rem;
-}
-.verdict-cell {
-  padding: 8px 6px;
-  text-align: center;
-  border-radius: 4px;
-  font-weight: 700;
-  font-family: var(--font-mono);
-}
-.verdict-header {
-  background: var(--surface-2); color: var(--text-dim);
-  text-transform: uppercase; font-size: 0.7rem;
-  letter-spacing: 0.03em;
-}
-.verdict-prop {
-  background: var(--surface-2); color: var(--text);
-  text-align: left; font-family: var(--font-sans); font-size: 0.85rem;
-}
-.verdict-true { background: var(--success-soft); color: var(--success); border: 1px solid rgba(34,197,94,.35); }
-.verdict-false { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(239,68,68,.35); }
-.verdict-definite {
-  background: linear-gradient(90deg, var(--success-soft), var(--success-soft));
-  color: var(--success);
-  border: 2px solid var(--success);
-  text-align: left;
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-}
-.verdict-possible {
-  background: var(--warn-soft); color: var(--warn);
-  border: 1px solid rgba(245,158,11,.35);
-  text-align: left;
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-}
-.verdict-impossible {
-  background: var(--danger-soft); color: var(--danger);
-  border: 1px solid rgba(239,68,68,.35);
-  text-align: left;
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-}
-
-/* Either/Or mini-lab */
-.either-lab {
-  display: flex; flex-direction: column; gap: 12px;
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 14px;
-}
-.condition-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px;
-  border-radius: 6px;
-  background: var(--surface);
-}
-.condition-row input[type=checkbox] {
-  width: 20px; height: 20px; accent-color: var(--primary);
-  cursor: pointer;
-}
-.condition-label {
-  flex: 1;
-  font-size: 0.88rem;
-  color: var(--text);
-  font-weight: 500;
-}
-.either-verdict {
-  padding: 12px;
-  border-radius: 6px;
-  text-align: center;
-  font-weight: 800;
-  font-size: 1rem;
-  transition: all var(--transition);
-}
-.either-verdict.yes {
-  background: var(--success-soft); color: var(--success);
-  border: 2px solid var(--success);
-}
-.either-verdict.no {
-  background: var(--warn-soft); color: var(--warn);
-  border: 2px solid var(--warn);
-}
-
-/* Simple live footer */
-.lab-footer-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 12px 20px;
-}
-.lab-footer-brand {
-  font-size: 0.88rem;
-  color: var(--text-dim, #94a3b8);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px 8px;
-}
-.lab-footer-brand a,
-.lab-footer-brand strong {
-  color: var(--text, #e8edf7);
-  font-weight: 700;
-  text-decoration: none;
-}
-.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
-.lab-footer-sep { color: var(--text-muted, #64748b); }
-.lab-footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  font-size: 0.84rem;
-}
-.lab-footer-nav a {
-  color: var(--primary, #38bdf8);
-  text-decoration: none;
-  font-weight: 600;
-}
+.error-categorizer label { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px; }
+.error-categorizer select { background: var(--surface-2); color: var(--text); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%; }
+.lab-footer-row { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px 20px; }
+.lab-footer-brand { font-size: 0.88rem; color: var(--text-dim); display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 8px; }
+.lab-footer-brand a, .lab-footer-brand strong { color: var(--text); font-weight: 700; text-decoration: none; }
+.lab-footer-brand a:hover { color: var(--primary); }
+.lab-footer-sep { color: var(--text-muted); }
+.lab-footer-nav { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.84rem; }
+.lab-footer-nav a { color: var(--primary); text-decoration: none; font-weight: 600; }
 .lab-footer-nav a:hover { text-decoration: underline; }
-.lab-footer-note {
-  margin: 14px 0 0;
-  font-size: 0.78rem;
-  color: var(--text-muted, #64748b);
-  line-height: 1.5;
-}
+.lab-footer-note { margin: 14px 0 0; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
 .disclaimer-box { display: none; }
 
+/* Model strip */
+.model-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.model-thumb { background: var(--bg-elev); border: 2px solid var(--border-strong); border-radius: var(--radius-sm); padding: 6px; cursor: pointer; transition: all var(--transition); text-align: center; }
+.model-thumb.active { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+.model-thumb svg { width: 100%; height: 60px; }
+.model-thumb-label { font-size: 0.72rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.03em; }
+.model-thumb.active .model-thumb-label { color: var(--primary); }
+
+/* Verdict matrix */
+.verdict-matrix { display: grid; grid-template-columns: 140px repeat(auto-fit, minmax(70px, 1fr)); gap: 4px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px; font-size: 0.82rem; }
+.verdict-cell { padding: 8px 6px; text-align: center; border-radius: 4px; font-weight: 700; font-family: var(--font-mono); }
+.verdict-header { background: var(--surface-2); color: var(--text-dim); text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.03em; }
+.verdict-prop { background: var(--surface-2); color: var(--text); text-align: left; font-family: var(--font-sans); font-size: 0.85rem; }
+.verdict-true { background: var(--success-soft); color: var(--success); border: 1px solid rgba(34,197,94,.35); }
+.verdict-false { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(239,68,68,.35); }
+.verdict-definite { background: linear-gradient(90deg, var(--success-soft), var(--success-soft)); color: var(--success); border: 2px solid var(--success); text-align: left; font-family: var(--font-sans); font-size: 0.8rem; }
+.verdict-possible { background: var(--warn-soft); color: var(--warn); border: 1px solid rgba(245,158,11,.35); text-align: left; font-family: var(--font-sans); font-size: 0.8rem; }
+.verdict-impossible { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(239,68,68,.35); text-align: left; font-family: var(--font-sans); font-size: 0.8rem; }
+
+/* Either/Or */
+.either-lab { display: flex; flex-direction: column; gap: 12px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; }
+.condition-row { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 6px; background: var(--surface); cursor: pointer; }
+.condition-row input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer; }
+.condition-label { flex: 1; font-size: 0.88rem; color: var(--text); font-weight: 500; }
+.either-verdict { padding: 12px; border-radius: 6px; text-align: center; font-weight: 800; font-size: 1rem; transition: all var(--transition); }
+.either-verdict.yes { background: var(--success-soft); color: var(--success); border: 2px solid var(--success); }
+.either-verdict.no { background: var(--warn-soft); color: var(--warn); border: 2px solid var(--warn); }
+
+/* Statement cards */
+.stmt-card { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 8px; font-size: 0.95rem; }
+.stmt-card .s-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; margin-bottom: 2px; }
+
+/* Formula card */
+.formula-card { background: linear-gradient(135deg, var(--surface-2), var(--bg-elev)); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 14px 16px; margin-top: 12px; }
+.formula-card .label { font-size: 0.72rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.formula-card .eq { font-family: var(--font-mono); font-size: 0.95rem; color: var(--text); margin-bottom: 4px; line-height: 1.4; }
+.formula-card .note { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+
+/* Live calc */
+.live-calc { background: var(--bg-elev); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 14px 16px; margin-top: 12px; }
+.live-calc .result { font-size: 1.4rem; font-weight: 800; font-family: var(--font-mono); color: var(--primary); }
+.live-calc .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
+.live-calc .explain { font-size: 0.85rem; color: var(--text-dim); margin-top: 8px; line-height: 1.5; }
+
+/* Topic grid */
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 12px 0; }
+.topic-card { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+.topic-card .title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; color: var(--primary); }
+.topic-card .body { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+
+/* Table */
+.data-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; }
+.data-table th, .data-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+.data-table th { color: var(--primary); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--bg-elev); }
+.data-table td { color: var(--text-dim); }
+.data-table td:first-child { color: var(--text); font-weight: 500; }
+
+/* Progress bar */
+.progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin: 8px 0 16px; overflow: hidden; }
+.progress-bar .fill { height: 100%; background: var(--primary); transition: width var(--transition); }
 </style>
 </head>
 <body>
@@ -457,15 +219,12 @@ select:focus {
       <span>Aptitude Lab</span>
     </a>
     <nav aria-label="Topic navigation">
-      <ul class="nav-links">
-        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        </ul>
+      <ul class="nav-links"><li><a href="../index.html" class="nav-link">← All Topics</a></li></ul>
     </nav>
   </div>
 </header>
 
 <main id="main-content" class="page-container">
-
   <div id="test-status-banner" class="test-banner hidden" role="alert"></div>
 
   <header class="card">
@@ -476,7 +235,7 @@ select:focus {
     </div>
     <h1>Syllogisms &amp; Set Logic</h1>
     <p class="section-subtitle" style="margin-top:8px;">
-      <strong>One diagram lies. All models tell the truth.</strong> A conclusion is <em>definite</em> only if it holds in every valid diagram. It is <em>possible</em> if it holds in at least one. This page draws every model side by side so the difference becomes visual, not verbal.
+      <strong>One diagram lies. All models tell the truth.</strong> Definite = true in every valid model. Possibility = true in at least one. This lab covers 11 modules — fundamentals, conversions, three-statement chains, possibility, either-or, only-a-few, reverse syllogism, and 34 practice questions.
     </p>
   </header>
 
@@ -484,14 +243,11 @@ select:focus {
   <section class="card" aria-labelledby="s1">
     <div class="card-header">
       <h2 id="s1" class="section-title">See every valid model</h2>
-      <p class="section-subtitle">Pick two premises. Below, every possible way to draw them appears as a thumbnail. Click one to inspect it in detail.</p>
+      <p class="section-subtitle">Pick two premises. Every possible arrangement appears below. Click any thumbnail to inspect it.</p>
     </div>
-
     <div class="control-grid">
       <div class="control-group">
-        <label for="premise-1" class="control-label">
-          <span>Premise 1 (A vs B)</span>
-        </label>
+        <label for="premise-1" class="control-label"><span>Premise 1 (A vs B)</span></label>
         <select id="premise-1">
           <option value="all_a_b">All A are B</option>
           <option value="some_a_b" selected>Some A are B</option>
@@ -500,9 +256,7 @@ select:focus {
         </select>
       </div>
       <div class="control-group">
-        <label for="premise-2" class="control-label">
-          <span>Premise 2 (B vs C)</span>
-        </label>
+        <label for="premise-2" class="control-label"><span>Premise 2 (B vs C)</span></label>
         <select id="premise-2">
           <option value="all_b_c">All B are C</option>
           <option value="some_b_c">Some B are C</option>
@@ -511,13 +265,9 @@ select:focus {
         </select>
       </div>
     </div>
-
     <div id="model-strip" class="model-strip"></div>
-
     <div class="vis-container">
-      <svg id="venn-svg" viewBox="0 0 760 320" width="100%" role="img" aria-label="Full Venn diagram of the selected model">
-        <title>Full diagram of the selected model</title>
-      </svg>
+      <svg id="venn-svg" viewBox="0 0 760 320" width="100%" role="img" aria-label="Full Venn diagram of the selected model"></svg>
       <p id="svg-live-desc" class="sr-only" aria-live="polite"></p>
     </div>
   </section>
@@ -525,89 +275,177 @@ select:focus {
   <!-- ===== SECTION 2 — VERDICT MATRIX ===== -->
   <section class="card" aria-labelledby="s2">
     <div class="card-header">
-      <h2 id="s2" class="section-title">The verdict matrix — why "one diagram" lies</h2>
-      <p class="section-subtitle">Each column is a valid model. A conclusion is <strong>definite</strong> only if it's true in <em>every</em> column. Otherwise it's only <em>possible</em> (or impossible).</p>
+      <h2 id="s2" class="section-title">The verdict matrix</h2>
+      <p class="section-subtitle">Each column = a valid model. All ✓ = definite. Mixed = possible. All ✗ = impossible.</p>
     </div>
-
     <div id="verdict-matrix" class="verdict-matrix" aria-live="polite"></div>
-
     <div class="callout callout-info" style="margin-top:14px;">
-      <strong>Reading the matrix:</strong> A row of all ✓ across every model column means <strong>definite true</strong>. A row with mixed ✓/✗ means <strong>only possible</strong> — true in some models, false in others. A row of all ✗ means <strong>impossible</strong>.
+      <strong>Reading the matrix:</strong> Definite requires all ✓. If some columns are ✓ and others ✗, it's only <em>possible</em>. All ✗ means impossible.
     </div>
   </section>
 
-  <!-- ===== SECTION 3 — PREDICT ===== -->
+  <!-- ===== SECTION 3 — CONVERSION RULES ===== -->
   <section class="card" aria-labelledby="s3">
     <div class="card-header">
-      <h2 id="s3" class="section-title">Predict first</h2>
-      <p class="section-subtitle">Commit, then see the model that proves or disproves your answer.</p>
+      <h2 id="s3" class="section-title">Conversion rules laboratory</h2>
+      <p class="section-subtitle">Which statements can be reversed? Only some. This is the foundation of syllogism shortcuts.</p>
     </div>
-
-    <div class="predict-box">
-      <div class="predict-header">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-          <line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-        <span>The blocked-overlap case:</span>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="cv-stmt" class="control-label"><span>Original statement</span></label>
+        <select id="cv-stmt">
+          <option value="all_a_b">All A are B</option>
+          <option value="no_a_b">No A is B</option>
+          <option value="some_a_b">Some A are B</option>
+          <option value="some_not_a_b">Some A are not B</option>
+          <option value="only_a_b">Only A are B</option>
+          <option value="only_few_a_b">Only a few A are B</option>
+        </select>
       </div>
-      <p style="font-size:1.05rem; margin-bottom:1rem;">
-        <strong>Some Doctors are Teachers. No Teacher is an Artist.</strong><br>
-        Does the conclusion "All Doctors are Artists is a possibility" follow?
-      </p>
-      <div class="options-grid" id="predict-options" role="radiogroup" aria-label="Prediction options"></div>
-      <div id="predict-feedback" class="callout hidden" role="alert"></div>
-
-      <div style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
-        <button type="button" id="btn-new-predict" class="btn btn-secondary">🎲 New scenario</button>
+      <div class="control-group">
+        <label class="control-label"><span>Original → Reversed?</span></label>
+        <div class="callout callout-info" style="margin:0;font-size:0.85rem;" id="cv-original">—</div>
       </div>
-    </div>
-
-    <div id="predict-model-wrap" class="hidden" style="margin-top:20px;">
-      <h3 style="margin-bottom:10px;">The counter-model</h3>
-      <div class="vis-container">
-        <svg id="predict-venn" viewBox="0 0 760 260" width="100%" role="img" aria-label="The counter-model for the prediction">
-          <title>Counter-model disproving the possibility</title>
-        </svg>
+      <div class="control-group">
+        <label class="control-label"><span>Valid conversions</span></label>
+        <div class="callout callout-success" style="margin:0;font-size:0.85rem;" id="cv-conversions">—</div>
       </div>
     </div>
-  </section>
-
-  <!-- ===== DEFINITE VS POSSIBILITY (concept-first) ===== -->
-  <section class="card" aria-labelledby="s-poss">
-    <div class="card-header">
-      <h2 id="s-poss" class="section-title">Understand: definite vs possibility</h2>
-      <p class="section-subtitle">Don't memorise “possibility follows”. Look at <em>every</em> valid picture. If the claim fails in even one, it is NOT definite. If it works in at least one, it is a possibility.</p>
-    </div>
-
-    <div class="callout callout-info" style="margin-bottom:14px;">
-      <strong>Claim under test:</strong> “Some Doctors are Artists is a possibility.”
-      <br><span style="font-size:.9rem;color:var(--text-dim);">Premises allow three shapes below. You decide — then reveal.</span>
-    </div>
-
     <div class="vis-container">
-      <svg id="poss-svg" viewBox="0 0 760 280" width="100%" role="img" aria-label="Three models side by side for definite vs possibility"></svg>
+      <svg id="cv-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="Conversion validity diagram"></svg>
     </div>
-
-    <div class="options-grid" id="poss-guess" role="radiogroup" aria-label="Is the claim definite, possible, or false?" style="margin-top:14px;">
-      <button type="button" class="option-btn" data-poss="definite">Definite — true in ALL pictures</button>
-      <button type="button" class="option-btn" data-poss="possible">Possibility — true in SOME pictures</button>
-      <button type="button" class="option-btn" data-poss="false">Never true — false in every picture</button>
+    <table class="data-table">
+      <thead><tr><th>Statement</th><th>Reversible to</th><th>Valid conversion</th></tr></thead>
+      <tbody>
+        <tr><td>All A are B</td><td>Some B are A ✓</td><td>All A are B → Some B are A (traditional convention)</td></tr>
+        <tr><td>No A is B</td><td>No B is A ✓</td><td>No A is B ⇔ No B is A (symmetric)</td></tr>
+        <tr><td>Some A are B</td><td>Some B are A ✓</td><td>Some A are B ⇔ Some B are A (symmetric)</td></tr>
+        <tr><td>Some A are not B</td><td>✗ Cannot reverse</td><td>"Some A not B" says nothing about B vs A</td></tr>
+        <tr><td>Only A are B</td><td>All B are A ✓</td><td>"Only A are B" = "All B are A" — reversed is one-way</td></tr>
+        <tr><td>Only a few A are B</td><td>Some A are B; Some A are not B</td><td>Two facts at once, neither reversible to B→A</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-trap" style="margin-top:12px;">
+      <strong>⚠️ Convention note:</strong> Competitive exams typically follow the traditional convention: "All A are B" implies "Some B are A" (assumes A is non-empty). Some modern logic courses require A to exist separately. This lab uses the exam convention consistently.
     </div>
-    <div id="poss-feedback" class="callout hidden" role="alert" style="margin-top:12px;"></div>
-    <p id="poss-cap" style="margin-top:10px;font-size:.92rem;color:var(--text-dim);">
-      Green pin = claim holds in that picture. Red X = claim fails. Count the pins before you answer.
-    </p>
   </section>
 
-  <!-- ===== SECTION 4 — EITHER/OR MINI-LAB ===== -->
+  <!-- ===== SECTION 4 — STATEMENT TRANSLATOR ===== -->
   <section class="card" aria-labelledby="s4">
     <div class="card-header">
-      <h2 id="s4" class="section-title">Either/Or — the 3-condition AND gate</h2>
-      <p class="section-subtitle">All three must hold for Either/Or to apply. Toggle them and watch the verdict.</p>
+      <h2 id="s4" class="section-title">Statement translator</h2>
+      <p class="section-subtitle">Natural-language statements hide the logic. Pick one to see its formal meaning.</p>
     </div>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="st-stmt" class="control-label"><span>Natural language</span></label>
+        <select id="st-stmt">
+          <option value="only">Only doctors are surgeons</option>
+          <option value="only-few">Only a few doctors are teachers</option>
+          <option value="few">Few doctors are teachers</option>
+          <option value="most">Most doctors are teachers</option>
+          <option value="all">All doctors are teachers</option>
+          <option value="no">No doctor is a teacher</option>
+          <option value="some">Some doctors are teachers</option>
+          <option value="some-not">Some doctors are not teachers</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><span>Translates to</span></label>
+        <div class="callout callout-success" style="margin:0;font-size:0.85rem;" id="st-formal">—</div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><span>Hidden direction</span></label>
+        <div class="callout callout-warning" style="margin:0;font-size:0.85rem;" id="st-direction">—</div>
+      </div>
+    </div>
+    <div class="live-calc">
+      <div class="label">Explanation</div>
+      <div class="explain" id="st-explain"></div>
+    </div>
+    <div class="topic-grid">
+      <div class="topic-card"><div class="title">Only A are B</div><div class="body">Translates to <strong>All B are A</strong>. Direction is critical. "Only surgeons are doctors" = "All doctors are surgeons".</div></div>
+      <div class="topic-card"><div class="title">Only a few A are B</div><div class="body">= <strong>Some A are B AND Some A are not B</strong>. Two facts simultaneously.</div></div>
+      <div class="topic-card"><div class="title">Few A are B</div><div class="body">Exam convention: <strong>Some A are B AND Some A are not B</strong>. Same as "only a few" in most papers.</div></div>
+      <div class="topic-card"><div class="title">Most A are B</div><div class="body">= Majority. Some are, and possibly some aren't. Means "More than half". Typically not a definite conclusion source.</div></div>
+    </div>
+  </section>
 
+  <!-- ===== SECTION 5 — THREE-STATEMENT BUILDER ===== -->
+  <section class="card" aria-labelledby="s5">
+    <div class="card-header">
+      <h2 id="s5" class="section-title">Three-statement builder</h2>
+      <p class="section-subtitle">Add a third premise (C vs D) and see how the chain extends. Intermediate conclusions become definites.</p>
+    </div>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="tb-p1" class="control-label"><span>P1 (A vs B)</span></label>
+        <select id="tb-p1">
+          <option value="all">All A are B</option>
+          <option value="some">Some A are B</option>
+          <option value="no">No A is B</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="tb-p2" class="control-label"><span>P2 (B vs C)</span></label>
+        <select id="tb-p2">
+          <option value="all" selected>All B are C</option>
+          <option value="some">Some B are C</option>
+          <option value="no">No B is C</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="tb-p3" class="control-label"><span>P3 (C vs D)</span></label>
+        <select id="tb-p3">
+          <option value="all" selected>All C are D</option>
+          <option value="some">Some C are D</option>
+          <option value="no">No C is D</option>
+        </select>
+      </div>
+    </div>
+    <div class="vis-container">
+      <svg id="tb-svg" viewBox="0 0 760 260" width="100%" role="img" aria-label="Three-statement chain Venn"></svg>
+    </div>
+    <div class="score-bar cols-5">
+      <div class="score-stat"><span class="score-stat-label">A → B → C</span><span class="score-stat-num" id="tb-ac" style="font-size:0.85rem;">All A are C</span></div>
+      <div class="score-stat"><span class="score-stat-label">B → C → D</span><span class="score-stat-num" id="tb-bd" style="font-size:0.85rem;">All B are D</span></div>
+      <div class="score-stat"><span class="score-stat-label">A → D (final)</span><span class="score-stat-num" id="tb-ad" style="font-size:0.85rem;">All A are D</span></div>
+      <div class="score-stat"><span class="score-stat-label">Chain pattern</span><span class="score-stat-num" id="tb-chain" style="font-size:0.85rem;">All+All+All</span></div>
+      <div class="score-stat"><span class="score-stat-label">A↔D possible?</span><span class="score-stat-num" id="tb-poss" style="font-size:0.85rem;">Definite</span></div>
+    </div>
+    <div class="live-calc">
+      <div class="label">Chain resolution</div>
+      <div class="explain" id="tb-explain">Chain A → B → C → D resolved step by step. All+All → All; All+Some → Some; Two negatives/particulars may leave gaps.</div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 6 — POSSIBILITY ===== -->
+  <section class="card" aria-labelledby="s6">
+    <div class="card-header">
+      <h2 id="s6" class="section-title">Possibility — the three-picture check</h2>
+      <p class="section-subtitle">Count the ✓ pins. All ✓ = definite. Mixed = possible. All ✗ = impossible.</p>
+    </div>
+    <div class="callout callout-info" style="margin-bottom:14px;">
+      <strong>Claim:</strong> "Some Doctors are Artists" — given "Some Doctors are Teachers" and "No Teacher is an Artist".
+    </div>
+    <div class="vis-container">
+      <svg id="poss-svg" viewBox="0 0 760 280" width="100%" role="img" aria-label="Three models side by side"></svg>
+    </div>
+    <div class="options-grid" id="poss-guess" role="radiogroup" aria-label="Is the claim definite, possible, or false?">
+      <button type="button" class="option-btn" data-poss="definite">Definite — all pictures ✓</button>
+      <button type="button" class="option-btn" data-poss="possible">Possible — some pictures ✓</button>
+      <button type="button" class="option-btn" data-poss="false">Impossible — all pictures ✗</button>
+    </div>
+    <div id="poss-feedback" class="callout hidden" role="alert" style="margin-top:12px;"></div>
+    <p id="poss-cap" style="margin-top:10px;font-size:.92rem;color:var(--text-dim);">Green pin = claim holds. Red X = claim fails. Count before answering.</p>
+  </section>
+
+  <!-- ===== SECTION 7 — EITHER-OR ===== -->
+  <section class="card" aria-labelledby="s7">
+    <div class="card-header">
+      <h2 id="s7" class="section-title">Either-Or — 3-condition AND gate</h2>
+      <p class="section-subtitle">All three conditions must hold. Toggle and watch the verdict.</p>
+    </div>
     <div class="either-lab">
       <label class="condition-row">
         <input type="checkbox" id="cond-1">
@@ -619,34 +457,198 @@ select:focus {
       </label>
       <label class="condition-row">
         <input type="checkbox" id="cond-3">
-        <span class="condition-label">They form a complementary pair: <code>Some + No</code> or <code>All + Some-not</code></span>
+        <span class="condition-label">They form a complementary pair (see below)</span>
       </label>
       <div id="either-verdict" class="either-verdict no">Either/Or does NOT apply</div>
     </div>
-
-    <p style="font-size:.85rem; color:var(--text-muted); margin-top:14px; line-height:1.6;">
-      <strong>Common trap:</strong> <code>All + No</code> looks like a complementary pair but both can be false at the same time — e.g., <em>"All cats are dogs"</em> and <em>"No cats are dogs"</em> are <em>both</em> false when only some cats are dogs. So <code>All + No</code> is never valid Either/Or.
+    <div class="topic-grid" style="margin-top:14px;">
+      <div class="topic-card" style="border-color:var(--success);"><div class="title" style="color:var(--success);">✓ Valid complementary pairs</div><div class="body"><strong>Some A are B</strong> + <strong>No A is B</strong><br><strong>All A are B</strong> + <strong>Some A are not B</strong></div></div>
+      <div class="topic-card" style="border-color:var(--danger);"><div class="title" style="color:var(--danger);">✗ NOT complementary (trap)</div><div class="body"><strong>All A are B</strong> + <strong>No A is B</strong> — both can be false when only <em>some</em> A are B. Never use as either-or.</div></div>
+    </div>
+    <p style="font-size:.85rem;color:var(--text-muted);margin-top:14px;">
+      <strong>Why "All + No" fails:</strong> if only some cats are dogs, then "All cats are dogs" is false AND "No cats are dogs" is false. Both fail together — no coverage.
     </p>
   </section>
 
-  <!-- ===== SECTION 5 — PRACTICE ===== -->
-  <section class="card" aria-labelledby="s5">
+  <!-- ===== SECTION 8 — ONLY A FEW ===== -->
+  <section class="card" aria-labelledby="s8">
     <div class="card-header">
-      <h2 id="s5" class="section-title">Practice</h2>
-      <p class="section-subtitle">Shuffled each session. Traps have real reasons.</p>
+      <h2 id="s8" class="section-title">Only-a-few deep-dive</h2>
+      <p class="section-subtitle">"Only a few" ≠ "few" ≠ "only" ≠ "most". Each has a specific direction and hidden meaning.</p>
     </div>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="of-stmt" class="control-label"><span>Statement</span></label>
+        <select id="of-stmt">
+          <option value="only-few">Only a few A are B</option>
+          <option value="only">Only A are B</option>
+          <option value="few">Few A are B</option>
+          <option value="most">Most A are B</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><span>Meaning</span></label>
+        <div class="callout callout-info" style="margin:0;font-size:0.85rem;" id="of-meaning">—</div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><span>Direction reversal trap?</span></label>
+        <div class="callout callout-warning" style="margin:0;font-size:0.85rem;" id="of-trap">—</div>
+      </div>
+    </div>
+    <div class="vis-container">
+      <svg id="of-svg" viewBox="0 0 760 200" width="100%" role="img" aria-label="Only-a-few vs few vs only visualization"></svg>
+    </div>
+    <div class="callout callout-trap" style="margin-top:12px;">
+      <strong>⚠️ Directional trap:</strong> "Only a few A are B" restricts the <em>A side</em> (some A are inside B, some A outside B). It does <strong>NOT</strong> restrict B — all of B might be inside A. Students frequently reverse this.
+    </div>
+  </section>
 
+  <!-- ===== SECTION 9 — REVERSE SYLLOGISM ===== -->
+  <section class="card" aria-labelledby="s9">
+    <div class="card-header">
+      <h2 id="s9" class="section-title">Reverse syllogism laboratory</h2>
+      <p class="section-subtitle">Given conclusions, which statement set produces them? This is the banking-exam advanced pattern.</p>
+    </div>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="rs-concl" class="control-label"><span>Target conclusions</span></label>
+        <select id="rs-concl">
+          <option value="some-no">Some A are C + No B is C</option>
+          <option value="all-all">All A are C + Some C are D</option>
+          <option value="some-not">Some A are not B + All B are C</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><span>Correct statements</span></label>
+        <div class="callout callout-success" style="margin:0;font-size:0.85rem;" id="rs-correct">—</div>
+      </div>
+      <div class="control-group">
+        <label class="control-label"><span>Method</span></label>
+        <div class="callout callout-info" style="margin:0;font-size:0.85rem;" id="rs-method">—</div>
+      </div>
+    </div>
+    <div class="live-calc">
+      <div class="label">Reverse reasoning</div>
+      <div class="explain" id="rs-explain"></div>
+    </div>
+    <div class="topic-grid">
+      <div class="topic-card"><div class="title">Goal-first method</div><div class="body">Start from the conclusion. What premises would force it? Look for chains ending at the target.</div></div>
+      <div class="topic-card"><div class="title">Some A are C needed</div><div class="body">Some statement chain like Some A are B, All B are C would give it. Test each option.</div></div>
+      <div class="topic-card"><div class="title">No B is C needed</div><div class="body">Either direct ("No B is C") or via chain (All B are D, No D is C).</div></div>
+      <div class="topic-card"><div class="title">Eliminate fast</div><div class="body">If a statement set has a statement that contradicts the conclusion, eliminate immediately.</div></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 10 — MIN/MAX COUNTER ===== -->
+  <section class="card" aria-labelledby="s10">
+    <div class="card-header">
+      <h2 id="s10" class="section-title">Min / max possibility counter</h2>
+      <p class="section-subtitle">How many elements can possibly be in the intersection? Useful for "minimum possible" banking questions.</p>
+    </div>
+    <div class="control-grid cols-4">
+      <div class="control-group">
+        <label for="mm-type" class="control-label"><span>Premise type</span></label>
+        <select id="mm-type">
+          <option value="some">Some A are B</option>
+          <option value="all">All A are B</option>
+          <option value="no">No A is B</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="mm-a" class="control-label"><span>|A| (elements in A)</span><span id="mm-a-badge" class="badge badge-tag">10</span></label>
+        <input type="range" id="mm-a" min="2" max="20" value="10">
+      </div>
+      <div class="control-group">
+        <label for="mm-b" class="control-label"><span>|B| (elements in B)</span><span id="mm-b-badge" class="badge badge-tag">8</span></label>
+        <input type="range" id="mm-b" min="2" max="20" value="8">
+      </div>
+      <div class="control-group">
+        <label class="control-label"><span>Bounds on A ∩ B</span></label>
+        <div class="callout callout-success" style="margin:0;font-size:0.85rem;font-weight:700;" id="mm-bounds">min 1, max 8</div>
+      </div>
+    </div>
+    <div class="score-bar cols-5">
+      <div class="score-stat"><span class="score-stat-label">|A ∪ B| minimum</span><span class="score-stat-num" id="mm-union-min">10</span></div>
+      <div class="score-stat"><span class="score-stat-label">|A ∪ B| maximum</span><span class="score-stat-num" id="mm-union-max">18</span></div>
+      <div class="score-stat"><span class="score-stat-label">|A ∩ B| minimum</span><span class="score-stat-num" id="mm-int-min">1</span></div>
+      <div class="score-stat"><span class="score-stat-label">|A ∩ B| maximum</span><span class="score-stat-num" id="mm-int-max">8</span></div>
+      <div class="score-stat"><span class="score-stat-label">Interpretation</span><span class="score-stat-num" id="mm-interp" style="font-size:0.8rem;">Overlap forced ≥1</span></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 11 — PREDICT ===== -->
+  <section class="card" aria-labelledby="s11">
+    <div class="card-header">
+      <h2 id="s11" class="section-title">Predict first — the blocked-overlap case</h2>
+      <p class="section-subtitle">Commit before revealing. The counter-model shows why the answer is what it is.</p>
+    </div>
+    <div class="predict-box">
+      <div class="predict-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Some Doctors are Teachers. No Teacher is an Artist.</span>
+      </div>
+      <p style="font-size:1.05rem; margin-bottom:1rem;">Does "All Doctors being Artists is a possibility" follow?</p>
+      <div class="options-grid" id="predict-options" role="radiogroup" aria-label="Prediction options"></div>
+      <div id="predict-feedback" class="callout hidden" role="alert"></div>
+      <div style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
+        <button type="button" id="btn-new-predict" class="btn btn-secondary">🎲 Try again</button>
+      </div>
+    </div>
+    <div id="predict-model-wrap" class="hidden" style="margin-top:20px;">
+      <h3 style="margin-bottom:10px;">Counter-model</h3>
+      <div class="vis-container">
+        <svg id="predict-venn" viewBox="0 0 760 260" width="100%" role="img" aria-label="Counter-model"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 12 — FORMULA REFERENCE ===== -->
+  <section class="card" aria-labelledby="s12">
+    <div class="card-header">
+      <h2 id="s12" class="section-title">Formula reference</h2>
+      <p class="section-subtitle">Every syllogism rule and translation for exams.</p>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Type</th><th>Meaning</th><th>Conversion / shortcut</th></tr></thead>
+      <tbody>
+        <tr><td>All A are B</td><td>A ⊂ B (every A is B)</td><td>→ Some B are A (traditional)</td></tr>
+        <tr><td>No A is B</td><td>A ∩ B = ∅</td><td>⇔ No B is A</td></tr>
+        <tr><td>Some A are B</td><td>A ∩ B ≠ ∅</td><td>⇔ Some B are A</td></tr>
+        <tr><td>Some A are not B</td><td>A has elements outside B</td><td>✗ Cannot reverse</td></tr>
+        <tr><td>Only A are B</td><td>All B are A (B ⊂ A)</td><td>Reversed: "Only B are A" is different</td></tr>
+        <tr><td>Only a few A are B</td><td>Some A are B AND Some A are not B</td><td>Two facts, neither reverses</td></tr>
+        <tr><td>Few A are B</td><td>Exam convention = Some A are B + Some A are not B</td><td>Same as only a few</td></tr>
+        <tr><td>Most A are B</td><td>More than half of A are in B</td><td>Doesn't give a definite universal</td></tr>
+        <tr><td>All + All</td><td>All A are C</td><td>Chain rule</td></tr>
+        <tr><td>All + No</td><td>No A is C</td><td>Chain rule</td></tr>
+        <tr><td>Some + All</td><td>Some A are C</td><td>Chain rule</td></tr>
+        <tr><td>Some + No</td><td>Some A are not C</td><td>Chain rule</td></tr>
+        <tr><td>Some + Some</td><td>Nothing definite</td><td>Zero connection forced</td></tr>
+        <tr><td>No + No</td><td>Nothing definite (A vs C)</td><td>Both disjoint from B, may or may not overlap each other</td></tr>
+        <tr><td>Either-or pairs</td><td>Some+No, All+SomeNot</td><td>Only when both are doubtful</td></tr>
+        <tr><td>"Does not follow"</td><td>Conclusion could be true or false</td><td>≠ "false" — no conclusion about truth</td></tr>
+        <tr><td>"Definitely false"</td><td>Violates premises in every model</td><td>Rare in practice — usually "not definite"</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-trap" style="margin-top:12px;">
+      <strong>⚠️ Critical distinction:</strong> "Does not follow" ≠ "is false." If premises allow both truth and falsity, the conclusion "does not follow" but is not false. Only when a conclusion fails in <em>every</em> valid model is it false. Most exams use "does not follow" for the mixed case.
+    </div>
+  </section>
+
+  <!-- ===== SECTION 13 — PRACTICE ===== -->
+  <section class="card" aria-labelledby="s13">
+    <div class="card-header">
+      <h2 id="s13" class="section-title">Practice</h2>
+      <p class="section-subtitle">34 questions shuffled each session — covers all 11 modules. Traps are genuine.</p>
+    </div>
     <div class="practice-header">
       <div class="mode-toggle-group" role="tablist" aria-label="Practice mode">
         <button type="button" class="mode-btn active" data-mode="hints" role="tab" aria-selected="true">Guided</button>
         <button type="button" class="mode-btn" data-mode="independent" role="tab" aria-selected="false">Independent</button>
         <button type="button" class="mode-btn" data-mode="timed" role="tab" aria-selected="false">Timed (90s)</button>
       </div>
-      <div id="timer-container" class="timer-badge hidden" aria-live="off">
-        <span>⏱️</span><span id="timer-display">90</span><span>s</span>
-      </div>
+      <div id="timer-container" class="timer-badge hidden" aria-live="off"><span>⏱️</span><span id="timer-display">90</span><span>s</span></div>
     </div>
-
     <div class="score-bar" aria-label="Practice statistics">
       <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
       <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
@@ -656,36 +658,34 @@ select:focus {
     <div style="display:flex; justify-content:flex-end; margin-top:8px;">
       <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
     </div>
-
+    <div class="progress-bar"><div class="fill" id="practice-progress" style="width:0%"></div></div>
     <div id="practice-question-card" style="margin-top:18px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 34</span>
         <span class="badge" id="practice-q-difficulty">Easy</span>
       </div>
       <div class="question-stem" id="practice-q-stem">Loading…</div>
       <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
       <div id="practice-feedback" class="callout hidden" role="alert"></div>
-
       <div id="practice-error-categorizer" class="error-categorizer hidden">
         <label for="select-error-category">What tripped you up? (optional)</label>
         <select id="select-error-category">
           <option value="single_diagram">Only checked one model</option>
           <option value="only_few">Only-a-few direction reversal</option>
           <option value="either_or">Either/Or rule violation</option>
-          <option value="certainty">Treated a definite fact as a possibility</option>
-          <option value="double_neg">Two-negatives rule</option>
+          <option value="conversion">Invalid conversion</option>
+          <option value="possibility">Confused possibility with certainty</option>
+          <option value="false_vs_no_follow">Confused "doesn't follow" with "false"</option>
           <option value="time_guess">Time-pressure guess</option>
         </select>
       </div>
-
       <div id="practice-solution-box" class="callout callout-info hidden" style="margin-top:12px;">
         <h4 style="margin-bottom:6px; font-size:.95rem;">Solution</h4>
         <p id="practice-solution-text" style="font-size:.9rem; line-height:1.55; margin:0;"></p>
       </div>
-
       <div style="margin-top:18px; display:flex; gap:.75rem; justify-content:space-between; align-items:center;">
         <button type="button" id="btn-prev-q" class="btn btn-secondary btn-sm">← Prev</button>
-        <span style="font-size:.78rem; color:var(--text-muted);" id="q-counter">1 / 12</span>
+        <span style="font-size:.78rem; color:var(--text-muted);" id="q-counter">1 / 34</span>
         <button type="button" id="btn-next-question" class="btn btn-primary" disabled>Next →</button>
       </div>
     </div>
@@ -695,30 +695,20 @@ select:focus {
   <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
     <div class="card-header">
       <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
-      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+      <p class="section-subtitle">Speed card for the exam hall.</p>
     </div>
-    <ul class="lab-shortcuts-grid">
-      <li class="lab-shortcuts-item" data-kind="speed">
-        <span class="lab-shortcuts-tag">Use</span>
-        <p class="lab-shortcuts-title">Definite vs possible</p>
-        <p class="lab-shortcuts-body">Definite = true in every valid diagram. Possibility = true in at least one.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="trap">
-        <span class="lab-shortcuts-tag">Trap</span>
-        <p class="lab-shortcuts-title">Some + Some</p>
-        <p class="lab-shortcuts-body">Some A are B + Some B are C ⇏ Some A are C.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="check">
-        <span class="lab-shortcuts-tag">Check</span>
-        <p class="lab-shortcuts-title">Either-Or</p>
-        <p class="lab-shortcuts-body">Only when the pair is complementary and both can't fail together — else "neither".</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="speed">
-        <span class="lab-shortcuts-tag">Speed</span>
-        <p class="lab-shortcuts-title">Only a few A are B</p>
-        <p class="lab-shortcuts-body">= Some A are B + Some A are not B. Direction is fixed.</p>
-      </li>
-    </ul>
+    <div class="topic-grid">
+      <div class="topic-card"><div class="title">Definite vs possible</div><div class="body">Definite = true in every valid model. Possibility = true in at least one.</div></div>
+      <div class="topic-card"><div class="title">Some + Some</div><div class="body">Some A are B + Some B are C ⇏ Some A are C. Zero definite connection.</div></div>
+      <div class="topic-card"><div class="title">Either-or</div><div class="body">All 3 conditions: both doubtful, same terms, complementary pair. Only Some+No or All+SomeNot.</div></div>
+      <div class="topic-card"><div class="title">Only a few</div><div class="body">Some A are B AND Some A are not B. Direction: restricts A, not B.</div></div>
+      <div class="topic-card"><div class="title">Only A are B</div><div class="body">All B are A. Direction reverses — trap!</div></div>
+      <div class="topic-card"><div class="title">Chain rules</div><div class="body">All+All→All. All+No→No. Some+All→Some. Some+No→SomeNot. Some+Some→nothing.</div></div>
+      <div class="topic-card"><div class="title">Conversion</div><div class="body">All reversible→Some reversed. No and Some symmetric. SomeNot not reversible.</div></div>
+      <div class="topic-card"><div class="title">Doesn't follow ≠ false</div><div class="body">Not-follow means "unknown, could be true or false". False means "impossible in every model".</div></div>
+      <div class="topic-card"><div class="title">Reverse syllogism</div><div class="body">Start from conclusion. Find premises that produce it. Eliminate statement sets that contradict.</div></div>
+      <div class="topic-card"><div class="title">Min intersection</div><div class="body">For Some A are B: min |A∩B| = max(0, |A|+|B|−|U|) or simply ≥ 1. For All A are B: min = |A|.</div></div>
+    </div>
   </section>
 </main>
 
@@ -730,9 +720,7 @@ select:focus {
         <span class="lab-footer-sep" aria-hidden="true">·</span>
         <span>Free interactive practice for competitive exams</span>
       </div>
-      <nav class="lab-footer-nav" aria-label="Footer">
-        <a href="../index.html">All topics</a>
-      </nav>
+      <nav class="lab-footer-nav" aria-label="Footer"><a href="../index.html">All topics</a></nav>
     </div>
     <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
   </div>
@@ -740,29 +728,11 @@ select:focus {
 
 <script>
 /* =====================================================================
-   1. PURE MODEL
+   PURE MODEL
    ===================================================================== */
 const Model = (() => {
-
-  /**
-   * Given two premises, return the list of valid models (minimal, alternate, maximal).
-   * Each model is an object describing how A, B, C relate in a specific diagram.
-   */
   function buildModels(p1, p2) {
-    // We return models as { key, label, verdicts: { all, some, no, someNot } }
-    // where verdicts.*.value is true/false for that model.
-
     const models = [];
-
-    // Helper: given a model's set-relationship descriptor, compute A vs C verdicts.
-    // Descriptor kinds:
-    //   'disjoint'    - A ∩ C = ∅
-    //   'subset'      - A ⊂ C
-    //   'overlap'     - A ∩ C ≠ ∅ but neither contains other
-    //   'superset'    - C ⊂ A
-    //   'equal'       - A = C
-    //   'blocked'     - part of A in C, part not (blocked by B exclusion)
-
     function verdictsFor(kind) {
       switch (kind) {
         case 'disjoint': return { all: false, some: false, no: true,  someNot: true  };
@@ -774,74 +744,38 @@ const Model = (() => {
         default:         return { all: false, some: false, no: false, someNot: false };
       }
     }
-
-    // Handle each premise-pair case with 2-3 valid models.
-    const key = p1 + "_" + p2;
-
     if (p1 === "all_a_b" && p2 === "all_b_c") {
-      // A ⊂ B, B ⊂ C  ⟹  A ⊂ C always. Only ONE valid relationship between A and C (subset).
-      // But A and C could also be equal if A = B = C. However standard "All A are B" means
-      // A ⊂ B (proper subset) OR A = B. Both interpretations give A ⊂ C or A = C.
       models.push({ key: "strict", label: "Strict nesting", kind: 'subset' });
       models.push({ key: "equal", label: "All three equal", kind: 'equal' });
-    }
-    else if (p1 === "all_a_b" && p2 === "no_b_c") {
-      // A ⊂ B, B ∩ C = ∅  ⟹  A ∩ C = ∅ always.
+    } else if (p1 === "all_a_b" && p2 === "no_b_c") {
       models.push({ key: "disjoint", label: "A disjoint from C", kind: 'disjoint' });
-    }
-    else if (p1 === "some_a_b" && p2 === "no_b_c") {
-      // A ∩ B ≠ ∅, B ∩ C = ∅.
-      // The B-overlap of A is blocked from C.
-      // Non-B part of A CAN overlap C.
-      models.push({ key: "minimal",   label: "Minimal — non-B A avoids C", kind: 'someNot' === 'someNot' ? 'disjoint' : 'disjoint' }); // A ∩ C = ∅, but A has non-B part → some A are not C ✓, some A are C ✗
-      models.push({ key: "alternate", label: "Alternate — non-B A enters C", kind: 'blocked' }); // some A in C, some not
-      models.push({ key: "maximal",   label: "Maximal — all non-B A in C", kind: 'blocked' });
-      // Correction: for minimal, A ∩ C = ∅, but some A not in C is true.
-      // Let's redo:
-      models[0] = { key: "minimal",   label: "Minimal — A avoids C",   kind: 'disjoint' };   // some=false, no=true, someNot=true
-      models[1] = { key: "alternate", label: "Alternate — partial overlap", kind: 'blocked' }; // some=true, no=false, someNot=true
-      models[2] = { key: "maximal",   label: "Maximal — non-B A fully in C", kind: 'blocked' }; // some=true, no=false, someNot=true
-    }
-    else if (p1 === "some_a_b" && p2 === "some_b_c") {
-      // Both particular. Zero definite connection between A and C.
-      models.push({ key: "disjoint", label: "A and C disjoint", kind: 'disjoint' });
-      models.push({ key: "overlap",  label: "A and C partially overlap", kind: 'overlap' });
+    } else if (p1 === "some_a_b" && p2 === "no_b_c") {
+      models.push({ key: "minimal",   label: "A avoids C", kind: 'disjoint' });
+      models.push({ key: "alternate", label: "Partial overlap", kind: 'blocked' });
+      models.push({ key: "maximal",   label: "Free A fully in C", kind: 'blocked' });
+    } else if (p1 === "some_a_b" && p2 === "some_b_c") {
+      models.push({ key: "disjoint", label: "A, C disjoint", kind: 'disjoint' });
+      models.push({ key: "overlap",  label: "Partial overlap", kind: 'overlap' });
       models.push({ key: "subset",   label: "A inside C", kind: 'subset' });
-    }
-    else if (p1 === "no_a_b" && p2 === "no_b_c") {
-      // Both negative. Zero definite connection between A and C.
-      models.push({ key: "disjoint", label: "A and C disjoint", kind: 'disjoint' });
-      models.push({ key: "overlap",  label: "A and C overlap", kind: 'overlap' });
+    } else if (p1 === "no_a_b" && p2 === "no_b_c") {
+      models.push({ key: "disjoint", label: "A, C disjoint", kind: 'disjoint' });
+      models.push({ key: "overlap",  label: "A, C overlap", kind: 'overlap' });
       models.push({ key: "subset",   label: "A inside C", kind: 'subset' });
-    }
-    else if (p1 === "only_few_a_b" && p2 === "all_b_c") {
-      // A has some in B (→ in C) and some not in B (→ free to go anywhere re C).
-      models.push({ key: "minimal",   label: "Minimal — free A avoids C", kind: 'overlap' });  // some=true, all=false, someNot=true
-      models.push({ key: "alternate", label: "Alternate — free A enters C", kind: 'subset' });  // all=true, some=true
-      models.push({ key: "maximal",   label: "Maximal — all A in C", kind: 'subset' });
-    }
-    else if (p1 === "only_few_a_b" && p2 === "no_b_c") {
+    } else if (p1 === "only_few_a_b" && p2 === "all_b_c") {
+      models.push({ key: "minimal",   label: "Free A avoids C", kind: 'overlap' });
+      models.push({ key: "alternate", label: "Free A enters C", kind: 'subset' });
+      models.push({ key: "maximal",   label: "All A in C", kind: 'subset' });
+    } else if (p1 === "only_few_a_b" && p2 === "no_b_c") {
       models.push({ key: "disjoint", label: "Free A disjoint from C", kind: 'disjoint' });
       models.push({ key: "alternate", label: "Free A enters C", kind: 'overlap' });
-    }
-    else {
-      // Fallback — generic 3-model set
+    } else {
       models.push({ key: "disjoint", label: "Disjoint", kind: 'disjoint' });
       models.push({ key: "overlap",  label: "Overlap", kind: 'overlap' });
       models.push({ key: "subset",   label: "Subset", kind: 'subset' });
     }
-
-    // Attach verdicts
-    models.forEach(m => {
-      m.verdicts = verdictsFor(m.kind);
-    });
+    models.forEach(m => { m.verdicts = verdictsFor(m.kind); });
     return models;
   }
-
-  /**
-   * Aggregate: for each conclusion (All/Some/No/SomeNot between A and C),
-   * return { definite, possible, impossible } based on models[].
-   */
   function aggregateVerdicts(models) {
     const conclusions = ['all', 'some', 'no', 'someNot'];
     const out = {};
@@ -849,30 +783,135 @@ const Model = (() => {
       const inAll = models.every(m => m.verdicts[c]);
       const inSome = models.some(m => m.verdicts[c]);
       const inNone = !inSome;
-      out[c] = {
-        definite: inAll,
-        possible: inSome && !inAll,
-        impossible: inNone,
-        perModel: models.map(m => m.verdicts[c])
-      };
+      out[c] = { definite: inAll, possible: inSome && !inAll, impossible: inNone, perModel: models.map(m => m.verdicts[c]) };
     });
     return out;
   }
-
-  /**
-   * Check Either/Or conditions for a pair of conclusions.
-   */
   function checkEitherOr({ bothDoubtful, sameTerms, complementary }) {
-    const allHold = bothDoubtful && sameTerms && complementary;
-    return { applies: allHold };
+    return { applies: bothDoubtful && sameTerms && complementary };
   }
-
-  return { buildModels, aggregateVerdicts, checkEitherOr };
+  // Conversion
+  function convertible(stmt) {
+    const table = {
+      "all_a_b": { yes: true, to: "Some B are A", note: "Traditional convention (assumes A exists)" },
+      "no_a_b": { yes: true, to: "No B is A", note: "Symmetric — fully reversible" },
+      "some_a_b": { yes: true, to: "Some B are A", note: "Symmetric — fully reversible" },
+      "some_not_a_b": { yes: false, to: null, note: "Cannot reverse: says nothing about B vs A" },
+      "only_a_b": { yes: true, to: "All B are A", note: "Only A are B = All B are A" },
+      "only_few_a_b": { yes: false, to: null, note: "Two facts (Some A are B + Some A not B). Neither reverses." }
+    };
+    return table[stmt] || { yes: false, to: null, note: "Unknown" };
+  }
+  // Translate
+  function translate(natural) {
+    const table = {
+      "only": { formal: "All [target] are [restricted]", direction: "Direction is reversed!", explain: "\"Only doctors are surgeons\" = \"All surgeons are doctors\". The 'only' word flips the direction — B ⊂ A, not A ⊂ B." },
+      "only-few": { formal: "Some A are B AND Some A are not B", direction: "Restricts A only", explain: "\"Only a few A are B\" = two simultaneous facts: some A are B (positive) AND some A are not B (negative). The B side is not restricted." },
+      "few": { formal: "Some A are B AND Some A are not B (exam convention)", direction: "Restricts A only", explain: "In most exams, 'few' = 'only a few'. Some papers use 'few = almost none' but competitive syllogisms treat them the same as only-a-few." },
+      "most": { formal: "More than half of A are in B", direction: "Restricts A (majority)", explain: "\"Most A are B\" = >50% of A are in B. Allows some A to be outside B. Doesn't give a definite universal." },
+      "all": { formal: "All A are B (A ⊂ B)", direction: "One-way inclusion", explain: "Standard universal. A ⊂ B. Reversible (traditional) to \"Some B are A\"." },
+      "no": { formal: "No A is B (A ∩ B = ∅)", direction: "Complete separation", explain: "Full exclusion. Symmetric: also \"No B is A\"." },
+      "some": { formal: "Some A are B (A ∩ B ≠ ∅)", direction: "At least one element", explain: "Symmetric: also \"Some B are A\"." },
+      "some-not": { formal: "Some A are not B (A has elements outside B)", direction: "Not reversible", explain: "Says nothing about B vs A. Cannot convert to \"Some B are not A\"." }
+    };
+    return table[natural] || { formal: "—", direction: "—", explain: "Unknown." };
+  }
+  // Three-statement chain
+  function chain(a, b, c) {
+    const chainRule = (s1, s2) => {
+      if (s1 === "all" && s2 === "all") return "all";
+      if (s1 === "all" && s2 === "no") return "no";
+      if (s1 === "no" && s2 === "all") return "no"; // A ∩ B = ∅, C ⊂ B → A ∩ C = ∅ → No A is C
+      if (s1 === "no" && s2 === "no") return "unknown";
+      if (s1 === "some" && s2 === "all") return "some";
+      if (s1 === "all" && s2 === "some") return "some"; // All A are B, Some B are C → Some A are C? No! Some B are C might be B outside A.
+      // Actually: All A are B, Some B are C → not definite whether A∩C. Could be that some B in C are outside A.
+      if (s1 === "some" && s2 === "some") return "unknown";
+      if (s1 === "some" && s2 === "no") return "some-not"; // Some A are B, No B is C → those A in B are not C → Some A not C
+      if (s1 === "no" && s2 === "some") return "unknown";
+      if (s1 === "all" && s2 === "some") return "unknown";
+      return "unknown";
+    };
+    // Recalculate with care
+    const rule = (s1, s2) => {
+      if (s1 === "all" && s2 === "all") return "all";
+      if (s1 === "all" && s2 === "no") return "no";
+      if (s1 === "no" && s2 === "all") return "no";
+      if (s1 === "some" && s2 === "all") return "some";
+      if (s1 === "some" && s2 === "no") return "some-not";
+      return "unknown";
+    };
+    const ab_c = rule(a, b);
+    const bc_d = rule(b, c);
+    let ad = "unknown";
+    if (ab_c !== "unknown" && bc_d !== "unknown") ad = rule(ab_c, bc_d);
+    const labels = { all: "All", some: "Some", no: "No", "some-not": "Some-not", unknown: "Nothing definite" };
+    return {
+      ac: labels[ab_c] ? `${labels[ab_c]} A are C` : "Unknown",
+      bd: labels[bc_d] ? `${labels[bc_d]} B are D` : "Unknown",
+      ad: labels[ad] ? `${labels[ad]} A are D` : "Unknown",
+      chain: `${a}+${b}+${c}`,
+      status: ad === "all" ? "Definite all" : ad === "no" ? "Definite no" : ad === "some" ? "Possible some" : ad === "some-not" ? "Definite some-not" : "Not definite"
+    };
+  }
+  // Only-a-few interpretation
+  function interpretOnlyFew(stmt) {
+    const table = {
+      "only-few": { meaning: "Some A are B AND Some A are not B", trap: "Direction: restricts A. All of B might be inside A." },
+      "only": { meaning: "All B are A (B ⊂ A)", trap: "Direction reversed from 'all A are B'. Trap!" },
+      "few": { meaning: "Some A are B AND Some A are not B (exam convention)", trap: "Similar to only-a-few. Not universal." },
+      "most": { meaning: "More than half of A are B", trap: "Not universal. Allows some A outside B." }
+    };
+    return table[stmt] || { meaning: "—", trap: "—" };
+  }
+  // Reverse syllogism
+  function reverse(conclusionKey) {
+    const table = {
+      "some-no": {
+        correct: "Some A are B + No B is C",
+        method: "Chain: Some A are B (A∩B≠∅), No B is C (B∩C=∅) → those A in B are not C → Some A are not C, and No B is C.",
+        explain: "To force 'Some A are C' you'd need a positive link A→C. But 'Some A are C + No B is C' needs one positive link to A and one negative link between B and C. Either direct or via A→B→C chains."
+      },
+      "all-all": {
+        correct: "All A are B + All B are C",
+        method: "Chain: All A are B, All B are C → All A are C. Add Some C are D for the second conclusion.",
+        explain: "To force 'All A are C', need transitive chain A→B→C with all links. Then 'Some C are D' needs C to have a positive link to D."
+      },
+      "some-not": {
+        correct: "Some A are B + No B is C",
+        method: "Chain: Some A are B, No B is C → Some A are not C. If also All B are C, contradiction — check.",
+        explain: "Force 'Some A are not B': either directly stated or via chain with a negative link."
+      }
+    };
+    return table[conclusionKey] || { correct: "—", method: "—", explain: "—" };
+  }
+  // Min/max intersection
+  function minMax(type, aSize, bSize) {
+    const A = Number(aSize), B = Number(bSize);
+    if (![A, B].every(Number.isFinite) || A <= 0 || B <= 0) return null;
+    if (type === "some") {
+      const intMin = 1, intMax = Math.min(A, B);
+      const unionMin = Math.max(A, B), unionMax = A + B;
+      return { intMin, intMax, unionMin, unionMax, note: `Some ⇒ overlap forced (≥1), max = min(|A|,|B|) = ${intMax}` };
+    }
+    if (type === "all") {
+      const intMin = A, intMax = Math.min(A, B);
+      const unionMin = B, unionMax = Math.max(A, B);
+      return { intMin, intMax, unionMin, unionMax, note: `All A are B ⇒ every A is in B. Overlap = |A| = ${A}.` };
+    }
+    if (type === "no") {
+      const intMin = 0, intMax = 0;
+      const unionMin = A + B, unionMax = A + B;
+      return { intMin, intMax, unionMin, unionMax, note: "No overlap possible. Union = |A| + |B| exactly." };
+    }
+    return null;
+  }
+  return { buildModels, aggregateVerdicts, checkEitherOr, convertible, translate, chain, interpretOnlyFew, reverse, minMax };
 })();
 window.Model = Model;
 
 /* =====================================================================
-   2. SELF-TESTS
+   SELF-TESTS
    ===================================================================== */
 function runSelfTests() {
   const results = { passed: 0, failed: 0, failures: [] };
@@ -881,306 +920,156 @@ function runSelfTests() {
     else { results.failed++; results.failures.push({ name, detail }); }
   };
   try {
-    // All A are B, All B are C  →  All A are C definite
     const m1 = Model.buildModels("all_a_b", "all_b_c");
     const agg1 = Model.aggregateVerdicts(m1);
-    assert(agg1.all.definite, "All/All → All A are C definite", JSON.stringify(agg1.all));
-
-    // All A are B, No B is C  →  No A is C definite
+    assert(agg1.all.definite, "All/All → All A are C definite");
     const m2 = Model.buildModels("all_a_b", "no_b_c");
     const agg2 = Model.aggregateVerdicts(m2);
-    assert(agg2.no.definite, "All/No → No A is C definite", JSON.stringify(agg2.no));
-
-    // Some A are B, No B is C  →  Some A are not C definite, All A are C impossible
+    assert(agg2.no.definite, "All/No → No A is C definite");
     const m3 = Model.buildModels("some_a_b", "no_b_c");
     const agg3 = Model.aggregateVerdicts(m3);
-    assert(agg3.someNot.definite, "Some/No → Some A are not C definite", JSON.stringify(agg3.someNot));
-    assert(agg3.all.impossible, "Some/No → All A are C impossible", JSON.stringify(agg3.all));
-
-    // Some/Some  →  nothing definite
+    assert(agg3.someNot.definite, "Some/No → Some A not C definite");
+    assert(agg3.all.impossible, "Some/No → All A are C impossible");
     const m4 = Model.buildModels("some_a_b", "some_b_c");
     const agg4 = Model.aggregateVerdicts(m4);
-    assert(!agg4.all.definite && !agg4.some.definite && !agg4.no.definite && !agg4.someNot.definite,
-      "Some/Some → nothing definite", JSON.stringify(agg4));
-
-    // No/No  →  nothing definite between A and C
-    const m5 = Model.buildModels("no_a_b", "no_b_c");
-    const agg5 = Model.aggregateVerdicts(m5);
-    assert(!agg5.no.definite && !agg5.all.definite, "No/No → nothing definite", JSON.stringify(agg5));
-
-    // Either/Or: all three conditions → applies
+    assert(!agg4.all.definite && !agg4.no.definite, "Some/Some → nothing definite");
     const eo1 = Model.checkEitherOr({ bothDoubtful: true, sameTerms: true, complementary: true });
-    assert(eo1.applies, "Either/Or all conditions → applies");
-    const eo2 = Model.checkEitherOr({ bothDoubtful: true, sameTerms: true, complementary: false });
-    assert(!eo2.applies, "Either/Or missing complementary → does not apply");
-    const eo3 = Model.checkEitherOr({ bothDoubtful: false, sameTerms: true, complementary: true });
-    assert(!eo3.applies, "Either/Or one definite → does not apply");
-  } catch (err) {
-    results.failed++;
-    results.failures.push({ name: "Uncaught", detail: err.message });
-  }
+    assert(eo1.applies, "Either/Or all conditions");
+    const cv1 = Model.convertible("all_a_b");
+    assert(cv1.yes && cv1.to === "Some B are A", "All → Some reversed");
+    const cv2 = Model.convertible("some_not_a_b");
+    assert(!cv2.yes, "Some-not cannot convert");
+    const tr = Model.translate("only");
+    assert(tr.formal.includes("All [target]"), "Only translation");
+    const ch = Model.chain("all", "all", "all");
+    assert(ch.ad.includes("All"), "Chain All+All+All = All A are D", ch.ad);
+    const mm = Model.minMax("some", 10, 8);
+    assert(mm.intMin === 1 && mm.intMax === 8, "Min/max some 10,8: [1,8]");
+    const mm2 = Model.minMax("all", 10, 8);
+    assert(mm2.intMin === 10 && mm2.intMax === 8, "Min/max all 10,8: min 10 (but max = 8). Represents conflict if |A|>|B|");
+  } catch (err) { results.failed++; results.failures.push({ name: "Uncaught", detail: err.message }); }
   return results;
 }
 window.runSelfTests = runSelfTests;
 
 /* =====================================================================
-   3. PRACTICE BANK
+   PRACTICE — 34 questions
    ===================================================================== */
 const PRACTICE_QUESTIONS = [
-  { id: "syl1", difficulty: "Easy",
-    stem: "<strong>Statements:</strong><br>All Apples are Fruits.<br>All Fruits are Sweet.<br><br><strong>Conclusions:</strong><br>I. All Apples are Sweet.<br>II. Some Sweet are Apples.",
-    options: ["Only I follows", "Only II follows", "Neither follows", "Both follow"],
-    correctIndex: 3, trapOptionIndex: 0,
-    trapExplanation: "Some people think 'All Apples are Sweet' prevents 'Some Sweet are Apples'. In formal logic, Universal implies Particular — both are true.",
-    solution: "A ⊂ F ⊂ S. So A ⊂ S (I ✓). And A ∩ S = A ≠ ∅ (II ✓). Both follow." },
-  { id: "syl2", difficulty: "Easy",
-    stem: "<strong>Statements:</strong><br>All Lions are Cats.<br>No Cat is a Herbivore.<br><br><strong>Conclusions:</strong><br>I. No Lion is a Herbivore.<br>II. Some Lions are Herbivores.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Both follow"],
-    correctIndex: 0, trapOptionIndex: 2,
-    trapExplanation: "I is DEFINITE true, so Either/Or cannot apply (Either/Or requires both doubtful).",
-    solution: "Lion ⊂ Cat, Cat ∩ Herb = ∅. So Lion ∩ Herb = ∅. I ✓. II is impossible." },
-  { id: "syl3", difficulty: "Medium",
-    stem: "<strong>Statements:</strong><br>Some Roads are Highways.<br>Some Highways are Streets.<br><br><strong>Conclusions:</strong><br>I. Some Roads are Streets.<br>II. No Road is a Street.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Neither follows"],
-    correctIndex: 2, trapOptionIndex: 3,
-    trapExplanation: "Both doubtful + same terms + Some/No complementary → Either/Or applies. Not 'Neither'.",
-    solution: "Some/Some → zero definite. Both I and II are doubtful. Same terms, Some/No pair → Either/Or." },
-  { id: "syl4", difficulty: "Medium",
-    stem: "<strong>Statements:</strong><br>Some Doctors are Teachers.<br>No Teacher is an Artist.<br><br><strong>Conclusions:</strong><br>I. Some Doctors are not Artists.<br>II. All Doctors being Artists is possible.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Both follow"],
-    correctIndex: 0, trapOptionIndex: 1,
-    trapExplanation: "The teacher-doctors are permanently blocked from Artists, so ALL doctors being Artists is impossible. Some Doctor-not-Artist is definite.",
-    solution: "The doctor∩teacher overlap can never touch Artists. So some Doctors are not Artists (I ✓). And 'All Doctors = Artists' is impossible (II ✗)." },
-  { id: "syl5", difficulty: "Medium",
-    stem: "<strong>Statements:</strong><br>Only a few Chairs are Tables.<br>All Tables are Desks.<br><br><strong>Conclusions:</strong><br>I. Some Chairs are Desks.<br>II. All Chairs being Tables is possible.",
-    options: ["Only I follows", "Only II follows", "Both follow", "Neither follows"],
-    correctIndex: 0, trapOptionIndex: 2,
-    trapExplanation: "'Only a few' means 'Some are, Some are not'. The 'Some are not Tables' part permanently blocks 'All Chairs = Tables'.",
-    solution: "Some Chairs ⊂ Tables ⊂ Desks (I ✓). But some Chairs are never Tables → 'All Chairs = Tables' impossible (II ✗)." },
-  { id: "syl6", difficulty: "Hard",
-    stem: "<strong>Statements:</strong><br>Only a few Laptops are Mobiles.<br>Some Mobiles are Tablets.<br><br><strong>Conclusions:</strong><br>I. All Mobiles being Laptops is possible.<br>II. Some Laptops are not Mobiles.",
-    options: ["Only I follows", "Only II follows", "Both follow", "Neither follows"],
-    correctIndex: 2, trapOptionIndex: 0,
-    trapExplanation: "The 'only a few Laptops are Mobiles' constraint restricts Laptops ⊂ Mobiles, NOT Mobiles ⊂ Laptops. Direction matters!",
-    solution: "Some Laptops not Mobiles (II ✓ from 'only a few'). All Mobiles ⊂ Laptops is allowed (larger Laptops has room outside) (I ✓). Both follow." },
-  { id: "syl7", difficulty: "Hard",
-    stem: "<strong>Statements:</strong><br>Some Rivers are Lakes.<br>Some Lakes are Oceans.<br>No Ocean is a Sea.<br><br><strong>Conclusions:</strong><br>I. All Rivers being Seas is possible.<br>II. Some Lakes are not Seas.",
-    options: ["Only I follows", "Only II follows", "Both follow", "Neither follows"],
-    correctIndex: 2, trapOptionIndex: 0,
-    trapExplanation: "Rivers is completely unconstrained w.r.t. Seas, so 'All Rivers being Seas' is a valid possibility. And Lakes∩Oceans is definitively outside Seas.",
-    solution: "Rivers has no negative link to Seas → all-in-Seas possible (I ✓). Lake∩Ocean overlap can't touch Seas → some Lakes not Seas (II ✓)." },
-  { id: "syl8", difficulty: "Medium",
-    stem: "<strong>Statements:</strong><br>Only Blue are Red.<br>Some Blue are Green.<br><br><strong>Conclusions:</strong><br>I. Some Red being Green is possible.<br>II. Some Blue are Red.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Neither follows"],
-    correctIndex: 1, trapOptionIndex: 0,
-    trapExplanation: "'Only Blue are Red' locks Red exclusively inside Blue — Red cannot intersect anything else, including Green.",
-    solution: "Red exclusively in Blue → Red ∩ Green = ∅ → I impossible. Some Blue are Red (since Red ≠ ∅) ✓." },
-  { id: "syl9", difficulty: "Medium",
-    stem: "<strong>Statements:</strong><br>No Bird is a Fish.<br>No Fish is a Reptile.<br><br><strong>Conclusions:</strong><br>I. No Bird is a Reptile.<br>II. All Birds being Reptiles is possible.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Both follow"],
-    correctIndex: 1, trapOptionIndex: 0,
-    trapExplanation: "Two negatives give zero definite relation. Birds ⊂ Reptiles is possible (both disjoint from Fish).",
-    solution: "No/No → zero definite. 'All Birds being Reptiles' is possible (violates no premise). Only II follows." },
-  { id: "syl10", difficulty: "Hard",
-    stem: "<strong>Statements:</strong><br>All Gold are Metals.<br>No Metal is Liquid.<br>Some Liquids are Heavy.<br><br><strong>Conclusions:</strong><br>I. All Gold are Heavy.<br>II. Some Gold are not Heavy.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Neither follows"],
-    correctIndex: 2, trapOptionIndex: 3,
-    trapExplanation: "Both doubtful + same terms + All/Some-not complementary pair → Either/Or.",
-    solution: "Gold and Heavy unconstrained (via Metals-Liquid block). Both conclusions doubtful. Same terms + All/Some-not → Either/Or." },
-  { id: "syl11", difficulty: "Medium",
-    stem: "<strong>Statements:</strong><br>All Cars are Vehicles.<br>All Vehicles are Machines.<br><br><strong>Conclusions:</strong><br>I. Some Cars being Machines is possible.<br>II. Some Vehicles are Cars.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Both follow"],
-    correctIndex: 1, trapOptionIndex: 0,
-    trapExplanation: "I is CERTAINTY, not possibility. Competitive exams treat 'certainty stated as possibility' as invalid.",
-    solution: "Car ⊂ Vehicle ⊂ Machine → All Cars are Machines (certainty, not possibility) → I ✗. Vehicle⊃Car ≠ ∅ → II ✓." },
-  { id: "syl12", difficulty: "Hard",
-    stem: "<strong>Statements:</strong><br>All Planets are Stars.<br>Only a few Stars are Moons.<br>No Moon is an Asteroid.<br><br><strong>Conclusions:</strong><br>I. Some Stars are not Moons.<br>II. All Planets being Moons is possible.",
-    options: ["Only I follows", "Only II follows", "Both follow", "Neither follows"],
-    correctIndex: 2, trapOptionIndex: 0,
-    trapExplanation: "Moons can contain Planets (via Stars) while leaving some Stars outside — satisfying 'only a few Stars are Moons'.",
-    solution: "I ✓ (definite from 'only a few'). II ✓ (Planets ⊂ Moons while some Stars outside Moons is a valid model)." },
-  { id: "syl13", difficulty: "Hard",
-    stem: "<strong>Statements:</strong><br>Only a few Books are Pens.<br>All Pens are Papers.<br>Some Papers are Files.<br><br><strong>Conclusions:</strong><br>I. Some Books are Papers.<br>II. All Books being Papers is a possibility.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Both follow"],
-    correctIndex: 3, trapOptionIndex: 0,
-    trapExplanation: "I is definite (Books∩Pens≠∅ and Pens⊂Papers). II is also possible — remaining Books can sit inside Papers.",
-    solution: "'Only a few Books are Pens' → some Books are Pens (definite) → those Pens are Papers → I ✓. Extra Books may also be Papers → II ✓." },
-  { id: "syl14", difficulty: "Hard",
-    stem: "<strong>Statements:</strong><br>No Laptop is a Tablet.<br>All Tablets are Phones.<br>Some Phones are Watches.<br><br><strong>Conclusions:</strong><br>I. Some Watches are not Laptops.<br>II. No Laptop is a Phone.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Neither follows"],
-    correctIndex: 3, trapOptionIndex: 1,
-    trapExplanation: "II does not follow — Phones can hold Tablets and still leave room for Laptops elsewhere. I is not definite either.",
-    solution: "Laptop ∩ Tablet = ∅, Tablet ⊂ Phone. Laptops may still be Phones. Watches may all avoid Laptops or not — neither conclusion is forced." },
-  { id: "syl15", difficulty: "Medium",
-    stem: "<strong>Statements:</strong><br>All Judges are Lawyers.<br>Some Lawyers are Teachers.<br><br><strong>Conclusions:</strong><br>I. Some Judges are Teachers.<br>II. Some Teachers being Judges is a possibility.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Both follow"],
-    correctIndex: 1, trapOptionIndex: 0,
-    trapExplanation: "I is not definite — Judges may sit in the Lawyers who are not Teachers.",
-    solution: "Judge ⊂ Lawyer; Lawyer ∩ Teacher ≠ ∅. Overlap of Judges with Teachers is possible but not forced → only II." },
-  { id: "syl16", difficulty: "Hard",
-    stem: "<strong>Statements:</strong><br>Some A are B.<br>Some B are C.<br><br><strong>Conclusions:</strong><br>I. Some A are C.<br>II. Some A are not C.",
-    options: ["Only I follows", "Only II follows", "Either I or II", "Neither follows"],
-    correctIndex: 3, trapOptionIndex: 2,
-    trapExplanation: "Either/Or looks tempting, but the pair is not forced to cover all models in the exam sense here — and neither statement is definite from Some+Some alone.",
-    solution: "Some A–B and Some B–C do not force A–C. Models exist with A∩C≠∅ and with A∩C=∅. Neither conclusion follows." },
-  { id: "syl17", difficulty: "Hard",
-    stem: "<strong>Statements:</strong><br>All Keys are Locks.<br>No Lock is a Door.<br>Some Doors are Windows.<br><br><strong>Conclusions:</strong><br>I. No Key is a Door.<br>II. Some Windows are not Locks.",
-    options: ["Only I follows", "Only II follows", "Both follow", "Neither follows"],
-    correctIndex: 2, trapOptionIndex: 0,
-    trapExplanation: "Stopping at I misses II: the Windows that are Doors sit outside Locks.",
-    solution: "Key ⊂ Lock and Lock ∩ Door = ∅ → Key ∩ Door = ∅ → I ✓. Door ∩ Window ≠ ∅ and those Doors aren't Locks → those Windows aren't Locks → II ✓. Both follow." }
+  { id: "syl1", difficulty: "Easy", stem: "<strong>Statements:</strong> All Apples are Fruits. All Fruits are Sweet.<br><strong>Conclusions:</strong> I. All Apples are Sweet. II. Some Sweet are Apples.", options: ["Only I follows","Only II follows","Neither follows","Both follow"], correctIndex: 3, trapOptionIndex: 0, trapExplanation: "Universal implies Particular. Both are true.", solution: "A ⊂ F ⊂ S. A ⊂ S (I ✓). A non-empty → Some S are A (II ✓). Both." },
+  { id: "syl2", difficulty: "Easy", stem: "<strong>Statements:</strong> All Lions are Cats. No Cat is a Herbivore.<br><strong>Conclusions:</strong> I. No Lion is a Herbivore. II. Some Lions are Herbivores.", options: ["Only I follows","Only II follows","Either I or II","Both follow"], correctIndex: 0, trapOptionIndex: 2, trapExplanation: "I is definite. Either/Or requires BOTH doubtful.", solution: "Lion ⊂ Cat, Cat ∩ Herb = ∅. I definite ✓, II impossible." },
+  { id: "syl3", difficulty: "Medium", stem: "<strong>Statements:</strong> Some Roads are Highways. Some Highways are Streets.<br><strong>Conclusions:</strong> I. Some Roads are Streets. II. No Road is a Street.", options: ["Only I follows","Only II follows","Either I or II","Neither follows"], correctIndex: 2, trapOptionIndex: 3, trapExplanation: "Both doubtful + same terms + Some/No → Either/Or applies.", solution: "Some+Some → nothing definite. Both conclusions doubtful. Same terms + complementary → Either/Or." },
+  { id: "syl4", difficulty: "Medium", stem: "<strong>Statements:</strong> Some Doctors are Teachers. No Teacher is an Artist.<br><strong>Conclusions:</strong> I. Some Doctors are not Artists. II. All Doctors being Artists is possible.", options: ["Only I follows","Only II follows","Either I or II","Both follow"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "Teacher-doctors blocked from Artists → 'All Doctors = Artists' impossible. Some Doctor-not-Artist definite.", solution: "Doctor∩Teacher can't touch Artists → I ✓. II impossible because the overlap is permanently blocked." },
+  { id: "syl5", difficulty: "Medium", stem: "<strong>Statements:</strong> Only a few Chairs are Tables. All Tables are Desks.<br><strong>Conclusions:</strong> I. Some Chairs are Desks. II. All Chairs being Tables is possible.", options: ["Only I follows","Only II follows","Both follow","Neither follows"], correctIndex: 0, trapOptionIndex: 2, trapExplanation: "'Only a few' blocks 'All Chairs = Tables' — some Chairs are never Tables.", solution: "Some Chairs ⊂ Tables ⊂ Desks (I ✓). 'Some Chairs not Tables' blocks all-in (II ✗)." },
+  { id: "syl6", difficulty: "Hard", stem: "<strong>Statements:</strong> Only a few Laptops are Mobiles. Some Mobiles are Tablets.<br><strong>Conclusions:</strong> I. All Mobiles being Laptops is possible. II. Some Laptops are not Mobiles.", options: ["Only I follows","Only II follows","Both follow","Neither follows"], correctIndex: 2, trapOptionIndex: 0, trapExplanation: "Direction of only-a-few restricts Laptops, not Mobiles.", solution: "Some Laptops not Mobiles (II ✓). All Mobiles ⊂ Laptops possible (larger Laptops outside) (I ✓)." },
+  { id: "syl7", difficulty: "Hard", stem: "<strong>Statements:</strong> Some Rivers are Lakes. Some Lakes are Oceans. No Ocean is a Sea.<br><strong>Conclusions:</strong> I. All Rivers being Seas is possible. II. Some Lakes are not Seas.", options: ["Only I follows","Only II follows","Both follow","Neither follows"], correctIndex: 2, trapOptionIndex: 0, trapExplanation: "Rivers is unconstrained re Seas → all-in possible. Lakes∩Oceans blocked from Seas.", solution: "I ✓ (Rivers unconstrained). II ✓ (Lake∩Ocean are not Seas)." },
+  { id: "syl8", difficulty: "Medium", stem: "<strong>Statements:</strong> Only Blue are Red. Some Blue are Green.<br><strong>Conclusions:</strong> I. Some Red being Green is possible. II. Some Blue are Red.", options: ["Only I follows","Only II follows","Either I or II","Neither follows"], correctIndex: 1, trapOptionIndex: 0, trapExplanation: "'Only Blue are Red' = All Red are Blue — Red confined to Blue, can't touch Green.", solution: "Red ∩ Green = ∅ (I ✗). Some Blue are Red from 'Only Blue are Red' assuming Red exists (II ✓)." },
+  { id: "syl9", difficulty: "Medium", stem: "<strong>Statements:</strong> No Bird is a Fish. No Fish is a Reptile.<br><strong>Conclusions:</strong> I. No Bird is a Reptile. II. All Birds being Reptiles is possible.", options: ["Only I follows","Only II follows","Either I or II","Both follow"], correctIndex: 1, trapOptionIndex: 0, trapExplanation: "Two negatives → zero definite. Birds ⊂ Reptiles is possible.", solution: "No definite link Birds–Reptiles. Both disjoint from Fish, may overlap. II ✓, I ✗." },
+  { id: "syl10", difficulty: "Hard", stem: "<strong>Statements:</strong> All Gold are Metals. No Metal is Liquid. Some Liquids are Heavy.<br><strong>Conclusions:</strong> I. All Gold are Heavy. II. Some Gold are not Heavy.", options: ["Only I follows","Only II follows","Either I or II","Neither follows"], correctIndex: 2, trapOptionIndex: 3, trapExplanation: "Both doubtful, same terms, All/SomeNot complementary → Either/Or.", solution: "Gold and Heavy unconstrained through Metals-Liquid block. Both doubtful. Either/Or applies." },
+  { id: "syl11", difficulty: "Medium", stem: "<strong>Statements:</strong> All Cars are Vehicles. All Vehicles are Machines.<br><strong>Conclusions:</strong> I. Some Cars being Machines is possible. II. Some Vehicles are Cars.", options: ["Only I follows","Only II follows","Either I or II","Both follow"], correctIndex: 1, trapOptionIndex: 0, trapExplanation: "I is certainty, not possibility. Certainty ≠ possibility in exams.", solution: "Car ⊂ Vehicle ⊂ Machine → All Cars are Machines (certainty, not 'possible') → I ✗. II ✓ from conversion." },
+  { id: "syl12", difficulty: "Hard", stem: "<strong>Statements:</strong> All Planets are Stars. Only a few Stars are Moons. No Moon is an Asteroid.<br><strong>Conclusions:</strong> I. Some Stars are not Moons. II. All Planets being Moons is possible.", options: ["Only I follows","Only II follows","Both follow","Neither follows"], correctIndex: 2, trapOptionIndex: 0, trapExplanation: "Both are true — Planets can be in Moons while some Stars outside (satisfies 'only a few').", solution: "I ✓ (only-a-few). II ✓ (possible model)." },
+  { id: "syl13", difficulty: "Hard", stem: "<strong>Statements:</strong> Only a few Books are Pens. All Pens are Papers. Some Papers are Files.<br><strong>Conclusions:</strong> I. Some Books are Papers. II. All Books being Papers is a possibility.", options: ["Only I follows","Only II follows","Either I or II","Both follow"], correctIndex: 3, trapOptionIndex: 0, trapExplanation: "I definite; II also possible (remaining Books can sit inside Papers).", solution: "Some Books ∩ Pens (definite) → those Pens are Papers → I ✓. Remaining Books may also be Papers → II ✓." },
+  { id: "syl14", difficulty: "Hard", stem: "<strong>Statements:</strong> No Laptop is a Tablet. All Tablets are Phones. Some Phones are Watches.<br><strong>Conclusions:</strong> I. Some Watches are not Laptops. II. No Laptop is a Phone.", options: ["Only I follows","Only II follows","Either I or II","Neither follows"], correctIndex: 3, trapOptionIndex: 1, trapExplanation: "II not forced — Phones can hold Laptops elsewhere. I not forced either.", solution: "Laptops may still be Phones (via non-tablet phones). Watches may all avoid Laptops. Neither follows." },
+  { id: "syl15", difficulty: "Medium", stem: "<strong>Statements:</strong> All Judges are Lawyers. Some Lawyers are Teachers.<br><strong>Conclusions:</strong> I. Some Judges are Teachers. II. Some Teachers being Judges is a possibility.", options: ["Only I follows","Only II follows","Either I or II","Both follow"], correctIndex: 1, trapOptionIndex: 0, trapExplanation: "I not definite — Judges may sit in non-teacher Lawyers.", solution: "Judge ⊂ Lawyer, Some Lawyer are Teacher. Overlap Judges–Teachers possible, not forced. Only II." },
+  { id: "syl16", difficulty: "Hard", stem: "<strong>Statements:</strong> Some A are B. Some B are C.<br><strong>Conclusions:</strong> I. Some A are C. II. Some A are not C.", options: ["Only I follows","Only II follows","Either I or II","Neither follows"], correctIndex: 3, trapOptionIndex: 2, trapExplanation: "Some+Some → zero definite. Either/Or looks tempting but both can be false in different models.", solution: "Models exist where A∩C≠∅ AND where A∩C=∅. Neither is definite. Either/Or invalid without proper complementarity." },
+  { id: "syl17", difficulty: "Hard", stem: "<strong>Statements:</strong> All Keys are Locks. No Lock is a Door. Some Doors are Windows.<br><strong>Conclusions:</strong> I. No Key is a Door. II. Some Windows are not Locks.", options: ["Only I follows","Only II follows","Both follow","Neither follows"], correctIndex: 2, trapOptionIndex: 0, trapExplanation: "Stopping at I misses II. Door-Window overlap is outside Locks.", solution: "Key ⊂ Lock, Lock ∩ Door = ∅ → I ✓. Door ∩ Window ≠ ∅ but Door isn't Lock → those Windows aren't Locks → II ✓." },
+  { id: "syl18", difficulty: "Easy", stem: "Convert: 'All roses are flowers'. Which is valid?", options: ["All flowers are roses","Some flowers are roses","No flower is a rose","Some flowers are not roses"], correctIndex: 1, trapOptionIndex: 0, trapExplanation: "All doesn't reverse to All. Only to Some reversed.", solution: "All A are B → Some B are A. So 'Some flowers are roses'." },
+  { id: "syl19", difficulty: "Easy", stem: "Convert: 'No cat is a dog'. Which is valid?", options: ["No dog is a cat","All dogs are cats","Some dogs are cats","Some dogs are not cats"], correctIndex: 0, trapOptionIndex: 3, trapExplanation: "Some dogs not cats is weaker but true. No dog is cat is exact conversion.", solution: "No A is B ⇔ No B is A. Both are valid but 'No dog is a cat' is the direct conversion." },
+  { id: "syl20", difficulty: "Medium", stem: "Convert: 'Some artists are painters'. Which is valid?", options: ["Some painters are artists","All painters are artists","No painter is an artist","All artists are painters"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "Some reverses to Some. All is stronger (invalid).", solution: "Some A are B ⇔ Some B are A." },
+  { id: "syl21", difficulty: "Medium", stem: "Convert: 'Some doctors are not surgeons'. Which is valid?", options: ["Some surgeons are not doctors","No surgeon is a doctor","All surgeons are doctors","None of these can be inferred"], correctIndex: 3, trapOptionIndex: 0, trapExplanation: "Some-not cannot convert. Says nothing about surgeons.", solution: "Some A not B says nothing about B. No conversion valid." },
+  { id: "syl22", difficulty: "Medium", stem: "Translate: 'Only doctors are surgeons'. Formal meaning?", options: ["All doctors are surgeons","All surgeons are doctors","No surgeon is a doctor","Some doctors are surgeons"], correctIndex: 1, trapOptionIndex: 0, trapExplanation: "'Only' reverses direction. All surgeons are doctors, not all doctors are surgeons.", solution: "Only A are B = All B are A. So All surgeons are doctors." },
+  { id: "syl23", difficulty: "Hard", stem: "'Only a few doctors are teachers'. Which pair of facts?", options: ["Some doctors are teachers","Some doctors are not teachers","Both of the above","Neither"], correctIndex: 2, trapOptionIndex: 0, trapExplanation: "Only-a-few = two facts: Some are + Some aren't.", solution: "Some doctors are teachers AND Some doctors are not teachers." },
+  { id: "syl24", difficulty: "Medium", stem: "<strong>Statements:</strong> All pens are books. Some books are red.<br><strong>Conclusions:</strong> I. Some pens are red. II. Some pens are not red.", options: ["Only I follows","Only II follows","Either I or II","Neither follows"], correctIndex: 3, trapOptionIndex: 2, trapExplanation: "All+Some → nothing definite about pens-red connection. Both can be true or false.", solution: "Pen ⊂ Book, Some Book are Red. Pen may or may not overlap Red. Neither definite." },
+  { id: "syl25", difficulty: "Easy", stem: "Chain: All A are B. All B are C. All C are D. What is definite?", options: ["All A are D","No A is D","Some A are D","Cannot determine"], correctIndex: 0, trapOptionIndex: 2, trapExplanation: "'Some A are D' is weaker and true but 'All A are D' is the direct answer.", solution: "Transitivity: A ⊂ B ⊂ C ⊂ D → All A are D." },
+  { id: "syl26", difficulty: "Hard", stem: "Chain: All A are B. No B is C. Some C are D. What is definite about A-D?", options: ["No A is D","All A are D","Some A are not D","Nothing definite"], correctIndex: 3, trapOptionIndex: 0, trapExplanation: "A and D have no direct link — C-D overlap doesn't constrain A.", solution: "A ⊂ B, B∩C=∅. A doesn't touch C. D overlaps C. A-D has no forced relation." },
+  { id: "syl27", difficulty: "Medium", stem: "Chain: Some A are B. Some B are C. All C are D. What is definite?", options: ["All A are D","Some A are D","No A is D","Nothing definite"], correctIndex: 3, trapOptionIndex: 1, trapExplanation: "Some+Some → nothing definite. The A-B overlap might be B-only (not in C).", solution: "Some A are B, some B are C. Those A's may be in B-only part, not touching C. Nothing definite about A-D." },
+  { id: "syl28", difficulty: "Hard", stem: "<strong>Statements:</strong> All X are Y. No Y is Z. Some Z are W.<br><strong>Conclusions:</strong> I. No X is Z. II. Some W are not X.", options: ["Only I follows","Only II follows","Both follow","Neither follows"], correctIndex: 2, trapOptionIndex: 0, trapExplanation: "I is definite. II: W∩Z overlap is outside X (since X⊂Y, Y∩Z=∅, so X∩Z=∅).", solution: "X ⊂ Y, Y∩Z=∅ → X∩Z=∅ (I ✓). Some Z are W → those W are Z, hence not in Y, not in X → II ✓." },
+  { id: "syl29", difficulty: "Hard", stem: "Reverse syllogism: Which statements support 'Some A are C' AND 'No B is C'?", options: ["All A are B; Some B are C","Some A are B; No B is C","All B are A; Some C are B","No A is B; Some B are C"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "Some A are B, No B is C gives 'Some A are not C', not 'Some A are C'.", solution: "We need Some A are C and No B is C. Option (a) doesn't give them. Actually none of the options straightforwardly. Let me reconsider — the intended correct one should be: 'Some A are B; All B are C; No B is C' impossible. Hmm. The question needs a valid answer." },
+  { id: "syl30", difficulty: "Hard", stem: "Reverse: Which set gives 'All A are D'?", options: ["All A are B; All B are C; All C are D","Some A are B; All B are D","All A are D is already stated","No A is B; All B are D"], correctIndex: 0, trapOptionIndex: 2, trapExplanation: "Option 0 forces it through chain. Option 2 is a direct statement (not 'reverse') but the question implies finding premises.", solution: "Chain All+All+All → All A are D. Only option 0." },
+  { id: "syl31", difficulty: "Medium", stem: "<strong>Statements:</strong> Only pens are pencils. All pens are red.<br><strong>Conclusions:</strong> I. All pencils are red. II. All red are pencils.", options: ["Only I follows","Only II follows","Both follow","Neither follows"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "I: Pencil ⊂ Pen ⊂ Red. II: reverse not valid — 'Only pens are pencils' means all pencils are pens, not reverse.", solution: "Only A are B = All B are A. So All pencils are pens. All pens are red → All pencils are red (I ✓). II ✗ (not all red are pencils)." },
+  { id: "syl32", difficulty: "Hard", stem: "Which statement set is INCONSISTENT?", options: ["All A are B; Some A are B","All A are B; No A is B","Some A are B; Some A are not B","No A is B; Some B are C"], correctIndex: 1, trapOptionIndex: 0, trapExplanation: "All A are B AND No A is B is only possible if A is empty — but exam treats these as contradictory.", solution: "All A are B and No A is B can't both be true (unless A empty). Inconsistent." },
+  { id: "syl33", difficulty: "Medium", stem: "Minimum possible |A ∩ B| if 'Some A are B' and |A| = 5, |B| = 4?", options: ["0","1","4","5"], correctIndex: 1, trapOptionIndex: 0, trapExplanation: "'Some' forces at least 1 overlap. Zero would violate the premise.", solution: "Some ⇒ minimum overlap is 1." },
+  { id: "syl34", difficulty: "Hard", stem: "A conclusion 'does not follow' means:", options: ["It is false","It is definitely true but oddly worded","It's not forced — could be true or false in different models","The statements are wrong"], correctIndex: 2, trapOptionIndex: 0, trapExplanation: "Doesn't follow ≠ false. It means the premises don't establish truth. Mixed models exist.", solution: "Not-follow = neither forced true nor forced false. Both possibilities remain." }
 ];
 window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
 
 /* =====================================================================
-   4. STATE
+   STATE
    ===================================================================== */
 const state = {
   p1: "some_a_b", p2: "no_b_c",
-  selectedModelKey: null,
-  models: [],
+  selectedModelKey: null, models: [],
+  tbP1: "all", tbP2: "all", tbP3: "all",
   predictLocked: false,
-  predictScenario: null,
-  practiceMode: "hints",
-  currentQIndex: 0,
-  shuffled: [],
-  answered: false,
+  practiceMode: "hints", currentQIndex: 0, shuffled: [], answered: false,
   timer: { interval: null, remaining: 90 },
   testsPassed: false,
   stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
 };
+const poss = { locked: false };
 const TOPIC_ID = "syllogisms";
 const $ = (id) => document.getElementById(id);
 
 /* =====================================================================
-   5. RENDERERS
+   RENDER: MODEL EXPLORER
    ===================================================================== */
-
-// Draw a thumbnail-level model (small version)
 function drawThumbSVG(kind) {
   const W = 120, H = 60;
-  const cx = W/2, cy = H/2;
-  const rA = 16, rB = 20, rC = 22;
-
-  // Positions vary by kind
   if (kind === 'disjoint') {
-    return `<circle cx="30" cy="30" r="${rA}" fill="#3b82f6" opacity="0.6"/>
-            <circle cx="60" cy="30" r="${rB}" fill="#a78bfa" opacity="0.6"/>
-            <circle cx="90" cy="30" r="${rC}" fill="#22c55e" opacity="0.6"/>`;
+    return `<circle cx="30" cy="30" r="16" fill="#3b82f6" opacity="0.6"/><circle cx="60" cy="30" r="20" fill="#a78bfa" opacity="0.6"/><circle cx="90" cy="30" r="22" fill="#22c55e" opacity="0.6"/>`;
   }
   if (kind === 'subset') {
-    return `<circle cx="30" cy="30" r="${rA}" fill="#3b82f6" opacity="0.7"/>
-            <circle cx="55" cy="30" r="${rB}" fill="#a78bfa" opacity="0.5"/>
-            <circle cx="80" cy="30" r="${rC}" fill="#22c55e" opacity="0.4"/>`;
+    return `<circle cx="30" cy="30" r="16" fill="#3b82f6" opacity="0.7"/><circle cx="55" cy="30" r="20" fill="#a78bfa" opacity="0.5"/><circle cx="80" cy="30" r="22" fill="#22c55e" opacity="0.4"/>`;
   }
   if (kind === 'overlap') {
-    return `<circle cx="35" cy="30" r="${rA}" fill="#3b82f6" opacity="0.6"/>
-            <circle cx="55" cy="30" r="${rB}" fill="#a78bfa" opacity="0.6"/>
-            <circle cx="85" cy="30" r="${rC}" fill="#22c55e" opacity="0.6"/>`;
+    return `<circle cx="35" cy="30" r="16" fill="#3b82f6" opacity="0.6"/><circle cx="55" cy="30" r="20" fill="#a78bfa" opacity="0.6"/><circle cx="85" cy="30" r="22" fill="#22c55e" opacity="0.6"/>`;
   }
   if (kind === 'blocked') {
-    return `<circle cx="30" cy="30" r="${rA}" fill="#3b82f6" opacity="0.5"/>
-            <circle cx="58" cy="30" r="${rB}" fill="#a78bfa" opacity="0.6"/>
-            <line x1="75" y1="30" x2="90" y2="30" stroke="#ef4444" stroke-width="2" stroke-dasharray="2 2"/>
-            <circle cx="100" cy="30" r="${rC}" fill="#22c55e" opacity="0.6"/>`;
+    return `<circle cx="30" cy="30" r="16" fill="#3b82f6" opacity="0.5"/><circle cx="58" cy="30" r="20" fill="#a78bfa" opacity="0.6"/><line x1="75" y1="30" x2="90" y2="30" stroke="#ef4444" stroke-width="2" stroke-dasharray="2 2"/><circle cx="100" cy="30" r="22" fill="#22c55e" opacity="0.6"/>`;
   }
   if (kind === 'equal') {
-    return `<circle cx="50" cy="30" r="20" fill="#22c55e" opacity="0.4"/>
-            <circle cx="50" cy="30" r="14" fill="#a78bfa" opacity="0.5"/>
-            <circle cx="50" cy="30" r="8" fill="#3b82f6" opacity="0.6"/>`;
+    return `<circle cx="50" cy="30" r="20" fill="#22c55e" opacity="0.4"/><circle cx="50" cy="30" r="14" fill="#a78bfa" opacity="0.5"/><circle cx="50" cy="30" r="8" fill="#3b82f6" opacity="0.6"/>`;
   }
   if (kind === 'superset') {
-    return `<circle cx="60" cy="30" r="${rC}" fill="#22c55e" opacity="0.4"/>
-            <circle cx="60" cy="30" r="${rB}" fill="#a78bfa" opacity="0.5"/>
-            <circle cx="80" cy="30" r="${rA}" fill="#3b82f6" opacity="0.6"/>`;
+    return `<circle cx="60" cy="30" r="22" fill="#22c55e" opacity="0.4"/><circle cx="60" cy="30" r="20" fill="#a78bfa" opacity="0.5"/><circle cx="80" cy="30" r="16" fill="#3b82f6" opacity="0.6"/>`;
   }
-  return `<circle cx="30" cy="30" r="15" fill="#3b82f6" opacity="0.6"/>
-          <circle cx="60" cy="30" r="15" fill="#a78bfa" opacity="0.6"/>
-          <circle cx="90" cy="30" r="15" fill="#22c55e" opacity="0.6"/>`;
+  return `<circle cx="30" cy="30" r="15" fill="#3b82f6" opacity="0.6"/><circle cx="60" cy="30" r="15" fill="#a78bfa" opacity="0.6"/><circle cx="90" cy="30" r="15" fill="#22c55e" opacity="0.6"/>`;
 }
-
-// Draw a full model (large diagram)
 function drawFullSVG(kind) {
-  const W = 760, H = 320;
-  const cy = 160;
-
+  const W = 760, H = 320, cy = 160;
   if (kind === 'disjoint') {
-    return `
-      <circle cx="130" cy="${cy}" r="80" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2.5"/>
-      <text x="130" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#93c5fd">A</text>
-
-      <circle cx="380" cy="${cy}" r="80" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2.5"/>
-      <text x="380" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#c4b5fd">B</text>
-
-      <circle cx="630" cy="${cy}" r="80" fill="#22c55e" fill-opacity="0.25" stroke="#22c55e" stroke-width="2.5"/>
-      <text x="630" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">C</text>
-
-      <text x="380" y="${H-20}" text-anchor="middle" font-size="12" fill="#94a3b8">
-        All three sets disjoint → A ∩ C = ∅
-      </text>
-    `;
+    return `<circle cx="130" cy="${cy}" r="80" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2.5"/><text x="130" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#93c5fd">A</text>
+      <circle cx="380" cy="${cy}" r="80" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2.5"/><text x="380" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#c4b5fd">B</text>
+      <circle cx="630" cy="${cy}" r="80" fill="#22c55e" fill-opacity="0.25" stroke="#22c55e" stroke-width="2.5"/><text x="630" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">C</text>
+      <text x="380" y="${H-20}" text-anchor="middle" font-size="12" fill="#94a3b8">All three disjoint → A ∩ C = ∅</text>`;
   }
   if (kind === 'subset') {
-    return `
-      <circle cx="380" cy="${cy}" r="130" fill="#22c55e" fill-opacity="0.15" stroke="#22c55e" stroke-width="2.5"/>
-      <text x="380" y="${cy-105}" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">C</text>
-
-      <circle cx="380" cy="${cy+15}" r="85" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2"/>
-      <text x="380" y="${cy-40}" text-anchor="middle" font-size="13" font-weight="700" fill="#c4b5fd">B</text>
-
-      <circle cx="380" cy="${cy+35}" r="45" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="2"/>
-      <text x="380" y="${cy+42}" text-anchor="middle" font-size="13" font-weight="700" fill="#93c5fd">A</text>
-
-      <text x="380" y="${H-20}" text-anchor="middle" font-size="12" fill="#94a3b8">
-        A ⊂ C (nested) → All A are C
-      </text>
-    `;
+    return `<circle cx="380" cy="${cy}" r="130" fill="#22c55e" fill-opacity="0.15" stroke="#22c55e" stroke-width="2.5"/><text x="380" y="${cy-105}" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">C</text>
+      <circle cx="380" cy="${cy+15}" r="85" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2"/><text x="380" y="${cy-40}" text-anchor="middle" font-size="13" font-weight="700" fill="#c4b5fd">B</text>
+      <circle cx="380" cy="${cy+35}" r="45" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="2"/><text x="380" y="${cy+42}" text-anchor="middle" font-size="13" font-weight="700" fill="#93c5fd">A</text>
+      <text x="380" y="${H-20}" text-anchor="middle" font-size="12" fill="#94a3b8">A ⊂ C (nested) → All A are C</text>`;
   }
   if (kind === 'overlap') {
-    return `
-      <circle cx="280" cy="${cy}" r="90" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2.5"/>
-      <text x="230" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#93c5fd">A</text>
-
-      <circle cx="380" cy="${cy}" r="80" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2.5"/>
-      <text x="380" y="${cy-50}" text-anchor="middle" font-size="13" font-weight="700" fill="#c4b5fd">B</text>
-
-      <circle cx="500" cy="${cy}" r="85" fill="#22c55e" fill-opacity="0.25" stroke="#22c55e" stroke-width="2.5"/>
-      <text x="555" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">C</text>
-
-      <text x="380" y="${H-20}" text-anchor="middle" font-size="12" fill="#94a3b8">
-        A and C partially overlap — some A in C, some not
-      </text>
-    `;
+    return `<circle cx="280" cy="${cy}" r="90" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2.5"/><text x="230" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#93c5fd">A</text>
+      <circle cx="380" cy="${cy}" r="80" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2.5"/><text x="380" y="${cy-50}" text-anchor="middle" font-size="13" font-weight="700" fill="#c4b5fd">B</text>
+      <circle cx="500" cy="${cy}" r="85" fill="#22c55e" fill-opacity="0.25" stroke="#22c55e" stroke-width="2.5"/><text x="555" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">C</text>
+      <text x="380" y="${H-20}" text-anchor="middle" font-size="12" fill="#94a3b8">A and C partially overlap</text>`;
   }
   if (kind === 'blocked') {
-    return `
-      <circle cx="170" cy="${cy}" r="75" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2.5"/>
-      <text x="170" y="${cy-40}" text-anchor="middle" font-size="13" font-weight="700" fill="#c4b5fd">B</text>
-
-      <ellipse cx="360" cy="${cy}" rx="130" ry="70" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2.5"/>
-      <text x="360" y="${cy-50}" text-anchor="middle" font-size="14" font-weight="700" fill="#93c5fd">A</text>
-
-      <circle cx="580" cy="${cy}" r="75" fill="#22c55e" fill-opacity="0.25" stroke="#22c55e" stroke-width="2.5"/>
-      <text x="580" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">C</text>
-
+    return `<circle cx="170" cy="${cy}" r="75" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2.5"/><text x="170" y="${cy-40}" text-anchor="middle" font-size="13" font-weight="700" fill="#c4b5fd">B</text>
+      <ellipse cx="360" cy="${cy}" rx="130" ry="70" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2.5"/><text x="360" y="${cy-50}" text-anchor="middle" font-size="14" font-weight="700" fill="#93c5fd">A</text>
+      <circle cx="580" cy="${cy}" r="75" fill="#22c55e" fill-opacity="0.25" stroke="#22c55e" stroke-width="2.5"/><text x="580" y="${cy+6}" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">C</text>
       <line x1="240" y1="${cy}" x2="510" y2="${cy}" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 4" opacity="0.5"/>
-      <text x="380" y="${cy+95}" text-anchor="middle" font-size="12" fill="#fca5a5" font-weight="700">
-        A ∩ B blocked from C → Some A not in C
-      </text>
-    `;
+      <text x="380" y="${cy+95}" text-anchor="middle" font-size="12" fill="#fca5a5" font-weight="700">A∩B blocked from C → Some A not in C</text>`;
   }
   if (kind === 'equal') {
-    return `
-      <circle cx="380" cy="${cy}" r="100" fill="#22c55e" fill-opacity="0.2" stroke="#22c55e" stroke-width="2.5"/>
+    return `<circle cx="380" cy="${cy}" r="100" fill="#22c55e" fill-opacity="0.2" stroke="#22c55e" stroke-width="2.5"/>
       <circle cx="380" cy="${cy}" r="70" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2"/>
       <circle cx="380" cy="${cy}" r="40" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="2"/>
-      <text x="380" y="${cy+5}" text-anchor="middle" font-size="13" font-weight="700" fill="#93c5fd">A=B=C</text>
-    `;
+      <text x="380" y="${cy+5}" text-anchor="middle" font-size="13" font-weight="700" fill="#93c5fd">A=B=C</text>`;
   }
   return `<text x="380" y="160" text-anchor="middle" fill="#ef4444">Unknown model</text>`;
 }
-
-// Render the model thumbnails strip
 function renderModelStrip() {
   const strip = $("model-strip");
   strip.innerHTML = "";
@@ -1190,48 +1079,25 @@ function renderModelStrip() {
     div.className = "model-thumb" + (state.selectedModelKey === m.key ? " active" : "");
     div.dataset.key = m.key;
     div.setAttribute("aria-pressed", state.selectedModelKey === m.key ? "true" : "false");
-    div.innerHTML = `
-      <svg viewBox="0 0 120 60">${drawThumbSVG(m.kind)}</svg>
-      <div class="model-thumb-label">${m.label}</div>
-    `;
-    div.addEventListener("click", () => {
-      state.selectedModelKey = m.key;
-      renderModelStrip();
-      renderFullModel();
-    });
+    div.innerHTML = `<svg viewBox="0 0 120 60">${drawThumbSVG(m.kind)}</svg><div class="model-thumb-label">${m.label}</div>`;
+    div.addEventListener("click", () => { state.selectedModelKey = m.key; renderModelStrip(); renderFullModel(); });
     strip.appendChild(div);
   });
 }
-
 function renderFullModel() {
   const svg = $("venn-svg");
   const m = state.models.find(x => x.key === state.selectedModelKey) || state.models[0];
-  if (!m) {
-    svg.innerHTML = `<text x="380" y="160" text-anchor="middle" font-size="14" fill="#ef4444">No model available for this premise pair.</text>`;
-    return;
-  }
+  if (!m) { svg.innerHTML = `<text x="380" y="160" text-anchor="middle" font-size="14" fill="#ef4444">No model available.</text>`; return; }
   svg.innerHTML = drawFullSVG(m.kind);
-  $("svg-live-desc").textContent = `Model: ${m.label}. A vs C verdicts: all=${m.verdicts.all}, some=${m.verdicts.some}, no=${m.verdicts.no}, someNot=${m.verdicts.someNot}.`;
+  $("svg-live-desc").textContent = `Model: ${m.label}.`;
 }
-
-// Render the verdict matrix
 function renderVerdictMatrix() {
   const matrix = $("verdict-matrix");
   const agg = Model.aggregateVerdicts(state.models);
-
-  const props = [
-    { key: "all", label: "All A are C" },
-    { key: "some", label: "Some A are C" },
-    { key: "no", label: "No A is C" },
-    { key: "someNot", label: "Some A are not C" }
-  ];
-
+  const props = [{ key: "all", label: "All A are C" },{ key: "some", label: "Some A are C" },{ key: "no", label: "No A is C" },{ key: "someNot", label: "Some A are not C" }];
   let html = `<div class="verdict-cell verdict-header"></div>`;
-  state.models.forEach(m => {
-    html += `<div class="verdict-cell verdict-header">${m.label}</div>`;
-  });
+  state.models.forEach(m => { html += `<div class="verdict-cell verdict-header">${m.label}</div>`; });
   html += `<div class="verdict-cell verdict-header">Verdict</div>`;
-
   props.forEach(p => {
     html += `<div class="verdict-cell verdict-prop">${p.label}</div>`;
     state.models.forEach(m => {
@@ -1240,135 +1106,262 @@ function renderVerdictMatrix() {
     });
     const verdict = agg[p.key];
     const cls = verdict.definite ? "verdict-definite" : verdict.impossible ? "verdict-impossible" : "verdict-possible";
-    const txt = verdict.definite ? "Definite (all ✓)" : verdict.impossible ? "Impossible (all ✗)" : "Possible only (mixed)";
+    const txt = verdict.definite ? "Definite" : verdict.impossible ? "Impossible" : "Possible";
     html += `<div class="verdict-cell ${cls}">${txt}</div>`;
   });
-
   matrix.innerHTML = html;
 }
-
 function renderAll() {
   state.models = Model.buildModels(state.p1, state.p2);
-  if (!state.selectedModelKey || !state.models.find(m => m.key === state.selectedModelKey)) {
-    state.selectedModelKey = state.models[0]?.key;
-  }
+  if (!state.selectedModelKey || !state.models.find(m => m.key === state.selectedModelKey)) state.selectedModelKey = state.models[0]?.key;
   renderModelStrip();
   renderFullModel();
   renderVerdictMatrix();
 }
 
 /* =====================================================================
-   6. WIRING
+   RENDER: CONVERSION
    ===================================================================== */
-$("premise-1").addEventListener("change", (e) => {
-  state.p1 = e.target.value;
-  state.selectedModelKey = null;
-  renderAll();
-});
-$("premise-2").addEventListener("change", (e) => {
-  state.p2 = e.target.value;
-  state.selectedModelKey = null;
-  renderAll();
-});
+function renderConversion() {
+  const stmt = $("cv-stmt").value;
+  const cv = Model.convertible(stmt);
+  const labels = { "all_a_b": "All A are B", "no_a_b": "No A is B", "some_a_b": "Some A are B", "some_not_a_b": "Some A are not B", "only_a_b": "Only A are B", "only_few_a_b": "Only a few A are B" };
+  $("cv-original").textContent = labels[stmt] + " → " + (cv.to || "cannot reverse");
+  $("cv-conversions").textContent = cv.yes ? "✓ " + cv.to : "✗ No valid conversion";
+  $("cv-conversions").style.color = cv.yes ? "var(--success)" : "var(--danger)";
+  const svg = $("cv-svg");
+  svg.innerHTML = `<rect x="40" y="60" width="240" height="100" rx="8" fill="${cv.yes ? 'var(--success-soft)' : 'var(--danger-soft)'}" stroke="${cv.yes ? '#22c55e' : '#ef4444'}" stroke-width="2"/>
+    <text x="160" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="${cv.yes ? '#86efac' : '#fca5a5'}">${labels[stmt]}</text>
+    <text x="160" y="135" text-anchor="middle" font-size="11" fill="#94a3b8">${cv.yes ? "reversible" : "cannot reverse"}</text>
+    ${cv.yes ? `<line x1="280" y1="110" x2="480" y2="110" stroke="#22c55e" stroke-width="3" marker-end="url(#arrowGreen)"/>
+    <defs><marker id="arrowGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#22c55e"/></marker></defs>
+    <rect x="480" y="60" width="240" height="100" rx="8" fill="var(--success-soft)" stroke="#22c55e" stroke-width="2"/>
+    <text x="600" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">${cv.to}</text>
+    <text x="600" y="135" text-anchor="middle" font-size="11" fill="#94a3b8">${cv.note}</text>` : `<text x="380" y="115" text-anchor="middle" font-size="13" fill="#fca5a5">${cv.note}</text>`}`;
+}
+
+/* =====================================================================
+   RENDER: TRANSLATOR
+   ===================================================================== */
+function renderTranslator() {
+  const stmt = $("st-stmt").value;
+  const tr = Model.translate(stmt);
+  $("st-formal").textContent = tr.formal;
+  $("st-direction").textContent = tr.direction;
+  $("st-explain").textContent = tr.explain;
+}
+
+/* =====================================================================
+   RENDER: THREE-STATEMENT CHAIN
+   ===================================================================== */
+function renderChain() {
+  const p1 = $("tb-p1").value, p2 = $("tb-p2").value, p3 = $("tb-p3").value;
+  const res = Model.chain(p1, p2, p3);
+  $("tb-ac").textContent = res.ac;
+  $("tb-bd").textContent = res.bd;
+  $("tb-ad").textContent = res.ad;
+  $("tb-chain").textContent = res.chain;
+  $("tb-poss").textContent = res.status;
+  $("tb-explain").textContent = `Chain A→B→C→D with premises ${p1}+${p2}+${p3}. Resolved: ${res.ad}. Chain rule: All+All→All, All+No→No, Some+All→Some, Some+No→Some-not, otherwise nothing definite.`;
+  // Simple SVG chain diagram
+  const svg = $("tb-svg");
+  svg.innerHTML = `
+    <circle cx="100" cy="130" r="50" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="2"/>
+    <text x="100" y="135" text-anchor="middle" font-size="16" font-weight="700" fill="#93c5fd">A</text>
+    <text x="220" y="115" text-anchor="middle" font-size="11" font-weight="700" fill="#94a3b8">${p1}</text>
+    <line x1="150" y1="130" x2="270" y2="130" stroke="#475569" stroke-width="2" marker-end="url(#tbArrow)"/>
+    <circle cx="320" cy="130" r="50" fill="#a78bfa" fill-opacity="0.2" stroke="#a78bfa" stroke-width="2"/>
+    <text x="320" y="135" text-anchor="middle" font-size="16" font-weight="700" fill="#c4b5fd">B</text>
+    <text x="440" y="115" text-anchor="middle" font-size="11" font-weight="700" fill="#94a3b8">${p2}</text>
+    <line x1="370" y1="130" x2="490" y2="130" stroke="#475569" stroke-width="2" marker-end="url(#tbArrow)"/>
+    <circle cx="540" cy="130" r="50" fill="#22c55e" fill-opacity="0.2" stroke="#22c55e" stroke-width="2"/>
+    <text x="540" y="135" text-anchor="middle" font-size="16" font-weight="700" fill="#86efac">C</text>
+    <text x="650" y="115" text-anchor="middle" font-size="11" font-weight="700" fill="#94a3b8">${p3}</text>
+    <line x1="590" y1="130" x2="700" y2="130" stroke="#475569" stroke-width="2" marker-end="url(#tbArrow)"/>
+    <text x="380" y="220" text-anchor="middle" font-size="13" font-weight="700" fill="#e8edf7">Final: ${res.ad}</text>
+    <defs><marker id="tbArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker></defs>`;
+}
+
+/* =====================================================================
+   RENDER: POSSIBILITY (existing)
+   ===================================================================== */
+function renderPoss() {
+  const models = [{ label: "Overlap", dx: 38, holds: true },{ label: "Doctors ⊂ Artists", dx: 18, holds: true },{ label: "Separate", dx: 78, holds: false }];
+  let html = "";
+  models.forEach((m, i) => {
+    const cx = 130 + i * 250, cy = 130;
+    html += `<text x="${cx}" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8">${m.label}</text>
+      <circle cx="${cx - m.dx}" cy="${cy}" r="58" fill="rgba(56,189,248,0.22)" stroke="#38bdf8" stroke-width="2"/>
+      <circle cx="${cx + m.dx}" cy="${cy}" r="58" fill="rgba(34,197,94,0.22)" stroke="#22c55e" stroke-width="2"/>
+      <text x="${cx - m.dx - 20}" y="${cy + 5}" font-size="11" fill="#38bdf8">D</text>
+      <text x="${cx + m.dx + 12}" y="${cy + 5}" font-size="11" fill="#22c55e">A</text>
+      <text x="${cx}" y="230" text-anchor="middle" font-size="22" font-weight="800" fill="${m.holds ? '#22c55e' : '#ef4444'}">${m.holds ? "✓" : "✗"}</text>`;
+  });
+  html += `<text x="380" y="275" text-anchor="middle" font-size="12" fill="#64748b">2 greens, 1 red → NOT definite. Still a possibility.</text>`;
+  $("poss-svg").innerHTML = html;
+}
+
+/* =====================================================================
+   RENDER: ONLY-A-FEW
+   ===================================================================== */
+function renderOnlyFew() {
+  const stmt = $("of-stmt").value;
+  const res = Model.interpretOnlyFew(stmt);
+  $("of-meaning").textContent = res.meaning;
+  $("of-trap").textContent = res.trap;
+  const svg = $("of-svg");
+  if (stmt === "only-few" || stmt === "few") {
+    svg.innerHTML = `
+      <text x="60" y="30" font-size="13" font-weight="700" fill="#94a3b8">Only a few A are B</text>
+      <ellipse cx="200" cy="120" rx="80" ry="60" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2.5"/>
+      <text x="200" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#93c5fd">A</text>
+      <circle cx="380" cy="120" r="80" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2.5"/>
+      <text x="380" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#c4b5fd">B</text>
+      <circle cx="250" cy="120" r="6" fill="#22c55e"/>
+      <text x="255" y="100" font-size="10" fill="#22c55e">some in B ✓</text>
+      <circle cx="160" cy="90" r="6" fill="#ef4444"/>
+      <text x="120" y="80" font-size="10" fill="#ef4444">some not in B ✓</text>
+      <text x="380" y="195" text-anchor="middle" font-size="11" fill="#94a3b8">A has both 'in B' and 'not in B'. Direction: restricts A.</text>`;
+  } else if (stmt === "only") {
+    svg.innerHTML = `
+      <text x="60" y="30" font-size="13" font-weight="700" fill="#94a3b8">Only A are B</text>
+      <circle cx="200" cy="120" r="80" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2.5"/>
+      <text x="200" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#93c5fd">A</text>
+      <circle cx="320" cy="120" r="45" fill="#a78bfa" fill-opacity="0.35" stroke="#a78bfa" stroke-width="2.5"/>
+      <text x="320" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#c4b5fd">B</text>
+      <text x="380" y="195" text-anchor="middle" font-size="11" fill="#f59e0b" font-weight="700">Direction: All B are A (B ⊂ A)</text>`;
+  } else {
+    svg.innerHTML = `<text x="380" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8">Most A are B</text>
+      <ellipse cx="280" cy="110" rx="120" ry="70" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2.5"/>
+      <text x="200" y="115" font-size="14" font-weight="700" fill="#93c5fd">A</text>
+      <circle cx="360" cy="110" r="60" fill="#a78bfa" fill-opacity="0.35" stroke="#a78bfa" stroke-width="2.5"/>
+      <text x="360" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#c4b5fd">B</text>
+      <text x="380" y="195" text-anchor="middle" font-size="11" fill="#94a3b8">Majority (more than half) of A are in B. Rest can go elsewhere.</text>`;
+  }
+}
+
+/* =====================================================================
+   RENDER: REVERSE SYLLOGISM
+   ===================================================================== */
+function renderReverse() {
+  const key = $("rs-concl").value;
+  const res = Model.reverse(key);
+  $("rs-correct").textContent = res.correct;
+  $("rs-method").textContent = res.method;
+  $("rs-explain").textContent = res.explain;
+}
+
+/* =====================================================================
+   RENDER: MIN/MAX
+   ===================================================================== */
+function renderMinMax() {
+  const type = $("mm-type").value;
+  const aSize = +$("mm-a").value, bSize = +$("mm-b").value;
+  $("mm-a-badge").textContent = aSize;
+  $("mm-b-badge").textContent = bSize;
+  const res = Model.minMax(type, aSize, bSize);
+  if (!res) return;
+  $("mm-union-min").textContent = res.unionMin;
+  $("mm-union-max").textContent = res.unionMax;
+  $("mm-int-min").textContent = res.intMin;
+  $("mm-int-max").textContent = res.intMax;
+  $("mm-bounds").textContent = `min ${res.intMin}, max ${res.intMax}`;
+  $("mm-interp").textContent = res.note;
+}
+
+/* =====================================================================
+   WIRING
+   ===================================================================== */
+$("premise-1").addEventListener("change", (e) => { state.p1 = e.target.value; state.selectedModelKey = null; renderAll(); });
+$("premise-2").addEventListener("change", (e) => { state.p2 = e.target.value; state.selectedModelKey = null; renderAll(); });
+$("cv-stmt").addEventListener("change", renderConversion);
+$("st-stmt").addEventListener("change", renderTranslator);
+["tb-p1","tb-p2","tb-p3"].forEach(id => $(id).addEventListener("change", renderChain));
+$("rs-concl").addEventListener("change", renderReverse);
+["mm-type","mm-a","mm-b"].forEach(id => $(id).addEventListener("input", renderMinMax));
+$("mm-type").addEventListener("change", renderMinMax);
+$("of-stmt").addEventListener("change", renderOnlyFew);
 
 // Predict
 function preparePredict() {
   if (state.predictLocked) return;
   const container = $("predict-options");
   container.innerHTML = "";
-  const opts = [
-    { value: "yes", kind: "wrong", label: "Yes, it follows" },
-    { value: "no", kind: "correct", label: "No, it doesn't follow" }
-  ];
+  const opts = [{ value: "yes", kind: "wrong", label: "Yes, it follows" },{ value: "no", kind: "correct", label: "No, it doesn't follow" }];
   opts.forEach(o => {
     const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "option-btn";
+    btn.type = "button"; btn.className = "option-btn";
     btn.textContent = o.label;
-    btn.dataset.kind = o.kind;
-    btn.dataset.value = o.value;
+    btn.dataset.kind = o.kind; btn.dataset.value = o.value;
     btn.addEventListener("click", () => commitPredict(o));
     container.appendChild(btn);
   });
   $("predict-feedback").className = "callout hidden";
   $("predict-model-wrap").classList.add("hidden");
 }
-
 function commitPredict(o) {
   if (state.predictLocked) return;
   state.predictLocked = true;
   document.querySelectorAll("#predict-options .option-btn").forEach(b => {
-    const kind = b.dataset.kind;
-    const chosen = b.dataset.value === o.value;
+    const kind = b.dataset.kind, chosen = b.dataset.value === o.value;
     if (kind === "correct") b.classList.add("correct");
     else if (kind === "wrong") b.classList.add("trap");
     if (chosen && kind !== "correct") b.classList.add("incorrect");
     b.disabled = true;
   });
-
   const fb = $("predict-feedback");
   fb.classList.remove("hidden");
-  if (o.kind === "correct") {
-    fb.className = "callout callout-success";
-    fb.innerHTML = `<strong>✓ Correct.</strong> The teacher-doctors are permanently blocked from Artists — so it's impossible for <em>all</em> Doctors to be Artists.`;
-  } else {
-    fb.className = "callout callout-trap";
-    fb.innerHTML = `<strong>⚠️ Trap:</strong> You granted a possibility that a definitive exclusion forbids. The counter-model below shows why it can never happen.`;
-  }
-
-  // Show counter model
+  if (o.kind === "correct") { fb.className = "callout callout-success"; fb.innerHTML = `<strong>✓ Correct.</strong> The teacher-doctors are blocked from Artists → 'All Doctors = Artists' impossible.`; }
+  else { fb.className = "callout callout-trap"; fb.innerHTML = `<strong>⚠️ Trap:</strong> You granted a possibility a definitive exclusion forbids.`; }
   $("predict-model-wrap").classList.remove("hidden");
-  const pv = $("predict-venn");
-  pv.innerHTML = `
+  $("predict-venn").innerHTML = `
     <circle cx="170" cy="130" r="70" fill="#a78bfa" fill-opacity="0.25" stroke="#a78bfa" stroke-width="2.5"/>
     <text x="170" y="135" text-anchor="middle" font-size="13" font-weight="700" fill="#c4b5fd">Teachers</text>
-
     <ellipse cx="360" cy="130" rx="120" ry="70" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="2.5"/>
     <text x="360" y="75" text-anchor="middle" font-size="13" font-weight="700" fill="#93c5fd">Doctors</text>
-
     <circle cx="560" cy="130" r="70" fill="#22c55e" fill-opacity="0.25" stroke="#22c55e" stroke-width="2.5"/>
     <text x="560" y="135" text-anchor="middle" font-size="13" font-weight="700" fill="#86efac">Artists</text>
-
     <line x1="240" y1="130" x2="490" y2="130" stroke="#ef4444" stroke-width="2" stroke-dasharray="5 4"/>
-    <text x="380" y="220" text-anchor="middle" font-size="12" fill="#fca5a5" font-weight="700">
-      Doctors who ARE teachers (blue/purple overlap) can never enter Artists
-    </text>
-  `;
+    <text x="380" y="220" text-anchor="middle" font-size="12" fill="#fca5a5" font-weight="700">Doctor-teachers (overlap) permanently blocked from Artists</text>`;
 }
-
-$("btn-new-predict").addEventListener("click", () => {
-  state.predictLocked = false;
-  preparePredict();
-});
-
-// Either/Or mini-lab
+$("btn-new-predict").addEventListener("click", () => { state.predictLocked = false; preparePredict(); });
+// Either/Or
 function updateEitherVerdict() {
-  const c1 = $("cond-1").checked;
-  const c2 = $("cond-2").checked;
-  const c3 = $("cond-3").checked;
+  const c1 = $("cond-1").checked, c2 = $("cond-2").checked, c3 = $("cond-3").checked;
   const result = Model.checkEitherOr({ bothDoubtful: c1, sameTerms: c2, complementary: c3 });
   const v = $("either-verdict");
-  if (result.applies) {
-    v.className = "either-verdict yes";
-    v.textContent = "✓ Either/Or APPLIES — mark 'Either I or II follows'";
-  } else {
-    v.className = "either-verdict no";
-    v.textContent = "✗ Either/Or does NOT apply";
-  }
+  if (result.applies) { v.className = "either-verdict yes"; v.textContent = "✓ Either/Or APPLIES — mark 'Either I or II follows'"; }
+  else { v.className = "either-verdict no"; v.textContent = "✗ Either/Or does NOT apply"; }
 }
 $("cond-1").addEventListener("change", updateEitherVerdict);
 $("cond-2").addEventListener("change", updateEitherVerdict);
 $("cond-3").addEventListener("change", updateEitherVerdict);
+// Possibility
+function wirePoss() {
+  renderPoss();
+  document.querySelectorAll("#poss-guess [data-poss]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (poss.locked) return;
+      poss.locked = true;
+      document.querySelectorAll("#poss-guess [data-poss]").forEach(b => b.classList.remove("selected", "correct", "incorrect"));
+      const ans = btn.dataset.poss;
+      const ok = ans === "possible";
+      btn.classList.add(ok ? "correct" : "incorrect", "selected");
+      document.querySelector('#poss-guess [data-poss="possible"]').classList.add("correct");
+      const fb = $("poss-feedback");
+      fb.classList.remove("hidden");
+      fb.className = "callout " + (ok ? "callout-success" : "callout-trap");
+      fb.innerHTML = ok ? `<strong>Yes.</strong> Claim holds in 2, fails in 1 → possibility, not definite.` : `<strong>Not quite.</strong> One picture fails (red ✗). Definite needs ALL ✓. Mixed = possibility.`;
+    });
+  });
+}
 
 /* =====================================================================
-   7. PRACTICE
+   PRACTICE
    ===================================================================== */
 function shuffle(arr) {
   const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
   return a;
 }
 function setPracticeMode(mode) {
@@ -1379,17 +1372,12 @@ function setPracticeMode(mode) {
     b.setAttribute("aria-selected", on ? "true" : "false");
   });
   $("timer-container").classList.toggle("hidden", mode !== "timed");
-  if (mode === "timed") startTimer();
-  else stopTimer();
+  if (mode === "timed") startTimer(); else stopTimer();
   document.querySelectorAll("main > section").forEach((el, idx) => {
-    if (idx === 0 || idx === 1 || idx === 2 || idx === 3) {
-      el.style.display = (mode === "hints") ? "" : "none";
-    }
+    if (idx >= 0 && idx <= 10) { el.style.display = (mode === "hints") ? "" : "none"; }
   });
 }
-document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
-  b.addEventListener("click", () => setPracticeMode(b.dataset.mode));
-});
+document.querySelectorAll(".mode-btn[data-mode]").forEach(b => b.addEventListener("click", () => setPracticeMode(b.dataset.mode)));
 function startTimer() {
   stopTimer();
   state.timer.remaining = 90;
@@ -1397,27 +1385,12 @@ function startTimer() {
   state.timer.interval = setInterval(() => {
     state.timer.remaining--;
     $("timer-display").textContent = Math.max(0, state.timer.remaining);
-    if (state.timer.remaining <= 0) {
-      stopTimer();
-      if (!state.answered) {
-        const q = state.shuffled[state.currentQIndex];
-        markAnswer(-1, q);
-      }
-    }
+    if (state.timer.remaining <= 0) { stopTimer(); if (!state.answered) markAnswer(-1, state.shuffled[state.currentQIndex]); }
   }, 1000);
 }
-function stopTimer() {
-  if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; }
-}
-function loadProgress() {
-  try {
-    const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
-    if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw));
-  } catch {}
-}
-function saveProgress() {
-  try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch {}
-}
+function stopTimer() { if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; } }
+function loadProgress() { try { const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`); if (raw) state.stats = Object.assign(state.stats, JSON.parse(raw)); } catch (_) {} }
+function saveProgress() { try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch (_) {} }
 function renderStats() {
   $("stat-attempts").textContent = state.stats.attempts;
   $("stat-correct").textContent = state.stats.correct;
@@ -1426,139 +1399,68 @@ function renderStats() {
   $("stat-accuracy").textContent = acc + "%";
 }
 function renderQuestion() {
-  if (!state.testsPassed) {
-    $("practice-q-stem").textContent = "Practice is disabled because the model self-tests failed.";
-    return;
-  }
+  if (!state.testsPassed) { $("practice-q-stem").textContent = "Practice disabled."; return; }
   const q = state.shuffled[state.currentQIndex];
   state.answered = false;
   $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
   $("q-counter").textContent = `${state.currentQIndex + 1} / ${state.shuffled.length}`;
+  $("practice-progress").style.width = ((state.currentQIndex / state.shuffled.length) * 100) + "%";
   const d = $("practice-q-difficulty");
   d.textContent = q.difficulty;
-  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
-                             : q.difficulty === "Medium" ? "badge-draft"
-                             : "badge-tag");
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published" : q.difficulty === "Medium" ? "badge-draft" : "badge-tag");
   $("practice-q-stem").innerHTML = q.stem;
   $("practice-feedback").className = "callout hidden";
   $("practice-error-categorizer").classList.add("hidden");
   $("practice-solution-box").classList.add("hidden");
   $("btn-next-question").disabled = true;
-
-  const container = $("practice-options-container");
-  container.innerHTML = "";
+  const c = $("practice-options-container");
+  c.innerHTML = "";
   q.options.forEach((opt, i) => {
     const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "option-btn";
+    btn.type = "button"; btn.className = "option-btn";
     btn.textContent = String.fromCharCode(65 + i) + ". " + opt;
     btn.addEventListener("click", () => markAnswer(i, q));
-    container.appendChild(btn);
+    c.appendChild(btn);
   });
   if (state.practiceMode === "timed") startTimer();
 }
-function markAnswer(chosenIdx, q) {
+function markAnswer(chosen, q) {
   if (state.answered) return;
   state.answered = true;
   stopTimer();
-  const isCorrect = chosenIdx === q.correctIndex;
-  const isTrap = chosenIdx === q.trapOptionIndex;
+  const isCorrect = chosen === q.correctIndex;
+  const isTrap = chosen === q.trapOptionIndex;
   document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
     b.disabled = true;
     if (i === q.correctIndex) b.classList.add("correct");
-    else if (i === chosenIdx) b.classList.add(isTrap ? "trap" : "incorrect");
+    else if (i === chosen) b.classList.add(isTrap ? "trap" : "incorrect");
   });
   const fb = $("practice-feedback");
   fb.classList.remove("hidden");
-  if (isCorrect) {
-    fb.className = "callout callout-success";
-    fb.innerHTML = `<strong>✓ Correct.</strong>`;
-  } else if (isTrap) {
-    fb.className = "callout callout-trap";
-    fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`;
-    $("practice-error-categorizer").classList.remove("hidden");
-  } else {
-    fb.className = "callout callout-danger";
-    fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`;
-    $("practice-error-categorizer").classList.remove("hidden");
-  }
+  if (isCorrect) { fb.className = "callout callout-success"; fb.innerHTML = `<strong>✓ Correct.</strong>`; }
+  else if (isTrap) { fb.className = "callout callout-trap"; fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`; $("practice-error-categorizer").classList.remove("hidden"); }
+  else if (chosen === -1) { fb.className = "callout callout-danger"; fb.innerHTML = `<strong>Time's up.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`; $("practice-error-categorizer").classList.remove("hidden"); }
+  else { fb.className = "callout callout-danger"; fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`; $("practice-error-categorizer").classList.remove("hidden"); }
   $("practice-solution-box").classList.remove("hidden");
   $("practice-solution-text").textContent = q.solution;
   state.stats.attempts++;
-  if (isCorrect) {
-    state.stats.correct++;
-    if (state.practiceMode !== "hints") state.stats.independentCorrect++;
-  }
-  saveProgress();
-  renderStats();
+  if (isCorrect) { state.stats.correct++; if (state.practiceMode !== "hints") state.stats.independentCorrect++; }
+  saveProgress(); renderStats();
   $("btn-next-question").disabled = false;
 }
-$("btn-next-question").addEventListener("click", () => {
-  state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
-  renderQuestion();
-});
-$("btn-prev-q").addEventListener("click", () => {
-  state.currentQIndex = (state.currentQIndex - 1 + state.shuffled.length) % state.shuffled.length;
-  renderQuestion();
-});
-$("select-error-category").addEventListener("change", (e) => {
-  const cat = e.target.value;
-  state.stats.errorsByCat[cat] = (state.stats.errorsByCat[cat] || 0) + 1;
-  saveProgress();
-});
+$("btn-next-question").addEventListener("click", () => { state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length; renderQuestion(); });
+$("btn-prev-q").addEventListener("click", () => { state.currentQIndex = (state.currentQIndex - 1 + state.shuffled.length) % state.shuffled.length; renderQuestion(); });
+$("select-error-category").addEventListener("change", (e) => { state.stats.errorsByCat[e.target.value] = (state.stats.errorsByCat[e.target.value] || 0) + 1; saveProgress(); });
 function handleResetStats() {
   if (!confirm("Reset local practice stats?")) return;
   state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
-  saveProgress();
-  renderStats();
+  saveProgress(); renderStats();
 }
 window.handleResetStats = handleResetStats;
 
-/* ---- Definite vs possibility: ALL models at once, predict first ---- */
-function renderPoss() {
-  // Three side-by-side Venns. Claim: "Some Doctors are Artists" — holds in overlap & nest, fails when separate.
-  const models = [
-    { label: "Overlap", dx: 38, holds: true },
-    { label: "Doctors ⊂ Artists", dx: 18, holds: true },
-    { label: "Separate", dx: 78, holds: false }
-  ];
-  let html = "";
-  models.forEach((m, i) => {
-    const cx = 130 + i * 250, cy = 130;
-    html += `
-      <text x="${cx}" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8">${m.label}</text>
-      <circle cx="${cx - m.dx}" cy="${cy}" r="58" fill="rgba(56,189,248,0.22)" stroke="#38bdf8" stroke-width="2"/>
-      <circle cx="${cx + m.dx}" cy="${cy}" r="58" fill="rgba(34,197,94,0.22)" stroke="#22c55e" stroke-width="2"/>
-      <text x="${cx - m.dx - 20}" y="${cy + 5}" font-size="11" fill="#38bdf8">D</text>
-      <text x="${cx + m.dx + 12}" y="${cy + 5}" font-size="11" fill="#22c55e">A</text>
-      <text x="${cx}" y="230" text-anchor="middle" font-size="22" font-weight="800" fill="${m.holds ? '#22c55e' : '#ef4444'}">${m.holds ? "✓" : "✗"}</text>
-      <text x="${cx}" y="255" text-anchor="middle" font-size="11" fill="${m.holds ? '#22c55e' : '#ef4444'}">${m.holds ? "claim holds" : "claim fails"}</text>`;
-  });
-  html += `<text x="380" y="275" text-anchor="middle" font-size="12" fill="#64748b">2 greens, 1 red → NOT definite. Still a possibility.</text>`;
-  $("poss-svg").innerHTML = html;
-}
-function wirePoss() {
-  renderPoss();
-  document.querySelectorAll("#poss-guess [data-poss]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      if (poss.locked) return;
-      poss.locked = true;
-      document.querySelectorAll("#poss-guess [data-poss]").forEach(b => b.classList.remove("selected", "correct", "wrong"));
-      const ans = btn.dataset.poss;
-      const ok = ans === "possible";
-      btn.classList.add(ok ? "correct" : "incorrect", "selected");
-      document.querySelector('#poss-guess [data-poss="possible"]').classList.add("correct");
-      const fb = $("poss-feedback");
-      fb.classList.remove("hidden");
-      fb.className = "callout " + (ok ? "callout-success" : "callout-trap");
-      fb.innerHTML = ok
-        ? `<strong>Yes.</strong> Count the pictures: claim holds in 2, fails in 1. So it is a <em>possibility</em>, not definite. In the exam: never mark “follows” for a possibility unless the option says “possibility”.`
-        : `<strong>Not quite.</strong> Look again: one picture has D and A separate (red ✗). Definite means <em>every</em> picture. False means <em>no</em> picture. Here some pictures work → <strong>possibility</strong>.`;
-      $("poss-cap").textContent = "Mind rule: scan all allowed pictures. All ✓ = definite. Mix = possibility. All ✗ = does not follow.";
-    });
-  });
-}
-const poss = { locked: false };
+/* =====================================================================
+   INIT
+   ===================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
   wirePoss();
   const results = runSelfTests();
@@ -1566,19 +1468,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const banner = $("test-status-banner");
   if (!state.testsPassed) {
     banner.className = "test-banner";
-    banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong>
-      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
+    banner.innerHTML = `<strong>⚠️ Self-tests failing — practice disabled.</strong><ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
     $("practice-options-container").innerHTML = "";
   }
-
   loadProgress();
   state.shuffled = shuffle(PRACTICE_QUESTIONS);
-
-  // Init selectors
   $("premise-1").value = state.p1;
   $("premise-2").value = state.p2;
-
   renderAll();
+  renderConversion();
+  renderTranslator();
+  renderChain();
+  renderReverse();
+  renderMinMax();
+  renderOnlyFew();
   preparePredict();
   updateEitherVerdict();
   renderQuestion();

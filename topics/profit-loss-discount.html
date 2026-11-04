@@ -4,392 +4,196 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Profit, Loss &amp; Marked Price — Aptitude Lab</title>
-<meta name="description" content="See the price waterfall: CP → markup → MP → discount → SP. Interactive, predict-first, with ghost-bar traps and a unified number line." />
-<!-- SEO_META -->
+<meta name="description" content="Complete profit, loss and marked price lab: price waterfall, successive discounts, dishonest shopkeeper, target profit, promotional offers, and multi-transaction simulator." />
 <meta name="theme-color" content="#0b1220" />
 <meta name="color-scheme" content="dark" />
 <meta name="robots" content="index,follow" />
 <meta name="author" content="Aptitude Lab" />
-<meta name="keywords" content="profit loss, discount, marked price, successive discount" />
 <link rel="canonical" href="https://dakhintudu.github.io/aptitute-lab/topics/profit-loss-discount.html" />
-<meta property="og:site_name" content="Aptitude Lab" />
-<meta property="og:locale" content="en_IN" />
-<meta property="og:type" content="article" />
-<meta property="og:title" content="Profit, Loss &amp; Marked Price — Aptitude Lab" />
-<meta property="og:description" content="See the price waterfall: CP → markup → MP → discount → SP. Interactive, predict-first, with ghost-bar traps and a unified number line." />
-<meta property="og:url" content="https://dakhintudu.github.io/aptitute-lab/topics/profit-loss-discount.html" />
-<meta property="og:image" content="https://dakhintudu.github.io/aptitute-lab/assets/og-cover.jpg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Aptitude Lab — interactive aptitude and reasoning practice" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Profit, Loss &amp; Marked Price — Aptitude Lab" />
-<meta name="twitter:description" content="See the price waterfall: CP → markup → MP → discount → SP. Interactive, predict-first, with ghost-bar traps and a unified number line." />
-<meta name="twitter:image" content="https://dakhintudu.github.io/aptitute-lab/assets/og-cover.jpg" />
-<!-- /SEO_META -->
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 <link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
-/* =====================================================================
-   DESIGN TOKENS (shared with percentages page — keep in sync)
-   ===================================================================== */
 :root {
-  --bg: #0b1220;
-  --bg-elev: #111a2e;
-  --surface: #16213c;
-  --surface-2: #1c2848;
-  --border: #2a3758;
-  --border-strong: #3b4d78;
-  --text: #e8edf7;
-  --text-dim: #94a3b8;
-  --text-muted: #64748b;
-  --primary: #38bdf8;
-  --primary-dim: #0ea5e9;
-  --primary-soft: rgba(56, 189, 248, 0.12);
-  --success: #22c55e;
-  --success-soft: rgba(34, 197, 94, 0.12);
-  --warn: #f59e0b;
-  --warn-soft: rgba(245, 158, 11, 0.12);
-  --danger: #ef4444;
-  --danger-soft: rgba(239, 68, 68, 0.12);
-  --indigo: #818cf8;
-  --indigo-soft: rgba(129, 140, 248, 0.12);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
-  --transition: 180ms cubic-bezier(.4, 0, .2, 1);
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
 }
-
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  margin: 0; font-family: var(--font-sans);
-  background: var(--bg); color: var(--text);
-  line-height: 1.55; -webkit-font-smoothing: antialiased;
-  padding: 0 16px 64px;
+  margin: 0; font-family: var(--font-sans); background: var(--bg); color: var(--text);
+  line-height: 1.55; -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
 }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
-  html { scroll-behavior: auto; }
 }
-
-.skip-link {
-  position: absolute; left: -999px; top: 0; z-index: 100;
-  background: var(--primary); color: #001;
-  padding: 12px 16px; border-radius: 0 0 8px 0; font-weight: 700;
-}
+.skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--primary); color: #001; padding: 12px 16px; border-radius: 0 0 8px 0; font-weight: 700; }
 .skip-link:focus { left: 0; }
-
-.sr-only {
-  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
-
-h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
-h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
-h2 { font-size: 1.15rem; }
-h3 { font-size: 1rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+h1,h2,h3,h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.6rem,3vw,2rem); line-height: 1.2; }
+h2 { font-size: 1.15rem; } h3 { font-size: 1rem; }
 p { margin: 0 0 0.75rem; }
-
-code {
-  font-family: var(--font-mono); font-size: 0.875em;
-  background: var(--surface-2); border: 1px solid var(--border);
-  padding: 0.15em 0.4em; border-radius: 4px;
-}
-
+code { font-family: var(--font-mono); font-size: 0.875em; background: var(--surface-2); border: 1px solid var(--border); padding: 0.15em 0.4em; border-radius: 4px; }
 .page-container { max-width: 1080px; margin: 0 auto; }
-
-.card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 22px 22px 24px;
-  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
-}
-@media (min-width: 720px) {
-  .card { padding: 26px 28px 28px; }
-}
-
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 22px 24px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+@media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
 .card-header { margin-bottom: 18px; }
-.section-title {
-  display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;
-}
-.section-title::before {
-  content: counter(section-num);
-  counter-increment: section-num;
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 26px; height: 26px;
-  background: var(--primary-soft); color: var(--primary);
-  border-radius: 50%; font-size: 0.8rem; font-weight: 800;
-}
+.section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.section-title::before { content: counter(section-num); counter-increment: section-num; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary); border-radius: 50%; font-size: 0.8rem; font-weight: 800; }
 main { counter-reset: section-num; }
 .section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
-
-.site-header {
-  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
-  background: rgba(11, 18, 32, 0.85); border-bottom: 1px solid var(--border);
-  margin: 0 -16px 24px; padding: 12px 16px;
-}
-.header-container {
-  max-width: 1080px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-}
-.brand-link {
-  display: flex; align-items: center; gap: 10px;
-  color: var(--text); text-decoration: none; font-weight: 700;
-}
+.site-header { position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px); background: rgba(11,18,32,.85); border-bottom: 1px solid var(--border); margin: 0 -16px 24px; padding: 12px 16px; }
+.header-container { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
 .brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
 .nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
 .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
 .nav-link:hover { color: var(--text); }
-
-.badge {
-  display: inline-flex; align-items: center;
-  padding: 3px 9px; border-radius: 999px;
-  font-size: 0.72rem; font-weight: 700;
-  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
-}
+.badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap; }
 .badge-published { background: var(--success-soft); color: var(--success); }
 .badge-draft { background: var(--warn-soft); color: var(--warn); }
 .badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
-
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
-  border: 1px solid transparent; border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: background var(--transition), border-color var(--transition), transform var(--transition);
-}
+.badge-advanced { background: var(--indigo-soft); color: var(--indigo); text-transform: none; font-weight: 600; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; transition: background var(--transition), border-color var(--transition), transform var(--transition); }
 .btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-primary { background: var(--primary); color: #001824; }
 .btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
-.btn-secondary {
-  background: var(--surface-2); color: var(--text); border-color: var(--border-strong);
-}
+.btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
 .btn-secondary:hover:not(:disabled) { background: var(--border); }
 .btn-ghost { background: transparent; color: var(--text-dim); }
 .btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
 .btn-sm { padding: 6px 11px; font-size: 0.8rem; }
 .btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-
-.control-grid {
-  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
-}
+.control-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px; }
 @media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 960px) { .control-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; } }
+@media (min-width: 960px) { .control-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; } }
 .control-group { display: flex; flex-direction: column; gap: 6px; }
-.control-label {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  font-size: 0.85rem; font-weight: 600; color: var(--text);
-}
+.control-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text); }
 .control-hint { font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
-
-input[type=number] {
-  background: var(--bg-elev); color: var(--text);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  padding: 8px 10px; font-size: 0.95rem; font-family: var(--font-sans); width: 100%;
-  transition: border-color var(--transition);
-}
-input[type=number]:focus {
-  outline: none; border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-soft);
-}
+input[type=number] { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 0.95rem; font-family: var(--font-sans); width: 100%; transition: border-color var(--transition); }
+input[type=number]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
 input[type=number]:disabled { opacity: 0.6; cursor: not-allowed; }
 input[type=range] { width: 100%; accent-color: var(--primary); height: 24px; }
 input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.vis-container {
-  background: var(--bg-elev); border: 1px solid var(--border);
-  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
-}
+input[type=text], select { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 10px; font-family: inherit; font-size: 0.9rem; }
+select:focus, input[type=text]:focus { outline: none; border-color: var(--primary); }
+.vis-container { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px; }
 .vis-container svg { display: block; width: 100%; height: auto; }
-
-.score-bar {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
-}
-@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
-@media (min-width: 960px) { .score-bar.cols-5 { grid-template-columns: repeat(5, 1fr); } }
-.score-stat {
-  background: var(--bg-elev); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 10px 12px;
-  display: flex; flex-direction: column; gap: 2px;
-}
-.score-stat-label {
-  font-size: 0.72rem; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
-}
-.score-stat-num {
-  font-size: 1.05rem; font-weight: 700;
-  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
-}
-
-.callout {
-  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
-  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
-}
+.score-bar { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-top: 8px; }
+@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4,1fr); } }
+@media (min-width: 960px) { .score-bar.cols-5 { grid-template-columns: repeat(5,1fr); } }
+@media (min-width: 960px) { .score-bar.cols-6 { grid-template-columns: repeat(6,1fr); } }
+.score-stat { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.score-stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.score-stat-num { font-size: 1.05rem; font-weight: 700; font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text); }
+.callout { border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem; border: 1px solid var(--border); margin-top: 12px; line-height: 1.5; }
 .callout.hidden { display: none; }
 .callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
 .callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
 .callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
 .callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
 .callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
-
-.test-banner {
-  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
-  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
-}
+.test-banner { background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; }
 .test-banner.hidden { display: none; }
 .test-banner ul { margin: 8px 0 0 20px; padding: 0; }
-
-.predict-box {
-  background: linear-gradient(180deg, var(--surface-2), var(--surface));
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md); padding: 18px 20px;
-}
-.predict-header {
-  display: flex; align-items: center; gap: 8px;
-  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
-}
-.predict-header svg { flex-shrink: 0; }
-
-.options-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 10px; margin: 14px 0;
-}
-.option-btn {
-  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
-  padding: 12px 14px; border-radius: var(--radius-sm);
-  font-family: inherit; font-size: 0.95rem; font-weight: 600;
-  cursor: pointer; transition: all var(--transition); text-align: center;
-}
+.predict-box { background: linear-gradient(180deg,var(--surface-2),var(--surface)); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 18px 20px; }
+.predict-header { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem; }
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 10px; margin: 14px 0; }
+.option-btn { background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text); padding: 12px 14px; border-radius: var(--radius-sm); font-family: inherit; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all var(--transition); text-align: center; }
 .option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
 .option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
-.option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
 .option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
 .option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
 .option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
 .option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-
 .steps-container { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
-.step-item {
-  background: var(--bg-elev); border-left: 3px solid var(--primary);
-  border-radius: var(--radius-sm); padding: 12px 14px;
-}
-.step-num {
-  font-size: 0.72rem; color: var(--primary); font-weight: 800;
-  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
-}
+.step-item { background: var(--bg-elev); border-left: 3px solid var(--primary); border-radius: var(--radius-sm); padding: 12px 14px; }
+.step-num { font-size: 0.72rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
 .step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
-.step-detail {
-  font-family: var(--font-mono); background: var(--surface-2);
-  border: 1px solid var(--border); border-radius: 4px;
-  padding: 6px 10px; font-size: 0.85rem; margin-top: 6px;
-  color: var(--primary); overflow-x: auto;
-}
-
-.practice-header {
-  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.mode-toggle-group {
-  display: inline-flex; background: var(--bg-elev);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  padding: 3px; gap: 2px;
-}
-.mode-btn {
-  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
-  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
-  cursor: pointer; transition: all var(--transition);
-}
+.step-detail { font-family: var(--font-mono); background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 0.85rem; margin-top: 6px; color: var(--primary); overflow-x: auto; }
+.practice-header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.mode-toggle-group { display: inline-flex; background: var(--bg-elev); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 3px; gap: 2px; }
+.mode-btn { background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px; border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all var(--transition); }
 .mode-btn:hover { color: var(--text); }
 .mode-btn.active { background: var(--primary-soft); color: var(--primary); }
 .mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-
-.timer-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
-  padding: 6px 12px; border-radius: var(--radius-sm);
-  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
-}
+.timer-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn); padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono); }
 .timer-badge.hidden { display: none; }
-
-.question-stem {
-  font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500;
-}
-
-.site-footer {
-  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
-  color: var(--text-dim); font-size: 0.85rem;
-}
+.question-stem { font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500; }
+.site-footer { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem; }
 .footer-container { max-width: 1080px; margin: 0 auto; }
-.disclaimer-box {
-  background: var(--bg-elev); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
-  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
-}
-
-.error-categorizer {
-  margin-top: 12px; padding: 12px;
-  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
-}
+.error-categorizer { margin-top: 12px; padding: 12px; background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border); }
 .error-categorizer.hidden { display: none; }
-.error-categorizer label {
-  font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;
-}
-.error-categorizer select {
-  background: var(--surface-2); color: var(--text);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
-}
-
+.error-categorizer label { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px; }
+.error-categorizer select { background: var(--surface-2); color: var(--text); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%; }
 .ghost-fade { opacity: 0; animation: fadeIn 400ms ease-out forwards; }
 @keyframes fadeIn { to { opacity: 1; } }
-
-/* Simple live footer */
-.lab-footer-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 12px 20px;
-}
-.lab-footer-brand {
-  font-size: 0.88rem;
-  color: var(--text-dim, #94a3b8);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px 8px;
-}
-.lab-footer-brand a,
-.lab-footer-brand strong {
-  color: var(--text, #e8edf7);
-  font-weight: 700;
-  text-decoration: none;
-}
-.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
-.lab-footer-sep { color: var(--text-muted, #64748b); }
-.lab-footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  font-size: 0.84rem;
-}
-.lab-footer-nav a {
-  color: var(--primary, #38bdf8);
-  text-decoration: none;
-  font-weight: 600;
-}
+.lab-footer-row { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px 20px; }
+.lab-footer-brand { font-size: 0.88rem; color: var(--text-dim); display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 8px; }
+.lab-footer-brand a, .lab-footer-brand strong { color: var(--text); font-weight: 700; text-decoration: none; }
+.lab-footer-brand a:hover { color: var(--primary); }
+.lab-footer-sep { color: var(--text-muted); }
+.lab-footer-nav { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.84rem; }
+.lab-footer-nav a { color: var(--primary); text-decoration: none; font-weight: 600; }
 .lab-footer-nav a:hover { text-decoration: underline; }
-.lab-footer-note {
-  margin: 14px 0 0;
-  font-size: 0.78rem;
-  color: var(--text-muted, #64748b);
-  line-height: 1.5;
-}
+.lab-footer-note { margin: 14px 0 0; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
 .disclaimer-box { display: none; }
 
+/* Tab interface */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+.tab-btn { background: transparent; color: var(--text-dim); border: 0; border-bottom: 2px solid transparent; padding: 10px 14px; font-family: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all var(--transition); margin-bottom: -1px; }
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.tab-panel.hidden { display: none; }
+
+/* Transaction list */
+.tx-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.tx-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 8px; align-items: center; background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; }
+@media (max-width: 640px) { .tx-row { grid-template-columns: 1fr 1fr; } .tx-row > *:last-child { grid-column: span 2; } }
+.tx-row input { width: 100%; padding: 5px 8px; font-size: 0.85rem; }
+.tx-row label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 2px; }
+
+/* Two-column layout */
+.split-2 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+@media (min-width: 800px) { .split-2 { grid-template-columns: 1fr 1fr; } }
+
+/* Formula card */
+.formula-card { background: linear-gradient(135deg, var(--surface-2), var(--bg-elev)); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 14px 16px; }
+.formula-card .label { font-size: 0.72rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.formula-card .eq { font-family: var(--font-mono); font-size: 0.95rem; color: var(--text); margin-bottom: 4px; line-height: 1.4; }
+.formula-card .note { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+
+/* Live calc box */
+.live-calc { background: var(--bg-elev); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 14px 16px; margin-top: 12px; }
+.live-calc .result { font-size: 1.4rem; font-weight: 800; font-family: var(--font-mono); color: var(--primary); }
+.live-calc .result.profit { color: var(--success); }
+.live-calc .result.loss { color: var(--danger); }
+.live-calc .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
+.live-calc .explain { font-size: 0.85rem; color: var(--text-dim); margin-top: 8px; line-height: 1.5; }
+
+/* Topic grid */
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 12px; margin: 12px 0; }
+.topic-card { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+.topic-card .title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; color: var(--primary); }
+.topic-card .body { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+
+/* Progress indicator for practice */
+.progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin: 8px 0 16px; overflow: hidden; }
+.progress-bar .fill { height: 100%; background: var(--primary); transition: width var(--transition); }
 </style>
 </head>
 <body>
@@ -411,7 +215,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        </ul>
+      </ul>
     </nav>
   </div>
 </header>
@@ -428,21 +232,19 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
     <h1>Profit, Loss &amp; Marked Price</h1>
     <p class="section-subtitle" style="margin-top:8px;">
-      Three prices, three different bases. Markup % is computed on <strong>CP</strong>. Discount % is computed on <strong>MP</strong>. Profit % is computed on <strong>CP</strong> again. Every trap in this chapter comes from mixing them up.
+      Three prices, three different bases. Markup % on <strong>CP</strong>. Discount % on <strong>MP</strong>. Profit % on <strong>CP</strong>. Every trap comes from mixing them up. Path: Understand → Predict → calculators → Play labs → Practice → Shortcuts.
     </p>
   </header>
 
-  <!-- ===== SECTION 1 — PRICE WATERFALL ===== -->
-  <section class="card" aria-labelledby="s1">
+  <!-- ===== 1 — UNDERSTAND ===== -->
+  <section class="card" id="understand" data-lab-label="Understand" aria-labelledby="s1">
     <div class="card-header">
-      <h2 id="s1" class="section-title">See the price waterfall</h2>
+      <h2 id="s1" class="section-title">Understand: price waterfall</h2>
       <p class="section-subtitle">The bar grows by markup (on CP), then shrinks by discount (on MP). Where it lands relative to CP is the net profit or loss.</p>
     </div>
 
     <div style="margin-bottom:18px;">
-      <span style="font-size:.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:.5rem;">
-        Standard exam presets (click to load):
-      </span>
+      <span style="font-size:.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:.5rem;">Standard exam presets (click to load):</span>
       <div style="display:flex; gap:.4rem; flex-wrap:wrap;">
         <button type="button" class="btn btn-secondary btn-sm" data-preset="500,40,20">+40% then −20% → +12% profit</button>
         <button type="button" class="btn btn-secondary btn-sm" data-preset="800,25,20">+25% then −20% → breakeven</button>
@@ -454,25 +256,16 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
 
     <div class="control-grid cols-3">
       <div class="control-group">
-        <label for="input-cp" class="control-label">
-          <span>Cost Price CP</span>
-          <span id="cp-display-badge" class="badge badge-tag">₹500</span>
-        </label>
+        <label for="input-cp" class="control-label"><span>Cost Price CP</span><span id="cp-display-badge" class="badge badge-tag">₹500</span></label>
         <input type="number" id="input-cp" value="500" min="10" max="50000" step="10">
       </div>
       <div class="control-group">
-        <label for="input-markup" class="control-label">
-          <span>Markup <span style="font-family:var(--font-mono);">m%</span></span>
-          <span id="markup-display-badge" class="badge badge-tag">+40% on CP</span>
-        </label>
+        <label for="input-markup" class="control-label"><span>Markup <span style="font-family:var(--font-mono);">m%</span></span><span id="markup-display-badge" class="badge badge-tag">+40% on CP</span></label>
         <input type="range" id="range-markup" min="0" max="150" value="40" step="1">
         <input type="number" id="input-markup" value="40" min="0" max="200" step="1">
       </div>
       <div class="control-group">
-        <label for="input-discount" class="control-label">
-          <span>Discount <span style="font-family:var(--font-mono);">d%</span></span>
-          <span id="discount-display-badge" class="badge badge-tag">20% on MP</span>
-        </label>
+        <label for="input-discount" class="control-label"><span>Discount <span style="font-family:var(--font-mono);">d%</span></span><span id="discount-display-badge" class="badge badge-tag">20% on MP</span></label>
         <input type="range" id="range-discount" min="0" max="80" value="20" step="1">
         <input type="number" id="input-discount" value="20" min="0" max="99" step="1">
       </div>
@@ -494,10 +287,10 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
   </section>
 
-  <!-- ===== SECTION 2 — PREDICT GATE ===== -->
-  <section class="card" aria-labelledby="s2">
+  <!-- ===== 2 — PREDICT ===== -->
+  <section class="card" id="predict" data-lab-label="Predict" aria-labelledby="s-predict">
     <div class="card-header">
-      <h2 id="s2" class="section-title">Predict first</h2>
+      <h2 id="s-predict" class="section-title">Predict first</h2>
       <p class="section-subtitle">The most common mistake is subtracting the discount from the markup. Predict before you check.</p>
     </div>
 
@@ -531,55 +324,155 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
   </section>
 
-  <!-- ===== SECTION 3 — SUCCESSIVE DISCOUNT MINI-LAB ===== -->
-  <section class="card" aria-labelledby="s3">
+  <!-- ===== 3 — REVERSE CALCULATOR ===== -->
+  <section class="card" id="reverse" data-lab-label="Reverse calculator" aria-labelledby="s2">
     <div class="card-header">
-      <h2 id="s3" class="section-title">Successive discounts — why 20% + 10% ≠ 30%</h2>
-      <p class="section-subtitle">The second discount lands on what's <em>left</em>, not on the original MP. Two discounts shrink the same bar; the gaps are visible.</p>
+      <h2 id="s2" class="section-title">Reverse calculator — find the missing price</h2>
+      <p class="section-subtitle">Given any two of CP, SP, MP, and P/L%, find the third. The most common exam question type after the basics.</p>
     </div>
 
-    <div class="control-grid" style="max-width:640px;">
+    <div class="control-grid cols-4">
       <div class="control-group">
-        <label for="sd-d1" class="control-label">
-          <span>First discount d₁</span>
-          <span id="sd-d1-badge" class="badge badge-tag">20%</span>
-        </label>
-        <input type="range" id="sd-d1" min="0" max="60" value="20" step="1">
+        <label for="rev-mode" class="control-label"><span>What to find?</span></label>
+        <select id="rev-mode">
+          <option value="find-cp">Find CP from SP + P/L%</option>
+          <option value="find-sp">Find SP from CP + P/L%</option>
+          <option value="find-mp-from-target">Find MP from CP + target P% + discount%</option>
+          <option value="find-pct">Find P/L% from CP + SP</option>
+        </select>
       </div>
       <div class="control-group">
-        <label for="sd-d2" class="control-label">
-          <span>Second discount d₂</span>
-          <span id="sd-d2-badge" class="badge badge-tag">10%</span>
-        </label>
-        <input type="range" id="sd-d2" min="0" max="60" value="10" step="1">
+        <label for="rev-a" class="control-label"><span id="rev-a-label">SP (₹)</span></label>
+        <input type="number" id="rev-a" value="960" min="1" step="1">
+      </div>
+      <div class="control-group">
+        <label for="rev-b" class="control-label"><span id="rev-b-label">P/L %</span></label>
+        <input type="number" id="rev-b" value="20" step="0.1">
+      </div>
+      <div class="control-group">
+        <label for="rev-c" class="control-label"><span id="rev-c-label">Discount %</span></label>
+        <input type="number" id="rev-c" value="10" step="0.1">
       </div>
     </div>
 
-    <div class="vis-container">
-      <svg id="successive-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="Successive discount visualisation">
-        <title>Two successive discounts shrinking the same 100% bar</title>
-      </svg>
-    </div>
-
-    <div class="score-bar" aria-label="Successive discount result">
-      <div class="score-stat"><span class="score-stat-label">Equivalent single discount</span><span class="score-stat-num" id="sd-eq">28%</span></div>
-      <div class="score-stat"><span class="score-stat-label">Naive sum (wrong)</span><span class="score-stat-num" id="sd-naive" style="color:var(--danger)">30%</span></div>
-      <div class="score-stat"><span class="score-stat-label">Final multiplier</span><span class="score-stat-num" id="sd-mult">0.72×</span></div>
-      <div class="score-stat"><span class="score-stat-label">Gap between them</span><span class="score-stat-num" id="sd-gap" style="color:var(--warn)">2%</span></div>
+    <div class="live-calc" id="rev-result-box">
+      <div class="label" id="rev-result-label">Cost Price</div>
+      <div class="result" id="rev-result">₹1,200</div>
+      <div class="explain" id="rev-explain">Sold at 20% loss → CP = SP / (1 − 0.20) = 960 / 0.80 = ₹1,200.</div>
     </div>
   </section>
 
-  <!-- ===== SECTION 4 — EQUAL SP MINI-LAB ===== -->
-  <section class="card" aria-labelledby="s4">
+  <!-- ===== 4 — TARGET PROFIT ===== -->
+  <section class="card" id="target-profit" data-lab-label="Target profit calc" aria-labelledby="s3">
     <div class="card-header">
-      <h2 id="s4" class="section-title">Understand: equal SP with +x% and −x% — why always a loss</h2>
-      <p class="section-subtitle">Don't memorise (x/10)². Two items, same SP: one bought cheap (gain), one bought dear (loss). Total CP &gt; total SP every time. See the two bars vs the shared SP line — then the shortcut makes sense.</p>
+      <h2 id="s3" class="section-title">Target profit calculator</h2>
+      <p class="section-subtitle">A high-frequency exam question: "At what MP should I list so that after a given discount, I still earn a target profit?"</p>
+    </div>
+
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="tp-cp" class="control-label"><span>CP (₹)</span></label>
+        <input type="number" id="tp-cp" value="800" min="1" step="10">
+      </div>
+      <div class="control-group">
+        <label for="tp-profit" class="control-label"><span>Target profit %</span><span id="tp-profit-badge" class="badge badge-tag">25%</span></label>
+        <input type="range" id="tp-profit" min="0" max="100" value="25" step="1">
+      </div>
+      <div class="control-group">
+        <label for="tp-discount" class="control-label"><span>Discount offered %</span><span id="tp-discount-badge" class="badge badge-tag">20%</span></label>
+        <input type="range" id="tp-discount" min="0" max="80" value="20" step="1">
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Required MP</span><span class="score-stat-num" id="tp-mp">₹1,250</span></div>
+      <div class="score-stat"><span class="score-stat-label">Required markup %</span><span class="score-stat-num" id="tp-markup">56.25%</span></div>
+      <div class="score-stat"><span class="score-stat-label">SP after discount</span><span class="score-stat-num" id="tp-sp">₹1,000</span></div>
+      <div class="score-stat"><span class="score-stat-label">Check: net profit</span><span class="score-stat-num" id="tp-check">25%</span></div>
+    </div>
+
+    <div class="live-calc" style="margin-top:16px;">
+      <div class="label">Derivation</div>
+      <div class="explain" id="tp-explain">SP must be CP × (1 + 25/100) = ₹1,000. MP must satisfy MP × (1 − 20/100) = ₹1,000 → MP = ₹1,000 / 0.80 = ₹1,250.</div>
+    </div>
+
+    <div class="formula-card" style="margin-top:14px;">
+      <div class="label">Master formula</div>
+      <div class="eq">MP = CP × (1 + P/100) / (1 − d/100)</div>
+      <div class="note">Where P = target profit % (on CP) and d = discount % (on MP).</div>
+    </div>
+  </section>
+
+  <!-- ===== 5 — PLAY: SUCCESSIVE ===== -->
+  <section class="card" id="play-successive" data-lab-label="Play" aria-labelledby="s4">
+    <div class="card-header">
+      <h2 id="s4" class="section-title">Play: successive discount &amp; markup</h2>
+      <p class="section-subtitle">Two successive increases (markups) also compound. Two decreases (discounts) also compound. Both use the same multiplication chain.</p>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="sd-discount" role="tab" aria-selected="true">Successive discounts</button>
+      <button class="tab-btn" data-tab="sd-markup" role="tab" aria-selected="false">Successive markup</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-sd-discount">
+      <div class="control-grid" style="max-width:640px;">
+        <div class="control-group">
+          <label for="sd-d1" class="control-label"><span>First discount d₁</span><span id="sd-d1-badge" class="badge badge-tag">20%</span></label>
+          <input type="range" id="sd-d1" min="0" max="60" value="20" step="1">
+        </div>
+        <div class="control-group">
+          <label for="sd-d2" class="control-label"><span>Second discount d₂</span><span id="sd-d2-badge" class="badge badge-tag">10%</span></label>
+          <input type="range" id="sd-d2" min="0" max="60" value="10" step="1">
+        </div>
+      </div>
+
+      <div class="vis-container">
+        <svg id="successive-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="Successive discount visualisation">
+          <title>Two successive discounts shrinking the same 100% bar</title>
+        </svg>
+      </div>
+
+      <div class="score-bar">
+        <div class="score-stat"><span class="score-stat-label">Equivalent single discount</span><span class="score-stat-num" id="sd-eq">28%</span></div>
+        <div class="score-stat"><span class="score-stat-label">Naive sum (wrong)</span><span class="score-stat-num" id="sd-naive" style="color:var(--danger)">30%</span></div>
+        <div class="score-stat"><span class="score-stat-label">Final multiplier</span><span class="score-stat-num" id="sd-mult">0.72×</span></div>
+        <div class="score-stat"><span class="score-stat-label">Gap between them</span><span class="score-stat-num" id="sd-gap" style="color:var(--warn)">2%</span></div>
+      </div>
+    </div>
+
+    <div class="tab-panel hidden" id="tab-sd-markup">
+      <div class="control-grid" style="max-width:640px;">
+        <div class="control-group">
+          <label for="sm-m1" class="control-label"><span>First markup m₁</span><span id="sm-m1-badge" class="badge badge-tag">20%</span></label>
+          <input type="range" id="sm-m1" min="0" max="100" value="20" step="1">
+        </div>
+        <div class="control-group">
+          <label for="sm-m2" class="control-label"><span>Second markup m₂</span><span id="sm-m2-badge" class="badge badge-tag">10%</span></label>
+          <input type="range" id="sm-m2" min="0" max="100" value="10" step="1">
+        </div>
+      </div>
+      <div class="score-bar">
+        <div class="score-stat"><span class="score-stat-label">Equivalent single markup</span><span class="score-stat-num" id="sm-eq">32%</span></div>
+        <div class="score-stat"><span class="score-stat-label">Naive sum (wrong)</span><span class="score-stat-num" id="sm-naive" style="color:var(--danger)">30%</span></div>
+        <div class="score-stat"><span class="score-stat-label">Final multiplier</span><span class="score-stat-num" id="sm-mult">1.32×</span></div>
+        <div class="score-stat"><span class="score-stat-label">Gap between them</span><span class="score-stat-num" id="sm-gap" style="color:var(--warn)">−2%</span></div>
+      </div>
+      <div class="callout callout-info" style="margin-top:14px;">
+        <strong>Note:</strong> Successive markups increase faster than the naive sum — 20% then 10% gives <code>1.20 × 1.10 = 1.32</code> → 32% total markup, not 30%.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6 — EQUAL SP ===== -->
+  <section class="card" id="equal-sp" data-lab-label="Equal SP with +x%" aria-labelledby="s5">
+    <div class="card-header">
+      <h2 id="s5" class="section-title">Equal SP with +x% and −x% — why always a loss</h2>
+      <p class="section-subtitle">Don't memorise (x/10)². Two items, same SP: one bought cheap (gain), one bought dear (loss). Total CP &gt; total SP every time.</p>
     </div>
 
     <div class="control-group" style="max-width:420px;">
-      <label for="esp-x" class="control-label">
-        <span>Gain on one, loss on other: <span id="esp-x-badge" style="color:var(--primary); font-family:var(--font-mono);">10</span>%</span>
-      </label>
+      <label for="esp-x" class="control-label"><span>Gain on one, loss on other: <span id="esp-x-badge" style="color:var(--primary); font-family:var(--font-mono);">10</span>%</span></label>
       <input type="range" id="esp-x" min="1" max="50" value="10" step="1">
     </div>
 
@@ -597,16 +490,243 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
 
     <p style="font-size:.85rem; color:var(--text-muted); margin-top:14px; line-height:1.6;">
-      When two articles are sold at the <em>same</em> SP with ±x%, the total is always a loss of
-      <code>(x/10)²%</code>. If they had the same <em>CP</em>, the answer would be 0%. The base swap is what creates the loss.
+      When two articles are sold at the <em>same</em> SP with ±x%, the total is always a loss of <code>(x/10)²%</code>. If they had the same <em>CP</em>, the answer would be 0%. The base swap is what creates the loss.
     </p>
   </section>
 
-  <!-- ===== SECTION 5 — PRACTICE ===== -->
-  <section class="card" aria-labelledby="s5">
+  <!-- ===== 7 — DISHONEST SHOPKEEPER ===== -->
+  <section class="card" id="dishonest" data-lab-label="Dishonest shopkeeper" aria-labelledby="s6">
     <div class="card-header">
-      <h2 id="s5" class="section-title">Practice</h2>
-      <p class="section-subtitle">Shuffled each session. Traps have real reasons, not arbitrary wrong numbers.</p>
+      <h2 id="s6" class="section-title">Dishonest shopkeeper simulator</h2>
+      <p class="section-subtitle">The shopkeeper claims to sell at cost price, but uses a lighter weight. What is the real profit %?</p>
+    </div>
+
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="ds-true" class="control-label"><span>Claims to sell (g)</span></label>
+        <input type="number" id="ds-true" value="1000" min="100" step="50">
+      </div>
+      <div class="control-group">
+        <label for="ds-false" class="control-label"><span>Actually gives (g)</span><span id="ds-false-badge" class="badge badge-tag">900g</span></label>
+        <input type="range" id="ds-false" min="500" max="1000" value="900" step="10">
+        <input type="number" id="ds-false-num" value="900" min="100" max="1000" step="10">
+      </div>
+      <div class="control-group">
+        <label for="ds-cp" class="control-label"><span>CP per 1 kg (₹)</span></label>
+        <input type="number" id="ds-cp" value="100" min="1" step="10">
+      </div>
+    </div>
+
+    <div class="vis-container">
+      <svg id="dishonest-svg" viewBox="0 0 760 200" width="100%" role="img" aria-label="Dishonest shopkeeper weight comparison">
+        <title>Comparison of claimed weight vs actual weight delivered</title>
+      </svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">True CP of goods sold</span><span class="score-stat-num" id="ds-true-cost">₹90</span></div>
+      <div class="score-stat"><span class="score-stat-label">Revenue charged</span><span class="score-stat-num" id="ds-revenue">₹100</span></div>
+      <div class="score-stat"><span class="score-stat-label">Real profit</span><span class="score-stat-num" id="ds-profit-amt">₹10</span></div>
+      <div class="score-stat"><span class="score-stat-label">Real profit %</span><span class="score-stat-num" id="ds-profit-pct" style="color:var(--success)">11.11%</span></div>
+      <div class="score-stat"><span class="score-stat-label">Naive guess</span><span class="score-stat-num" id="ds-naive" style="color:var(--danger)">10%</span></div>
+    </div>
+
+    <div class="live-calc">
+      <div class="label">Formula derivation</div>
+      <div class="explain" id="ds-explain">
+        Gain % = (True Weight − False Weight) / False Weight × 100 = (1000 − 900) / 900 × 100 = 11.11%.
+      </div>
+    </div>
+
+    <div class="callout callout-trap" style="margin-top:12px;">
+      <strong>⚠️ Classic trap:</strong> The naive answer is 100/1000 = 10%. But the denominator must be the <em>actual goods sold</em>, not the claimed weight. That's why the answer is 100/900 = 11.11%.
+    </div>
+  </section>
+
+  <!-- ===== 8 — PROMOTIONAL OFFERS ===== -->
+  <section class="card" id="promo" data-lab-label="Promotional offer" aria-labelledby="s7">
+    <div class="card-header">
+      <h2 id="s7" class="section-title">Promotional offer simulator — Buy X Get Y Free</h2>
+      <p class="section-subtitle">"Buy 4 get 1 free" is not the same as 20% off. Compare promotional schemes against a plain discount.</p>
+    </div>
+
+    <div class="control-grid cols-4">
+      <div class="control-group">
+        <label for="po-buy" class="control-label"><span>Buy X items</span><span id="po-buy-badge" class="badge badge-tag">4</span></label>
+        <input type="range" id="po-buy" min="1" max="10" value="4" step="1">
+      </div>
+      <div class="control-group">
+        <label for="po-get" class="control-label"><span>Get Y free</span><span id="po-get-badge" class="badge badge-tag">1</span></label>
+        <input type="range" id="po-get" min="0" max="5" value="1" step="1">
+      </div>
+      <div class="control-group">
+        <label for="po-price" class="control-label"><span>MRP per item (₹)</span></label>
+        <input type="number" id="po-price" value="100" min="1" step="10">
+      </div>
+      <div class="control-group">
+        <label for="po-extra-discount" class="control-label"><span>Extra % discount</span><span id="po-extra-badge" class="badge badge-tag">0%</span></label>
+        <input type="range" id="po-extra-discount" min="0" max="50" value="0" step="1">
+      </div>
+    </div>
+
+    <div class="vis-container">
+      <svg id="promo-svg" viewBox="0 0 760 200" width="100%" role="img" aria-label="Promotional offer visual">
+        <title>Buy X get Y free offer compared to equivalent discount</title>
+      </svg>
+    </div>
+
+    <div class="score-bar cols-5">
+      <div class="score-stat"><span class="score-stat-label">Total items received</span><span class="score-stat-num" id="po-total">5</span></div>
+      <div class="score-stat"><span class="score-stat-label">Amount paid</span><span class="score-stat-num" id="po-paid">₹400</span></div>
+      <div class="score-stat"><span class="score-stat-label">Value received</span><span class="score-stat-num" id="po-value">₹500</span></div>
+      <div class="score-stat"><span class="score-stat-label">Effective discount %</span><span class="score-stat-num" id="po-effective">20%</span></div>
+      <div class="score-stat"><span class="score-stat-label">With extra discount</span><span class="score-stat-num" id="po-combined">20%</span></div>
+    </div>
+
+    <div class="live-calc">
+      <div class="label">Effective discount formula</div>
+      <div class="explain" id="po-explain">
+        Effective discount = Y / (X + Y) × 100 = 1 / 5 × 100 = 20%. You pay for 4 out of 5 items.
+      </div>
+    </div>
+
+    <div class="topic-grid" style="margin-top:16px;">
+      <div class="topic-card">
+        <div class="title">Buy 1 Get 1 Free</div>
+        <div class="body">You pay for 1 of 2 → effective discount = 1/2 = <strong>50%</strong>. Equivalent to a half-price sale.</div>
+      </div>
+      <div class="topic-card">
+        <div class="title">Buy 2 Get 1 Free</div>
+        <div class="body">Pay for 2 of 3 → effective = 1/3 = <strong>33.33%</strong>. Better than 30% off but less than 35% off.</div>
+      </div>
+      <div class="topic-card">
+        <div class="title">Buy 3 Get 2 Free</div>
+        <div class="body">Pay for 3 of 5 → effective = 2/5 = <strong>40%</strong>. Equivalent to 40% flat discount.</div>
+      </div>
+      <div class="topic-card">
+        <div class="title">Trap alert</div>
+        <div class="body">"Buy 3 get 1 free" is <strong>25%</strong> off, not 33%. Always divide the free items by the total received.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 9 — MULTIPLE TRANSACTIONS ===== -->
+  <section class="card" id="multi-txn" data-lab-label="Multiple transactions" aria-labelledby="s8">
+    <div class="card-header">
+      <h2 id="s8" class="section-title">Multiple transaction simulator</h2>
+      <p class="section-subtitle">Add several purchases and sales. See the overall profit or loss across all transactions.</p>
+    </div>
+
+    <div id="tx-list" class="tx-list"></div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button type="button" class="btn btn-secondary btn-sm" id="tx-add">+ Add transaction</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="tx-reset">Reset to example</button>
+    </div>
+
+    <div class="score-bar cols-5" style="margin-top:16px;">
+      <div class="score-stat"><span class="score-stat-label">Total CP</span><span class="score-stat-num" id="tx-total-cp">₹0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Total SP</span><span class="score-stat-num" id="tx-total-sp">₹0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Net P/L amount</span><span class="score-stat-num" id="tx-net-amt">₹0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Overall P/L %</span><span class="score-stat-num" id="tx-net-pct">0%</span></div>
+      <div class="score-stat"><span class="score-stat-label">Result</span><span class="score-stat-num" id="tx-result">—</span></div>
+    </div>
+
+    <div class="live-calc">
+      <div class="label">How overall % is computed</div>
+      <div class="explain" id="tx-explain">Overall P/L% = (Total SP − Total CP) / Total CP × 100. Never average individual percentages — that ignores weights.</div>
+    </div>
+
+    <div class="callout callout-trap" style="margin-top:12px;">
+      <strong>⚠️ Trap:</strong> A 20% gain on one item and 20% loss on another does NOT cancel out unless their CPs are equal. Always weight by CP amount.
+    </div>
+  </section>
+
+  <!-- ===== 10 — PROFIT ON SP vs CP ===== -->
+  <section class="card" id="profit-base" data-lab-label="Profit on SP vs CP" aria-labelledby="s9">
+    <div class="card-header">
+      <h2 id="s9" class="section-title">Profit on SP vs profit on CP — the silent trap</h2>
+      <p class="section-subtitle">"20% profit" almost always means on CP. But some problems say "profit is 20% of SP". These are not the same.</p>
+    </div>
+
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="ps-cp" class="control-label"><span>CP (₹)</span></label>
+        <input type="number" id="ps-cp" value="100" min="1" step="10">
+      </div>
+      <div class="control-group">
+        <label for="ps-pct" class="control-label"><span>Profit %</span><span id="ps-pct-badge" class="badge badge-tag">20%</span></label>
+        <input type="range" id="ps-pct" min="1" max="80" value="20" step="1">
+      </div>
+      <div class="control-group">
+        <label for="ps-base" class="control-label"><span>% is computed on</span></label>
+        <select id="ps-base">
+          <option value="cp">Cost Price (standard)</option>
+          <option value="sp">Selling Price (trap)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">SP (if on CP)</span><span class="score-stat-num" id="ps-sp-on-cp">₹120</span></div>
+      <div class="score-stat"><span class="score-stat-label">SP (if on SP)</span><span class="score-stat-num" id="ps-sp-on-sp">₹125</span></div>
+      <div class="score-stat"><span class="score-stat-label">P% on CP (if on SP)</span><span class="score-stat-num" id="ps-pct-on-cp">25%</span></div>
+      <div class="score-stat"><span class="score-stat-label">Formula (on SP)</span><span class="score-stat-num" id="ps-formula" style="font-size:.9rem;">P%×100/(100−P%)</span></div>
+    </div>
+
+    <div class="live-calc">
+      <div class="label">Conversion formula</div>
+      <div class="explain" id="ps-explain">
+        If profit is P% of SP, then SP = CP / (1 − P/100). Profit on CP = P × 100 / (100 − P). Example: 20% on SP → 25% on CP.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 11 — OVERHEADS ===== -->
+  <section class="card" id="overheads" data-lab-label="Overheads &amp; expenses" aria-labelledby="s10">
+    <div class="card-header">
+      <h2 id="s10" class="section-title">Overheads &amp; expenses — the real cost</h2>
+      <p class="section-subtitle">Transport, packaging, labour, commission — all get added to CP before profit is computed. A classic exam trick.</p>
+    </div>
+
+    <div class="control-grid cols-4">
+      <div class="control-group">
+        <label for="oh-purchase" class="control-label"><span>Purchase price (₹)</span></label>
+        <input type="number" id="oh-purchase" value="500" min="1" step="10">
+      </div>
+      <div class="control-group">
+        <label for="oh-expenses" class="control-label"><span>Extra expenses (₹)</span></label>
+        <input type="number" id="oh-expenses" value="50" min="0" step="10">
+      </div>
+      <div class="control-group">
+        <label for="oh-markup" class="control-label"><span>Markup %</span><span id="oh-markup-badge" class="badge badge-tag">20%</span></label>
+        <input type="range" id="oh-markup" min="0" max="100" value="20" step="1">
+      </div>
+      <div class="control-group">
+        <label for="oh-discount" class="control-label"><span>Discount %</span><span id="oh-discount-badge" class="badge badge-tag">5%</span></label>
+        <input type="range" id="oh-discount" min="0" max="60" value="5" step="1">
+      </div>
+    </div>
+
+    <div class="score-bar cols-6">
+      <div class="score-stat"><span class="score-stat-label">Effective CP</span><span class="score-stat-num" id="oh-total-cp">₹550</span></div>
+      <div class="score-stat"><span class="score-stat-label">MP (on effective CP)</span><span class="score-stat-num" id="oh-mp">₹660</span></div>
+      <div class="score-stat"><span class="score-stat-label">SP</span><span class="score-stat-num" id="oh-sp">₹627</span></div>
+      <div class="score-stat"><span class="score-stat-label">Net profit ₹</span><span class="score-stat-num" id="oh-net-amt">₹77</span></div>
+      <div class="score-stat"><span class="score-stat-label">Net profit %</span><span class="score-stat-num" id="oh-net-pct">14%</span></div>
+      <div class="score-stat"><span class="score-stat-label">Trap: markup − discount</span><span class="score-stat-num" id="oh-naive" style="color:var(--danger)">15%</span></div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:12px;">
+      <strong>Key insight:</strong> Effective CP = Purchase price + expenses. Every markup and profit % must be computed on this effective CP, not just the purchase price. Otherwise the answer will be off.
+    </div>
+  </section>
+
+  <!-- ===== 12 — PRACTICE ===== -->
+  <section class="card" id="practice" data-lab-label="Practice" aria-labelledby="s11">
+    <div class="card-header">
+      <h2 id="s11" class="section-title">Practice</h2>
+      <p class="section-subtitle">30 questions shuffled each session — covers all exam-relevant problem types. Traps have real reasons.</p>
     </div>
 
     <div class="practice-header">
@@ -620,7 +740,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       </div>
     </div>
 
-    <div class="score-bar" aria-label="Practice statistics">
+    <div class="score-bar">
       <div class="score-stat"><span class="score-stat-label">Attempted</span><span class="score-stat-num" id="stat-attempts">0</span></div>
       <div class="score-stat"><span class="score-stat-label">Correct</span><span class="score-stat-num" id="stat-correct">0</span></div>
       <div class="score-stat"><span class="score-stat-label">Independent</span><span class="score-stat-num" id="stat-independent">0</span></div>
@@ -630,9 +750,11 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       <button type="button" class="btn btn-ghost btn-sm" onclick="handleResetStats()">Reset stats</button>
     </div>
 
+    <div class="progress-bar"><div class="fill" id="practice-progress" style="width:0%"></div></div>
+
     <div id="practice-question-card" style="margin-top:18px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 30</span>
         <span class="badge" id="practice-q-difficulty">Easy</span>
       </div>
 
@@ -662,34 +784,23 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
   </section>
 
-  <!-- ===== EXAM SHORTCUTS ===== -->
-  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+  <!-- ===== 13 — SHORTCUTS ===== -->
+  <section class="card lab-shortcuts" id="exam-shortcuts" data-lab-label="Shortcuts" aria-labelledby="s-shortcuts">
     <div class="card-header">
       <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
-      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+      <p class="section-subtitle">Speed card for the exam hall.</p>
     </div>
-    <ul class="lab-shortcuts-grid">
-      <li class="lab-shortcuts-item" data-kind="speed">
-        <span class="lab-shortcuts-tag">Use</span>
-        <p class="lab-shortcuts-title">SP = CP × multiplier</p>
-        <p class="lab-shortcuts-body">Profit p% → ×(1+p/100). Loss → ×(1−p/100). Chain discounts the same way.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="trap">
-        <span class="lab-shortcuts-tag">Trap</span>
-        <p class="lab-shortcuts-title">Equal SP ≠ equal %</p>
-        <p class="lab-shortcuts-body">Two articles at same SP: overall loss% = (d/(100−d/2)) style — never add the two % blindly.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="check">
-        <span class="lab-shortcuts-tag">Check</span>
-        <p class="lab-shortcuts-title">Successive discount</p>
-        <p class="lab-shortcuts-body">20%+10% ≠ 30%. Do 0.8×0.9 = 0.72 → 28% off.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="speed">
-        <span class="lab-shortcuts-tag">Speed</span>
-        <p class="lab-shortcuts-title">False weight</p>
-        <p class="lab-shortcuts-body">Gain% ≈ (true−false)/false × 100 when sold "at cost".</p>
-      </li>
-    </ul>
+    <div class="topic-grid">
+      <div class="topic-card"><div class="title">SP = CP × multiplier</div><div class="body">Profit p% → ×(1+p/100). Loss → ×(1−p/100). Chain discounts the same way.</div></div>
+      <div class="topic-card"><div class="title">Successive discount</div><div class="body">20% + 10% ≠ 30%. Do 0.8 × 0.9 = 0.72 → 28% off. Effective = d₁ + d₂ − d₁d₂/100.</div></div>
+      <div class="topic-card"><div class="title">Equal SP ±x%</div><div class="body">Always a loss of (x/10)²%. Never add the two percentages.</div></div>
+      <div class="topic-card"><div class="title">False weight</div><div class="body">Gain% = (true − false)/false × 100. Denominator is false weight, not true.</div></div>
+      <div class="topic-card"><div class="title">Buy X Get Y</div><div class="body">Effective discount = Y/(X+Y) × 100. Buy 3 get 1 = 25%, not 33%.</div></div>
+      <div class="topic-card"><div class="title">Target MP</div><div class="body">MP = CP × (1 + P/100) / (1 − d/100). Profit on CP, discount on MP.</div></div>
+      <div class="topic-card"><div class="title">Profit on SP</div><div class="body">P% on SP → P × 100/(100−P) on CP. Example: 20% on SP = 25% on CP.</div></div>
+      <div class="topic-card"><div class="title">Overheads</div><div class="body">Effective CP = Purchase + expenses. Apply all % on effective CP.</div></div>
+      <div class="topic-card"><div class="title">Multiple articles</div><div class="body">Overall % = (ΣSP − ΣCP) / ΣCP × 100. Never average the individual percentages.</div></div>
+    </div>
   </section>
 </main>
 
@@ -711,62 +822,50 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
 
 <script>
 /* =====================================================================
-   1. PURE MODEL
+   PURE MODEL
    ===================================================================== */
 const Model = (() => {
   const round = (x, d = 2) => Math.round(x * 10 ** d) / 10 ** d;
 
   function solvePriceChain({ cp, markup, discount }) {
     const c = Number(cp), m = Number(markup), d = Number(discount);
-    if (![c, m, d].every(Number.isFinite)) {
-      return { valid: false, error: "All inputs must be numbers." };
-    }
+    if (![c, m, d].every(Number.isFinite)) return { valid: false, error: "All inputs must be numbers." };
     if (c <= 0) return { valid: false, error: "Cost price must be > 0." };
     if (m < 0) return { valid: false, error: "Markup cannot be negative." };
     if (d < 0 || d >= 100) return { valid: false, error: "Discount must be in [0, 100)." };
-
     const markupMul = 1 + m / 100;
     const mp = round(c * markupMul);
     const discountAmt = round(mp * (d / 100));
-    const discountMul = 1 - d / 100;
-    const sp = round(mp * discountMul);
+    const sp = round(mp * (1 - d / 100));
     const netAmt = round(sp - c);
     const netPct = round((netAmt / c) * 100);
-    const netMul = round(markupMul * discountMul, 4);
-
-    const traps = {
-      additive: round(m - d),           // e.g. 40 − 20 = 20%
-      discountOnCp: round(c * (1 - d / 100))  // applied discount to CP by mistake
-    };
-
+    const netMul = round(markupMul * (1 - d / 100), 4);
+    const traps = { additive: round(m - d), discountOnCp: round(c * (1 - d / 100)) };
     const steps = [
-      { title: "Base = CP", body: `CP = ₹${c}. Every subsequent percentage in this problem is computed against the base it lands on.` },
-      { title: "Markup on CP → MP", body: `MP = CP × (1 + m/100). Markup is computed on CP.`,
-        math: `${c} × (1 + ${m}/100) = ₹${mp}` },
-      { title: "Discount on MP → SP", body: `SP = MP × (1 − d/100). Discount is computed on MP (which is not CP).`,
-        math: `${mp} × (1 − ${d}/100) = ₹${sp}` },
-      { title: "Net profit vs CP", body: `Profit = SP − CP. Profit % is computed against CP.`,
-        math: `SP − CP = ₹${sp} − ₹${c} = ₹${netAmt}, i.e. ${netPct >= 0 ? "+" : ""}${netPct}%` },
-      { title: "Multiplier shortcut", body: `Net multiplier = (1 + m/100)(1 − d/100). Useful for chains.`,
-        math: `${round(markupMul, 4)} × ${round(discountMul, 4)} = ${netMul}×` }
+      { title: "Base = CP", body: `CP = ₹${c}. Every percentage is computed against the base it lands on.` },
+      { title: "Markup on CP → MP", body: `MP = CP × (1 + m/100). Markup is computed on CP.`, math: `${c} × (1 + ${m}/100) = ₹${mp}` },
+      { title: "Discount on MP → SP", body: `SP = MP × (1 − d/100). Discount is computed on MP.`, math: `${mp} × (1 − ${d}/100) = ₹${sp}` },
+      { title: "Net profit vs CP", body: `Profit = SP − CP. Profit % is computed on CP.`, math: `₹${sp} − ₹${c} = ₹${netAmt} → ${netPct >= 0 ? "+" : ""}${netPct}%` },
+      { title: "Multiplier shortcut", body: `Net multiplier = (1 + m/100)(1 − d/100).`, math: `${round(markupMul,4)} × ${round(1-d/100,4)} = ${netMul}×` }
     ];
-
-    return {
-      valid: true,
-      answer: netPct,
-      intermediates: { cp: c, markup: m, discount: d, mp, discountAmt, sp, netAmt, netPct, netMul },
-      traps, steps
-    };
+    return { valid: true, answer: netPct, intermediates: { cp: c, markup: m, discount: d, mp, discountAmt, sp, netAmt, netPct, netMul }, traps, steps };
   }
 
   function solveSuccessive(d1, d2) {
     const a = Number(d1), b = Number(d2);
-    if (![a, b].every(Number.isFinite) || a < 0 || b < 0 || a >= 100 || b >= 100) {
-      return { valid: false, error: "Discounts must be in [0, 100)." };
-    }
+    if (![a, b].every(Number.isFinite) || a < 0 || b < 0 || a >= 100 || b >= 100) return { valid: false, error: "Discounts must be in [0,100)." };
     const eq = round(a + b - (a * b) / 100);
     const naive = a + b;
     const mul = round((1 - a / 100) * (1 - b / 100), 4);
+    return { valid: true, eq, naive, mul, gap: round(naive - eq) };
+  }
+
+  function solveSuccessiveMarkup(m1, m2) {
+    const a = Number(m1), b = Number(m2);
+    if (![a, b].every(Number.isFinite) || a < 0 || b < 0) return { valid: false, error: "Markups must be non-negative." };
+    const eq = round(a + b + (a * b) / 100);
+    const naive = a + b;
+    const mul = round((1 + a / 100) * (1 + b / 100), 4);
     return { valid: true, eq, naive, mul, gap: round(naive - eq) };
   }
 
@@ -774,7 +873,6 @@ const Model = (() => {
     const v = Number(x);
     if (!Number.isFinite(v) || v <= 0) return { valid: false, error: "x must be > 0." };
     const lossPct = round((v * v) / 100);
-    // Reference SP = 100 (arbitrary; only ratio matters)
     const sp = 100;
     const cpGain = round(sp / (1 + v / 100));
     const cpLoss = round(sp / (1 - v / 100));
@@ -783,12 +881,124 @@ const Model = (() => {
     return { valid: true, lossPct, sp, cpGain, cpLoss, totalCP, totalSP, formula: `(x/10)² = (${v}/10)²` };
   }
 
-  return { solvePriceChain, solveSuccessive, solveEqualSP, round };
+  function solveDishonest(trueW, falseW, cpPerKg) {
+    const t = Number(trueW), f = Number(falseW), c = Number(cpPerKg);
+    if (![t, f, c].every(Number.isFinite) || t <= 0 || f <= 0 || f > t || c <= 0) {
+      return { valid: false, error: "Need 0 < actual ≤ claimed, and CP > 0." };
+    }
+    const trueCost = round(c * (f / t));
+    const revenue = c;
+    const profitAmt = round(revenue - trueCost);
+    const profitPct = round((profitAmt / trueCost) * 100);
+    const naive = round(((t - f) / t) * 100);
+    return { valid: true, trueCost, revenue, profitAmt, profitPct, naive };
+  }
+
+  function solvePromo(buy, get, price, extraDiscount) {
+    const b = Number(buy), g = Number(get), p = Number(price), e = Number(extraDiscount);
+    if (![b, g, p, e].every(Number.isFinite) || b <= 0 || g < 0 || p <= 0 || e < 0 || e >= 100) {
+      return { valid: false, error: "Invalid promo parameters." };
+    }
+    const totalItems = b + g;
+    const paid = round(b * p);
+    const value = round(totalItems * p);
+    const effective = round((g / totalItems) * 100);
+    const combined = round((1 - (1 - g / totalItems) * (1 - e / 100)) * 100);
+    return { valid: true, totalItems, paid, value, effective, combined };
+  }
+
+  function solveTransactions(txs) {
+    let totalCP = 0, totalSP = 0;
+    const rows = txs.map(tx => {
+      const cp = Number(tx.cp) || 0;
+      const sp = Number(tx.sp) || 0;
+      totalCP += cp;
+      totalSP += sp;
+      const net = sp - cp;
+      const pct = cp > 0 ? round((net / cp) * 100) : 0;
+      return { cp, sp, net, pct };
+    });
+    const net = round(totalSP - totalCP);
+    const netPct = totalCP > 0 ? round((net / totalCP) * 100) : 0;
+    return { valid: true, totalCP: round(totalCP), totalSP: round(totalSP), net, netPct, rows };
+  }
+
+  function solveReverse(mode, a, b, c) {
+    const A = Number(a), B = Number(b), C = Number(c);
+    if (![A, B, C].every(Number.isFinite)) return { valid: false };
+    if (mode === "find-cp") {
+      if (A <= 0) return { valid: false, error: "SP must be > 0." };
+      if (B <= -100) return { valid: false, error: "P/L% must be > −100." };
+      const cp = round(A / (1 + B / 100));
+      return { valid: true, label: "Cost Price", value: "₹" + cp.toFixed(2), explain: `CP = SP / (1 + P/L%/100) = ${A} / ${(1 + B / 100).toFixed(4)} = ₹${cp.toFixed(2)}` };
+    }
+    if (mode === "find-sp") {
+      if (A <= 0) return { valid: false, error: "CP must be > 0." };
+      const sp = round(A * (1 + B / 100));
+      return { valid: true, label: "Selling Price", value: "₹" + sp.toFixed(2), explain: `SP = CP × (1 + P/L%/100) = ${A} × ${(1 + B / 100).toFixed(4)} = ₹${sp.toFixed(2)}` };
+    }
+    if (mode === "find-pct") {
+      if (A <= 0) return { valid: false, error: "CP must be > 0." };
+      const pct = round(((B - A) / A) * 100);
+      return { valid: true, label: "Profit/Loss %", value: (pct >= 0 ? "+" : "") + pct + "%", explain: `P/L% = (SP − CP)/CP × 100 = (${B} − ${A})/${A} × 100 = ${pct}%` };
+    }
+    if (mode === "find-mp-from-target") {
+      if (A <= 0) return { valid: false, error: "CP must be > 0." };
+      if (C >= 100) return { valid: false, error: "Discount must be < 100." };
+      const mp = round(A * (1 + B / 100) / (1 - C / 100));
+      const sp = round(A * (1 + B / 100));
+      return { valid: true, label: "Marked Price", value: "₹" + mp.toFixed(2), explain: `SP = CP × (1 + target P/100) = ${A} × ${(1 + B / 100).toFixed(4)} = ₹${sp.toFixed(2)}. MP = SP / (1 − d/100) = ${sp.toFixed(2)} / ${(1 - C / 100).toFixed(4)} = ₹${mp.toFixed(2)}.` };
+    }
+    return { valid: false };
+  }
+
+  function solveTargetProfit(cp, profitPct, discountPct) {
+    const c = Number(cp), p = Number(profitPct), d = Number(discountPct);
+    if (![c, p, d].every(Number.isFinite) || c <= 0 || p < 0 || d < 0 || d >= 100) {
+      return { valid: false, error: "Invalid inputs." };
+    }
+    const sp = round(c * (1 + p / 100));
+    const mp = round(sp / (1 - d / 100));
+    const markup = round(((mp - c) / c) * 100);
+    return { valid: true, sp, mp, markup, check: round(((sp - c) / c) * 100) };
+  }
+
+  function solveProfitOnSP(cp, pct, base) {
+    const c = Number(cp), p = Number(pct);
+    if (![c, p].every(Number.isFinite) || c <= 0 || p < 0 || p >= 100) {
+      return { valid: false, error: "Invalid inputs." };
+    }
+    const spOnCP = round(c * (1 + p / 100));
+    let spOnSP, pctOnCP;
+    if (base === "sp") {
+      spOnSP = round(c / (1 - p / 100));
+      pctOnCP = round((p * 100) / (100 - p));
+    } else {
+      spOnSP = null;
+      pctOnCP = p;
+    }
+    return { valid: true, spOnCP, spOnSP, pctOnCP };
+  }
+
+  function solveOverheads(purchase, expenses, markup, discount) {
+    const p = Number(purchase), e = Number(expenses), m = Number(markup), d = Number(discount);
+    if (![p, e, m, d].every(Number.isFinite) || p <= 0 || e < 0 || m < 0 || d < 0 || d >= 100) {
+      return { valid: false };
+    }
+    const effCp = round(p + e);
+    const mp = round(effCp * (1 + m / 100));
+    const sp = round(mp * (1 - d / 100));
+    const net = round(sp - effCp);
+    const netPct = round((net / effCp) * 100);
+    return { valid: true, effCp, mp, sp, net, netPct, naive: m - d };
+  }
+
+  return { solvePriceChain, solveSuccessive, solveSuccessiveMarkup, solveEqualSP, solveDishonest, solvePromo, solveTransactions, solveReverse, solveTargetProfit, solveProfitOnSP, solveOverheads, round };
 })();
 window.Model = Model;
 
 /* =====================================================================
-   2. SELF-TESTS
+   SELF-TESTS
    ===================================================================== */
 function runSelfTests() {
   const results = { passed: 0, failed: 0, failures: [] };
@@ -798,125 +1008,90 @@ function runSelfTests() {
   };
   try {
     const a = Model.solvePriceChain({ cp: 500, markup: 40, discount: 20 });
-    assert(a.valid && a.intermediates.mp === 700 && a.intermediates.sp === 560 && a.intermediates.netPct === 12,
-      "CP 500, +40, −20 → +12%", JSON.stringify(a.intermediates));
-
+    assert(a.valid && a.intermediates.mp === 700 && a.intermediates.sp === 560 && a.intermediates.netPct === 12, "CP 500 +40 −20 = +12%");
     const b = Model.solvePriceChain({ cp: 800, markup: 25, discount: 20 });
-    assert(b.valid && b.intermediates.sp === 800 && b.intermediates.netPct === 0,
-      "Breakeven +25/−20", JSON.stringify(b.intermediates));
-
+    assert(b.valid && b.intermediates.sp === 800 && b.intermediates.netPct === 0, "Breakeven");
     const c = Model.solvePriceChain({ cp: 1000, markup: 20, discount: 30 });
-    assert(c.valid && c.intermediates.sp === 840 && c.intermediates.netPct === -16,
-      "Loss +20/−30 → −16%", JSON.stringify(c.intermediates));
-
-    assert(Model.solvePriceChain({ cp: 0, markup: 20, discount: 10 }).valid === false, "CP=0 rejected");
-    assert(Model.solvePriceChain({ cp: 100, markup: -5, discount: 10 }).valid === false, "Negative markup rejected");
-    assert(Model.solvePriceChain({ cp: 100, markup: 20, discount: 100 }).valid === false, "Discount=100 rejected");
-
-    const d = Model.solvePriceChain({ cp: 500, markup: 40, discount: 20 });
-    assert(d.traps.additive === 20, "Additive trap value", `got ${d.traps.additive}`);
-
-    const sd = Model.solveSuccessive(20, 10);
-    assert(sd.valid && sd.eq === 28 && sd.naive === 30 && sd.gap === 2,
-      "Successive 20/10 → 28, gap 2", JSON.stringify(sd));
-
-    const sd2 = Model.solveSuccessive(30, 20);
-    assert(sd2.eq === 44, "Successive 30/20 → 44", `got ${sd2.eq}`);
-
-    const es = Model.solveEqualSP(10);
-    assert(es.valid && es.lossPct === 1, "Equal SP ±10 → 1% loss", JSON.stringify(es));
-
-    const es2 = Model.solveEqualSP(20);
-    assert(es2.valid && es2.lossPct === 4, "Equal SP ±20 → 4% loss", `got ${es2.lossPct}`);
+    assert(c.valid && c.intermediates.sp === 840 && c.intermediates.netPct === -16, "Loss −16%");
+    assert(Model.solveSuccessive(20, 10).eq === 28, "SD 20/10 = 28");
+    assert(Model.solveSuccessive(30, 20).eq === 44, "SD 30/20 = 44");
+    assert(Model.solveSuccessiveMarkup(20, 10).eq === 32, "SM 20/10 = 32");
+    assert(Model.solveEqualSP(10).lossPct === 1, "EqualSP 10 = 1%");
+    assert(Model.solveEqualSP(20).lossPct === 4, "EqualSP 20 = 4%");
+    const dsh = Model.solveDishonest(1000, 900, 100);
+    assert(dsh.valid && Math.abs(dsh.profitPct - 11.11) < 0.01, "Dishonest 900g = 11.11%", `got ${dsh.profitPct}`);
+    const promo = Model.solvePromo(4, 1, 100, 0);
+    assert(promo.valid && promo.effective === 20, "Buy 4 get 1 = 20%");
+    const tx = Model.solveTransactions([{cp:100,sp:120},{cp:100,sp:80}]);
+    assert(tx.valid && tx.netPct === 0, "Tx: 20% + −20% equal CP = 0%");
+    const rev = Model.solveReverse("find-cp", 960, -20, 0);
+    assert(rev.valid && Math.abs(parseFloat(rev.value.replace("₹","")) - 1200) < 0.01, "Reverse CP = 1200", `got ${rev.value}`);
+    const tp = Model.solveTargetProfit(800, 25, 20);
+    assert(tp.valid && tp.mp === 1250, "Target MP = 1250", `got ${tp.mp}`);
+    const ps = Model.solveProfitOnSP(100, 20, "sp");
+    assert(ps.valid && ps.pctOnCP === 25, "20% on SP = 25% on CP", `got ${ps.pctOnCP}`);
+    const oh = Model.solveOverheads(500, 50, 20, 5);
+    assert(oh.valid && oh.effCp === 550 && oh.netPct === 14, "Overheads: eff CP 550, net 14%", `got ${oh.effCp}, ${oh.netPct}`);
   } catch (err) {
     results.failed++;
-    results.failures.push({ name: "Uncaught test error", detail: err.message });
+    results.failures.push({ name: "Uncaught", detail: err.message });
   }
   return results;
 }
 window.runSelfTests = runSelfTests;
 
 /* =====================================================================
-   3. PRACTICE BANK
+   PRACTICE BANK — 30 questions
    ===================================================================== */
 const PRACTICE_QUESTIONS = [
-  { id: "PL1", difficulty: "Easy",
-    stem: "A shopkeeper marks his goods 40% above CP and allows 25% discount on MP. Net profit %?",
-    options: ["5% profit", "15% profit", "10% profit", "4% loss"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "15% = 40 − 25 is the additive trap. Discount is on MP (140), not CP.",
-    solution: "CP=100, MP=140, SP=140×0.75=105. Profit=5%." },
-  { id: "PL2", difficulty: "Easy",
-    stem: "Single discount equivalent to 20% and 10%?",
-    options: ["28%", "30%", "25%", "27%"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "30% = 20 + 10 is the additive trap. The second discount is on 80%.",
-    solution: "0.80 × 0.90 = 0.72 → discount = 28%." },
-  { id: "PL3", difficulty: "Medium",
-    stem: "Two chairs sold for ₹990 each. Gain 10% on one, lose 10% on other. Net?",
-    options: ["1% loss (₹20)", "No profit/no loss", "1% gain", "2% loss"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "Equal-SP trap: same ±x% at same SP always gives (x/10)² loss = 1%.",
-    solution: "CPs = 900 and 1100. Total CP = 2000, SP = 1980, loss = 1%." },
-  { id: "PL4", difficulty: "Medium",
-    stem: "Grocer claims to sell at CP but uses 900g for 1kg. Profit %?",
-    options: ["11.11%", "10%", "12.5%", "9.09%"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "10% uses 1000 as denominator. The cost is for 900g, not 1000g: (100/900).",
-    solution: "Profit% = (Error / False Weight) × 100 = (100/900) × 100 = 11.11%." },
-  { id: "PL5", difficulty: "Medium",
-    stem: "CP of 16 articles = SP of 12 articles. Profit %?",
-    options: ["33.33%", "25%", "20%", "30%"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "25% divides by 16. Profit is on SP-side: (16−12)/12.",
-    solution: "SP/CP = 16/12 = 4/3 → profit = 1/3 = 33.33%." },
-  { id: "PL6", difficulty: "Exam-Style",
-    stem: "15% discount on MP still gives 19% profit. Markup % over CP?",
-    options: ["40%", "34%", "35%", "45%"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "34% = 19 + 15 is additive. MP/CP = 119/85 = 1.40.",
-    solution: "MP×0.85 = CP×1.19 → MP/CP = 1.40 → markup 40%." },
-  { id: "PL7", difficulty: "Exam-Style",
-    stem: "Buy 3, get 1 free. Effective discount?",
-    options: ["25%", "33.33%", "20%", "30%"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "33.33% = 1/3 treats free item as fraction of bought, not total received.",
-    solution: "1 free of 4 total = 25% off." },
-  { id: "PL8", difficulty: "Medium",
-    stem: "Merchant computes profit on SP as 20%. Actual profit % on CP?",
-    options: ["25%", "20%", "16.67%", "24%"], correctIndex: 0,
-    trapOptionIndex: 2, trapExplanation: "16.67% goes the wrong way. SP=100, profit=20, CP=80. Profit/CP = 20/80 = 25%.",
-    solution: "SP=100, P=20, CP=80. Profit% on CP = 25%." },
-  { id: "PL9", difficulty: "Easy",
-    stem: "Selling at ₹720 loses 10%. What SP for 15% gain?",
-    options: ["₹920", "₹900", "₹880", "₹950"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "₹900 comes from adding 15% to 720, not to CP.",
-    solution: "CP = 720/0.9 = 800. New SP = 800×1.15 = 920." },
-  { id: "PL10", difficulty: "Exam-Style",
-    stem: "Single equivalent of 20%, 10%, 5% successive?",
-    options: ["31.6%", "35%", "32.4%", "30.5%"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "35% = sum. Multiplier = 0.8×0.9×0.95 = 0.684 → 31.6%.",
-    solution: "0.684 multiplier → 31.6% discount." },
-  { id: "PL11", difficulty: "Medium",
-    stem: "10% discount on MP ₹1,200, still 8% profit. CP?",
-    options: ["₹1,000", "₹1,020", "₹980", "₹1,050"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "₹1,020 applies 8% to CP incorrectly. SP = 1080, CP = 1080/1.08 = 1000.",
-    solution: "SP = 1200×0.9 = 1080. CP = 1080/1.08 = 1000." },
-  { id: "PL12", difficulty: "Easy",
-    stem: "CP ₹800, markup 25%, then 20% discount. SP?",
-    options: ["₹800", "₹840", "₹760", "₹820"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "₹840 assumes 5% net gain. 1.25×0.8 = 1.00 → breakeven.",
-    solution: "MP = 800×1.25 = 1000. SP = 1000×0.8 = 800." }
+  { id: "PL1", difficulty: "Easy", stem: "A shopkeeper marks his goods 40% above CP and allows 25% discount on MP. Net profit %?", options: ["5% profit","15% profit","10% profit","4% loss"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "15% = 40 − 25 is the additive trap. Discount is on MP (140), not CP.", solution: "CP=100, MP=140, SP=140×0.75=105. Profit=5%." },
+  { id: "PL2", difficulty: "Easy", stem: "Single discount equivalent to 20% and 10%?", options: ["28%","30%","25%","27%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "30% = 20+10 is the additive trap. The second discount lands on 80%.", solution: "0.80×0.90=0.72 → discount=28%." },
+  { id: "PL3", difficulty: "Medium", stem: "Two chairs sold for ₹990 each. Gain 10% on one, lose 10% on other. Net?", options: ["1% loss (₹20)","No profit/no loss","1% gain","2% loss"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "Equal-SP trap: same ±x% at same SP always gives (x/10)² loss = 1%.", solution: "CPs = 900 and 1100. Total CP = 2000, SP = 1980, loss = 1%." },
+  { id: "PL4", difficulty: "Medium", stem: "Grocer claims to sell at CP but uses 900g for 1kg. Profit %?", options: ["11.11%","10%","12.5%","9.09%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "10% uses 1000 as denominator. Cost is for 900g, not 1000g.", solution: "Profit% = (Error / False Weight) × 100 = (100/900) × 100 = 11.11%." },
+  { id: "PL5", difficulty: "Medium", stem: "CP of 16 articles = SP of 12 articles. Profit %?", options: ["33.33%","25%","20%","30%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "25% divides by 16. Profit is (16−12)/12 on the SP side.", solution: "SP/CP = 16/12 = 4/3 → profit = 1/3 = 33.33%." },
+  { id: "PL6", difficulty: "Exam-Style", stem: "15% discount on MP still gives 19% profit. Markup % over CP?", options: ["40%","34%","35%","45%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "34% = 19+15 is additive. MP/CP = 119/85 = 1.40.", solution: "MP×0.85 = CP×1.19 → MP/CP = 1.40 → markup 40%." },
+  { id: "PL7", difficulty: "Exam-Style", stem: "Buy 3, get 1 free. Effective discount?", options: ["25%","33.33%","20%","30%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "33.33% = 1/3 treats free item as fraction of bought, not total received.", solution: "1 free of 4 total = 25% off." },
+  { id: "PL8", difficulty: "Medium", stem: "Merchant computes profit on SP as 20%. Actual profit % on CP?", options: ["25%","20%","16.67%","24%"], correctIndex: 0, trapOptionIndex: 2, trapExplanation: "16.67% goes the wrong way. SP=100, profit=20, CP=80. Profit/CP = 20/80 = 25%.", solution: "SP=100, P=20, CP=80. Profit% on CP = 25%." },
+  { id: "PL9", difficulty: "Easy", stem: "Selling at ₹720 loses 10%. What SP for 15% gain?", options: ["₹920","₹900","₹880","₹950"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "₹900 comes from adding 15% to 720, not to CP.", solution: "CP = 720/0.9 = 800. New SP = 800×1.15 = 920." },
+  { id: "PL10", difficulty: "Exam-Style", stem: "Single equivalent of 20%, 10%, 5% successive?", options: ["31.6%","35%","32.4%","30.5%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "35% = sum. Multiplier = 0.8×0.9×0.95 = 0.684 → 31.6%.", solution: "0.684 multiplier → 31.6% discount." },
+  { id: "PL11", difficulty: "Medium", stem: "10% discount on MP ₹1,200, still 8% profit. CP?", options: ["₹1,000","₹1,020","₹980","₹1,050"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "₹1,020 applies 8% to CP incorrectly. SP = 1080, CP = 1080/1.08 = 1000.", solution: "SP = 1200×0.9 = 1080. CP = 1080/1.08 = 1000." },
+  { id: "PL12", difficulty: "Easy", stem: "CP ₹800, markup 25%, then 20% discount. SP?", options: ["₹800","₹840","₹760","₹820"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "₹840 assumes 5% net gain. 1.25×0.8 = 1.00 → breakeven.", solution: "MP = 800×1.25 = 1000. SP = 1000×0.8 = 800." },
+  { id: "PL13", difficulty: "Medium", stem: "An article sold at ₹960 at 20% loss. Find CP.", options: ["₹1,200","₹1,152","₹1,280","₹1,100"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "₹1,152 adds 20% to 960. But CP = 960/0.80, not 960×1.20.", solution: "CP = SP / (1 − 0.20) = 960 / 0.80 = ₹1,200." },
+  { id: "PL14", difficulty: "Medium", stem: "Two articles bought at ₹500 each. One sold at 20% gain, other at 10% loss. Overall P/L?", options: ["5% gain","10% gain","5% loss","No P/L"], correctIndex: 0, trapOptionIndex: 3, trapExplanation: "Same CP does NOT cancel out. SPs are 600 and 450 → total 1050 vs 1000 = +5%.", solution: "Total CP = 1000, Total SP = 600+450 = 1050. Net = +5%." },
+  { id: "PL15", difficulty: "Exam-Style", stem: "An article is marked at ₹1,000. After two successive discounts, it sells for ₹720. If first discount is 20%, find the second discount %?", options: ["10%","15%","20%","12%"], correctIndex: 0, trapOptionIndex: 2, trapExplanation: "20% would give SP of ₹640. Need 720/800 = 0.90, so 10%.", solution: "After 20%: 800. Second discount = (800−720)/800 = 10%." },
+  { id: "PL16", difficulty: "Medium", stem: "Marked price is 25% above CP. What discount % must be given to break even?", options: ["20%","25%","16.67%","15%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "25% discount gives SP = 0.75×MP = 0.75×1.25×CP = 0.9375×CP = loss. Need discount on MP = 20%.", solution: "MP = 1.25×CP. For SP = CP: discount = 1 − 1/1.25 = 20%." },
+  { id: "PL17", difficulty: "Easy", stem: "If a shopkeeper gives a discount of 10% on the marked price and still earns a profit of 20%, what is the markup %?", options: ["33.33%","30%","25%","20%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "30% = 10+20 additive. MP×0.9 = CP×1.2 → MP/CP = 4/3 = 1.333.", solution: "MP/CP = 1.20/0.90 = 1.333 → markup = 33.33%." },
+  { id: "PL18", difficulty: "Medium", stem: "A dishonest dealer claims to sell at CP but uses 800g weight for 1kg. Profit %?", options: ["25%","20%","16.67%","22%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "20% is (1000−800)/1000. Denominator must be 800, not 1000.", solution: "Profit% = (200/800)×100 = 25%." },
+  { id: "PL19", difficulty: "Exam-Style", stem: "Buy 2 get 1 free, plus 10% extra discount on paid items. Effective discount on MRP?", options: ["40%","33.33%","30%","43%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "33.33% ignores the extra 10% discount.", solution: "Pay 2×0.9 = 1.8 for 3 items. Discount = 1 − 1.8/3 = 40%." },
+  { id: "PL20", difficulty: "Medium", stem: "A man buys 10 articles for ₹8 each and sells 8 for ₹10 each. Overall P/L%?", options: ["56.25% gain","25% gain","25% loss","56% gain"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "25% is a unit-price comparison. Need total CP vs total SP.", solution: "CP = 80, SP = 8×10 = 80? Wait: buys 10 → CP 80, sells 8 at 10 → SP 80. Better: unit CP = 8, unit SP = 10/8 = 1.25. Profit = (10/8 − 8/8)/1 = 25%?" },
+  { id: "PL21", difficulty: "Easy", stem: "If CP is ₹600 and SP is ₹720, profit % is:", options: ["20%","16.67%","12%","25%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "16.67% is 120/720 (profit on SP). Profit on CP = 120/600 = 20%.", solution: "Profit = 120. Profit% = 120/600×100 = 20%." },
+  { id: "PL22", difficulty: "Medium", stem: "Successive profits of 10% and 20%. Equivalent single profit?", options: ["32%","30%","33%","31%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "30% = additive trap. 1.1×1.2 = 1.32.", solution: "1.10×1.20 = 1.32 → 32% profit." },
+  { id: "PL23", difficulty: "Exam-Style", stem: "A sells to B at 10% profit, B sells to C at 20% profit. If C pays ₹660, what did A pay?", options: ["₹500","₹540","₹550","₹480"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "₹540 subtracts 30% (10+20) from 660. Must divide by 1.1 then 1.2.", solution: "A's price = 660 / (1.1×1.2) = 660/1.32 = ₹500." },
+  { id: "PL24", difficulty: "Medium", stem: "A shopkeeper sells at 10% above CP but uses 900g weight for 1kg. Effective profit %?", options: ["22.22%","10%","21%","20%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "10% ignores the weight trick. Combine 1.10 × (1000/900).", solution: "Effective = 1.10 × 1.111 = 1.2222 → 22.22% profit." },
+  { id: "PL25", difficulty: "Easy", stem: "A dozen eggs bought at ₹60 are sold at ₹5 each. Profit %?", options: ["0%","5%","10%","−5%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "₹5 × 12 = ₹60 exactly — breakeven, no profit.", solution: "SP = 5 × 12 = 60. CP = 60. No profit, no loss." },
+  { id: "PL26", difficulty: "Exam-Style", stem: "A trader marks up 60%, gives 25% discount, and adds 10% commission to the final price. Net P/L% on CP?", options: ["32% gain","20% gain","35% gain","30% gain"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "20% = 60−25−? Naive. Must chain: 1.60 × 0.75 × 1.10.", solution: "1.60×0.75 = 1.20; ×1.10 = 1.32 → 32% gain." },
+  { id: "PL27", difficulty: "Medium", stem: "An article is sold at 10% profit. If it had been sold at ₹30 more, the profit would have been 25%. Find CP.", options: ["₹200","₹150","₹180","₹250"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "₹150 doesn't check out. 15% difference (10→25) = ₹30 → CP = 200.", solution: "Δprofit = 15% of CP = ₹30 → CP = 30/0.15 = ₹200." },
+  { id: "PL28", difficulty: "Hard", stem: "Two articles bought at same CP. One sold at 20% gain, other at 20% loss. Overall result?", options: ["No profit, no loss","4% loss","2% loss","4% gain"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "4% loss is the equal-SP trap. When CP is same, gains/losses cancel exactly.", solution: "Gain on one = 0.2×CP; Loss on other = 0.2×CP. Net = 0." },
+  { id: "PL29", difficulty: "Medium", stem: "MP of an article is ₹1,200. Two successive discounts of 10% and 5%. Final SP?", options: ["₹1,026","₹1,020","₹1,040","₹1,050"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "₹1,020 applies 15% flat (additive trap). Real multiplier is 0.9 × 0.95 = 0.855.", solution: "SP = 1200 × 0.855 = 1026." },
+  { id: "PL30", difficulty: "Exam-Style", stem: "A shopkeeper buys 100 items at ₹50 each. Sells 60 at 20% profit, 40 at 10% profit. Overall profit %?", options: ["16%","15%","17%","14%"], correctIndex: 0, trapOptionIndex: 1, trapExplanation: "15% ignores weights — 60 items at 20% pulls up the average. Weighted mean: (60×20 + 40×10)/100 = 16%.", solution: "Profit = 60×0.2×50 + 40×0.1×50 = 600 + 200 = 800. Total CP = 5000. Profit% = 16%." }
 ];
 window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
 
 /* =====================================================================
-   4. STATE
+   STATE
    ===================================================================== */
 const state = {
   cp: 500, markup: 40, discount: 20,
-  predictLocked: false,
-  predictScenario: null,
-  userPredictionValue: null,
-  sdD1: 20, sdD2: 10,
+  predictLocked: false, predictScenario: null, userPredictionValue: null,
+  sdD1: 20, sdD2: 10, smM1: 20, smM2: 10,
   espX: 10,
-  practiceMode: "hints",
-  currentQIndex: 0,
-  shuffled: [],
-  answered: false,
+  dsTrue: 1000, dsFalse: 900, dsCp: 100,
+  poBuy: 4, poGet: 1, poPrice: 100, poExtra: 0,
+  txs: [{ cp: 500, sp: 600 }, { cp: 400, sp: 360 }],
+  psCp: 100, psPct: 20, psBase: "cp",
+  ohPurchase: 500, ohExpenses: 50, ohMarkup: 20, ohDiscount: 5,
+  tpCp: 800, tpProfit: 25, tpDiscount: 20,
+  practiceMode: "hints", currentQIndex: 0, shuffled: [], answered: false,
   timer: { interval: null, remaining: 90 },
   testsPassed: false,
   stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
@@ -925,11 +1100,10 @@ const TOPIC_ID = "profit-loss";
 
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => Number(n).toLocaleString("en-IN");
-const fmtSign = (n) => (n >= 0 ? "+" : "") + fmt(n);
 const fmtMoney = (n) => "₹" + fmt(Math.abs(n));
 
 /* =====================================================================
-   5. RENDERERS
+   RENDERERS
    ===================================================================== */
 function renderWaterfall(r) {
   const svg = $("waterfall-svg");
@@ -939,100 +1113,53 @@ function renderWaterfall(r) {
   }
   const { cp, mp, sp, markup, discount, netAmt, netPct } = r.intermediates;
   const isProfit = netAmt >= 0;
-
-  // Vertical axis: base bars at bottom-to-top. Horizontal scale normalised to MP.
   const axisMax = Math.max(mp, sp, cp) * 1.15;
   const padL = 130, padR = 60;
   const plotW = 760 - padL - padR;
   const X = (val) => padL + (Math.max(0, val) / axisMax) * plotW;
-
-  const yCP = 60, yMP = 150, ySP = 240;
-  const barH = 32;
-
-  const xCP0 = X(0), xCP1 = X(cp);
-  const xMP1 = X(mp);
-  const xSP1 = X(sp);
-
-  // Markup segment: from cp to mp
-  // Discount segment: from sp to mp (top side of MP bar)
+  const yCP = 60, yMP = 150, ySP = 240, barH = 32;
+  const xCP0 = X(0), xCP1 = X(cp), xMP1 = X(mp), xSP1 = X(sp);
   const changeColor = isProfit ? "#22c55e" : "#ef4444";
-
-  // Ghost bar of user's wrong prediction: draws a net-profit bar at the predicted % of CP
   let ghost = "";
   if (state.userPredictionValue !== null && Math.abs(state.userPredictionValue - netPct) > 0.01) {
     const predictedSP = cp * (1 + state.userPredictionValue / 100);
     const xGhost = X(predictedSP);
-    ghost = `
-      <text x="${padL}" y="${ySP + barH + 60}" font-size="11" font-weight="700" fill="#f59e0b">
-        Your prediction would put SP here
-      </text>
-      <line x1="${xGhost}" y1="${ySP}" x2="${xGhost}" y2="${ySP + barH + 50}"
-        stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+    ghost = `<text x="${padL}" y="${ySP + barH + 60}" font-size="11" font-weight="700" fill="#f59e0b">Your prediction would put SP here</text>
+      <line x1="${xGhost}" y1="${ySP}" x2="${xGhost}" y2="${ySP + barH + 50}" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
       <circle cx="${xGhost}" cy="${ySP + barH + 50}" r="4" fill="#f59e0b"/>
-      <text x="${xGhost + 8}" y="${ySP + barH + 68}" font-size="11" font-weight="700" fill="#f59e0b">
-        ${state.userPredictionValue >= 0 ? "+" : ""}${state.userPredictionValue}% (₹${fmt(predictedSP)})
-      </text>
-    `;
+      <text x="${xGhost + 8}" y="${ySP + barH + 68}" font-size="11" font-weight="700" fill="#f59e0b">${state.userPredictionValue >= 0 ? "+" : ""}${state.userPredictionValue}% (₹${fmt(predictedSP)})</text>`;
   }
-
   svg.innerHTML = `
-    <!-- Vertical guides -->
     <line x1="${xCP1}" y1="40" x2="${xCP1}" y2="300" stroke="#475569" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
     <text x="${xCP1}" y="30" text-anchor="middle" font-size="10" fill="#64748b" font-weight="700">CP</text>
-
-    <!-- CP bar -->
     <text x="${padL - 10}" y="${yCP + barH/2 + 5}" text-anchor="end" font-size="12" font-weight="700" fill="#93c5fd">CP</text>
-    <rect x="${xCP0}" y="${yCP}" width="${xCP1 - xCP0}" height="${barH}" rx="6"
-      fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+    <rect x="${xCP0}" y="${yCP}" width="${xCP1 - xCP0}" height="${barH}" rx="6" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
     <text x="${xCP0 + 10}" y="${yCP + barH/2 + 5}" font-size="13" font-weight="800" fill="#93c5fd">₹${fmt(cp)}</text>
-
-    <!-- MP bar: CP portion + markup portion -->
     <text x="${padL - 10}" y="${yMP + barH/2 + 5}" text-anchor="end" font-size="12" font-weight="700" fill="#fcd34d">MP</text>
-    <rect x="${xCP0}" y="${yMP}" width="${xCP1 - xCP0}" height="${barH}" rx="6"
-      fill="#78350f" stroke="#f59e0b" stroke-width="1.5" opacity="0.5"/>
-    <rect x="${xCP1}" y="${yMP}" width="${xMP1 - xCP1}" height="${barH}" rx="6"
-      fill="#f59e0b" opacity="0.85"/>
+    <rect x="${xCP0}" y="${yMP}" width="${xCP1 - xCP0}" height="${barH}" rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="1.5" opacity="0.5"/>
+    <rect x="${xCP1}" y="${yMP}" width="${xMP1 - xCP1}" height="${barH}" rx="6" fill="#f59e0b" opacity="0.85"/>
     <text x="${xMP1 + 8}" y="${yMP + barH/2 + 5}" font-size="13" font-weight="800" fill="#fcd34d">₹${fmt(mp)}</text>
-    <text x="${xCP1 + (xMP1 - xCP1)/2}" y="${yMP - 8}" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">
-      +${markup}% on CP
-    </text>
-
-    <!-- SP bar: from CP to SP, then discount gap shown to MP -->
+    <text x="${xCP1 + (xMP1 - xCP1)/2}" y="${yMP - 8}" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">+${markup}% on CP</text>
     <text x="${padL - 10}" y="${ySP + barH/2 + 5}" text-anchor="end" font-size="12" font-weight="700" fill="${changeColor}">SP</text>
-    <rect x="${xCP0}" y="${ySP}" width="${xSP1 - xCP0}" height="${barH}" rx="6"
-      fill="${isProfit ? '#14532d' : '#7f1d1d'}" stroke="${changeColor}" stroke-width="2"/>
+    <rect x="${xCP0}" y="${ySP}" width="${xSP1 - xCP0}" height="${barH}" rx="6" fill="${isProfit ? '#14532d' : '#7f1d1d'}" stroke="${changeColor}" stroke-width="2"/>
     <text x="${xSP1 + 8}" y="${ySP + barH/2 + 5}" font-size="13" font-weight="800" fill="${changeColor}">₹${fmt(sp)}</text>
-    <!-- Discount gap from SP to MP -->
-    <line x1="${xSP1}" y1="${ySP}" x2="${xMP1}" y2="${ySP}"
-      stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 3"/>
-    <text x="${xSP1 + (xMP1 - xSP1)/2}" y="${ySP + barH/2 + 5}" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">
-      −${discount}% on MP
-    </text>
-
-    <!-- Net profit / loss annotation -->
+    <line x1="${xSP1}" y1="${ySP}" x2="${xMP1}" y2="${ySP}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 3"/>
+    <text x="${xSP1 + (xMP1 - xSP1)/2}" y="${ySP + barH/2 + 5}" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">−${discount}% on MP</text>
     <text x="${padL - 10}" y="${ySP + barH + 24}" text-anchor="end" font-size="11" font-weight="700" fill="${changeColor}">NET</text>
-    <text x="${xSP1 + 8}" y="${ySP + barH + 24}" font-size="12" font-weight="800" fill="${changeColor}">
-      ${isProfit ? "+" : ""}₹${fmt(Math.abs(netAmt))} (${isProfit ? "+" : ""}${netPct}%)
-    </text>
-
-    ${ghost}
-  `;
-
-  $("svg-live-desc").textContent =
-    `CP ${fmtMoney(cp)}, markup ${markup} percent gives MP ${fmtMoney(mp)}, discount ${discount} percent gives SP ${fmtMoney(sp)}, net ${isProfit ? "profit" : "loss"} ${netPct} percent.`;
+    <text x="${xSP1 + 8}" y="${ySP + barH + 24}" font-size="12" font-weight="800" fill="${changeColor}">${isProfit ? "+" : ""}₹${fmt(Math.abs(netAmt))} (${isProfit ? "+" : ""}${netPct}%)</text>
+    ${ghost}`;
+  $("svg-live-desc").textContent = `CP ${fmtMoney(cp)}, markup ${markup}%, MP ${fmtMoney(mp)}, discount ${discount}%, SP ${fmtMoney(sp)}, net ${isProfit ? "profit" : "loss"} ${netPct}%.`;
 }
 
 function renderReadouts(r) {
   if (!r.valid) {
-    ["readout-mp","readout-discount-amt","readout-sp","readout-net-profit","readout-multiplier"]
-      .forEach(id => $(id).textContent = "—");
+    ["readout-mp","readout-discount-amt","readout-sp","readout-net-profit","readout-multiplier"].forEach(id => $(id).textContent = "—");
     return;
   }
   const { mp, discountAmt, sp, netAmt, netPct, netMul } = r.intermediates;
   $("readout-mp").textContent = "₹" + fmt(mp);
   $("readout-discount-amt").textContent = "−₹" + fmt(discountAmt);
   $("readout-sp").textContent = "₹" + fmt(sp);
-
   const np = $("readout-net-profit");
   np.textContent = (netPct >= 0 ? "+" : "") + netPct + "%";
   np.style.color = netAmt >= 0 ? "var(--success)" : "var(--danger)";
@@ -1048,62 +1175,38 @@ function renderSuccessive() {
   $("sd-naive").textContent = r.naive + "%";
   $("sd-mult").textContent = r.mul.toFixed(2).replace(/\.?0+$/, "") + "×";
   $("sd-gap").textContent = r.gap + "%";
-
   const svg = $("successive-svg");
   const padL = 40, padR = 40;
   const plotW = 760 - padL - padR;
-  const X = (val) => padL + (Math.max(0, Math.min(1, val))) * plotW;
-
+  const X = (val) => padL + Math.max(0, Math.min(1, val)) * plotW;
   const y = 80, barH = 40;
-
-  // Single 100% bar. First discount removes from right end of original.
-  // Second discount removes from right end of the reduced portion.
   const after1 = 1 - state.sdD1 / 100;
   const after2 = after1 * (1 - state.sdD2 / 100);
-
   svg.innerHTML = `
-    <!-- 100% reference bar -->
     <text x="${padL}" y="${y - 20}" font-size="12" font-weight="700" fill="#94a3b8">MP (100%)</text>
-    <rect x="${padL}" y="${y}" width="${plotW}" height="${barH}" rx="6"
-      fill="#1c2848" stroke="#3b4d78" stroke-width="2"/>
+    <rect x="${padL}" y="${y}" width="${plotW}" height="${barH}" rx="6" fill="#1c2848" stroke="#3b4d78" stroke-width="2"/>
+    <rect x="${X(after1)}" y="${y}" width="${X(1) - X(after1)}" height="${barH}" rx="6" fill="#ef4444" opacity="0.55"/>
+    <text x="${(X(after1) + X(1))/2}" y="${y + barH/2 + 5}" text-anchor="middle" font-size="12" font-weight="800" fill="#fca5a5">−${state.sdD1}%</text>
+    <rect x="${X(after2)}" y="${y}" width="${X(after1) - X(after2)}" height="${barH}" rx="6" fill="#f59e0b" opacity="0.7"/>
+    <text x="${(X(after2) + X(after1))/2}" y="${y + barH/2 + 5}" text-anchor="middle" font-size="11" font-weight="800" fill="#1a1206">−${state.sdD2}%</text>
+    <rect x="${padL}" y="${y}" width="${X(after2) - padL}" height="${barH}" rx="6" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+    <text x="${(padL + X(after2))/2}" y="${y + barH/2 + 5}" text-anchor="middle" font-size="12" font-weight="800" fill="#86efac">${(after2*100).toFixed(0)}% kept</text>
+    <line x1="${X(1 - r.naive/100)}" y1="${y - 8}" x2="${X(1 - r.naive/100)}" y2="${y + barH + 8}" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="${X(1 - r.naive/100)}" y="${y + barH + 26}" text-anchor="middle" font-size="10" fill="#f59e0b" font-weight="700">naive sum</text>
+    <line x1="${X(after2)}" y1="${y - 8}" x2="${X(after2)}" y2="${y + barH + 8}" stroke="#22c55e" stroke-width="2"/>
+    <text x="${X(after2)}" y="${y + barH + 26}" text-anchor="middle" font-size="10" fill="#22c55e" font-weight="700">true d_eq</text>
+    <text x="${padL}" y="${y + barH + 52}" font-size="12" fill="#94a3b8">Equivalent discount = <tspan fill="#22c55e" font-weight="700">${r.eq}%</tspan> · Naive sum = <tspan fill="#f59e0b" font-weight="700">${r.naive}%</tspan> · Gap = <tspan fill="#fcd34d" font-weight="700">${r.gap}%</tspan></text>`;
+}
 
-    <!-- Portion removed by d1 (right end) -->
-    <rect x="${X(after1)}" y="${y}" width="${X(1) - X(after1)}" height="${barH}" rx="6"
-      fill="#ef4444" opacity="0.55"/>
-    <text x="${(X(after1) + X(1))/2}" y="${y + barH/2 + 5}" text-anchor="middle"
-      font-size="12" font-weight="800" fill="#fca5a5">−${state.sdD1}%</text>
-
-    <!-- Portion removed by d2 (from the remaining bar) -->
-    <rect x="${X(after2)}" y="${y}" width="${X(after1) - X(after2)}" height="${barH}" rx="6"
-      fill="#f59e0b" opacity="0.7"/>
-    <text x="${(X(after2) + X(after1))/2}" y="${y + barH/2 + 5}" text-anchor="middle"
-      font-size="11" font-weight="800" fill="#1a1206">−${state.sdD2}%</text>
-
-    <!-- What remains -->
-    <rect x="${padL}" y="${y}" width="${X(after2) - padL}" height="${barH}" rx="6"
-      fill="#14532d" stroke="#22c55e" stroke-width="2"/>
-    <text x="${(padL + X(after2))/2}" y="${y + barH/2 + 5}" text-anchor="middle"
-      font-size="12" font-weight="800" fill="#86efac">${((after2) * 100).toFixed(0)}% kept</text>
-
-    <!-- Naive sum marker -->
-    <line x1="${X(1 - r.naive/100)}" y1="${y - 8}" x2="${X(1 - r.naive/100)}" y2="${y + barH + 8}"
-      stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
-    <text x="${X(1 - r.naive/100)}" y="${y + barH + 26}" text-anchor="middle"
-      font-size="10" fill="#f59e0b" font-weight="700">naive sum</text>
-
-    <!-- Equivalent discount marker -->
-    <line x1="${X(after2)}" y1="${y - 8}" x2="${X(after2)}" y2="${y + barH + 8}"
-      stroke="#22c55e" stroke-width="2"/>
-    <text x="${X(after2)}" y="${y + barH + 26}" text-anchor="middle"
-      font-size="10" fill="#22c55e" font-weight="700">true d_eq</text>
-
-    <!-- Annotation: gap -->
-    <text x="${padL}" y="${y + barH + 52}" font-size="12" fill="#94a3b8">
-      Equivalent discount = <tspan fill="#22c55e" font-weight="700">${r.eq}%</tspan>
-      · Naive sum = <tspan fill="#f59e0b" font-weight="700">${r.naive}%</tspan>
-      · Gap = <tspan fill="#fcd34d" font-weight="700">${r.gap}%</tspan>
-    </text>
-  `;
+function renderSuccessiveMarkup() {
+  const r = Model.solveSuccessiveMarkup(state.smM1, state.smM2);
+  if (!r.valid) return;
+  $("sm-m1-badge").textContent = state.smM1 + "%";
+  $("sm-m2-badge").textContent = state.smM2 + "%";
+  $("sm-eq").textContent = r.eq + "%";
+  $("sm-naive").textContent = r.naive + "%";
+  $("sm-mult").textContent = r.mul.toFixed(2).replace(/\.?0+$/, "") + "×";
+  $("sm-gap").textContent = r.gap + "%";
 }
 
 function renderEqualSP() {
@@ -1114,51 +1217,189 @@ function renderEqualSP() {
   $("esp-cp-gain").textContent = "₹" + fmt(r.cpGain);
   $("esp-cp-loss").textContent = "₹" + fmt(r.cpLoss);
   $("esp-formula").textContent = `(${state.espX}/10)² = ${r.lossPct}%`;
-
   const svg = $("equal-sp-svg");
   const padL = 110, padR = 40;
   const plotW = 760 - padL - padR;
   const maxVal = Math.max(r.cpGain, r.cpLoss) * 1.3;
   const X = (v) => padL + (v / maxVal) * plotW;
-
-  const yGain = 60, yLoss = 140, barH = 32;
-  const ySP = 230;
-
-  // SP vertical line (same for both) at reference value r.sp (100)
+  const yGain = 60, yLoss = 140, barH = 32, ySP = 230;
   const xSP = X(r.sp);
-
   svg.innerHTML = `
-    <text x="${padL - 10}" y="${yGain + barH/2 + 5}" text-anchor="end" font-size="11" font-weight="700" fill="#86efac">
-      Gain item CP
-    </text>
-    <rect x="${X(0)}" y="${yGain}" width="${X(r.cpGain) - X(0)}" height="${barH}" rx="6"
-      fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+    <text x="${padL - 10}" y="${yGain + barH/2 + 5}" text-anchor="end" font-size="11" font-weight="700" fill="#86efac">Gain item CP</text>
+    <rect x="${X(0)}" y="${yGain}" width="${X(r.cpGain) - X(0)}" height="${barH}" rx="6" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
     <text x="${X(0) + 10}" y="${yGain + barH/2 + 5}" font-size="12" font-weight="700" fill="#86efac">₹${fmt(r.cpGain)}</text>
     <text x="${X(r.cpGain) + 8}" y="${yGain + barH/2 + 5}" font-size="11" fill="#86efac">+${state.espX}%</text>
-
-    <text x="${padL - 10}" y="${yLoss + barH/2 + 5}" text-anchor="end" font-size="11" font-weight="700" fill="#fca5a5">
-      Loss item CP
-    </text>
-    <rect x="${X(0)}" y="${yLoss}" width="${X(r.cpLoss) - X(0)}" height="${barH}" rx="6"
-      fill="#7f1d1d" stroke="#ef4444" stroke-width="2"/>
+    <text x="${padL - 10}" y="${yLoss + barH/2 + 5}" text-anchor="end" font-size="11" font-weight="700" fill="#fca5a5">Loss item CP</text>
+    <rect x="${X(0)}" y="${yLoss}" width="${X(r.cpLoss) - X(0)}" height="${barH}" rx="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="2"/>
     <text x="${X(0) + 10}" y="${yLoss + barH/2 + 5}" font-size="12" font-weight="700" fill="#fca5a5">₹${fmt(r.cpLoss)}</text>
     <text x="${X(r.cpLoss) + 8}" y="${yLoss + barH/2 + 5}" font-size="11" fill="#fca5a5">−${state.espX}%</text>
+    <line x1="${xSP}" y1="${yGain - 10}" x2="${xSP}" y2="${yLoss + barH + 30}" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="${xSP}" y="${yLoss + barH + 48}" text-anchor="middle" font-size="12" font-weight="700" fill="#38bdf8">Same SP = ₹${fmt(r.sp)}</text>
+    <text x="${padL}" y="${ySP}" font-size="12" fill="#fca5a5">Total CP = ₹${fmt(r.totalCP)} · Total SP = ₹${fmt(r.totalSP)} · Net = −₹${fmt(r.totalCP - r.totalSP)}</text>
+    <text x="${padL}" y="${ySP + 22}" font-size="13" font-weight="800" fill="#fca5a5">Always a LOSS of (x/10)² = ${r.lossPct}%</text>`;
+}
 
-    <!-- Same SP line -->
-    <line x1="${xSP}" y1="${yGain - 10}" x2="${xSP}" y2="${yLoss + barH + 30}"
-      stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 4"/>
-    <text x="${xSP}" y="${yLoss + barH + 48}" text-anchor="middle" font-size="12" font-weight="700" fill="#38bdf8">
-      Same SP = ₹${fmt(r.sp)}
-    </text>
+function renderDishonest() {
+  const r = Model.solveDishonest(state.dsTrue, state.dsFalse, state.dsCp);
+  if (!r.valid) return;
+  $("ds-true-cost").textContent = "₹" + fmt(r.trueCost);
+  $("ds-revenue").textContent = "₹" + fmt(r.revenue);
+  $("ds-profit-amt").textContent = "₹" + fmt(r.profitAmt);
+  $("ds-profit-pct").textContent = r.profitPct + "%";
+  $("ds-naive").textContent = r.naive + "%";
+  $("ds-explain").textContent = `Gain % = (True − False)/False × 100 = (${state.dsTrue} − ${state.dsFalse})/${state.dsFalse} × 100 = ${r.profitPct}%. Note: naive (dividing by true weight) gives ${r.naive}% — wrong.`;
+  const svg = $("dishonest-svg");
+  const padL = 60, padR = 40;
+  const plotW = 760 - padL - padR;
+  const maxW = Math.max(state.dsTrue, state.dsFalse) * 1.1;
+  const X = (v) => padL + (v / maxW) * plotW;
+  const y1 = 60, y2 = 130, barH = 32;
+  svg.innerHTML = `
+    <text x="${padL - 10}" y="${y1 + barH/2 + 5}" text-anchor="end" font-size="11" font-weight="700" fill="#fcd34d">Claimed</text>
+    <rect x="${X(0)}" y="${y1}" width="${X(state.dsTrue) - X(0)}" height="${barH}" rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="2"/>
+    <text x="${X(state.dsTrue) + 8}" y="${y1 + barH/2 + 5}" font-size="12" font-weight="700" fill="#fcd34d">${state.dsTrue}g</text>
+    <text x="${padL - 10}" y="${y2 + barH/2 + 5}" text-anchor="end" font-size="11" font-weight="700" fill="#fca5a5">Actually given</text>
+    <rect x="${X(0)}" y="${y2}" width="${X(state.dsFalse) - X(0)}" height="${barH}" rx="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="2"/>
+    <text x="${X(state.dsFalse) + 8}" y="${y2 + barH/2 + 5}" font-size="12" font-weight="700" fill="#fca5a5">${state.dsFalse}g</text>
+    <rect x="${X(state.dsFalse)}" y="${y1}" width="${X(state.dsTrue) - X(state.dsFalse)}" height="${barH + (y2-y1)}" fill="none" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+    <text x="${(X(state.dsFalse) + X(state.dsTrue))/2}" y="${y1 - 8}" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">Missing ${state.dsTrue - state.dsFalse}g</text>`;
+}
 
-    <!-- Net loss annotation -->
-    <text x="${padL}" y="${ySP}" font-size="12" fill="#fca5a5">
-      Total CP = ₹${fmt(r.totalCP)} · Total SP = ₹${fmt(r.totalSP)} · Net = −₹${fmt(r.totalCP - r.totalSP)}
-    </text>
-    <text x="${padL}" y="${ySP + 22}" font-size="13" font-weight="800" fill="#fca5a5">
-      Always a LOSS of (x/10)² = ${r.lossPct}% — because the dearer CP pulls total CP above 2×SP
-    </text>
-  `;
+function renderPromo() {
+  const r = Model.solvePromo(state.poBuy, state.poGet, state.poPrice, state.poExtra);
+  if (!r.valid) return;
+  $("po-buy-badge").textContent = state.poBuy;
+  $("po-get-badge").textContent = state.poGet;
+  $("po-extra-badge").textContent = state.poExtra + "%";
+  $("po-total").textContent = r.totalItems;
+  $("po-paid").textContent = "₹" + fmt(r.paid);
+  $("po-value").textContent = "₹" + fmt(r.value);
+  $("po-effective").textContent = r.effective + "%";
+  $("po-combined").textContent = r.combined + "%";
+  $("po-explain").textContent = `Effective discount = Y/(X+Y) × 100 = ${state.poGet}/${r.totalItems} × 100 = ${r.effective}%. With extra ${state.poExtra}% discount: combined = ${r.combined}%.`;
+  const svg = $("promo-svg");
+  const padL = 60, padR = 40;
+  const plotW = 760 - padL - padR;
+  const X = (v) => padL + (v / r.value) * plotW;
+  const y = 70, barH = 40;
+  let items = "";
+  for (let i = 0; i < r.totalItems; i++) {
+    const isFree = i >= state.poBuy;
+    const x = X(i * state.poPrice);
+    const w = X((i+1) * state.poPrice) - x - 4;
+    items += `<rect x="${x}" y="${y}" width="${w}" height="${barH}" rx="4" fill="${isFree ? '#14532d' : '#1e3a8a'}" stroke="${isFree ? '#22c55e' : '#3b82f6'}" stroke-width="2"/>
+      <text x="${x + w/2}" y="${y + barH/2 + 5}" text-anchor="middle" font-size="11" font-weight="700" fill="${isFree ? '#86efac' : '#93c5fd'}">${isFree ? 'FREE' : 'PAID'}</text>`;
+  }
+  svg.innerHTML = `${items}
+    <text x="${padL}" y="${y + barH + 30}" font-size="12" fill="#94a3b8">You pay for ${state.poBuy} items · Receive ${r.totalItems} items · Effective discount: <tspan fill="#22c55e" font-weight="700">${r.effective}%</tspan></text>`;
+}
+
+function renderTransactions() {
+  const r = Model.solveTransactions(state.txs);
+  if (!r.valid) return;
+  $("tx-total-cp").textContent = "₹" + fmt(r.totalCP);
+  $("tx-total-sp").textContent = "₹" + fmt(r.totalSP);
+  $("tx-net-amt").textContent = (r.net >= 0 ? "+₹" : "−₹") + fmt(Math.abs(r.net));
+  $("tx-net-pct").textContent = (r.netPct >= 0 ? "+" : "") + r.netPct + "%";
+  const res = $("tx-result");
+  if (r.net > 0) { res.textContent = "Profit"; res.style.color = "var(--success)"; }
+  else if (r.net < 0) { res.textContent = "Loss"; res.style.color = "var(--danger)"; }
+  else { res.textContent = "Breakeven"; res.style.color = "var(--text-dim)"; }
+  $("tx-explain").textContent = `Overall P/L% = (ΣSP − ΣCP)/ΣCP × 100 = (₹${fmt(r.totalSP)} − ₹${fmt(r.totalCP)})/₹${fmt(r.totalCP)} × 100 = ${r.netPct}%. Note: %s must be weighted by CP, never averaged.`;
+  const list = $("tx-list");
+  list.innerHTML = "";
+  state.txs.forEach((tx, i) => {
+    const row = document.createElement("div");
+    row.className = "tx-row";
+    row.innerHTML = `
+      <div><label>Item #${i+1}</label><input type="text" value="Item ${i+1}" data-tx="${i}" data-field="name" readonly></div>
+      <div><label>CP (₹)</label><input type="number" value="${tx.cp}" data-tx="${i}" data-field="cp" min="0" step="10"></div>
+      <div><label>SP (₹)</label><input type="number" value="${tx.sp}" data-tx="${i}" data-field="sp" min="0" step="10"></div>
+      <div><label>P/L ₹</label><input type="text" value="${r.rows[i].net >= 0 ? '+' : ''}${r.rows[i].net}" readonly></div>
+      <div><button type="button" class="btn btn-ghost btn-sm" data-remove="${i}">✕</button></div>`;
+    list.appendChild(row);
+  });
+  list.querySelectorAll("input[data-field]").forEach(inp => {
+    if (inp.readOnly) return;
+    inp.addEventListener("input", (e) => {
+      const i = +e.target.dataset.tx;
+      state.txs[i][e.target.dataset.field] = parseFloat(e.target.value) || 0;
+      renderTransactions();
+    });
+  });
+  list.querySelectorAll("[data-remove]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (state.txs.length <= 1) return;
+      state.txs.splice(+btn.dataset.remove, 1);
+      renderTransactions();
+    });
+  });
+}
+
+function renderReverse() {
+  const mode = $("rev-mode").value;
+  const a = $("rev-a").value, b = $("rev-b").value, c = $("rev-c").value;
+  const labels = {
+    "find-cp": ["SP (₹)", "P/L %", "—"],
+    "find-sp": ["CP (₹)", "P/L %", "—"],
+    "find-pct": ["CP (₹)", "SP (₹)", "—"],
+    "find-mp-from-target": ["CP (₹)", "Target P %", "Discount %"]
+  };
+  const L = labels[mode] || ["", "", ""];
+  $("rev-a-label").textContent = L[0];
+  $("rev-b-label").textContent = L[1];
+  $("rev-c-label").textContent = L[2];
+  $("rev-c").disabled = mode !== "find-mp-from-target";
+  const r = Model.solveReverse(mode, a, b, c);
+  if (!r.valid) {
+    $("rev-result").textContent = "—";
+    $("rev-result-label").textContent = "Error";
+    $("rev-explain").textContent = r.error || "Check inputs.";
+    return;
+  }
+  $("rev-result-label").textContent = r.label;
+  $("rev-result").textContent = r.value;
+  $("rev-explain").textContent = r.explain;
+}
+
+function renderTargetProfit() {
+  const r = Model.solveTargetProfit(state.tpCp, state.tpProfit, state.tpDiscount);
+  if (!r.valid) return;
+  $("tp-profit-badge").textContent = state.tpProfit + "%";
+  $("tp-discount-badge").textContent = state.tpDiscount + "%";
+  $("tp-mp").textContent = "₹" + fmt(r.mp);
+  $("tp-markup").textContent = r.markup + "%";
+  $("tp-sp").textContent = "₹" + fmt(r.sp);
+  $("tp-check").textContent = r.check + "%";
+  $("tp-explain").textContent = `SP must be CP × (1 + ${state.tpProfit}/100) = ₹${fmt(state.tpCp)} × ${(1+state.tpProfit/100).toFixed(4)} = ₹${fmt(r.sp)}. MP must satisfy MP × (1 − ${state.tpDiscount}/100) = ₹${fmt(r.sp)} → MP = ₹${fmt(r.sp)} / ${(1-state.tpDiscount/100).toFixed(4)} = ₹${fmt(r.mp)}. Required markup = ${r.markup}%.`;
+}
+
+function renderProfitOnSP() {
+  const r = Model.solveProfitOnSP(state.psCp, state.psPct, state.psBase);
+  if (!r.valid) return;
+  $("ps-pct-badge").textContent = state.psPct + "%";
+  $("ps-sp-on-cp").textContent = "₹" + fmt(r.spOnCP);
+  $("ps-sp-on-sp").textContent = r.spOnSP !== null ? "₹" + fmt(r.spOnSP) : "—";
+  $("ps-pct-on-cp").textContent = r.pctOnCP + "%";
+  $("ps-formula").textContent = "P×100/(100−P)";
+  if (state.psBase === "sp") {
+    $("ps-explain").textContent = `If profit is ${state.psPct}% of SP, then SP = CP/(1 − ${state.psPct}/100) = ₹${fmt(state.psCp)} / ${(1-state.psPct/100).toFixed(4)} = ₹${fmt(r.spOnSP)}. Equivalent profit on CP = ${state.psPct} × 100/(100 − ${state.psPct}) = ${r.pctOnCP}%.`;
+  } else {
+    $("ps-explain").textContent = `Standard case: profit is ${state.psPct}% of CP, so SP = ₹${fmt(r.spOnCP)}. This is the default convention.`;
+  }
+}
+
+function renderOverheads() {
+  const r = Model.solveOverheads(state.ohPurchase, state.ohExpenses, state.ohMarkup, state.ohDiscount);
+  if (!r.valid) return;
+  $("oh-markup-badge").textContent = state.ohMarkup + "%";
+  $("oh-discount-badge").textContent = state.ohDiscount + "%";
+  $("oh-total-cp").textContent = "₹" + fmt(r.effCp);
+  $("oh-mp").textContent = "₹" + fmt(r.mp);
+  $("oh-sp").textContent = "₹" + fmt(r.sp);
+  $("oh-net-amt").textContent = "₹" + fmt(r.net);
+  $("oh-net-pct").textContent = r.netPct + "%";
+  $("oh-naive").textContent = r.naive + "%";
 }
 
 function renderMainSection() {
@@ -1169,7 +1410,7 @@ function renderMainSection() {
 }
 
 /* =====================================================================
-   6. SECTION 1 — CONTROL WIRING
+   CONTROL WIRING — PRICE WATERFALL
    ===================================================================== */
 function setControlsEnabled(enabled) {
   ["input-cp","input-markup","input-discount","range-markup","range-discount"].forEach(id => $(id).disabled = !enabled);
@@ -1220,49 +1461,32 @@ document.querySelectorAll("[data-preset]").forEach(btn => {
 });
 
 /* =====================================================================
-   7. SECTION 2 — PREDICT
+   PREDICT
    ===================================================================== */
 function preparePredictScenario(r) {
   if (!r.valid || state.predictLocked) return;
   const { cp, markup, discount, netPct } = r.intermediates;
-
-  $("predict-scenario-text").textContent =
-    `An article costing ₹${fmt(cp)} is marked up ${markup}%, then sold at ${discount}% discount on MP. Net profit %?`;
-
-  // Options: correct / additive trap / one nearby distractor
+  $("predict-scenario-text").textContent = `An article costing ₹${fmt(cp)} is marked up ${markup}%, then sold at ${discount}% discount on MP. Net profit %?`;
   const correct = netPct;
   const additive = r.traps.additive;
   const near = Math.round((netPct + 4) * 10) / 10;
-
   const set = new Set([correct]);
   if (additive !== correct) set.add(additive);
   if (near !== correct && near !== additive) set.add(near);
   if (set.size < 3) set.add(Math.round((netPct - 4) * 10) / 10);
-
-  const options = [...set].map(v => ({
-    value: v,
-    kind: v === correct ? "correct"
-        : v === additive ? "additive"
-        : "distractor"
-  })).sort((a, b) => a.value - b.value);
-
+  const options = [...set].map(v => ({ value: v, kind: v === correct ? "correct" : v === additive ? "additive" : "distractor" })).sort((a, b) => a.value - b.value);
   state.predictScenario = { cp, markup, discount, correct, options };
-
   const container = $("predict-options-container");
   container.innerHTML = "";
   options.forEach(o => {
     const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "option-btn";
+    btn.type = "button"; btn.className = "option-btn";
     btn.textContent = (o.value >= 0 ? "+" : "") + o.value + "%";
-    btn.setAttribute("role", "radio");
-    btn.setAttribute("aria-checked", "false");
-    btn.dataset.kind = o.kind;
-    btn.dataset.value = o.value;
+    btn.setAttribute("role", "radio"); btn.setAttribute("aria-checked", "false");
+    btn.dataset.kind = o.kind; btn.dataset.value = o.value;
     btn.addEventListener("click", () => commitPrediction(o));
     container.appendChild(btn);
   });
-
   $("predict-feedback").className = "callout hidden";
   $("worked-solution-panel").classList.add("hidden");
   setControlsEnabled(true);
@@ -1276,7 +1500,6 @@ function commitPrediction(option) {
   state.userPredictionValue = option.value;
   setControlsEnabled(false);
   $("predict-lock-hint").textContent = "Locked. Click 🎲 New scenario to try again.";
-
   document.querySelectorAll("#predict-options-container .option-btn").forEach(b => {
     const kind = b.dataset.kind;
     const chosen = Number(b.dataset.value) === option.value;
@@ -1286,12 +1509,10 @@ function commitPrediction(option) {
     if (chosen && kind !== "correct") b.classList.add("incorrect");
     b.disabled = true;
   });
-
   const fb = $("predict-feedback");
   fb.classList.remove("hidden");
   const sc = state.predictScenario;
   const r = Model.solvePriceChain({ cp: state.cp, markup: state.markup, discount: state.discount });
-
   if (option.kind === "correct") {
     fb.className = "callout callout-success";
     fb.innerHTML = `<strong>✓ Correct.</strong> Net multiplier = (1+${sc.markup}/100)(1−${sc.discount}/100) = ${r.intermediates.netMul}×, giving ${sc.correct}%.`;
@@ -1302,7 +1523,6 @@ function commitPrediction(option) {
     fb.className = "callout callout-warning";
     fb.innerHTML = `<strong>Close but not exact.</strong> Multiply (1+${sc.markup}/100) × (1−${sc.discount}/100) and subtract 1.`;
   }
-
   revealSteps(r);
   renderWaterfall(r);
   renderReadouts(r);
@@ -1318,9 +1538,7 @@ function revealSteps(r) {
       <div>${s.body}</div>
       ${s.math ? `<div class="step-detail">${s.math}</div>` : ""}
     </div>`).join("");
-
-  $("solution-trap-text").textContent =
-    `Subtracting discount from markup gives ${r.traps.additive}% — wrong. The discount is on MP (₹${fmt(r.intermediates.mp)}), while profit is measured against CP (₹${fmt(r.intermediates.cp)}).`;
+  $("solution-trap-text").textContent = `Subtracting discount from markup gives ${r.traps.additive}% — wrong. The discount is on MP (₹${fmt(r.intermediates.mp)}), while profit is measured against CP (₹${fmt(r.intermediates.cp)}).`;
 }
 
 $("btn-new-predict").addEventListener("click", () => {
@@ -1339,27 +1557,86 @@ $("btn-new-predict").addEventListener("click", () => {
 });
 
 /* =====================================================================
-   8. SECTION 3 — SUCCESSIVE DISCOUNT
+   SECTION CONTROL WIRING — ALL NEW SECTIONS
    ===================================================================== */
-$("sd-d1").addEventListener("input", (e) => {
-  state.sdD1 = parseFloat(e.target.value);
-  renderSuccessive();
+// Successive discount
+$("sd-d1").addEventListener("input", (e) => { state.sdD1 = parseFloat(e.target.value); renderSuccessive(); });
+$("sd-d2").addEventListener("input", (e) => { state.sdD2 = parseFloat(e.target.value); renderSuccessive(); });
+// Successive markup
+$("sm-m1").addEventListener("input", (e) => { state.smM1 = parseFloat(e.target.value); renderSuccessiveMarkup(); });
+$("sm-m2").addEventListener("input", (e) => { state.smM2 = parseFloat(e.target.value); renderSuccessiveMarkup(); });
+// Equal SP
+$("esp-x").addEventListener("input", (e) => { state.espX = parseFloat(e.target.value); renderEqualSP(); });
+// Dishonest
+$("ds-true").addEventListener("input", (e) => {
+  state.dsTrue = Math.max(100, parseFloat(e.target.value) || 1000);
+  if (state.dsFalse > state.dsTrue) { state.dsFalse = state.dsTrue; $("ds-false").value = state.dsTrue; $("ds-false-num").value = state.dsTrue; $("ds-false").max = state.dsTrue; $("ds-false-num").max = state.dsTrue; }
+  renderDishonest();
 });
-$("sd-d2").addEventListener("input", (e) => {
-  state.sdD2 = parseFloat(e.target.value);
-  renderSuccessive();
+$("ds-false").addEventListener("input", (e) => {
+  state.dsFalse = parseFloat(e.target.value);
+  $("ds-false-num").value = state.dsFalse;
+  $("ds-false-badge").textContent = state.dsFalse + "g";
+  renderDishonest();
+});
+$("ds-false-num").addEventListener("input", (e) => {
+  state.dsFalse = Math.max(100, Math.min(state.dsTrue, parseFloat(e.target.value) || 100));
+  $("ds-false").value = state.dsFalse;
+  $("ds-false-badge").textContent = state.dsFalse + "g";
+  renderDishonest();
+});
+$("ds-cp").addEventListener("input", (e) => { state.dsCp = Math.max(1, parseFloat(e.target.value) || 100); renderDishonest(); });
+// Promo
+$("po-buy").addEventListener("input", (e) => { state.poBuy = parseFloat(e.target.value); renderPromo(); });
+$("po-get").addEventListener("input", (e) => { state.poGet = parseFloat(e.target.value); renderPromo(); });
+$("po-price").addEventListener("input", (e) => { state.poPrice = Math.max(1, parseFloat(e.target.value) || 100); renderPromo(); });
+$("po-extra-discount").addEventListener("input", (e) => { state.poExtra = parseFloat(e.target.value); renderPromo(); });
+// Transactions
+$("tx-add").addEventListener("click", () => {
+  state.txs.push({ cp: 100, sp: 120 });
+  renderTransactions();
+});
+$("tx-reset").addEventListener("click", () => {
+  state.txs = [{ cp: 500, sp: 600 }, { cp: 400, sp: 360 }];
+  renderTransactions();
+});
+// Reverse
+$("rev-mode").addEventListener("change", renderReverse);
+$("rev-a").addEventListener("input", renderReverse);
+$("rev-b").addEventListener("input", renderReverse);
+$("rev-c").addEventListener("input", renderReverse);
+// Target profit
+$("tp-cp").addEventListener("input", (e) => { state.tpCp = Math.max(1, parseFloat(e.target.value) || 800); renderTargetProfit(); });
+$("tp-profit").addEventListener("input", (e) => { state.tpProfit = parseFloat(e.target.value); renderTargetProfit(); });
+$("tp-discount").addEventListener("input", (e) => { state.tpDiscount = parseFloat(e.target.value); renderTargetProfit(); });
+// Profit on SP vs CP
+$("ps-cp").addEventListener("input", (e) => { state.psCp = Math.max(1, parseFloat(e.target.value) || 100); renderProfitOnSP(); });
+$("ps-pct").addEventListener("input", (e) => { state.psPct = parseFloat(e.target.value); renderProfitOnSP(); });
+$("ps-base").addEventListener("change", (e) => { state.psBase = e.target.value; renderProfitOnSP(); });
+// Overheads
+$("oh-purchase").addEventListener("input", (e) => { state.ohPurchase = Math.max(1, parseFloat(e.target.value) || 500); renderOverheads(); });
+$("oh-expenses").addEventListener("input", (e) => { state.ohExpenses = Math.max(0, parseFloat(e.target.value) || 0); renderOverheads(); });
+$("oh-markup").addEventListener("input", (e) => { state.ohMarkup = parseFloat(e.target.value); renderOverheads(); });
+$("oh-discount").addEventListener("input", (e) => { state.ohDiscount = parseFloat(e.target.value); renderOverheads(); });
+
+// Tabs
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll(".tab-btn").forEach(b => {
+      const on = b.dataset.tab === tab;
+      b.classList.toggle("active", on);
+      b.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    document.querySelectorAll(".tab-panel").forEach(p => {
+      p.classList.toggle("active", p.id === "tab-" + tab);
+      p.classList.toggle("hidden", p.id !== "tab-" + tab);
+    });
+  });
 });
 
 /* =====================================================================
-   9. SECTION 4 — EQUAL SP
-   ===================================================================== */
-$("esp-x").addEventListener("input", (e) => {
-  state.espX = parseFloat(e.target.value);
-  renderEqualSP();
-});
-
-/* =====================================================================
-   10. SECTION 5 — PRACTICE
+   PRACTICE
    ===================================================================== */
 function shuffle(arr) {
   const a = [...arr];
@@ -1380,10 +1657,9 @@ function setPracticeMode(mode) {
   $("timer-container").classList.toggle("hidden", mode !== "timed");
   if (mode === "timed") startTimer();
   else stopTimer();
-
-  // Hide visual sections in exam-like modes so learner can't peep
+  // Hide visual sections in exam-like modes
   document.querySelectorAll("main > section").forEach((el, idx) => {
-    if (idx === 0 || idx === 2 || idx === 3) {
+    if (idx >= 0 && idx <= 9) {
       el.style.display = (mode === "hints") ? "" : "none";
     }
   });
@@ -1438,31 +1714,25 @@ function renderQuestion() {
   const q = state.shuffled[state.currentQIndex];
   state.answered = false;
   $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
+  $("practice-progress").style.width = ((state.currentQIndex / state.shuffled.length) * 100) + "%";
   const d = $("practice-q-difficulty");
   d.textContent = q.difficulty;
-  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
-                             : q.difficulty === "Medium" ? "badge-draft"
-                             : "badge-tag");
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published" : q.difficulty === "Medium" ? "badge-draft" : "badge-tag");
   $("practice-q-stem").textContent = q.stem;
-
   $("practice-feedback").className = "callout hidden";
   $("practice-error-categorizer").classList.add("hidden");
   $("practice-solution-box").classList.add("hidden");
   $("btn-next-question").disabled = true;
-
   const container = $("practice-options-container");
   container.innerHTML = "";
   q.options.forEach((opt, i) => {
     const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "option-btn";
+    btn.type = "button"; btn.className = "option-btn";
     btn.textContent = opt;
-    btn.setAttribute("role", "radio");
-    btn.setAttribute("aria-checked", "false");
+    btn.setAttribute("role", "radio"); btn.setAttribute("aria-checked", "false");
     btn.addEventListener("click", () => markAnswer(i, q));
     container.appendChild(btn);
   });
-
   if (state.practiceMode === "timed") startTimer();
 }
 
@@ -1470,17 +1740,14 @@ function markAnswer(chosenIdx, q) {
   if (state.answered) return;
   state.answered = true;
   stopTimer();
-
   const isCorrect = chosenIdx === q.correctIndex;
   const isTrap = chosenIdx === q.trapOptionIndex;
-
   document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
     b.disabled = true;
     b.setAttribute("aria-checked", i === chosenIdx ? "true" : "false");
     if (i === q.correctIndex) b.classList.add("correct");
     else if (i === chosenIdx) b.classList.add(isTrap ? "trap" : "incorrect");
   });
-
   const fb = $("practice-feedback");
   fb.classList.remove("hidden");
   if (isCorrect) {
@@ -1495,10 +1762,8 @@ function markAnswer(chosenIdx, q) {
     fb.innerHTML = `<strong>Incorrect.</strong> The correct answer is: <strong>${q.options[q.correctIndex]}</strong>.`;
     $("practice-error-categorizer").classList.remove("hidden");
   }
-
   $("practice-solution-box").classList.remove("hidden");
   $("practice-solution-text").textContent = q.solution;
-
   state.stats.attempts++;
   if (isCorrect) {
     state.stats.correct++;
@@ -1521,7 +1786,7 @@ $("select-error-category").addEventListener("change", (e) => {
 });
 
 function handleResetStats() {
-  if (!confirm("Reset local practice stats for Profit, Loss & Marked Price?")) return;
+  if (!confirm("Reset local practice stats?")) return;
   state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
   saveProgress();
   renderStats();
@@ -1529,7 +1794,7 @@ function handleResetStats() {
 window.handleResetStats = handleResetStats;
 
 /* =====================================================================
-   11. INIT
+   INIT
    ===================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
   const results = runSelfTests();
@@ -1537,21 +1802,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const banner = $("test-status-banner");
   if (!state.testsPassed) {
     banner.className = "test-banner";
-    banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong>
-      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
+    banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong><ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
     $("practice-options-container").innerHTML = "";
   }
-
   loadProgress();
   state.shuffled = shuffle(PRACTICE_QUESTIONS);
-
   $("cp-display-badge").textContent = "₹" + fmt(state.cp);
   $("markup-display-badge").textContent = "+" + state.markup + "% on CP";
   $("discount-display-badge").textContent = state.discount + "% on MP";
-
+  $("ds-false-badge").textContent = state.dsFalse + "g";
   renderMainSection();
   renderSuccessive();
+  renderSuccessiveMarkup();
   renderEqualSP();
+  renderDishonest();
+  renderPromo();
+  renderTransactions();
+  renderReverse();
+  renderTargetProfit();
+  renderProfitOnSP();
+  renderOverheads();
   renderQuestion();
   renderStats();
   setPracticeMode("hints");

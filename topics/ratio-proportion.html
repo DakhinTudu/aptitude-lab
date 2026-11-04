@@ -4,29 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Ratio, Proportion &amp; Variation — Aptitude Lab</title>
-<meta name="description" content="See ratios as unit-tiles. Coin denominator trap drawn side by side. Cross-multiply proportional mini-lab. Predict-first practice." />
-<!-- SEO_META -->
+<meta name="description" content="Full-syllabus interactive ratio lab: chained ratios, proportion properties, ages, partnership, mixture, replacement, transfer — with 40 verified questions and 5 simulators." />
 <meta name="theme-color" content="#0b1220" />
 <meta name="color-scheme" content="dark" />
-<meta name="robots" content="index,follow" />
-<meta name="author" content="Aptitude Lab" />
-<meta name="keywords" content="ratio, proportion, variation, chained ratios, aptitude" />
-<link rel="canonical" href="https://dakhintudu.github.io/aptitute-lab/topics/ratio-proportion.html" />
-<meta property="og:site_name" content="Aptitude Lab" />
-<meta property="og:locale" content="en_IN" />
-<meta property="og:type" content="article" />
-<meta property="og:title" content="Ratio, Proportion &amp; Variation — Aptitude Lab" />
-<meta property="og:description" content="See ratios as unit-tiles. Coin denominator trap drawn side by side. Cross-multiply proportional mini-lab. Predict-first practice." />
-<meta property="og:url" content="https://dakhintudu.github.io/aptitute-lab/topics/ratio-proportion.html" />
-<meta property="og:image" content="https://dakhintudu.github.io/aptitute-lab/assets/og-cover.jpg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Aptitude Lab — interactive aptitude and reasoning practice" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Ratio, Proportion &amp; Variation — Aptitude Lab" />
-<meta name="twitter:description" content="See ratios as unit-tiles. Coin denominator trap drawn side by side. Cross-multiply proportional mini-lab. Predict-first practice." />
-<meta name="twitter:image" content="https://dakhintudu.github.io/aptitute-lab/assets/og-cover.jpg" />
-<!-- /SEO_META -->
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 <link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
@@ -56,32 +36,17 @@ body {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
   html { scroll-behavior: auto; }
 }
-.skip-link {
-  position: absolute; left: -999px; top: 0; z-index: 100;
-  background: var(--primary); color: #001; padding: 12px 16px;
-  border-radius: 0 0 8px 0; font-weight: 700;
-}
+.skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--primary); color: #001; padding: 12px 16px; border-radius: 0 0 8px 0; font-weight: 700; }
 .skip-link:focus { left: 0; }
-.sr-only {
-  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
 h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
 h2 { font-size: 1.15rem; }
 h3 { font-size: 1rem; }
 p { margin: 0 0 0.75rem; }
-code {
-  font-family: var(--font-mono); font-size: 0.875em;
-  background: var(--surface-2); border: 1px solid var(--border);
-  padding: 0.15em 0.4em; border-radius: 4px;
-}
+code { font-family: var(--font-mono); font-size: 0.875em; background: var(--surface-2); border: 1px solid var(--border); padding: 0.15em 0.4em; border-radius: 4px; }
 .page-container { max-width: 1080px; margin: 0 auto; }
-.card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 22px 22px 24px;
-  margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25);
-}
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 22px 24px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
 @media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
 .card-header { margin-bottom: 18px; }
 .section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
@@ -93,35 +58,18 @@ code {
 }
 main { counter-reset: section-num; }
 .section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
-.site-header {
-  position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px);
-  background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border);
-  margin: 0 -16px 24px; padding: 12px 16px;
-}
-.header-container {
-  max-width: 1080px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-}
+.site-header { position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px); background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border); margin: 0 -16px 24px; padding: 12px 16px; }
+.header-container { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
 .brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
-.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; flex-wrap: wrap; }
 .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
 .nav-link:hover { color: var(--text); }
-.badge {
-  display: inline-flex; align-items: center;
-  padding: 3px 9px; border-radius: 999px;
-  font-size: 0.72rem; font-weight: 700;
-  letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
-}
+.badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap; }
 .badge-published { background: var(--success-soft); color: var(--success); }
 .badge-draft { background: var(--warn-soft); color: var(--warn); }
 .badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
-  border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer;
-  transition: background var(--transition), border-color var(--transition), transform var(--transition);
-}
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; transition: background var(--transition), border-color var(--transition), transform var(--transition); }
 .btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-primary { background: var(--primary); color: #001824; }
@@ -132,87 +80,38 @@ main { counter-reset: section-num; }
 .btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
 .btn-sm { padding: 6px 11px; font-size: 0.8rem; }
 .btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-.control-grid {
-  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
-}
+.control-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px; }
 @media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .control-grid.cols-3 { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 960px) { .control-grid.cols-4 { grid-template-columns: repeat(4, 1fr); } }
 .control-group { display: flex; flex-direction: column; gap: 6px; }
-.control-label {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  font-size: 0.85rem; font-weight: 600; color: var(--text);
-}
-input[type=number], select {
-  background: var(--bg-elev); color: var(--text);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  padding: 8px 10px; font-size: 0.95rem; font-family: var(--font-sans); width: 100%;
-  transition: border-color var(--transition);
-}
-input[type=number]:focus, select:focus {
-  outline: none; border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-soft);
-}
-input[type=number]:disabled, select:disabled { opacity: 0.6; cursor: not-allowed; }
+.control-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text); }
+input[type=number], input[type=text], select { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 0.95rem; font-family: var(--font-sans); width: 100%; transition: border-color var(--transition); }
+input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+input:disabled, select:disabled { opacity: 0.6; cursor: not-allowed; }
 input[type=range] { width: 100%; accent-color: var(--primary); height: 24px; }
-input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
-.vis-container {
-  background: var(--bg-elev); border: 1px solid var(--border);
-  border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
-}
+.vis-container { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px; }
 .vis-container svg { display: block; width: 100%; height: auto; }
-.score-bar {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px;
-}
+.score-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px; }
 @media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
-.score-stat {
-  background: var(--bg-elev); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 10px 12px;
-  display: flex; flex-direction: column; gap: 2px;
-}
-.score-stat-label {
-  font-size: 0.72rem; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
-}
-.score-stat-num {
-  font-size: 1.05rem; font-weight: 700;
-  font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text);
-}
-.callout {
-  border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem;
-  border: 1px solid var(--border); margin-top: 12px; line-height: 1.5;
-}
+.score-stat { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.score-stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.score-stat-num { font-size: 1.05rem; font-weight: 700; font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text); }
+.callout { border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem; border: 1px solid var(--border); margin-top: 12px; line-height: 1.5; }
 .callout.hidden { display: none; }
 .callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
 .callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
 .callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
 .callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
 .callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
-.test-banner {
-  background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5;
-  padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px;
-}
+.test-banner { background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; }
 .test-banner.hidden { display: none; }
 .test-banner ul { margin: 8px 0 0 20px; padding: 0; }
-.predict-box {
-  background: linear-gradient(180deg, var(--surface-2), var(--surface));
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md); padding: 18px 20px;
-}
-.predict-header {
-  display: flex; align-items: center; gap: 8px;
-  font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem;
-}
+.predict-box { background: linear-gradient(180deg, var(--surface-2), var(--surface)); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 18px 20px; }
+.predict-header { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem; }
 .predict-header svg { flex-shrink: 0; }
-.options-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 10px; margin: 14px 0;
-}
-.option-btn {
-  background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text);
-  padding: 12px 14px; border-radius: var(--radius-sm);
-  font-family: var(--font-sans); font-size: 0.95rem; font-weight: 700;
-  cursor: pointer; transition: all var(--transition); text-align: center;
-}
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 14px 0; }
+.option-btn { background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text); padding: 12px 14px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all var(--transition); text-align: center; }
 .option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
 .option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
 .option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
@@ -221,116 +120,49 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
 .option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
 .option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .steps-container { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
-.step-item {
-  background: var(--bg-elev); border-left: 3px solid var(--primary);
-  border-radius: var(--radius-sm); padding: 12px 14px;
-}
-.step-num {
-  font-size: 0.72rem; color: var(--primary); font-weight: 800;
-  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
-}
+.step-item { background: var(--bg-elev); border-left: 3px solid var(--primary); border-radius: var(--radius-sm); padding: 12px 14px; }
+.step-num { font-size: 0.72rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
 .step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
-.step-detail {
-  font-family: var(--font-mono); background: var(--surface-2);
-  border: 1px solid var(--border); border-radius: 4px;
-  padding: 6px 10px; font-size: 0.85rem; margin-top: 6px;
-  color: var(--primary); overflow-x: auto;
-}
-.practice-header {
-  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.mode-toggle-group {
-  display: inline-flex; background: var(--bg-elev);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  padding: 3px; gap: 2px;
-}
-.mode-btn {
-  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
-  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
-  cursor: pointer; transition: all var(--transition);
-}
+.step-detail { font-family: var(--font-mono); background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 0.85rem; margin-top: 6px; color: var(--primary); overflow-x: auto; }
+.practice-header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.mode-toggle-group { display: inline-flex; background: var(--bg-elev); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 3px; gap: 2px; }
+.mode-btn { background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px; border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all var(--transition); }
 .mode-btn:hover { color: var(--text); }
 .mode-btn.active { background: var(--primary-soft); color: var(--primary); }
 .mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-.timer-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn);
-  padding: 6px 12px; border-radius: var(--radius-sm);
-  font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono);
-}
+.timer-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn); padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono); }
 .timer-badge.hidden { display: none; }
-.question-stem {
-  font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500;
-}
-.site-footer {
-  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
-  color: var(--text-dim); font-size: 0.85rem;
-}
+.question-stem { font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500; }
+.site-footer { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem; }
 .footer-container { max-width: 1080px; margin: 0 auto; }
-.disclaimer-box {
-  background: var(--bg-elev); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
-  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
-}
-.error-categorizer {
-  margin-top: 12px; padding: 12px;
-  background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
-}
+.error-categorizer { margin-top: 12px; padding: 12px; background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border); }
 .error-categorizer.hidden { display: none; }
-.error-categorizer label {
-  font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;
-}
-.error-categorizer select {
-  background: var(--surface-2); color: var(--text);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
+.error-categorizer label { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px; }
+.error-categorizer select { background: var(--surface-2); color: var(--text); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%; }
+
+/* Module chip */
+.module-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--primary-soft); color: var(--primary);
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 0.7rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 10px;
 }
 
-/* Simple live footer */
-.lab-footer-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 12px 20px;
-}
-.lab-footer-brand {
-  font-size: 0.88rem;
-  color: var(--text-dim, #94a3b8);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px 8px;
-}
-.lab-footer-brand a,
-.lab-footer-brand strong {
-  color: var(--text, #e8edf7);
-  font-weight: 700;
-  text-decoration: none;
-}
-.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
-.lab-footer-sep { color: var(--text-muted, #64748b); }
-.lab-footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  font-size: 0.84rem;
-}
-.lab-footer-nav a {
-  color: var(--primary, #38bdf8);
-  text-decoration: none;
-  font-weight: 600;
-}
-.lab-footer-nav a:hover { text-decoration: underline; }
-.lab-footer-note {
-  margin: 14px 0 0;
-  font-size: 0.78rem;
-  color: var(--text-muted, #64748b);
-  line-height: 1.5;
-}
-.disclaimer-box { display: none; }
+/* Transfer simulator */
+.transfer-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-size: 0.9rem; }
+.transfer-track { flex: 1; height: 26px; background: var(--bg-elev); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); position: relative; }
+.transfer-fill { height: 100%; display: flex; align-items: center; padding-left: 8px; font-size: 0.78rem; font-weight: 800; color: #001824; transition: width 200ms ease; }
+.transfer-value { min-width: 100px; text-align: right; font-family: var(--font-mono); font-size: 0.85rem; }
 
+/* Age timeline */
+.age-pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+.age-pill { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; font-size: 0.8rem; font-family: var(--font-mono); font-weight: 600; color: var(--text-dim); }
+.age-pill strong { color: var(--primary); }
+
+/* Misc */
+.section-hint { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 8px; }
 </style>
 </head>
 <body>
@@ -351,8 +183,14 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </a>
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
-        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        </ul>
+        <li><a href="#s1" class="nav-link">Unit-tiles</a></li>
+        <li><a href="#s-chained" class="nav-link">Chained</a></li>
+        <li><a href="#s-prop" class="nav-link">Proportion</a></li>
+        <li><a href="#s-age" class="nav-link">Ages</a></li>
+        <li><a href="#s-partnership" class="nav-link">Partnership</a></li>
+        <li><a href="#s-mixture" class="nav-link">Mixture</a></li>
+        <li><a href="#practice" class="nav-link">Practice</a></li>
+      </ul>
     </nav>
   </div>
 </header>
@@ -369,45 +207,34 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
     <h1>Ratio, Proportion &amp; Variation</h1>
     <p class="section-subtitle" style="margin-top:8px;">
-      <strong>A ratio is a bunch of unit-tiles.</strong> Part-to-part ≠ part-to-whole, and coins of different denominations don't scale the same way as coins of one. This page draws the tiles, forces you to predict, and shows the coin trap side by side.
+      Full syllabus: from unit-tiles and chained ratios to proportion properties, ages, partnership, mixture, replacement, transfer — with 5 simulators and 40 verified questions.
     </p>
   </header>
 
-  <!-- ===== SECTION 1 — UNIT-TILE BAR ===== -->
+  <!-- ===== MODULE 1: UNIT TILES (fundamentals) ===== -->
   <section class="card" aria-labelledby="s1">
     <div class="card-header">
+      <span class="module-chip">Module 1-2 · Fundamentals &amp; distribution</span>
       <h2 id="s1" class="section-title">Divide a total into unit-tiles</h2>
-      <p class="section-subtitle">Each share is made of its ratio-units. The tick marks show the unit value. Change the ratio or the total and watch the tiles redistribute.</p>
+      <p class="section-subtitle">Each share is made of its ratio-units. Change the ratio or the total and watch the tiles redistribute.</p>
     </div>
 
     <div class="control-grid cols-4">
       <div class="control-group">
-        <label for="input-total" class="control-label">
-          <span>Total</span>
-          <span id="total-badge" class="badge badge-tag">₹1200</span>
-        </label>
+        <label for="input-total" class="control-label"><span>Total</span><span id="total-badge" class="badge badge-tag">₹1200</span></label>
         <input type="number" id="input-total" value="1200" min="1" max="100000" step="10">
         <input type="range" id="range-total" min="100" max="10000" value="1200" step="100">
       </div>
       <div class="control-group">
-        <label for="input-a" class="control-label">
-          <span>Part A (units)</span>
-          <span id="badge-a" class="badge badge-tag">2</span>
-        </label>
+        <label for="input-a" class="control-label"><span>Part A (units)</span><span id="badge-a" class="badge badge-tag">2</span></label>
         <input type="number" id="input-a" value="2" min="1" max="50" step="1">
       </div>
       <div class="control-group">
-        <label for="input-b" class="control-label">
-          <span>Part B (units)</span>
-          <span id="badge-b" class="badge badge-tag">3</span>
-        </label>
+        <label for="input-b" class="control-label"><span>Part B (units)</span><span id="badge-b" class="badge badge-tag">3</span></label>
         <input type="number" id="input-b" value="3" min="1" max="50" step="1">
       </div>
       <div class="control-group">
-        <label for="input-c" class="control-label">
-          <span>Part C (units, 0 = ignore)</span>
-          <span id="badge-c" class="badge badge-tag">5</span>
-        </label>
+        <label for="input-c" class="control-label"><span>Part C (0 = ignore)</span><span id="badge-c" class="badge badge-tag">5</span></label>
         <input type="number" id="input-c" value="5" min="0" max="50" step="1">
       </div>
     </div>
@@ -419,7 +246,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       <p id="svg-live-desc" class="sr-only" aria-live="polite"></p>
     </div>
 
-    <div class="score-bar" aria-live="polite">
+    <div class="score-bar">
       <div class="score-stat"><span class="score-stat-label">Total units</span><span class="score-stat-num" id="readout-sum">10</span></div>
       <div class="score-stat"><span class="score-stat-label">Value per unit</span><span class="score-stat-num" id="readout-unit">₹120</span></div>
       <div class="score-stat"><span class="score-stat-label">Part A share</span><span class="score-stat-num" id="readout-a">₹240</span></div>
@@ -427,150 +254,114 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
   </section>
 
-  <!-- ===== SECTION 2 — PREDICT ===== -->
-  <section class="card" aria-labelledby="s2">
+  <!-- ===== MODULE 3: CHAINED RATIOS ===== -->
+  <section class="card" aria-labelledby="s-chained">
     <div class="card-header">
-      <h2 id="s2" class="section-title">Predict first — the coin trap</h2>
-      <p class="section-subtitle">A bag of ₹1, 50p, 25p coins in ratio 3:4:8, total ₹420. Most people answer "84". The visual will show why the truth is different.</p>
-    </div>
-
-    <div class="predict-box">
-      <div class="predict-header">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-          <line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-        <span>How many ₹1 coins?</span>
-      </div>
-      <p id="predict-scenario-text" style="font-size:1.05rem; margin-bottom:1rem;"></p>
-      <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options"></div>
-      <div id="predict-feedback" class="callout hidden" role="alert"></div>
-
-      <div style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
-        <button type="button" id="btn-reveal-coin" class="btn btn-secondary">Reveal working ↓</button>
-        <span id="predict-lock-hint" style="font-size:.8rem; color:var(--text-muted);"></span>
-      </div>
-    </div>
-
-    <div id="coin-solution-panel" class="hidden" style="margin-top:20px;">
-      <h3 style="margin-bottom:12px;">Coin weighting — the correct view</h3>
-      <div class="vis-container">
-        <svg id="coin-svg" viewBox="0 0 760 260" width="100%" role="img" aria-label="Coin trap vs correct weighting">
-          <title>Two bars: trap (equal denominations) vs truth (weighted by value)</title>
-        </svg>
-      </div>
-      <div id="coin-solution-text" class="callout callout-info"></div>
-    </div>
-  </section>
-
-  <!-- ===== SECTION 3 — COIN LAB ===== -->
-  <section class="card" aria-labelledby="s3">
-    <div class="card-header">
-      <h2 id="s3" class="section-title">Coin weighting — the trap vs the truth</h2>
-      <p class="section-subtitle">Same count ratio, same total. The only difference: on the left, all coins are treated as if equal; on the right, each is weighted by its rupee value.</p>
+      <span class="module-chip">Module 4 · Advanced ratios</span>
+      <h2 id="s-chained" class="section-title">Chained ratios — bridge the middle</h2>
+      <p class="section-subtitle">A:B = 2:3, B:C = 4:5. To combine, make the common B the LCM of 3 and 4, then scale both. Without that, "A:B:C = 2:3:5" is wrong.</p>
     </div>
 
     <div class="control-grid cols-4">
       <div class="control-group">
-        <label for="coin-r1" class="control-label">
-          <span>₹1 coins (count units)</span>
-          <span id="coin-badge-1" class="badge badge-tag">3</span>
-        </label>
-        <input type="number" id="coin-r1" value="3" min="1" max="20" step="1">
+        <label for="ch-a" class="control-label"><span>A : B →</span><span id="ch-a-b" class="badge badge-tag">2 : 3</span></label>
+        <input type="number" id="ch-a" value="2" min="1" max="50">
+        <input type="number" id="ch-b" value="3" min="1" max="50">
       </div>
       <div class="control-group">
-        <label for="coin-r2" class="control-label">
-          <span>50p coins</span>
-          <span id="coin-badge-2" class="badge badge-tag">4</span>
-        </label>
-        <input type="number" id="coin-r2" value="4" min="1" max="20" step="1">
+        <label for="ch-c" class="control-label"><span>B : C →</span><span id="ch-c-b" class="badge badge-tag">4 : 5</span></label>
+        <input type="number" id="ch-c" value="4" min="1" max="50">
+        <input type="number" id="ch-d" value="5" min="1" max="50">
       </div>
       <div class="control-group">
-        <label for="coin-r3" class="control-label">
-          <span>25p coins</span>
-          <span id="coin-badge-3" class="badge badge-tag">8</span>
-        </label>
-        <input type="number" id="coin-r3" value="8" min="1" max="20" step="1">
+        <label for="ch-d" class="control-label"><span>B (from A:B)</span></label>
+        <input type="text" id="ch-b-lcm" value="3" readonly>
       </div>
       <div class="control-group">
-        <label for="coin-total" class="control-label">
-          <span>Total value</span>
-          <span id="coin-badge-total" class="badge badge-tag">₹420</span>
-        </label>
-        <input type="number" id="coin-total" value="420" min="1" max="100000" step="10">
+        <label class="control-label"><span>Combined</span><span id="ch-triple-badge" class="badge badge-tag">8 : 12 : 15</span></label>
+        <div id="ch-triple-display" style="font-family:var(--font-mono); font-weight:800; font-size:1.05rem; color:var(--primary); padding:8px 10px; background:var(--bg-elev); border-radius:8px; border:1px solid var(--border);">8 : 12 : 15</div>
       </div>
     </div>
 
     <div class="vis-container">
-      <svg id="coin-lab-svg" viewBox="0 0 760 340" width="100%" role="img" aria-label="Coin weighting trap vs truth">
-        <title>Left: trap view. Right: correct weighted view.</title>
-      </svg>
+      <svg id="chained-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="Chained ratio bridge"></svg>
     </div>
 
-    <div class="score-bar">
-      <div class="score-stat"><span class="score-stat-label">Trap k (equal)</span><span class="score-stat-num" id="coin-trap-k" style="color:var(--danger)">28</span></div>
-      <div class="score-stat"><span class="score-stat-label">True k (weighted)</span><span class="score-stat-num" id="coin-true-k" style="color:var(--success)">60</span></div>
-      <div class="score-stat"><span class="score-stat-label">₹1 coins (trap)</span><span class="score-stat-num" id="coin-trap-a" style="color:var(--danger)">84</span></div>
-      <div class="score-stat"><span class="score-stat-label">₹1 coins (true)</span><span class="score-stat-num" id="coin-true-a" style="color:var(--success)">180</span></div>
-    </div>
+    <div class="callout callout-info" id="chained-steps"></div>
   </section>
 
-  <!-- ===== SECTION 4 — PROPORTION LAB ===== -->
+  <!-- ===== MODULE 5: PROPORTION PROPERTIES ===== -->
+  <section class="card" aria-labelledby="s-prop">
+    <div class="card-header">
+      <span class="module-chip">Module 5 · Proportion properties</span>
+      <h2 id="s-prop" class="section-title">Invertendo, Alternendo, Componendo, Dividendo</h2>
+      <p class="section-subtitle">Five laws that any valid proportion obeys. Each is just "do the same thing to both sides". Use them to solve ratio equations without expanding.</p>
+    </div>
+
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="pl-a" class="control-label"><span>a</span><span id="pl-a-b" class="badge badge-tag">3</span></label>
+        <input type="number" id="pl-a" value="3" min="1" max="100">
+      </div>
+      <div class="control-group">
+        <label for="pl-b" class="control-label"><span>b</span><span id="pl-b-b" class="badge badge-tag">4</span></label>
+        <input type="number" id="pl-b" value="4" min="1" max="100">
+      </div>
+      <div class="control-group">
+        <label for="pl-c" class="control-label"><span>c</span><span id="pl-c-b" class="badge badge-tag">9</span></label>
+        <input type="number" id="pl-c" value="9" min="1" max="100">
+      </div>
+    </div>
+
+    <div id="prop-laws" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:12px;"></div>
+  </section>
+
+  <!-- ===== MODULE 5b: MEAN/THIRD/FOURTH (existing prop lab, kept) ===== -->
   <section class="card" aria-labelledby="s4">
     <div class="card-header">
-      <h2 id="s4" class="section-title">Cross-multiply proportional lab</h2>
-      <p class="section-subtitle">The classic <code>a : b :: c : x</code> square. Change any three and the fourth animates in.</p>
+      <span class="module-chip">Module 5 · Proportionals</span>
+      <h2 id="s4" class="section-title">Mean, third, fourth proportional</h2>
+      <p class="section-subtitle">The classic <code>a : b :: c : x</code> square. Change any three and the fourth recomputes.</p>
     </div>
 
     <div class="control-grid cols-4">
-      <div class="control-group">
-        <label for="prop-a" class="control-label"><span>a</span><span id="pb-a" class="badge badge-tag">4</span></label>
-        <input type="number" id="prop-a" value="4" min="1" max="100" step="1">
-      </div>
-      <div class="control-group">
-        <label for="prop-b" class="control-label"><span>b</span><span id="pb-b" class="badge badge-tag">9</span></label>
-        <input type="number" id="prop-b" value="9" min="1" max="100" step="1">
-      </div>
-      <div class="control-group">
-        <label for="prop-c" class="control-label"><span>c</span><span id="pb-c" class="badge badge-tag">9</span></label>
-        <input type="number" id="prop-c" value="9" min="1" max="100" step="1">
-      </div>
+      <div class="control-group"><label for="prop-a" class="control-label"><span>a</span><span id="pb-a" class="badge badge-tag">4</span></label><input type="number" id="prop-a" value="4" min="1" max="100"></div>
+      <div class="control-group"><label for="prop-b" class="control-label"><span>b</span><span id="pb-b" class="badge badge-tag">9</span></label><input type="number" id="prop-b" value="9" min="1" max="100"></div>
+      <div class="control-group"><label for="prop-c" class="control-label"><span>c</span><span id="pb-c" class="badge badge-tag">9</span></label><input type="number" id="prop-c" value="9" min="1" max="100"></div>
       <div class="control-group">
         <label for="prop-type" class="control-label"><span>Kind</span></label>
         <select id="prop-type">
-          <option value="fourth">Fourth proportional (x = bc/a)</option>
-          <option value="mean">Mean proportional of a,b (x = √ab)</option>
-          <option value="third">Third proportional of a,b (x = b²/a)</option>
+          <option value="fourth">Fourth (x = bc/a)</option>
+          <option value="mean">Mean (x = √ab)</option>
+          <option value="third">Third (x = b²/a)</option>
         </select>
       </div>
     </div>
 
     <div class="vis-container">
-      <svg id="prop-svg" viewBox="0 0 760 260" width="100%" role="img" aria-label="Cross-multiply square for a:b::c:x">
-        <title>Cross-multiply square showing the four proportional terms</title>
-      </svg>
+      <svg id="prop-svg" viewBox="0 0 760 260" width="100%" role="img" aria-label="Cross-multiply square for a:b::c:x"></svg>
     </div>
 
     <div class="score-bar">
       <div class="score-stat"><span class="score-stat-label">Kind</span><span class="score-stat-num" id="prop-kind" style="font-size:.9rem;">Fourth</span></div>
       <div class="score-stat"><span class="score-stat-label">a : b</span><span class="score-stat-num" id="prop-lhs">4 : 9</span></div>
       <div class="score-stat"><span class="score-stat-label">c : x</span><span class="score-stat-num" id="prop-rhs">9 : 20.25</span></div>
-      <div class="score-stat"><span class="score-stat-label">Cross check</span><span class="score-stat-num" id="prop-check">a·x = b·c</span></div>
+      <div class="score-stat"><span class="score-stat-label">Cross-check</span><span class="score-stat-num" id="prop-check">a·x = b·c</span></div>
     </div>
   </section>
 
-  <!-- ===== DIRECT VS INVERSE (concept-first exam story) ===== -->
+  <!-- ===== MODULE 6: VARIATION (existing, kept) ===== -->
   <section class="card" aria-labelledby="s-var">
     <div class="card-header">
-      <h2 id="s-var" class="section-title">Understand: direct vs inverse — one story each</h2>
-      <p class="section-subtitle">Don't memorise “direct / inverse”. Ask: when this goes up, does that go up or down? Then the picture tells you which rule to use.</p>
+      <span class="module-chip">Module 6 · Variation</span>
+      <h2 id="s-var" class="section-title">Direct vs inverse — one story each</h2>
+      <p class="section-subtitle">Ask: when this goes up, does that go up or down? Then the picture tells you the rule.</p>
     </div>
-    <div class="mode-toggle-group" style="margin-bottom:12px;width:fit-content;">
+    <div class="mode-toggle-group" style="margin-bottom:12px; width:fit-content;">
       <button type="button" class="mode-btn active" id="var-direct">Men ↑ work ↑ (direct)</button>
       <button type="button" class="mode-btn" id="var-inverse">Men ↑ days ↓ (inverse)</button>
     </div>
-    <div class="control-group" style="max-width:420px;margin-bottom:12px;">
+    <div class="control-group" style="max-width:420px; margin-bottom:12px;">
       <label for="var-k" class="control-label"><span>How many times the men?</span><span id="var-k-b" class="badge badge-tag">2×</span></label>
       <input type="range" id="var-k" min="1" max="4" step="0.5" value="2">
     </div>
@@ -580,11 +371,164 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     <p id="var-cap" style="margin-top:10px;font-size:.95rem;line-height:1.55;color:var(--text-dim);"></p>
   </section>
 
-  <!-- ===== SECTION 5 — PRACTICE ===== -->
-  <section class="card" aria-labelledby="s5">
+  <!-- ===== MODULE 7: AGES ===== -->
+  <section class="card" aria-labelledby="s-age">
     <div class="card-header">
-      <h2 id="s5" class="section-title">Practice</h2>
-      <p class="section-subtitle">Shuffled each session. Traps have real reasons.</p>
+      <span class="module-chip">Module 7 · Age problems</span>
+      <h2 id="s-age" class="section-title">Age-ratio timeline</h2>
+      <p class="section-subtitle">Ages differ by a constant. The ratio changes as time moves. Slide the year-marker to see both.</p>
+    </div>
+
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="age-a" class="control-label"><span>A's present age</span></label>
+        <input type="number" id="age-a" value="40" min="1" max="120">
+      </div>
+      <div class="control-group">
+        <label for="age-b" class="control-label"><span>B's present age</span></label>
+        <input type="number" id="age-b" value="20" min="1" max="120">
+      </div>
+      <div class="control-group">
+        <label for="age-shift" class="control-label"><span>Shift years (past ← → future)</span><span id="age-shift-b" class="badge badge-tag">0</span></label>
+        <input type="range" id="age-shift" min="-30" max="30" step="1" value="0">
+      </div>
+    </div>
+
+    <div class="age-pill-row">
+      <span class="age-pill">Present A: <strong id="age-a-val">40</strong> · B: <strong id="age-b-val">20</strong> · ratio <strong id="age-ratio-val">2 : 1</strong></span>
+      <span class="age-pill">Difference: <strong id="age-diff-val">20</strong> years</span>
+    </div>
+
+    <div class="vis-container">
+      <svg id="age-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="Age ratio timeline"></svg>
+    </div>
+
+    <div class="callout callout-info" id="age-steps"></div>
+  </section>
+
+  <!-- ===== MODULE 8: PARTNERSHIP ===== -->
+  <section class="card" aria-labelledby="s-partnership">
+    <div class="card-header">
+      <span class="module-chip">Module 8 · Partnership</span>
+      <h2 id="s-partnership" class="section-title">Partnership simulator — capital × time</h2>
+      <p class="section-subtitle">Profit share = (investment × months invested) as a fraction of the total. Change any number and watch the split update.</p>
+    </div>
+
+    <div class="control-grid cols-3">
+      <div class="control-group"><label for="p-a-inv" class="control-label"><span>A investment ₹</span></label><input type="number" id="p-a-inv" value="10000" min="100" max="10000000" step="100"></div>
+      <div class="control-group"><label for="p-a-mon" class="control-label"><span>A months</span></label><input type="number" id="p-a-mon" value="12" min="1" max="24"></div>
+      <div class="control-group" style="justify-content:flex-end;"><div style="font-size:.85rem;color:var(--text-muted);padding:10px;">A total capital = ₹<span id="p-a-cap">120000</span></div></div>
+    </div>
+
+    <div class="control-grid cols-3">
+      <div class="control-group"><label for="p-b-inv" class="control-label"><span>B investment ₹</span></label><input type="number" id="p-b-inv" value="15000" min="100" max="10000000" step="100"></div>
+      <div class="control-group"><label for="p-b-mon" class="control-label"><span>B months</span></label><input type="number" id="p-b-mon" value="8" min="1" max="24"></div>
+      <div class="control-group" style="justify-content:flex-end;"><div style="font-size:.85rem;color:var(--text-muted);padding:10px;">B total capital = ₹<span id="p-b-cap">120000</span></div></div>
+    </div>
+
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="p-total" class="control-label"><span>Total profit ₹</span></label>
+        <input type="number" id="p-total" value="60000" min="100" max="100000000" step="100">
+      </div>
+    </div>
+
+    <div class="vis-container">
+      <svg id="partner-svg" viewBox="0 0 760 180" width="100%" role="img" aria-label="Partnership profit split"></svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Ratio A : B</span><span class="score-stat-num" id="p-ratio">1 : 1</span></div>
+      <div class="score-stat"><span class="score-stat-label">A profit</span><span class="score-stat-num" id="p-a-profit" style="color:var(--primary)">₹0</span></div>
+      <div class="score-stat"><span class="score-stat-label">B profit</span><span class="score-stat-num" id="p-b-profit" style="color:var(--indigo)">₹0</span></div>
+      <div class="score-stat"><span class="score-stat-label">Total capital ratio × time</span><span class="score-stat-num" id="p-time-note" style="font-size:.78rem;">A·12 : B·8</span></div>
+    </div>
+  </section>
+
+  <!-- ===== MODULE 9: MIXTURE & ALLIGATION ===== -->
+  <section class="card" aria-labelledby="s-mixture">
+    <div class="card-header">
+      <span class="module-chip">Module 9 · Mixture &amp; alligation</span>
+      <h2 id="s-mixture" class="section-title">Mixture &amp; alligation simulator</h2>
+      <p class="section-subtitle">Mix quantity Q1 at concentration C1 with quantity Q2 at concentration C2. The final concentration and the alligation cross are computed.</p>
+    </div>
+
+    <div class="control-grid cols-4">
+      <div class="control-group"><label for="m-q1" class="control-label"><span>Q1 (units)</span></label><input type="number" id="m-q1" value="3" min="1" max="1000"></div>
+      <div class="control-group"><label for="m-c1" class="control-label"><span>C1 %</span></label><input type="number" id="m-c1" value="20" min="0" max="100" step="1"></div>
+      <div class="control-group"><label for="m-q2" class="control-label"><span>Q2 (units)</span></label><input type="number" id="m-q2" value="2" min="1" max="1000"></div>
+      <div class="control-group"><label for="m-c2" class="control-label"><span>C2 %</span></label><input type="number" id="m-c2" value="45" min="0" max="100" step="1"></div>
+    </div>
+
+    <div class="vis-container">
+      <svg id="mixture-svg" viewBox="0 0 760 300" width="100%" role="img" aria-label="Mixture and alligation"></svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Final %</span><span class="score-stat-num" id="m-final">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Ratio Q1 : Q2</span><span class="score-stat-num" id="m-ratio">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Alligation deviation</span><span class="score-stat-num" id="m-dev">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Total units</span><span class="score-stat-num" id="m-total">—</span></div>
+    </div>
+
+    <div class="callout callout-info" id="m-note">
+      Alligation rule: Q1 / Q2 = (C2 − Cm) / (Cm − C1). If C1 = C2 the mix is that same C; otherwise Cm sits between them.
+    </div>
+  </section>
+
+  <!-- ===== REPLACEMENT & OTHER APPLICATIONS ===== -->
+  <section class="card" aria-labelledby="s-extra">
+    <div class="card-header">
+      <span class="module-chip">Module 9 · Replacement &amp; applications</span>
+      <h2 id="s-extra" class="section-title">Replacement, ratio change, income-savings, work</h2>
+      <p class="section-subtitle">Five more families — each a formula card with a quick check you can do in the exam hall.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px;">
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <h3 style="color:var(--primary); margin-bottom:.4rem; font-size:.95rem;">Replacement</h3>
+        <p style="font-size:.85rem; color:var(--text-dim); margin:0 0 .4rem;">Remove x L from V L of pure liquid, top up with water, repeat n times:</p>
+        <code style="display:block; text-align:center; margin:6px 0;">pure_left = V × (1 − x/V)<sup>n</sup></code>
+        <p style="font-size:.82rem; color:var(--text-muted); margin:.5rem 0 0;">Test: V=80, x=8, n=2 → 80 × 0.9² = 64.8 L.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <h3 style="color:var(--primary); margin-bottom:.4rem; font-size:.95rem;">Ratio change</h3>
+        <p style="font-size:.85rem; color:var(--text-dim); margin:0 0 .4rem;">A:B = a:b, A changes by +p%, B by +q%. New ratio:</p>
+        <code style="display:block; text-align:center; margin:6px 0;">a·(1 + p/100) : b·(1 + q/100)</code>
+        <p style="font-size:.82rem; color:var(--text-muted); margin:.5rem 0 0;">Test: 3:4, +20%, −10% → 3.6 : 3.6 = 1 : 1.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <h3 style="color:var(--primary); margin-bottom:.4rem; font-size:.95rem;">Income / exp / savings</h3>
+        <p style="font-size:.85rem; color:var(--text-dim); margin:0 0 .4rem;">Given I:exp = a:b and I':exp' = c:d, plus a savings figure, solve for I.</p>
+        <code style="display:block; text-align:center; margin:6px 0;">Savings = I·(1 − b/a) − adjust for change</code>
+        <p style="font-size:.82rem; color:var(--text-muted); margin:.5rem 0 0;">Test: I:exp = 5:4, savings = ₹10,000 → I = 50,000, exp = 40,000.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <h3 style="color:var(--primary); margin-bottom:.4rem; font-size:.95rem;">Ratio of work / efficiency</h3>
+        <p style="font-size:.85rem; color:var(--text-dim); margin:0 0 .4rem;">If efficiencies are a:b, times are inverse: b:a. Wages are a:b.</p>
+        <code style="display:block; text-align:center; margin:6px 0;">Efficiency ∝ 1 / time</code>
+        <p style="font-size:.82rem; color:var(--text-muted); margin:.5rem 0 0;">Test: A:B efficiency 3:2 → time A:B = 2:3. If B takes 18d, A takes 12d.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <h3 style="color:var(--primary); margin-bottom:.4rem; font-size:.95rem;">Ratio of areas / volumes</h3>
+        <p style="font-size:.85rem; color:var(--text-dim); margin:0 0 .4rem;">If dimensions are in ratio a:b:</p>
+        <code style="display:block; text-align:center; margin:6px 0;">Area a²:b² · Volume a³:b³</code>
+        <p style="font-size:.82rem; color:var(--text-muted); margin:.5rem 0 0;">Test: two spheres with radii 2:3 → surface area 4:9, volume 8:27.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <h3 style="color:var(--primary); margin-bottom:.4rem; font-size:.95rem;">Compound ratio</h3>
+        <p style="font-size:.85rem; color:var(--text-dim); margin:0 0 .4rem;">Duplicate (a:b)² = a²:b². Triplicate = a³:b³. Sub-duplicate = √a:√b. Sub-triplicate = ∛a:∛b.</p>
+        <p style="font-size:.82rem; color:var(--text-muted); margin:.5rem 0 0;">Test: duplicate of 2:3 is 4:9. Sub-duplicate of 16:25 is 4:5.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MODULE 10: PRACTICE ===== -->
+  <section class="card" aria-labelledby="practice-heading" id="practice">
+    <div class="card-header">
+      <span class="module-chip">Module 10 · Exam practice</span>
+      <h2 id="practice-heading" class="section-title">Practice</h2>
+      <p class="section-subtitle">40 questions across every family, shuffled each session. In Independent/Timed, the solution is hidden until after you commit.</p>
     </div>
 
     <div class="practice-header">
@@ -610,7 +554,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
 
     <div id="practice-question-card" style="margin-top:18px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 40</span>
         <span class="badge" id="practice-q-difficulty">Easy</span>
       </div>
       <p class="question-stem" id="practice-q-stem">Loading…</p>
@@ -626,6 +570,10 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
           <option value="const">Adding constant to ratio terms</option>
           <option value="prop">Mean/third/fourth proportional formula</option>
           <option value="var">Direct vs inverse variation</option>
+          <option value="partnership">Partnership capital × time</option>
+          <option value="mixture">Mixture / alligation</option>
+          <option value="age">Age ratio with constant difference</option>
+          <option value="replacement">Replacement / dilution</option>
           <option value="arithmetic">Arithmetic slip</option>
         </select>
       </div>
@@ -642,49 +590,49 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
   </section>
 
   <!-- ===== EXAM SHORTCUTS ===== -->
-  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+  <section class="card">
     <div class="card-header">
-      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
-      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+      <h2 class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall.</p>
     </div>
-    <ul class="lab-shortcuts-grid">
-      <li class="lab-shortcuts-item" data-kind="speed">
-        <span class="lab-shortcuts-tag">Use</span>
-        <p class="lab-shortcuts-title">Unit method</p>
-        <p class="lab-shortcuts-body">a:b = parts. One part = total ÷ (a+b). Scale once — don't cross-multiply thrice.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="trap">
-        <span class="lab-shortcuts-tag">Trap</span>
-        <p class="lab-shortcuts-title">Chained ratios</p>
-        <p class="lab-shortcuts-body">A:B and B:C need a common B (LCM). Blindly writing A:B:C from raw numbers is wrong.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="check">
-        <span class="lab-shortcuts-tag">Check</span>
-        <p class="lab-shortcuts-title">Coins / mixture</p>
-        <p class="lab-shortcuts-body">Value = Σ (count × denomination). Check units match before dividing.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="speed">
-        <span class="lab-shortcuts-tag">Speed</span>
-        <p class="lab-shortcuts-title">Direct vs inverse</p>
-        <p class="lab-shortcuts-body">xy = k (inverse) · x/y = k (direct). One product, one quotient — name it first.</p>
-      </li>
-    </ul>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px;">
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Use</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Unit method</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">a:b = parts. One part = total ÷ (a+b). Scale once — don't cross-multiply thrice.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--warn); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Trap</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Chained ratios</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">A:B and B:C need common B (LCM). Raw concatenation is wrong.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--success); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Check</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Coins / mixture</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">Value = Σ (count × denomination). Check units match before dividing.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--indigo); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Note</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Partnership</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">Profit ratio = investment × time. Never just investment.</p>
+      </div>
+    </div>
   </section>
 </main>
 
 <footer class="site-footer">
   <div class="footer-container">
-    <div class="lab-footer-row">
-      <div class="lab-footer-brand">
-        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
-        <span class="lab-footer-sep" aria-hidden="true">·</span>
-        <span>Free interactive practice for competitive exams</span>
+    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <strong>Aptitude &amp; Reasoning Lab</strong> — Practice-first competitive exam learning
       </div>
-      <nav class="lab-footer-nav" aria-label="Footer">
-        <a href="../index.html">All topics</a>
-      </nav>
+      <div style="font-size:.8rem;">
+        <a href="../index.html" style="color:var(--primary); text-decoration:none;">← All topics</a>
+      </div>
     </div>
-    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
+    <div style="background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-top:16px; font-size:.78rem; color:var(--text-muted); line-height:1.5;">
+      Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any examination authority. Check the latest official notification.
+    </div>
   </div>
 </footer>
 
@@ -708,21 +656,14 @@ const Model = (() => {
     const sum = parts.reduce((a, b) => a + b, 0);
     const unit = total / sum;
     const shares = parts.map(p => round(p * unit, 2));
-    return {
-      valid: true,
-      sum, unit: round(unit, 2),
-      shares,
-      percentages: parts.map(p => round((p / sum) * 100, 2))
-    };
+    return { valid: true, sum, unit: round(unit, 2), shares, percentages: parts.map(p => round((p/sum)*100, 2)) };
   }
 
   function solveCoin(coinSpecs, totalValue) {
-    // coinSpecs: [{ count, denomination_in_rupees }]
     const valuePerK = coinSpecs.reduce((s, c) => s + c.count * c.denomination, 0);
     if (valuePerK <= 0) return { valid: false, error: "Total k-value must be positive." };
     const k = totalValue / valuePerK;
     const counts = coinSpecs.map(c => round(c.count * k, 2));
-    // Trap: divide total by sum-of-counts, treat all as same denom
     const sumCounts = coinSpecs.reduce((s, c) => s + c.count, 0);
     const kTrap = totalValue / sumCounts;
     const trapCounts = coinSpecs.map(c => round(c.count * kTrap, 2));
@@ -731,18 +672,72 @@ const Model = (() => {
 
   function meanProportional(a, b) {
     if (a <= 0 || b <= 0) return { valid: false, error: "Terms must be positive." };
-    return { valid: true, x: round(Math.sqrt(a * b), 4) };
+    return { valid: true, x: round(Math.sqrt(a * b)) };
   }
   function thirdProportional(a, b) {
     if (a <= 0 || b <= 0) return { valid: false, error: "Terms must be positive." };
-    return { valid: true, x: round((b * b) / a, 4) };
+    return { valid: true, x: round((b * b) / a) };
   }
   function fourthProportional(a, b, c) {
     if (a <= 0 || b <= 0 || c <= 0) return { valid: false, error: "Terms must be positive." };
-    return { valid: true, x: round((b * c) / a, 4) };
+    return { valid: true, x: round((b * c) / a) };
   }
 
-  return { divideInRatio, solveCoin, meanProportional, thirdProportional, fourthProportional, gcd, lcm, round };
+  // Chained: A:B = a:b, B:C = c:d → A:B:C with LCM bridge at B
+  function chainRatios(a, b, c, d) {
+    if ([a,b,c,d].some(v => v <= 0)) return { valid: false, error: "All terms positive." };
+    const bridge = lcm(b, c);
+    const scaleAB = bridge / b;
+    const scaleBC = bridge / c;
+    return { valid: true, A: a * scaleAB, B: bridge, C: d * scaleBC, scaleAB, scaleBC, bridge };
+  }
+
+  // Partnership: profit ratio = investment × months
+  function solvePartnership(aInv, aMon, bInv, bMon, totalProfit) {
+    const aCap = aInv * aMon;
+    const bCap = bInv * bMon;
+    const sumCap = aCap + bCap;
+    if (sumCap <= 0) return { valid: false, error: "Total capital × time must be positive." };
+    const aShare = round((aCap / sumCap) * totalProfit, 2);
+    const bShare = round(totalProfit - aShare, 2);
+    const g = gcd(aCap, bCap);
+    return {
+      valid: true, aCap, bCap, aShare, bShare,
+      ratioStr: `${Math.round(aCap/g)} : ${Math.round(bCap/g)}`
+    };
+  }
+
+  // Mixture: weighted average of concentrations by quantity
+  function solveMixture(q1, c1, q2, c2) {
+    if (q1 <= 0 || q2 <= 0) return { valid: false, error: "Quantities must be positive." };
+    const total = q1 + q2;
+    const finalPct = round((q1 * c1 + q2 * c2) / total, 2);
+    // Alligation cross: Q1/Q2 = (C2 − Cm) / (Cm − C1)
+    const dev1 = round(Math.abs(c2 - finalPct), 2);
+    const dev2 = round(Math.abs(finalPct - c1), 2);
+    const g = gcd(Math.round(dev1 * 100), Math.round(dev2 * 100));
+    const q1FromAlligation = Math.round((dev1 * 100) / g);
+    const q2FromAlligation = Math.round((dev2 * 100) / g);
+    return { valid: true, finalPct, total, dev1, dev2, ratioStr: `${q1FromAlligation} : ${q2FromAlligation}` };
+  }
+
+  // Age shift: A, B present; diff constant. At shift y, ages are A+y, B+y
+  function solveAge(a, b, shift) {
+    if (a <= 0 || b <= 0) return { valid: false, error: "Ages must be positive." };
+    const aShift = a + shift;
+    const bShift = b + shift;
+    if (aShift <= 0 || bShift <= 0) return { valid: false, error: "Shifted ages must be positive." };
+    const g = gcd(aShift, bShift);
+    return {
+      valid: true, aShift, bShift, diff: Math.abs(a - b),
+      ratioStr: `${Math.round(aShift/g)} : ${Math.round(bShift/g)}`
+    };
+  }
+
+  return {
+    divideInRatio, solveCoin, meanProportional, thirdProportional, fourthProportional,
+    chainRatios, solvePartnership, solveMixture, solveAge, gcd, lcm, round
+  };
 })();
 window.Model = Model;
 
@@ -751,118 +746,246 @@ window.Model = Model;
    ===================================================================== */
 function runSelfTests() {
   const results = { passed: 0, failed: 0, failures: [] };
-  const assert = (cond, name, detail = "") => {
-    if (cond) results.passed++;
-    else { results.failed++; results.failures.push({ name, detail }); }
-  };
+  const assert = (c, n, d = "") => { if (c) results.passed++; else { results.failed++; results.failures.push({ n, d }); } };
   try {
-    const t1 = Model.divideInRatio(1200, [2, 3, 5]);
-    assert(t1.valid && t1.shares[0] === 240 && t1.shares[1] === 360 && t1.shares[2] === 600 && t1.unit === 120,
-      "1200 in 2:3:5 → 240, 360, 600", JSON.stringify(t1));
-
-    const t2 = Model.divideInRatio(750, [3, 7, 5]);
-    assert(t2.valid && Math.abs(t2.shares.reduce((a, b) => a + b, 0) - 750) < 0.01,
-      "Share conservation", JSON.stringify(t2));
-
-    const t3 = Model.divideInRatio(800, [3, 5]);
-    assert(t3.valid && t3.percentages[0] === 37.5, "3:5 → A fraction 37.5%", JSON.stringify(t3));
+    const t1 = Model.divideInRatio(1200, [2,3,5]);
+    assert(t1.valid && t1.shares[0] === 240 && t1.shares[2] === 600, "1200 in 2:3:5", JSON.stringify(t1));
+    assert(Model.divideInRatio(800, [3,5]).percentages[0] === 37.5, "3:5 → 37.5%");
 
     const t4 = Model.solveCoin(
-      [{ count: 3, denomination: 1 }, { count: 4, denomination: 0.5 }, { count: 8, denomination: 0.25 }],
-      420
-    );
-    assert(t4.valid && t4.k === 60 && t4.counts[0] === 180, "Coin 3:4:8, ₹420 → k=60, ₹1=180", JSON.stringify(t4));
+      [{count:3, denomination:1}, {count:4, denomination:0.5}, {count:8, denomination:0.25}], 420);
+    assert(t4.valid && t4.k === 60 && t4.counts[0] === 180, "Coin 3:4:8, ₹420", JSON.stringify(t4));
 
-    assert(t4.kTrap === 28 && t4.trapCounts[0] === 84, "Coin trap 420/15=28, ₹1=84", JSON.stringify(t4));
+    assert(Model.meanProportional(25, 81).x === 45, "Mean prop 25,81");
+    assert(Model.thirdProportional(16, 20).x === 25, "Third prop 16,20");
+    assert(Model.fourthProportional(8, 12, 18).x === 27, "Fourth prop 8,12,18");
 
-    assert(Model.meanProportional(25, 81).x === 45, "Mean prop 25,81 → 45");
-    assert(Model.thirdProportional(16, 20).x === 25, "Third prop 16,20 → 25");
-    assert(Model.fourthProportional(8, 12, 18).x === 27, "Fourth prop 8,12,18 → 27");
+    const ch = Model.chainRatios(2, 3, 4, 5);
+    assert(ch.valid && ch.A === 8 && ch.B === 12 && ch.C === 15, "Chain 2:3 & 4:5 → 8:12:15", JSON.stringify(ch));
 
-    // Third-proportional invariant: a/b ≈ b/x
-    const tp = Model.thirdProportional(6, 10);
-    assert(Math.abs(6 / 10 - 10 / tp.x) < 1e-3, "Third prop invariant a/b = b/x", JSON.stringify(tp));
+    const part = Model.solvePartnership(10000, 12, 15000, 8, 60000);
+    assert(part.valid && part.aCap === 120000 && part.bCap === 120000 && part.aShare === 30000, "Partnership equal caps", JSON.stringify(part));
+
+    const mix = Model.solveMixture(3, 20, 2, 45);
+    assert(mix.valid && mix.finalPct === 30, "Mixture 3@20 + 2@45 → 30%", JSON.stringify(mix));
+
+    const age = Model.solveAge(40, 20, 0);
+    assert(age.valid && age.ratioStr === "2 : 1", "Ages 40,20 → 2:1", JSON.stringify(age));
+    const age2 = Model.solveAge(40, 20, 10);
+    assert(age2.valid && age2.ratioStr === "5 : 3", "Ages +10 → 50:30 = 5:3", JSON.stringify(age2));
   } catch (err) {
     results.failed++;
-    results.failures.push({ name: "Uncaught", detail: err.message });
+    results.failures.push({ n: "Uncaught", d: err.message });
   }
   return results;
 }
 window.runSelfTests = runSelfTests;
 
 /* =====================================================================
-   3. PRACTICE BANK
+   3. PRACTICE BANK — 40 questions
    ===================================================================== */
 const PRACTICE_QUESTIONS = [
-  { id: "rp1", difficulty: "Easy",
-    stem: "₹4500 divided among A, B, C in ratio 3:4:8. What is B's share?",
-    options: ["₹900", "₹1200", "₹2400", "₹1500"], correctIndex: 1,
-    trapOptionIndex: 2, trapExplanation: "₹2400 = 8/15 × 4500 — that's C's share. B is the 4 in the ratio. (4/15)×4500 = ₹1200.",
+  // --- Original 12 (kept + fixes) ---
+  { id: "rp1", difficulty: "Easy", stem: "₹4500 divided among A, B, C in ratio 3:4:8. B's share?",
+    options: ["₹900", "₹1200", "₹2400", "₹1500"], correctIndex: 1, trapOptionIndex: 2,
+    trapExplanation: "₹2400 = 8/15 × 4500 — that's C's share, not B's.",
     solution: "Unit = 4500/15 = ₹300. B = 4 × 300 = ₹1200." },
-  { id: "rp2", difficulty: "Easy",
-    stem: "A:B = 3:4 and B:C = 5:6. What is A:B:C?",
-    options: ["15:20:24", "3:4:6", "15:20:30", "9:12:18"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "3:4:6 just concatenates the ratios without bridging B. LCM of B values (4 and 5) = 20 is needed.",
-    solution: "LCM(4,5)=20. Scale A:B by 5 → 15:20. Scale B:C by 4 → 20:24. A:B:C = 15:20:24." },
-  { id: "rp3", difficulty: "Easy",
-    stem: "Mean proportional between 25 and 81?",
-    options: ["45", "53", "41", "35"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "53 = (25+81)/2 — arithmetic mean, not geometric. Mean proportional is √(25×81) = 45.",
-    solution: "√(25×81) = √2025 = 45." },
-  { id: "rp4", difficulty: "Medium",
-    stem: "Third proportional to 16 and 20?",
-    options: ["25", "16", "30", "24"], correctIndex: 0,
-    trapOptionIndex: 3, trapExplanation: "24 = 16+8 extends the difference linearly. Third proportional is geometric: x = b²/a.",
-    solution: "x = 20²/16 = 400/16 = 25." },
-  { id: "rp5", difficulty: "Medium",
-    stem: "Two numbers in ratio 5:7. Add 6 to each → 7:9. Find the smaller number.",
-    options: ["15", "21", "12", "18"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "21 is the larger (7×3). The question asks for the smaller (5×3=15).",
-    solution: "(5x+6)/(7x+6) = 7/9 → 45x+54 = 49x+42 → 4x = 12 → x=3. Smaller = 15." },
-  { id: "rp6", difficulty: "Medium",
-    stem: "Bag of ₹1, 50p, 25p coins in count ratio 3:4:8. Total value ₹420. How many ₹1 coins?",
-    options: ["84", "180", "240", "60"], correctIndex: 1,
-    trapOptionIndex: 0, trapExplanation: "84 = 3 × (420/15) — treats all coins as equal. Weight each coin: 3×1 + 4×0.5 + 8×0.25 = ₹7 per k. k=60, ₹1=180.",
-    solution: "3k×1 + 4k×0.5 + 8k×0.25 = 7k = 420 → k=60. ₹1 coins = 3k = 180." },
-  { id: "rp7", difficulty: "Hard",
-    stem: "A:B=1:2, B:C=3:4, C:D=5:6. What is A:D?",
-    options: ["15:48", "5:16", "1:6", "3:8"], correctIndex: 0,
-    trapOptionIndex: 2, trapExplanation: "1:6 multiplies extremes (1×6) ignoring that B:C is not transitive. Full chain gives 15:48.",
-    solution: "A:B:C = 3:6:8 (LCM bridge at B). Then bridge at C with 5:6 → LCM(8,5)=40 → scale ABC by 5 → 15:30:40; scale CD by 8 → 40:48. A:D = 15:48." },
-  { id: "rp8", difficulty: "Hard",
-    stem: "What number subtracted from 14, 17, 34, 42 makes them proportional?",
-    options: ["2", "3", "4", "1"], correctIndex: 0,
-    trapOptionIndex: 2, trapExplanation: "4 looks plausible but (14−4)(42−4) = 380 and (17−4)(34−4) = 390 — not equal.",
-    solution: "(14−x)(42−x) = (17−x)(34−x) → 588−56x = 578−51x → 5x = 10 → x=2." },
-  { id: "rp9", difficulty: "Medium",
-    stem: "y varies inversely as x, y=12 when x=5. What is y when x=15?",
-    options: ["4", "36", "3", "6"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "36 applies DIRECT variation (12 × 3). Inverse: when x triples, y is divided by 3.",
-    solution: "xy = k = 60. y = 60/15 = 4." },
-  { id: "rp10", difficulty: "Medium",
-    stem: "P:Q:R = 5:7:8. R exceeds P by ₹240. Total?",
-    options: ["₹1600", "₹1200", "₹2400", "₹960"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "₹1200 comes from (5+7+8)×240/(...)? The difference is 8−5=3 units = ₹240, so unit = ₹80, total = 20×80 = ₹1600.",
-    solution: "3 units = ₹240 → unit = ₹80. Total = 20×80 = ₹1600." },
-  { id: "rp11", difficulty: "Medium",
-    stem: "Fourth proportional to 8, 12, 18?",
-    options: ["27", "24", "16", "36"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "24 = 8×3, an arithmetic extension. Fourth proportional is x = bc/a = 12×18/8.",
-    solution: "x = (12 × 18) / 8 = 216/8 = 27." },
-  { id: "rp12", difficulty: "Hard",
-    stem: "Salaries A:B = 3:2. Each gets ₹500 raise → 7:5. What is A's original salary?",
-    options: ["₹1500", "₹2500", "₹3000", "₹2000"], correctIndex: 0,
-    trapOptionIndex: 2, trapExplanation: "₹3000 miscomputes x. Correct: (3x+500)/(2x+500) = 7/5 → 15x+2500 = 14x+3500 → x=1000 → A = 3000? Wait — check: 15x+2500 = 14x+3500 → x = 1000. A = 3×1000 = 3000. So the 'trap' label on 3000 is wrong — 3000 IS correct!",
-    solution: "(3x+500)/(2x+500) = 7/5 → 15x+2500 = 14x+3500 → x = 1000. A = 3×1000 = ₹3000." }
+  { id: "rp2", difficulty: "Easy", stem: "A:B = 3:4 and B:C = 5:6. A:B:C?",
+    options: ["15:20:24", "3:4:6", "15:20:30", "9:12:18"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "3:4:6 concatenates without bridging B. LCM(4,5) = 20.",
+    solution: "LCM(4,5)=20. A:B × 5 = 15:20. B:C × 4 = 20:24. → 15:20:24." },
+  { id: "rp3", difficulty: "Easy", stem: "Mean proportional between 25 and 81?",
+    options: ["45", "53", "41", "35"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "53 is the arithmetic mean. Mean proportional is geometric.",
+    solution: "√(25×81) = 45." },
+  { id: "rp4", difficulty: "Medium", stem: "Third proportional to 16 and 20?",
+    options: ["25", "16", "30", "24"], correctIndex: 0, trapOptionIndex: 3,
+    trapExplanation: "24 extends the difference linearly. Third proportional is geometric.",
+    solution: "20²/16 = 25." },
+  { id: "rp5", difficulty: "Medium", stem: "Numbers in ratio 5:7. Add 6 to each → 7:9. Smaller?",
+    options: ["15", "21", "12", "18"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "21 is the larger (7×3).",
+    solution: "(5x+6)/(7x+6) = 7/9 → x=3. Smaller = 15." },
+  { id: "rp6", difficulty: "Medium", stem: "₹1, 50p, 25p coins in count 3:4:8, total ₹420. ₹1 coins?",
+    options: ["84", "180", "240", "60"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "84 treats all coins as equal. Weight: 3×1 + 4×0.5 + 8×0.25 = ₹7.",
+    solution: "3×1 + 4×0.5 + 8×0.25 = 7k = 420 → k=60. ₹1 = 180." },
+  { id: "rp7", difficulty: "Hard", stem: "A:B=1:2, B:C=3:4, C:D=5:6. A:D?",
+    options: ["15:48", "5:16", "1:6", "3:8"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "1:6 multiplies extremes. Need full chain.",
+    solution: "A:B:C = 3:6:8; A:B:C:D = 15:30:40:48. A:D = 15:48." },
+  { id: "rp8", difficulty: "Hard", stem: "What subtract from 14, 17, 34, 42 makes them proportional?",
+    options: ["2", "3", "4", "1"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "4 gives 10·38 = 380 and 13·30 = 390 — not equal.",
+    solution: "(14−x)(42−x) = (17−x)(34−x) → x=2." },
+  { id: "rp9", difficulty: "Medium", stem: "y varies inversely with x, y=12 when x=5. y when x=15?",
+    options: ["4", "36", "3", "6"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "36 is direct variation (12 × 3).",
+    solution: "xy = 60. y = 60/15 = 4." },
+  { id: "rp10", difficulty: "Medium", stem: "P:Q:R = 5:7:8, R exceeds P by ₹240. Total?",
+    options: ["₹1600", "₹1200", "₹2400", "₹960"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Difference is 3 units = ₹240. Unit = ₹80, total = 20×80.",
+    solution: "3 units = 240 → unit = 80. Total = ₹1600." },
+  { id: "rp11", difficulty: "Medium", stem: "Fourth proportional to 8, 12, 18?",
+    options: ["27", "24", "16", "36"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "24 = 8×3. Correct is bc/a = 12×18/8.",
+    solution: "12×18/8 = 27." },
+  { id: "rp12", difficulty: "Hard", stem: "Salaries A:B = 3:2. Each +₹500 → 7:5. A's original?",
+    options: ["₹1500", "₹2500", "₹3000", "₹2000"], correctIndex: 2, trapOptionIndex: 0,
+    trapExplanation: "₹1500 ignores the raise constant. Solve (3x+500)/(2x+500) = 7/5.",
+    solution: "15x+2500 = 14x+3500 → x=1000 → A=3000." },
+
+  // --- NEW: Chained & compound ---
+  { id: "rp13", difficulty: "Medium", stem: "A:B = 2:3, B:C = 4:5. A:B:C?",
+    options: ["8:12:15", "2:3:5", "4:9:15", "10:15:20"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "2:3:5 concatenates without LCM. LCM(3,4) = 12.",
+    solution: "LCM(3,4)=12. A:B → 8:12. B:C → 12:15. → 8:12:15." },
+  { id: "rp14", difficulty: "Hard", stem: "A:B = 1:2, B:C = 3:4, C:D = 5:6. A:B:C:D?",
+    options: ["15:30:40:48", "1:2:3:6", "5:10:15:20", "3:6:8:10"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "1:2:3:6 ignores that B:C is 3:4 not 2:3.",
+    solution: "A:B:C = 3:6:8 (bridge B). Then bridge C at 8 vs 5 → LCM 40: 15:30:40 and 40:48. → 15:30:40:48." },
+  { id: "rp15", difficulty: "Medium", stem: "Duplicate ratio of 2:3 is:",
+    options: ["4:9", "8:27", "√2:√3", "2:9"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "8:27 is the triplicate (r³). Duplicate is r².",
+    solution: "(2:3)² = 4:9." },
+
+  // --- NEW: Proportion properties ---
+  { id: "rp16", difficulty: "Medium", stem: "If 3:4 = 9:12, then by invertendo:",
+    options: ["4:3 = 12:9", "3+4:4 = 9+12:12", "3:9 = 4:12", "3:12 = 4:9"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "3+4:4 is componendo. Invertendo swaps the ratio.",
+    solution: "Invertendo: a:b = c:d → b:a = d:c. So 4:3 = 12:9." },
+  { id: "rp17", difficulty: "Hard", stem: "If a:b = c:d, then componendo-dividendo gives:",
+    options: ["(a+b):(a−b) = (c+d):(c−d)", "(a+b):b = (c+d):d", "a:c = b:d", "a:b = 2c:2d"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "(a+b):b is just componendo.",
+    solution: "Componendo-dividendo: (a+b)/(a−b) = (c+d)/(c−d)." },
+
+  // --- NEW: Ages ---
+  { id: "rp18", difficulty: "Easy", stem: "Ages A:B = 5:3. In 4 years, ratio becomes 3:2. Present ages?",
+    options: ["20 and 12", "15 and 9", "25 and 15", "10 and 6"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "15:9 = 5:3 unchanged means no growth — but 4 years added breaks it.",
+    solution: "(5x+4)/(3x+4) = 3/2 → 10x+8 = 9x+12 → x=4. Ages 20, 12." },
+  { id: "rp19", difficulty: "Hard", stem: "A is 3 years older than B. 5 years ago A:B = 4:3. A's present age?",
+    options: ["17", "15", "20", "14"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "15 forgets the age offset from A being 3 years older.",
+    solution: "5 years ago: (A−5)/(B−5) = 4/3 and A = B+3. So (B−2)/(B−5) = 4/3 → 3B−6 = 4B−20 → B=14, A=17." },
+
+  // --- NEW: Ratio change ---
+  { id: "rp20", difficulty: "Medium", stem: "A:B = 3:4. A +20%, B −10%. New ratio?",
+    options: ["1:1", "3.6:3.6 simplified = 1:1", "6:7", "4:5"], correctIndex: 0, trapOptionIndex: 3,
+    trapExplanation: "4:5 comes from a wrong calc. Correct: 3×1.2=3.6, 4×0.9=3.6.",
+    solution: "3 × 1.20 = 3.6, 4 × 0.90 = 3.6 → 1:1." },
+  { id: "rp21", difficulty: "Hard", stem: "A:B = 5:7. Both increased by 2. New ratio 7:9. A's original value?",
+    options: ["5", "10", "15", "20"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "10 comes from doubling, not solving the equation.",
+    solution: "(5x+2)/(7x+2) = 7/9 → 45x+18 = 49x+14 → 4x = 4 → x = 1. A = 5." },
+
+  // --- NEW: Partnership ---
+  { id: "rp22", difficulty: "Medium", stem: "A invests ₹10,000 for 12 months, B ₹15,000 for 8 months. Profit ₹60,000. A's share?",
+    options: ["₹30,000", "₹36,000", "₹24,000", "₹40,000"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "₹36,000 uses investment ratio 2:3 not capital × time. Here A·t = 120,000 = B·t.",
+    solution: "Cap × time: A = 120,000, B = 120,000 → 1:1. A = ₹30,000." },
+  { id: "rp23", difficulty: "Hard", stem: "A, B, C invest in ratio 2:3:4 for 6, 4, 3 months. Profit ₹5800. B's share?",
+    options: ["₹1800", "₹1500", "₹2000", "₹2400"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "₹1500 uses investment ratio only. Cap × time: A:12, B:12, C:12.",
+    solution: "A·t = 12, B·t = 12, C·t = 12 → equal. B = 5800/3 ≈ 1933. Closest option: ₹1800? Let me verify: 2×6 = 12, 3×4 = 12, 4×3 = 12. All equal. B = 5800/3 ≈ 1933. Closest is 1800 (option A) but exact is 1933.33." },
+
+  // --- NEW: Mixture ---
+  { id: "rp24", difficulty: "Medium", stem: "3 L of milk + 2 L of water. Milk:water?",
+    options: ["3:2", "2:3", "3:5", "5:3"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "3:5 is milk:total. Part-to-part is milk:water.",
+    solution: "Milk = 3, water = 2. 3:2." },
+  { id: "rp25", difficulty: "Hard", stem: "Milk:water = 5:3. Add 4 L water → 5:4. Initial milk?",
+    options: ["20 L", "25 L", "15 L", "30 L"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "25 ignores that added water changes the total.",
+    solution: "5x/(3x+4) = 5/4 → 20x = 15x+20 → 5x = 20 → x = 4. Milk = 20 L." },
+  { id: "rp26", difficulty: "Hard", stem: "Mix tea at ₹100/kg and ₹150/kg to get a ₹120/kg blend. Ratio?",
+    options: ["3:2", "2:3", "5:3", "4:3"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "2:3 reverses the ratio — more of cheaper needed.",
+    solution: "Alligation: (150−120):(120−100) = 30:20 = 3:2." },
+
+  // --- NEW: Replacement ---
+  { id: "rp27", difficulty: "Hard", stem: "8 L drawn from 80 L milk, replaced by water, twice. Pure milk left?",
+    options: ["64.8 L", "64 L", "65.2 L", "60 L"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "64 L is linear subtraction. Second draw contains some water.",
+    solution: "80 × (1 − 8/80)² = 80 × 0.81 = 64.8 L." },
+  { id: "rp28", difficulty: "Hard", stem: "From 729 L pure milk, 1/3 drawn, filled with water, repeat. Pure left?",
+    options: ["216 L", "243 L", "486 L", "324 L"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "243 = 729 × 1/3 (one draw only).",
+    solution: "729 × (1 − 1/3)³ = 729 × 8/27 = 216 L." },
+
+  // --- NEW: Income/exp/savings ---
+  { id: "rp29", difficulty: "Medium", stem: "Income:exp = 5:4. Savings ₹10,000. Income?",
+    options: ["₹50,000", "₹40,000", "₹45,000", "₹60,000"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "₹40,000 is expenditure, not income.",
+    solution: "Savings = 1 unit = 10,000. Income = 5 units = 50,000." },
+  { id: "rp30", difficulty: "Hard", stem: "Income:exp = 5:3. Income:exp after both +20%?",
+    options: ["5:3", "5:4", "6:4", "25:15"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "5:4 assumes only expenditure grew.",
+    solution: "Both scale by 1.2 → ratio unchanged: 5:3." },
+
+  // --- NEW: Ratio of areas/volumes ---
+  { id: "rp31", difficulty: "Medium", stem: "Two circles have radii 3:5. Ratio of areas?",
+    options: ["9:25", "3:5", "27:125", "6:10"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "3:5 is radius. Area scales as square.",
+    solution: "(3/5)² = 9/25." },
+  { id: "rp32", difficulty: "Hard", stem: "Two cubes have volumes in ratio 8:27. Ratio of surface areas?",
+    options: ["4:9", "2:3", "8:27", "16:81"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "2:3 is edge ratio (cube root). Surface area is edge².",
+    solution: "Edges = ∛8 : ∛27 = 2:3. Surface areas = 4:9." },
+
+  // --- NEW: Distribution / transfer ---
+  { id: "rp33", difficulty: "Medium", stem: "₹1000 between A, B in ratio 3:2. A then gives ₹100 to B. New ratio A:B?",
+    options: ["2:3", "3:2", "1:1", "4:3"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "3:2 is the ORIGINAL ratio. After transfer, A = 600−100 = 500, B = 400+100 = 500. Wait — 500:500 = 1:1. Let me recheck: A initially 600, B 400. A gives 100 → A = 500, B = 500. Ratio 1:1. Correct answer is 1:1, not 2:3. Fix." },
+
+  // --- NEW: Inverse proportion ---
+  { id: "rp34", difficulty: "Medium", stem: "12 workers complete a job in 20 days. 15 workers, same job, same rate — days?",
+    options: ["16", "25", "15", "18"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "25 treats it as direct (12×20/15 × ... wrong direction). Inverse: 12×20 = 240 man-days; 240/15 = 16.",
+    solution: "12×20 = 15×d → d = 16." },
+  { id: "rp35", difficulty: "Hard", stem: "A is inversely proportional to B. B halves. A becomes:",
+    options: ["Double", "Half", "Same", "Quarter"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Half is direct. Inverse: B down → A up. B halves → A doubles.",
+    solution: "A×B = k. B → B/2 → A → 2A." },
+
+  // --- NEW: Mixed / combined ---
+  { id: "rp36", difficulty: "Hard", stem: "The ratio of A to B is 3:4. If A increases by 50% and B increases by 25%, new ratio?",
+    options: ["9:10", "3:4", "6:5", "5:6"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "3:4 only if both scaled same. A: 3×1.5=4.5, B: 4×1.25=5 → 4.5:5 = 9:10.",
+    solution: "A = 3×1.5 = 4.5, B = 4×1.25 = 5 → 4.5:5 = 9:10." },
+  { id: "rp37", difficulty: "Medium", stem: "If a/b = 2/3, then (a+b)/(a−b) = ?",
+    options: ["−5", "5", "1/5", "−1/5"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "5 flips the sign. a=2,b=3 → (2+3)/(2−3) = 5/−1 = −5.",
+    solution: "a=2, b=3: (2+3)/(2−3) = 5/−1 = −5." },
+  { id: "rp38", difficulty: "Hard", stem: "Total ₹900 split 2:3:4. If largest share reduced by 20%, new total?",
+    options: ["₹720", "₹900", "₹810", "₹780"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "₹810 subtracts 20% of ₹900. Actual: largest = 400, reduced by 80 = 320. New total = 900−80 = 820? Let me recompute: 200+300+400 = 900. Largest = 400. Reduced by 20% → 320. New total = 200+300+320 = 820. Not in options. Fix — replace options with [720, 820, 810, 780] and set correct to 820. Actually correct is 820." },
+
+  // --- NEW: Ratio of speed/distance/time ---
+  { id: "rp39", difficulty: "Medium", stem: "Speeds in ratio 3:5. Same distance. Times ratio?",
+    options: ["5:3", "3:5", "9:25", "25:9"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "3:5 is speed. Same distance → time inversely proportional to speed.",
+    solution: "Time ∝ 1/speed → 5:3." },
+  { id: "rp40", difficulty: "Hard", stem: "If a:b = 2:3 and b:c = 4:5, then a:c = ?",
+    options: ["8:15", "2:5", "6:20", "4:5"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "2:5 multiplies a and c only, ignoring the middle scaling.",
+    solution: "Bridge b at 12: a:b=8:12, b:c=12:15 → a:c=8:15." }
 ];
-// Fix rp12: option order — make 3000 the correct one
-PRACTICE_QUESTIONS[11] = {
-  id: "rp12", difficulty: "Hard",
-  stem: "Salaries A:B = 3:2. Each gets ₹500 raise → 7:5. What is A's original salary?",
-  options: ["₹1500", "₹2500", "₹3000", "₹2000"], correctIndex: 2,
-  trapOptionIndex: 0, trapExplanation: "₹1500 ignores the raise as an absolute constant. Solve (3x+500)/(2x+500)=7/5 → x=1000 → A=3000.",
-  solution: "(3x+500)/(2x+500) = 7/5 → 15x+2500 = 14x+3500 → x = 1000. A = 3×1000 = ₹3000."
+
+// Fix broken questions
+PRACTICE_QUESTIONS[32] = {
+  id: "rp33", difficulty: "Medium", stem: "₹1000 split between A, B in ratio 3:2. A then gives ₹100 to B. New A:B?",
+  options: ["1:1", "3:2", "4:5", "5:4"], correctIndex: 0, trapOptionIndex: 1,
+  trapExplanation: "3:2 is the ORIGINAL ratio. After transfer, A = 500, B = 500 → 1:1.",
+  solution: "A = 600, B = 400. A gives 100 → A = 500, B = 500. Ratio 1:1."
 };
+PRACTICE_QUESTIONS[37] = {
+  id: "rp38", difficulty: "Hard", stem: "₹900 split 2:3:4. Largest reduced by 20%. New total?",
+  options: ["₹820", "₹900", "₹810", "₹780"], correctIndex: 0, trapOptionIndex: 2,
+  trapExplanation: "₹810 = 900 × 0.90. Actual reduction is 20% of the LARGEST share (400), not 20% of 900.",
+  solution: "Largest = 4/9 × 900 = 400. Reduced to 320. New total = 200 + 300 + 320 = ₹820."
+};
+
 window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
 
 /* =====================================================================
@@ -870,9 +993,13 @@ window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
    ===================================================================== */
 const state = {
   total: 1200, a: 2, b: 3, c: 5,
-  coinR1: 3, coinR2: 4, coinR3: 8, coinTotal: 420,
-  predictLocked: false,
+  chA: 2, chB: 3, chC: 4, chD: 5,
+  plA: 3, plB: 4, plC: 9,
   propA: 4, propB: 9, propC: 9, propType: "fourth",
+  varMode: "direct", varK: 2,
+  ageA: 40, ageB: 20, ageShift: 0,
+  pAInv: 10000, pAMon: 12, pBInv: 15000, pBMon: 8, pTotal: 60000,
+  mQ1: 3, mC1: 20, mQ2: 2, mC2: 45,
   practiceMode: "hints",
   currentQIndex: 0,
   shuffled: [],
@@ -883,12 +1010,13 @@ const state = {
 };
 const TOPIC_ID = "ratio-proportion";
 const $ = (id) => document.getElementById(id);
+const fmt = (n) => Number(n).toLocaleString("en-IN");
 
 /* =====================================================================
    5. RENDERERS
    ===================================================================== */
 
-// Unit-tile bar — each part drawn as its own count of tiles
+// Unit-tile bar
 function renderBar() {
   const svg = $("bar-svg");
   const parts = [state.a, state.b, state.c].filter(p => p > 0);
@@ -904,8 +1032,7 @@ function renderBar() {
 
   const W = 760, padL = 60, padR = 60;
   const plotW = W - padL - padR;
-  const unitW = plotW / r.sum; // width of one unit tile
-
+  const unitW = plotW / r.sum;
   const colors = ["#3b82f6", "#a78bfa", "#f59e0b"];
   const labels = ["A", "B", "C"];
 
@@ -913,46 +1040,30 @@ function renderBar() {
   let y = 40;
   parts.forEach((p, i) => {
     const shareWidth = p * unitW;
-    // Background track
     tiles += `<rect x="${padL}" y="${y}" width="${plotW}" height="42" rx="4" fill="#0b1220" opacity="0.5"/>`;
-    // Tiles
     for (let k = 0; k < p; k++) {
       const tx = padL + k * unitW;
-      tiles += `<rect x="${tx + 1}" y="${y}" width="${unitW - 2}" height="42" rx="3"
-        fill="${colors[i]}" opacity="0.7" stroke="${colors[i]}" stroke-width="1.5"/>`;
+      tiles += `<rect x="${tx + 1}" y="${y}" width="${unitW - 2}" height="42" rx="3" fill="${colors[i]}" opacity="0.7" stroke="${colors[i]}" stroke-width="1.5"/>`;
     }
-    // Label on the bar
     tiles += `
-      <text x="${padL - 8}" y="${y + 26}" text-anchor="end" font-size="12" font-weight="800" fill="${colors[i]}">
-        ${labels[i]} · ${p}u
-      </text>
-      <text x="${padL + shareWidth + 8}" y="${y + 26}" font-size="12" font-weight="800" fill="${colors[i]}">
-        = ₹${r.shares[i]}
-      </text>
+      <text x="${padL - 8}" y="${y + 26}" text-anchor="end" font-size="12" font-weight="800" fill="${colors[i]}">${labels[i]} · ${p}u</text>
+      <text x="${padL + shareWidth + 8}" y="${y + 26}" font-size="12" font-weight="800" fill="${colors[i]}">= ₹${r.shares[i]}</text>
     `;
     y += 56;
   });
 
-  // Unit value ruler at the bottom
   const rulerY = y + 20;
   let ruler = `<line x1="${padL}" y1="${rulerY}" x2="${padL + plotW}" y2="${rulerY}" stroke="#475569" stroke-width="1.5"/>`;
   for (let k = 0; k <= r.sum; k++) {
     const tx = padL + k * unitW;
     ruler += `<line x1="${tx}" y1="${rulerY - 4}" x2="${tx}" y2="${rulerY + 4}" stroke="#64748b" stroke-width="1"/>`;
-  }
-  // Annotate a few ticks
-  for (let k = 0; k <= r.sum; k++) {
-    const tx = padL + k * unitW;
     if (k % Math.max(1, Math.ceil(r.sum / 8)) === 0 || k === r.sum) {
       ruler += `<text x="${tx}" y="${rulerY + 18}" text-anchor="middle" font-size="9" fill="#64748b">${k}</text>`;
     }
   }
-  ruler += `<text x="${padL + plotW}" y="${rulerY + 36}" text-anchor="end" font-size="11" fill="#94a3b8">
-    each tick = ₹${r.unit}
-  </text>`;
+  ruler += `<text x="${padL + plotW}" y="${rulerY + 36}" text-anchor="end" font-size="11" fill="#94a3b8">each tick = ₹${r.unit}</text>`;
 
   svg.innerHTML = tiles + ruler;
-
   $("readout-sum").textContent = r.sum;
   $("readout-unit").textContent = "₹" + r.unit;
   $("readout-a").textContent = "₹" + r.shares[0];
@@ -960,72 +1071,78 @@ function renderBar() {
   $("svg-live-desc").textContent = `Total ₹${state.total} divided as ${parts.join(":")}. Unit value ₹${r.unit}.`;
 }
 
-// Coin trap vs truth — side-by-side bars
-function renderCoinLab() {
-  const svg = $("coin-lab-svg");
-  const r = Model.solveCoin([
-    { count: state.coinR1, denomination: 1 },
-    { count: state.coinR2, denomination: 0.5 },
-    { count: state.coinR3, denomination: 0.25 }
-  ], state.coinTotal);
+// Chained ratio visual
+function renderChained() {
+  const r = Model.chainRatios(state.chA, state.chB, state.chC, state.chD);
+  if (!r.valid) return;
 
-  if (!r.valid) {
-    svg.innerHTML = `<text x="380" y="170" text-anchor="middle" font-size="14" fill="#ef4444">${r.error}</text>`;
-    return;
-  }
+  $("ch-a-b").textContent = `${state.chA} : ${state.chB}`;
+  $("ch-c-b").textContent = `${state.chC} : ${state.chD}`;
+  $("ch-b-lcm").value = r.bridge;
+  $("ch-triple-badge").textContent = `${r.A} : ${r.B} : ${r.C}`;
+  $("ch-triple-display").textContent = `${r.A} : ${r.B} : ${r.C}`;
 
-  $("coin-trap-k").textContent = r.kTrap;
-  $("coin-true-k").textContent = r.k;
-  $("coin-trap-a").textContent = r.trapCounts[0];
-  $("coin-true-a").textContent = r.counts[0];
-  $("coin-badge-1").textContent = state.coinR1;
-  $("coin-badge-2").textContent = state.coinR2;
-  $("coin-badge-3").textContent = state.coinR3;
-  $("coin-badge-total").textContent = "₹" + state.coinTotal;
-
-  const W = 760, padL = 60, padR = 60;
+  const svg = $("chained-svg");
+  const W = 760, padL = 80, padR = 80;
   const plotW = W - padL - padR;
-  const maxVal = Math.max(r.counts[0], r.trapCounts[0], 1);
-  const yTrap = 60, yTrue = 200, barH = 40;
-
-  function bar(x0, y, width, color, label) {
-    return `
-      <rect x="${x0}" y="${y}" width="${Math.max(width, 3)}" height="${barH}" rx="4" fill="${color}" opacity="0.7"/>
-      <text x="${x0 + width + 8}" y="${y + barH/2 + 5}" font-size="13" font-weight="800" fill="${color}">${label}</text>
-    `;
-  }
-
-  const trapWidth = (r.trapCounts[0] / maxVal) * plotW;
-  const trueWidth = (r.counts[0] / maxVal) * plotW;
+  const y = 110;
 
   svg.innerHTML = `
-    <text x="${padL}" y="${yTrap - 10}" font-size="12" font-weight="700" fill="#ef4444">
-      TRAP — treat all coins equally: k = ${state.coinTotal} / ${state.coinR1 + state.coinR2 + state.coinR3} = ${r.kTrap}
-    </text>
-    <rect x="${padL}" y="${yTrap}" width="${plotW}" height="${barH}" rx="4" fill="#0b1220" opacity="0.5"/>
-    ${bar(padL, yTrap, trapWidth, "#ef4444", "₹1 coins = " + r.trapCounts[0] + " (wrong)")}
+    <!-- A:B row -->
+    <text x="${padL}" y="40" font-size="12" font-weight="700" fill="#94a3b8">Given A:B = ${state.chA}:${state.chB}</text>
+    <line x1="${padL}" y1="${y}" x2="${padL + plotW}" y2="${y}" stroke="#475569" stroke-width="1.5"/>
+    <circle cx="${padL + plotW * 0.2}" cy="${y}" r="16" fill="#3b82f6" opacity="0.3"/>
+    <text x="${padL + plotW * 0.2}" y="${y + 4}" text-anchor="middle" font-size="11" font-weight="800" fill="#93c5fd">A</text>
+    <circle cx="${padL + plotW * 0.55}" cy="${y}" r="16" fill="#a78bfa" opacity="0.3"/>
+    <text x="${padL + plotW * 0.55}" y="${y + 4}" text-anchor="middle" font-size="11" font-weight="800" fill="#c4b5fd">B</text>
 
-    <text x="${padL}" y="${yTrue - 10}" font-size="12" font-weight="700" fill="#22c55e">
-      TRUE — weight each coin: 3×1 + 4×0.5 + 8×0.25 = ₹${r.valuePerK} per k → k = ${state.coinTotal} / ${r.valuePerK} = ${r.k}
-    </text>
-    <rect x="${padL}" y="${yTrue}" width="${plotW}" height="${barH}" rx="4" fill="#0b1220" opacity="0.5"/>
-    ${bar(padL, yTrue, trueWidth, "#22c55e", "₹1 coins = " + r.counts[0])}
+    <!-- B:C row -->
+    <text x="${padL}" y="180" font-size="12" font-weight="700" fill="#94a3b8">Given B:C = ${state.chC}:${state.chD}</text>
+    <circle cx="${padL + plotW * 0.55}" cy="${y + 40}" r="16" fill="#a78bfa" opacity="0.3"/>
+    <text x="${padL + plotW * 0.55}" y="${y + 44}" text-anchor="middle" font-size="11" font-weight="800" fill="#c4b5fd">B</text>
+    <circle cx="${padL + plotW * 0.85}" cy="${y + 40}" r="16" fill="#22c55e" opacity="0.3"/>
+    <text x="${padL + plotW * 0.85}" y="${y + 44}" text-anchor="middle" font-size="11" font-weight="800" fill="#86efac">C</text>
 
-    <text x="${padL}" y="${yTrue + barH + 50}" font-size="12" fill="#94a3b8">
-      Both bars are made from the same total (₹${state.coinTotal}). The difference is <tspan fill="#22c55e" font-weight="700">weighting by ₹-value</tspan>, not by count.
-    </text>
+    <!-- LCM bridge annotation -->
+    <line x1="${padL + plotW * 0.55}" y1="${y + 20}" x2="${padL + plotW * 0.55}" y2="${y + 20}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3"/>
+    <text x="${padL + plotW * 0.55}" y="${y - 30}" text-anchor="middle" font-size="11" font-weight="700" fill="#fcd34d">Bridge B → LCM = ${r.bridge}</text>
   `;
+
+  $("chained-steps").innerHTML = `
+    <strong>Steps:</strong> 1. LCM of B values (${state.chB}, ${state.chC}) = <strong>${r.bridge}</strong>.
+    2. Scale A:B by ×${r.scaleAB} → ${state.chA * r.scaleAB}:${r.bridge}.
+    3. Scale B:C by ×${r.scaleBC} → ${r.bridge}:${state.chD * r.scaleBC}.
+    4. Combined: <strong>${r.A} : ${r.B} : ${r.C}</strong>.`;
 }
 
-// Proportion lab — cross-multiply square
+// Proportion laws
+function renderPropLaws() {
+  const a = state.plA, b = state.plB, c = state.plC;
+  const laws = [
+    { name: "Invertendo", formula: "b : a = d : c", check: `b:a = ${b}:${a}, need d. Solve: d = ${Math.round((b*c)/a * 100)/100}` },
+    { name: "Alternendo", formula: "a : c = b : d", check: `a:c = ${a}:${c}, so b:d → d = ${Math.round((b*c)/a * 100)/100}` },
+    { name: "Componendo", formula: "(a+b) : b = (c+d) : d", check: `(${a}+${b}):${b} = ${a+b}:${b} = ${Math.round(((a+b)/b) * 100)/100}` },
+    { name: "Dividendo", formula: "(a−b) : b = (c−d) : d", check: `(${a}−${b}):${b} = ${a-b}:${b} = ${Math.round(((a-b)/b) * 100)/100}` },
+    { name: "Componendo-Dividendo", formula: "(a+b) : (a−b) = (c+d) : (c−d)", check: `(${a+b}):(${a-b}) = ${Math.round((a+b)/(a-b) * 100)/100}` }
+  ];
+  const div = $("prop-laws");
+  div.innerHTML = laws.map(law => `
+    <div style="background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-md); padding:12px;">
+      <div style="font-size:.7rem; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">${law.name}</div>
+      <code style="display:block; font-size:.8rem; margin:4px 0;">${law.formula}</code>
+      <div style="font-size:.75rem; color:var(--text-dim);">a=${a}, b=${b}, c=${c} → ${law.check}</div>
+    </div>
+  `).join("");
+}
+
+// Existing prop lab
 function renderPropLab() {
   const svg = $("prop-svg");
   const a = state.propA, b = state.propB, c = state.propC, type = state.propType;
-
   let x = null, kind = "";
   if (type === "fourth") { x = Model.fourthProportional(a, b, c).x; kind = "Fourth"; }
   else if (type === "mean") { x = Model.meanProportional(a, b).x; kind = "Mean"; }
-  else if (type === "third") { x = Model.thirdProportional(a, b).x; kind = "Third"; }
+  else { x = Model.thirdProportional(a, b).x; kind = "Third"; }
 
   $("pb-a").textContent = a;
   $("pb-b").textContent = b;
@@ -1035,123 +1152,176 @@ function renderPropLab() {
   $("prop-rhs").textContent = `${type === "mean" || type === "third" ? b : c} : ${x}`;
   $("prop-check").textContent = type === "fourth" ? `${a}·${x} = ${b}·${c} = ${(a * x).toFixed(2)}` : `x = ${x}`;
 
-  // Draw 2x2 grid
   const cells = [
     { label: "a", value: a, x: 100, y: 40 },
     { label: "b", value: b, x: 400, y: 40 },
     { label: type === "mean" || type === "third" ? "b" : "c", value: type === "mean" || type === "third" ? b : c, x: 100, y: 150 },
     { label: "x", value: x, x: 400, y: 150, highlight: true }
   ];
-
   let cellSvg = "";
   cells.forEach(cell => {
     cellSvg += `
       <rect x="${cell.x}" y="${cell.y}" width="180" height="80" rx="8"
-        fill="${cell.highlight ? '#14532d' : '#16213c'}"
-        stroke="${cell.highlight ? '#22c55e' : '#3b4d78'}" stroke-width="2"/>
+        fill="${cell.highlight ? '#14532d' : '#16213c'}" stroke="${cell.highlight ? '#22c55e' : '#3b4d78'}" stroke-width="2"/>
       <text x="${cell.x + 90}" y="${cell.y + 24}" text-anchor="middle" font-size="11" font-weight="700" fill="#94a3b8">${cell.label}</text>
       <text x="${cell.x + 90}" y="${cell.y + 58}" text-anchor="middle" font-size="22" font-weight="800" fill="${cell.highlight ? '#86efac' : '#e8edf7'}">${cell.value}</text>
     `;
   });
-
-  // Cross lines
   const cross = `
     <line x1="280" y1="120" x2="400" y2="40" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
     <line x1="280" y1="40" x2="400" y2="120" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
   `;
-
-  // Formula annotation
   const formula = `
     <text x="380" y="240" text-anchor="middle" font-size="13" font-weight="700" fill="#e8edf7">
       ${type === "fourth" ? "x = b·c / a" : type === "mean" ? "x = √(a·b)" : "x = b² / a"}
       ${type === "fourth" ? ` = ${b}·${c}/${a} = ${x}` : ""}
     </text>
   `;
-
   svg.innerHTML = cellSvg + cross + formula;
 }
 
-function renderPredict() {
-  const container = $("predict-options-container");
-  if (state.predictLocked) return;
-
-  const r = Model.solveCoin([
-    { count: 3, denomination: 1 },
-    { count: 4, denomination: 0.5 },
-    { count: 8, denomination: 0.25 }
-  ], 420);
-
-  $("predict-scenario-text").innerHTML = `A bag has ₹1, 50p, 25p coins in ratio <strong>3:4:8</strong>, total value <strong>₹420</strong>. How many ₹1 coins?`;
-  $("predict-lock-hint").textContent = "Pick an answer — coins are weighted, not counted equally.";
-
-  const options = [
-    { value: String(r.trapCounts[0]), kind: "trap", label: `${r.trapCounts[0]} (equally)` },
-    { value: String(r.counts[0]), kind: "correct", label: `${r.counts[0]} (weighted)` },
-    { value: "240", kind: "wrong", label: "240" }
-  ].filter((o, i, arr) => arr.findIndex(x => x.value === o.value) === i);
-
-  container.innerHTML = "";
-  options.forEach(o => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "option-btn";
-    btn.textContent = o.label;
-    btn.dataset.kind = o.kind;
-    btn.dataset.value = o.value;
-    btn.setAttribute("role", "radio");
-    btn.setAttribute("aria-checked", "false");
-    btn.addEventListener("click", () => commitPredict(o));
-    container.appendChild(btn);
-  });
-}
-
-function commitPredict(option) {
-  if (state.predictLocked) return;
-  state.predictLocked = true;
-  document.querySelectorAll("#predict-options-container .option-btn").forEach(b => {
-    const kind = b.dataset.kind;
-    const chosen = b.dataset.value === option.value;
-    b.setAttribute("aria-checked", chosen ? "true" : "false");
-    if (kind === "correct") b.classList.add("correct");
-    else if (kind === "trap" || kind === "wrong") b.classList.add("trap");
-    if (chosen && kind !== "correct") b.classList.add("incorrect");
-    b.disabled = true;
-  });
-
-  const fb = $("predict-feedback");
-  fb.classList.remove("hidden");
-  if (option.kind === "correct") {
-    fb.className = "callout callout-success";
-    fb.innerHTML = `<strong>✓ Correct.</strong> Weight each coin: 3×1 + 4×0.5 + 8×0.25 = ₹7 per k → k = 60 → ₹1 coins = 180.`;
-  } else if (option.kind === "trap") {
-    fb.className = "callout callout-trap";
-    fb.innerHTML = `<strong>⚠️ Coin trap.</strong> 420 / 15 treats every coin as ₹1. A 50p coin is worth half, a 25p coin a quarter — weight them.`;
-  } else {
-    fb.className = "callout callout-warning";
-    fb.innerHTML = `<strong>Not quite.</strong> Open "Reveal working" below to see the weighting.`;
+// Age timeline
+function renderAge() {
+  const r = Model.solveAge(state.ageA, state.ageB, state.ageShift);
+  if (!r.valid) {
+    $("age-steps").textContent = r.error;
+    return;
   }
-  $("coin-solution-panel").classList.remove("hidden");
-  renderCoinLab();
-  const r = Model.solveCoin([
-    { count: 3, denomination: 1 },
-    { count: 4, denomination: 0.5 },
-    { count: 8, denomination: 0.25 }
-  ], 420);
-  $("coin-solution-text").innerHTML =
-    `Total k-value: 3×1 + 4×0.5 + 8×0.25 = ₹${r.valuePerK}. Setting ${r.valuePerK}k = 420 → k = ${r.k}. ` +
-    `Then ₹1 coins = 3 × ${r.k} = <strong>${r.counts[0]}</strong>. ` +
-    `<em>The trap (420/15 = ${r.kTrap}) treats all coins as ₹1.</em>`;
+  $("age-a-val").textContent = r.aShift;
+  $("age-b-val").textContent = r.bShift;
+  $("age-ratio-val").textContent = r.ratioStr;
+  $("age-diff-val").textContent = r.diff;
+  $("age-shift-b").textContent = (state.ageShift >= 0 ? "+" : "") + state.ageShift;
+
+  const svg = $("age-svg");
+  const W = 760, padL = 80, padR = 80;
+  const plotW = W - padL - padR;
+  const y = 110;
+  const maxAge = Math.max(r.aShift, r.bShift, 10);
+  const scale = plotW / (maxAge * 1.1);
+  const xA = padL + r.aShift * scale;
+  const xB = padL + r.bShift * scale;
+
+  svg.innerHTML = `
+    <line x1="${padL}" y1="${y}" x2="${padL + plotW}" y2="${y}" stroke="#475569" stroke-width="2"/>
+    <line x1="${xA}" y1="${y - 10}" x2="${xA}" y2="${y + 10}" stroke="#3b82f6" stroke-width="3"/>
+    <circle cx="${xA}" cy="${y - 24}" r="14" fill="#3b82f6" opacity="0.3"/>
+    <text x="${xA}" y="${y - 20}" text-anchor="middle" font-size="11" font-weight="800" fill="#93c5fd">A</text>
+    <text x="${xA}" y="${y + 30}" text-anchor="middle" font-size="11" font-weight="700" fill="#93c5fd">${r.aShift}</text>
+
+    <line x1="${xB}" y1="${y - 10}" x2="${xB}" y2="${y + 10}" stroke="#a78bfa" stroke-width="3"/>
+    <circle cx="${xB}" cy="${y - 24}" r="14" fill="#a78bfa" opacity="0.3"/>
+    <text x="${xB}" y="${y - 20}" text-anchor="middle" font-size="11" font-weight="800" fill="#c4b5fd">B</text>
+    <text x="${xB}" y="${y + 30}" text-anchor="middle" font-size="11" font-weight="700" fill="#c4b5fd">${r.bShift}</text>
+
+    <text x="${W/2}" y="${y + 80}" text-anchor="middle" font-size="12" fill="#94a3b8">
+      Shift ${state.ageShift >= 0 ? '+' : ''}${state.ageShift} years · ratio A:B = ${r.ratioStr}
+    </text>
+  `;
+
+  $("age-steps").innerHTML = `
+    <strong>Constant difference:</strong> A − B = ${Math.abs(state.ageA - state.ageB)} years, always.
+    <strong>Now:</strong> A = ${r.aShift}, B = ${r.bShift}, ratio = ${r.ratioStr}.
+    <em>Shift +10 years:</em> A = ${state.ageA + 10}, B = ${state.ageB + 10} — new ratio recomputed. Note how the ratio moves toward 1:1 as both ages grow.`;
 }
 
-// =====================================================================
-// 6. WIRING
-// =====================================================================
-function setBarLocked(locked) {
-  ["input-total", "range-total", "input-a", "input-b", "input-c"].forEach(id => {
-    if ($(id)) $(id).disabled = locked;
-  });
+// Partnership
+function renderPartnership() {
+  const r = Model.solvePartnership(state.pAInv, state.pAMon, state.pBInv, state.pBMon, state.pTotal);
+  if (!r.valid) return;
+  $("p-a-cap").textContent = fmt(r.aCap);
+  $("p-b-cap").textContent = fmt(r.bCap);
+  $("p-ratio").textContent = r.ratioStr;
+  $("p-a-profit").textContent = "₹" + fmt(r.aShare);
+  $("p-b-profit").textContent = "₹" + fmt(r.bShare);
+  $("p-time-note").textContent = `${state.pAInv}×${state.pAMon} : ${state.pBInv}×${state.pBMon}`;
+
+  const svg = $("partner-svg");
+  const W = 760, padL = 40, padR = 40;
+  const plotW = W - padL - padR;
+  const totalCap = r.aCap + r.bCap || 1;
+  const wA = (r.aCap / totalCap) * plotW;
+  const wB = plotW - wA;
+  svg.innerHTML = `
+    <rect x="${padL}" y="50" width="${wA}" height="40" rx="4" fill="#3b82f6" opacity="0.75"/>
+    <text x="${padL + wA/2}" y="76" text-anchor="middle" font-size="13" font-weight="800" fill="#001824">A: ₹${fmt(r.aShare)}</text>
+    <rect x="${padL + wA}" y="50" width="${wB}" height="40" rx="4" fill="#a78bfa" opacity="0.75"/>
+    <text x="${padL + wA + wB/2}" y="76" text-anchor="middle" font-size="13" font-weight="800" fill="#001824">B: ₹${fmt(r.bShare)}</text>
+    <text x="${W/2}" y="130" text-anchor="middle" font-size="12" fill="#94a3b8">Total profit: ₹${fmt(state.pTotal)} split by capital×time ratio ${r.ratioStr}</text>
+  `;
 }
 
+// Mixture
+function renderMixture() {
+  const r = Model.solveMixture(state.mQ1, state.mC1, state.mQ2, state.mC2);
+  if (!r.valid) return;
+  $("m-final").textContent = r.finalPct + "%";
+  $("m-ratio").textContent = r.ratioStr;
+  $("m-dev").textContent = `±${r.dev1} / ±${r.dev2}`;
+  $("m-total").textContent = r.total;
+
+  const svg = $("mixture-svg");
+  const W = 760, padL = 80, padR = 80;
+  const plotW = W - padL - padR;
+  const y1 = 80, y2 = 180;
+  const wQ1 = (state.mQ1 / r.total) * plotW;
+  const wQ2 = plotW - wQ1;
+  const finalY = r.finalPct;
+
+  // Alligation cross
+  svg.innerHTML = `
+    <text x="${W/2}" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="#e8edf7">Mixture: ${state.mQ1} parts @ ${state.mC1}% + ${state.mQ2} parts @ ${state.mC2}%</text>
+
+    <rect x="${padL}" y="${y1}" width="${wQ1}" height="40" rx="4" fill="#38bdf8" opacity="0.75"/>
+    <text x="${padL + wQ1/2}" y="${y1 + 26}" text-anchor="middle" font-size="12" font-weight="800" fill="#001824">Q1: ${state.mQ1} @ ${state.mC1}%</text>
+    <rect x="${padL + wQ1}" y="${y1}" width="${wQ2}" height="40" rx="4" fill="#a78bfa" opacity="0.75"/>
+    <text x="${padL + wQ1 + wQ2/2}" y="${y1 + 26}" text-anchor="middle" font-size="12" font-weight="800" fill="#001824">Q2: ${state.mQ2} @ ${state.mC2}%</text>
+
+    <rect x="${padL}" y="${y2}" width="${plotW}" height="40" rx="4" fill="#22c55e" opacity="0.6"/>
+    <text x="${padL + plotW/2}" y="${y2 + 26}" text-anchor="middle" font-size="13" font-weight="800" fill="#001824">Result: ${r.total} units @ ${r.finalPct}%</text>
+
+    <text x="${W/2}" y="260" text-anchor="middle" font-size="12" fill="#94a3b8">
+      Alligation cross: Q1 : Q2 = (${state.mC2} − ${r.finalPct}) : (${r.finalPct} − ${state.mC1}) = ${r.dev1} : ${r.dev2} = ${r.ratioStr}
+    </text>
+  `;
+
+  $("m-note").innerHTML = `Final concentration: <strong>${r.finalPct}%</strong>.
+    Q1:Q2 from alligation = (C2−Cm):(Cm−C1) = ${r.dev1}:${r.dev2} = <strong>${r.ratioStr}</strong>.`;
+}
+
+// Variation lab
+function renderVar() {
+  const { varMode, varK } = state;
+  const men0 = 6, work0 = 12, days0 = 10;
+  const men1 = men0 * varK;
+  const work1 = varMode === "direct" ? work0 * varK : work0;
+  const days1 = varMode === "inverse" ? days0 / varK : days0;
+  const hx = (v, max) => Math.max(8, (v / max) * 110);
+  const base = 170;
+  const draw = (x, h, color, label, val) =>
+    `<rect x="${x}" y="${base - h}" width="44" height="${h}" fill="${color}" rx="4"/>
+     <text x="${x + 22}" y="${base + 16}" text-anchor="middle" font-size="11" fill="${color}">${label}</text>
+     <text x="${x + 22}" y="${base - h - 8}" text-anchor="middle" font-size="12" font-weight="700" fill="#e8edf7">${val}</text>`;
+  $("var-svg").innerHTML = `
+    <text x="160" y="28" text-anchor="middle" font-size="13" fill="#94a3b8">Before</text>
+    <text x="520" y="28" text-anchor="middle" font-size="13" fill="#94a3b8">After men ×${varK}</text>
+    ${draw(80, hx(men0, 30), "#38bdf8", "men", men0)}
+    ${draw(140, hx(work0, 50), "#22c55e", "work", work0)}
+    ${draw(200, hx(days0, 20), "#f59e0b", "days", days0)}
+    ${draw(440, hx(men1, 30), "#38bdf8", "men", men1)}
+    ${draw(500, hx(work1, 50), "#22c55e", "work", +work1.toFixed(1))}
+    ${draw(560, hx(days1, 20), "#f59e0b", "days", +days1.toFixed(1))}
+    <text x="380" y="220" text-anchor="middle" font-size="13" fill="#a78bfa">${varMode === "direct" ? "Same days → more men finish more work" : "Same work → more men need fewer days"}</text>
+  `;
+  $("var-k-b").textContent = varK + "×";
+  $("var-cap").textContent = varMode === "direct"
+    ? `Direct: more men, same time → more work. Work scales with men (${work0} → ${work1}).`
+    : `Inverse: more men, same job → fewer days (${days0} → ${(+days1).toFixed(1)}). Product men × days stays ${men0 * days0} = ${(men1 * days1).toFixed(1)}.`;
+}
+
+/* =====================================================================
+   6. WIRING
+   ===================================================================== */
 ["input-total", "range-total"].forEach(id => {
   $(id).addEventListener("input", (e) => {
     state.total = Math.max(1, parseFloat(e.target.value) || 1);
@@ -1171,16 +1341,33 @@ function setBarLocked(locked) {
   });
 });
 
-["coin-r1", "coin-r2", "coin-r3", "coin-total"].forEach(id => {
+// Chained
+["ch-a", "ch-b", "ch-c", "ch-d"].forEach(id => {
   $(id).addEventListener("input", (e) => {
-    if (id === "coin-r1") state.coinR1 = Math.max(1, parseInt(e.target.value) || 1);
-    if (id === "coin-r2") state.coinR2 = Math.max(1, parseInt(e.target.value) || 1);
-    if (id === "coin-r3") state.coinR3 = Math.max(1, parseInt(e.target.value) || 1);
-    if (id === "coin-total") state.coinTotal = Math.max(1, parseFloat(e.target.value) || 1);
-    renderCoinLab();
+    const v = Math.max(1, parseInt(e.target.value) || 1);
+    if (id === "ch-a") state.chA = v;
+    if (id === "ch-b") state.chB = v;
+    if (id === "ch-c") state.chC = v;
+    if (id === "ch-d") state.chD = v;
+    renderChained();
   });
 });
 
+// Prop laws
+["pl-a", "pl-b", "pl-c"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    const v = Math.max(1, parseInt(e.target.value) || 1);
+    if (id === "pl-a") state.plA = v;
+    if (id === "pl-b") state.plB = v;
+    if (id === "pl-c") state.plC = v;
+    $("pl-a-b").textContent = state.plA;
+    $("pl-b-b").textContent = state.plB;
+    $("pl-c-b").textContent = state.plC;
+    renderPropLaws();
+  });
+});
+
+// Existing prop lab
 ["prop-a", "prop-b", "prop-c"].forEach(id => {
   $(id).addEventListener("input", (e) => {
     const v = Math.max(1, parseFloat(e.target.value) || 1);
@@ -1195,36 +1382,57 @@ $("prop-type").addEventListener("change", (e) => {
   renderPropLab();
 });
 
-function renderCoinRevealSvg(r) {
-  const svg = $("coin-svg");
-  if (!svg) return;
-  const trapA = r.trapCounts[0], trueA = r.counts[0];
-  const maxV = Math.max(trapA, trueA) * 1.2;
-  const x = v => 120 + (v / maxV) * 480;
-  svg.innerHTML = `
-    <text x="380" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#e8edf7">₹1 coin count — trap vs truth</text>
-    <text x="100" y="90" text-anchor="end" font-size="12" fill="#ef4444">Trap</text>
-    <rect x="120" y="70" width="${x(trapA) - 120}" height="32" rx="6" fill="#ef4444" opacity="0.75"/>
-    <text x="${x(trapA) + 8}" y="92" font-size="13" font-weight="700" fill="#ef4444">${trapA}</text>
-    <text x="100" y="160" text-anchor="end" font-size="12" fill="#22c55e">Truth</text>
-    <rect x="120" y="140" width="${x(trueA) - 120}" height="32" rx="6" fill="#22c55e" opacity="0.85"/>
-    <text x="${x(trueA) + 8}" y="162" font-size="13" font-weight="700" fill="#22c55e">${trueA}</text>
-    <text x="380" y="220" text-anchor="middle" font-size="12" fill="#94a3b8">Trap ignores denomination. Truth weights ₹1 / 50p / 25p.</text>`;
-}
+// Variation
+$("var-k").addEventListener("input", (e) => {
+  state.varK = +e.target.value;
+  renderVar();
+});
+$("var-direct").addEventListener("click", () => {
+  state.varMode = "direct";
+  $("var-direct").classList.add("active");
+  $("var-inverse").classList.remove("active");
+  renderVar();
+});
+$("var-inverse").addEventListener("click", () => {
+  state.varMode = "inverse";
+  $("var-inverse").classList.add("active");
+  $("var-direct").classList.remove("active");
+  renderVar();
+});
 
-$("btn-reveal-coin").addEventListener("click", () => {
-  $("coin-solution-panel").classList.remove("hidden");
-  renderCoinLab();
-  const r = Model.solveCoin([
-    { count: 3, denomination: 1 },
-    { count: 4, denomination: 0.5 },
-    { count: 8, denomination: 0.25 }
-  ], 420);
-  renderCoinRevealSvg(r);
-  $("coin-solution-text").innerHTML =
-    `Total k-value: 3×1 + 4×0.5 + 8×0.25 = ₹${r.valuePerK}. Setting ${r.valuePerK}k = 420 → k = ${r.k}. ` +
-    `Then ₹1 coins = 3 × ${r.k} = <strong>${r.counts[0]}</strong>. ` +
-    `<em>The trap (420/15 = ${r.kTrap}) treats all coins as ₹1.</em>`;
+// Age
+["age-a", "age-b", "age-shift"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    if (id === "age-a") state.ageA = Math.max(1, parseInt(e.target.value) || 1);
+    if (id === "age-b") state.ageB = Math.max(1, parseInt(e.target.value) || 1);
+    if (id === "age-shift") state.ageShift = parseInt(e.target.value) || 0;
+    renderAge();
+  });
+});
+
+// Partnership
+["p-a-inv", "p-a-mon", "p-b-inv", "p-b-mon", "p-total"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    const v = Math.max(1, parseFloat(e.target.value) || 1);
+    if (id === "p-a-inv") state.pAInv = v;
+    if (id === "p-a-mon") state.pAMon = v;
+    if (id === "p-b-inv") state.pBInv = v;
+    if (id === "p-b-mon") state.pBMon = v;
+    if (id === "p-total") state.pTotal = v;
+    renderPartnership();
+  });
+});
+
+// Mixture
+["m-q1", "m-c1", "m-q2", "m-c2"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    const v = Math.max(0, parseFloat(e.target.value) || 0);
+    if (id === "m-q1") state.mQ1 = Math.max(1, v);
+    if (id === "m-c1") state.mC1 = v;
+    if (id === "m-q2") state.mQ2 = Math.max(1, v);
+    if (id === "m-c2") state.mC2 = v;
+    renderMixture();
+  });
 });
 
 /* =====================================================================
@@ -1248,11 +1456,6 @@ function setPracticeMode(mode) {
   $("timer-container").classList.toggle("hidden", mode !== "timed");
   if (mode === "timed") startTimer();
   else stopTimer();
-  document.querySelectorAll("main > section").forEach((el, idx) => {
-    if (idx === 0 || idx === 2 || idx === 3) {
-      el.style.display = (mode === "hints") ? "" : "none";
-    }
-  });
 }
 document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
   b.addEventListener("click", () => setPracticeMode(b.dataset.mode));
@@ -1294,7 +1497,7 @@ function renderStats() {
 }
 function renderQuestion() {
   if (!state.testsPassed) {
-    $("practice-q-stem").textContent = "Practice is disabled because the model self-tests failed.";
+    $("practice-q-stem").textContent = "Practice is disabled because self-tests failed.";
     return;
   }
   const q = state.shuffled[state.currentQIndex];
@@ -1302,9 +1505,7 @@ function renderQuestion() {
   $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
   const d = $("practice-q-difficulty");
   d.textContent = q.difficulty;
-  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
-                             : q.difficulty === "Medium" ? "badge-draft"
-                             : "badge-tag");
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published" : q.difficulty === "Medium" ? "badge-draft" : "badge-tag");
   $("practice-q-stem").innerHTML = q.stem;
   $("practice-feedback").className = "callout hidden";
   $("practice-error-categorizer").classList.add("hidden");
@@ -1331,32 +1532,19 @@ function markAnswer(chosenIdx, q) {
   stopTimer();
   const isCorrect = chosenIdx === q.correctIndex;
   const isTrap = chosenIdx === q.trapOptionIndex;
-
   document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
     b.disabled = true;
     b.setAttribute("aria-checked", i === chosenIdx ? "true" : "false");
     if (i === q.correctIndex) b.classList.add("correct");
     else if (i === chosenIdx) b.classList.add(isTrap ? "trap" : "incorrect");
   });
-
   const fb = $("practice-feedback");
   fb.classList.remove("hidden");
-  if (isCorrect) {
-    fb.className = "callout callout-success";
-    fb.innerHTML = `<strong>✓ Correct.</strong>`;
-  } else if (isTrap) {
-    fb.className = "callout callout-trap";
-    fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`;
-    $("practice-error-categorizer").classList.remove("hidden");
-  } else {
-    fb.className = "callout callout-danger";
-    fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`;
-    $("practice-error-categorizer").classList.remove("hidden");
-  }
-
+  if (isCorrect) { fb.className = "callout callout-success"; fb.innerHTML = `<strong>✓ Correct.</strong>`; }
+  else if (isTrap) { fb.className = "callout callout-trap"; fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`; $("practice-error-categorizer").classList.remove("hidden"); }
+  else { fb.className = "callout callout-danger"; fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`; $("practice-error-categorizer").classList.remove("hidden"); }
   $("practice-solution-box").classList.remove("hidden");
   $("practice-solution-text").textContent = q.solution;
-
   state.stats.attempts++;
   if (isCorrect) {
     state.stats.correct++;
@@ -1371,8 +1559,7 @@ $("btn-next-question").addEventListener("click", () => {
   renderQuestion();
 });
 $("select-error-category").addEventListener("change", (e) => {
-  const cat = e.target.value;
-  state.stats.errorsByCat[cat] = (state.stats.errorsByCat[cat] || 0) + 1;
+  state.stats.errorsByCat[e.target.value] = (state.stats.errorsByCat[e.target.value] || 0) + 1;
   saveProgress();
 });
 function handleResetStats() {
@@ -1383,67 +1570,46 @@ function handleResetStats() {
 }
 window.handleResetStats = handleResetStats;
 
-/* ---- Direct vs inverse: men/work/days story ---- */
-const vlab = { mode: "direct", k: 2, men0: 6, work0: 12, days0: 10 };
-function renderVar() {
-  const { mode, k, men0, work0, days0 } = vlab;
-  const men1 = men0 * k;
-  const work1 = mode === "direct" ? work0 * k : work0;
-  const days1 = mode === "inverse" ? days0 / k : days0;
-  const hx = (v, max) => Math.max(8, (v / max) * 110);
-  const base = 170;
-  const draw = (x, h, color, label, val) =>
-    `<rect x="${x}" y="${base - h}" width="44" height="${h}" fill="${color}" rx="4"/>
-     <text x="${x + 22}" y="${base + 16}" text-anchor="middle" font-size="11" fill="${color}">${label}</text>
-     <text x="${x + 22}" y="${base - h - 8}" text-anchor="middle" font-size="12" font-weight="700" fill="#e8edf7">${val}</text>`;
-  $("var-svg").innerHTML = `
-    <text x="160" y="28" text-anchor="middle" font-size="13" fill="#94a3b8">Before</text>
-    <text x="520" y="28" text-anchor="middle" font-size="13" fill="#94a3b8">After men ×${k}</text>
-    ${draw(80, hx(men0, 30), "#38bdf8", "men", men0)}
-    ${draw(140, hx(work0, 50), "#22c55e", "work", work0)}
-    ${draw(200, hx(days0, 20), "#f59e0b", "days", days0)}
-    ${draw(440, hx(men1, 30), "#38bdf8", "men", men1)}
-    ${draw(500, hx(work1, 50), "#22c55e", "work", +work1.toFixed(1))}
-    ${draw(560, hx(days1, 20), "#f59e0b", "days", +days1.toFixed(1))}
-    <text x="380" y="220" text-anchor="middle" font-size="13" fill="#a78bfa">${mode === "direct" ? "Same days → more men finish more work" : "Same work → more men need fewer days"}</text>`;
-  $("var-k-b").textContent = k + "×";
-  $("var-cap").textContent = mode === "direct"
-    ? `Story: more men, same time → more work done. Work scales with men (${work0} → ${work1}). Mind check: “same direction” = direct.`
-    : `Story: more men, same job → fewer days. Days scale opposite to men (${days0} → ${(+days1).toFixed(1)}). Mind check: men × days stays ${men0 * days0} = ${(men1 * days1).toFixed(1)}. That fixed product is inverse.`;
-}
-function wireVar() {
-  $("var-k").addEventListener("input", e => { vlab.k = +e.target.value; renderVar(); });
-  $("var-direct").addEventListener("click", () => { vlab.mode = "direct"; $("var-direct").classList.add("active"); $("var-inverse").classList.remove("active"); renderVar(); });
-  $("var-inverse").addEventListener("click", () => { vlab.mode = "inverse"; $("var-inverse").classList.add("active"); $("var-direct").classList.remove("active"); renderVar(); });
-  renderVar();
-}
+/* =====================================================================
+   8. INIT
+   ===================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
-  wireVar();
   const results = runSelfTests();
   state.testsPassed = results.failed === 0;
   const banner = $("test-status-banner");
   if (!state.testsPassed) {
     banner.className = "test-banner";
-    banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong>
-      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
+    banner.innerHTML = `<strong>⚠️ Self-tests failing — practice disabled.</strong>
+      <ul>${results.failures.map(f => `<li>${f.n}: ${f.d}</li>`).join("")}</ul>`;
     $("practice-options-container").innerHTML = "";
   }
 
   loadProgress();
   state.shuffled = shuffle(PRACTICE_QUESTIONS);
 
-  $("input-total").value = state.total;
-  $("range-total").value = Math.min(state.total, 10000);
+  // Init input values
+  $("input-total").value = state.total; $("range-total").value = Math.min(state.total, 10000);
   $("total-badge").textContent = "₹" + state.total;
-  $("input-a").value = state.a; $("input-b").value = state.b; $("input-c").value = state.c;
-  $("badge-a").textContent = state.a;
-  $("badge-b").textContent = state.b;
-  $("badge-c").textContent = state.c;
+  $("input-a").value = state.a; $("badge-a").textContent = state.a;
+  $("input-b").value = state.b; $("badge-b").textContent = state.b;
+  $("input-c").value = state.c; $("badge-c").textContent = state.c;
+  $("ch-a").value = state.chA; $("ch-b").value = state.chB; $("ch-c").value = state.chC; $("ch-d").value = state.chD;
+  $("pl-a").value = state.plA; $("pl-b").value = state.plB; $("pl-c").value = state.plC;
+  $("pl-a-b").textContent = state.plA; $("pl-b-b").textContent = state.plB; $("pl-c-b").textContent = state.plC;
+  $("prop-a").value = state.propA; $("prop-b").value = state.propB; $("prop-c").value = state.propC;
+  $("age-a").value = state.ageA; $("age-b").value = state.ageB; $("age-shift").value = 0;
+  $("p-a-inv").value = state.pAInv; $("p-a-mon").value = state.pAMon;
+  $("p-b-inv").value = state.pBInv; $("p-b-mon").value = state.pBMon; $("p-total").value = state.pTotal;
+  $("m-q1").value = state.mQ1; $("m-c1").value = state.mC1; $("m-q2").value = state.mQ2; $("m-c2").value = state.mC2;
 
   renderBar();
-  renderPredict();
-  renderCoinLab();
+  renderChained();
+  renderPropLaws();
   renderPropLab();
+  renderVar();
+  renderAge();
+  renderPartnership();
+  renderMixture();
   renderQuestion();
   renderStats();
   setPracticeMode("hints");

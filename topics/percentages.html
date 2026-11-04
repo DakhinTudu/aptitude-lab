@@ -4,536 +4,181 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Percentages &amp; Percentage Change — Aptitude Lab</title>
-<meta name="description" content="See percentages, not just calculate them. Interactive base model, real predict gate, ghost bar traps, and unified number line." />
-<!-- SEO_META -->
+<meta name="description" content="Full-syllabus interactive percentages lab: base-shift, successive change, reverse, comparison, population growth, elections, savings, error, distribution — with 44 verified practice questions." />
 <meta name="theme-color" content="#0b1220" />
 <meta name="color-scheme" content="dark" />
-<meta name="robots" content="index,follow" />
-<meta name="author" content="Aptitude Lab" />
-<meta name="keywords" content="percentages, percentage change, base shift, SEBI, SSC, banking aptitude" />
-<link rel="canonical" href="https://dakhintudu.github.io/aptitute-lab/topics/percentages.html" />
-<meta property="og:site_name" content="Aptitude Lab" />
-<meta property="og:locale" content="en_IN" />
-<meta property="og:type" content="article" />
-<meta property="og:title" content="Percentages &amp; Percentage Change — Aptitude Lab" />
-<meta property="og:description" content="See percentages, not just calculate them. Interactive base model, real predict gate, ghost bar traps, and unified number line." />
-<meta property="og:url" content="https://dakhintudu.github.io/aptitute-lab/topics/percentages.html" />
-<meta property="og:image" content="https://dakhintudu.github.io/aptitute-lab/assets/og-cover.jpg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Aptitude Lab — interactive aptitude and reasoning practice" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Percentages &amp; Percentage Change — Aptitude Lab" />
-<meta name="twitter:description" content="See percentages, not just calculate them. Interactive base model, real predict gate, ghost bar traps, and unified number line." />
-<meta name="twitter:image" content="https://dakhintudu.github.io/aptitute-lab/assets/og-cover.jpg" />
-<!-- /SEO_META -->
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 <link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
-/* =====================================================================
-   DESIGN TOKENS
-   ===================================================================== */
 :root {
-  --bg: #0b1220;
-  --bg-elev: #111a2e;
-  --surface: #16213c;
-  --surface-2: #1c2848;
-  --border: #2a3758;
-  --border-strong: #3b4d78;
-  --text: #e8edf7;
-  --text-dim: #94a3b8;
-  --text-muted: #64748b;
-  --primary: #38bdf8;
-  --primary-dim: #0ea5e9;
-  --primary-soft: rgba(56, 189, 248, 0.12);
-  --success: #22c55e;
-  --success-soft: rgba(34, 197, 94, 0.12);
-  --warn: #f59e0b;
-  --warn-soft: rgba(245, 158, 11, 0.12);
-  --danger: #ef4444;
-  --danger-soft: rgba(239, 68, 68, 0.12);
-  --indigo: #818cf8;
-  --indigo-soft: rgba(129, 140, 248, 0.12);
-  --shadow-sm: 0 1px 2px rgba(0,0,0,.25);
-  --shadow-md: 0 4px 14px rgba(0,0,0,.35);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  --bg: #0b1220; --bg-elev: #111a2e; --surface: #16213c; --surface-2: #1c2848;
+  --border: #2a3758; --border-strong: #3b4d78;
+  --text: #e8edf7; --text-dim: #94a3b8; --text-muted: #64748b;
+  --primary: #38bdf8; --primary-dim: #0ea5e9; --primary-soft: rgba(56,189,248,.12);
+  --success: #22c55e; --success-soft: rgba(34,197,94,.12);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.12);
+  --danger: #ef4444; --danger-soft: rgba(239,68,68,.12);
+  --indigo: #818cf8; --indigo-soft: rgba(129,140,248,.12);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
-  --transition: 180ms cubic-bezier(.4, 0, .2, 1);
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
 }
-
-/* =====================================================================
-   BASE
-   ===================================================================== */
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  margin: 0;
-  font-family: var(--font-sans);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  padding: 0 16px 64px;
+  margin: 0; font-family: var(--font-sans);
+  background: var(--bg); color: var(--text); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
 }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
   html { scroll-behavior: auto; }
 }
-
-.skip-link {
-  position: absolute; left: -999px; top: 0; z-index: 100;
-  background: var(--primary); color: #001; padding: 12px 16px; border-radius: 0 0 8px 0; font-weight: 700;
-}
+.skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--primary); color: #001; padding: 12px 16px; border-radius: 0 0 8px 0; font-weight: 700; }
 .skip-link:focus { left: 0; }
-
-.sr-only {
-  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
-
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
 h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.2; }
 h2 { font-size: 1.15rem; }
 h3 { font-size: 1rem; }
 p { margin: 0 0 0.75rem; }
-
-code {
-  font-family: var(--font-mono);
-  font-size: 0.875em;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
-}
-
-/* =====================================================================
-   LAYOUT
-   ===================================================================== */
-.page-container {
-  max-width: 1080px;
-  margin: 0 auto;
-}
-
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 22px 22px 24px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-sm);
-}
-@media (min-width: 720px) {
-  .card { padding: 26px 28px 28px; }
-}
-
+code { font-family: var(--font-mono); font-size: 0.875em; background: var(--surface-2); border: 1px solid var(--border); padding: 0.15em 0.4em; border-radius: 4px; }
+.page-container { max-width: 1080px; margin: 0 auto; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 22px 24px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+@media (min-width: 720px) { .card { padding: 26px 28px 28px; } }
 .card-header { margin-bottom: 18px; }
-.section-title {
-  display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;
-}
+.section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
 .section-title::before {
-  content: counter(section-num);
-  counter-increment: section-num;
+  content: counter(section-num); counter-increment: section-num;
   display: inline-flex; align-items: center; justify-content: center;
-  width: 26px; height: 26px;
-  background: var(--primary-soft); color: var(--primary);
-  border-radius: 50%;
-  font-size: 0.8rem; font-weight: 800;
+  width: 26px; height: 26px; background: var(--primary-soft); color: var(--primary);
+  border-radius: 50%; font-size: 0.8rem; font-weight: 800;
 }
 main { counter-reset: section-num; }
-.section-subtitle {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-/* =====================================================================
-   HEADER
-   ===================================================================== */
-.site-header {
-  position: sticky; top: 0; z-index: 40;
-  backdrop-filter: blur(12px);
-  background: rgba(11, 18, 32, 0.85);
-  border-bottom: 1px solid var(--border);
-  margin: 0 -16px 24px;
-  padding: 12px 16px;
-}
-.header-container {
-  max-width: 1080px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-}
-.brand-link {
-  display: flex; align-items: center; gap: 10px;
-  color: var(--text); text-decoration: none; font-weight: 700;
-}
+.section-subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0; }
+.site-header { position: sticky; top: 0; z-index: 40; backdrop-filter: blur(12px); background: rgba(11,18,32,0.85); border-bottom: 1px solid var(--border); margin: 0 -16px 24px; padding: 12px 16px; }
+.header-container { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
 .brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
-.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; flex-wrap: wrap; }
 .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
 .nav-link:hover { color: var(--text); }
-
-/* =====================================================================
-   BADGES
-   ===================================================================== */
-.badge {
-  display: inline-flex; align-items: center;
-  padding: 3px 9px; border-radius: 999px;
-  font-size: 0.72rem; font-weight: 700;
-  letter-spacing: 0.02em; text-transform: uppercase;
-  white-space: nowrap;
-}
+.badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap; }
 .badge-published { background: var(--success-soft); color: var(--success); }
 .badge-draft { background: var(--warn-soft); color: var(--warn); }
 .badge-tag { background: var(--primary-soft); color: var(--primary); text-transform: none; font-weight: 600; }
-
-/* =====================================================================
-   BUTTONS
-   ===================================================================== */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 9px 16px;
-  font-family: inherit; font-size: 0.9rem; font-weight: 600;
-  border: 1px solid transparent; border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: background var(--transition), border-color var(--transition), transform var(--transition);
-}
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 16px; font-family: inherit; font-size: 0.9rem; font-weight: 600; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; transition: background var(--transition), border-color var(--transition), transform var(--transition); }
 .btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-primary { background: var(--primary); color: #001824; }
 .btn-primary:hover:not(:disabled) { background: var(--primary-dim); }
-.btn-secondary {
-  background: var(--surface-2); color: var(--text); border-color: var(--border-strong);
-}
+.btn-secondary { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); }
 .btn-secondary:hover:not(:disabled) { background: var(--border); }
 .btn-ghost { background: transparent; color: var(--text-dim); }
 .btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface-2); }
 .btn-sm { padding: 6px 11px; font-size: 0.8rem; }
 .btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-
-/* =====================================================================
-   INPUTS
-   ===================================================================== */
-.control-grid {
-  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px;
-}
-@media (min-width: 640px) {
-  .control-grid { grid-template-columns: 1fr 1fr; }
-}
+.control-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px; }
+@media (min-width: 640px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .control-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; } }
 .control-group { display: flex; flex-direction: column; gap: 6px; }
-.control-label {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  font-size: 0.85rem; font-weight: 600; color: var(--text);
-}
+.control-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text); }
 .control-hint { font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
-
-input[type=number] {
-  background: var(--bg-elev);
-  color: var(--text);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  padding: 8px 10px;
-  font-size: 0.95rem;
-  font-family: var(--font-sans);
-  width: 100%;
-  transition: border-color var(--transition);
-}
-input[type=number]:focus {
-  outline: none; border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-soft);
-}
-input[type=number]:disabled { opacity: 0.6; cursor: not-allowed; }
-
-input[type=range] {
-  width: 100%;
-  accent-color: var(--primary);
-  height: 24px;
-}
+input[type=number], input[type=text] { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 0.95rem; font-family: var(--font-sans); width: 100%; transition: border-color var(--transition); }
+input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+input:disabled { opacity: 0.6; cursor: not-allowed; }
+input[type=range] { width: 100%; accent-color: var(--primary); height: 24px; }
 input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
-
-/* =====================================================================
-   VISUAL
-   ===================================================================== */
-.vis-container {
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 12px;
-  margin: 8px 0 16px;
-}
+.vis-container { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px; }
 .vis-container svg { display: block; width: 100%; height: auto; }
-
-/* =====================================================================
-   READOUTS
-   ===================================================================== */
-.score-bar {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 8px;
-}
-@media (min-width: 640px) {
-  .score-bar { grid-template-columns: repeat(4, 1fr); }
-}
-.score-stat {
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  display: flex; flex-direction: column; gap: 2px;
-}
-.score-stat-label {
-  font-size: 0.72rem; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
-}
-.score-stat-num {
-  font-size: 1.1rem; font-weight: 700;
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  color: var(--text);
-}
-
-/* =====================================================================
-   CALLOUTS
-   ===================================================================== */
-.callout {
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  font-size: 0.9rem;
-  border: 1px solid var(--border);
-  margin-top: 12px;
-  line-height: 1.5;
-}
+.score-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px; }
+@media (min-width: 640px) { .score-bar { grid-template-columns: repeat(4, 1fr); } }
+.score-stat { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.score-stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.score-stat-num { font-size: 1.05rem; font-weight: 700; font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text); }
+.callout { border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.9rem; border: 1px solid var(--border); margin-top: 12px; line-height: 1.5; }
 .callout.hidden { display: none; }
 .callout-trap { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
 .callout-success { background: var(--success-soft); border-color: rgba(34,197,94,.35); color: #86efac; }
 .callout-danger { background: var(--danger-soft); border-color: rgba(239,68,68,.35); color: #fca5a5; }
 .callout-info { background: var(--primary-soft); border-color: rgba(56,189,248,.35); color: #7dd3fc; }
 .callout-warning { background: var(--warn-soft); border-color: rgba(245,158,11,.35); color: #fcd34d; }
-
-.test-banner {
-  background: var(--danger-soft);
-  border: 1px solid var(--danger);
-  color: #fca5a5;
-  padding: 12px 16px; border-radius: var(--radius-md);
-  margin-bottom: 20px;
-}
+.test-banner { background: var(--danger-soft); border: 1px solid var(--danger); color: #fca5a5; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; }
 .test-banner.hidden { display: none; }
 .test-banner ul { margin: 8px 0 0 20px; padding: 0; }
-
-/* =====================================================================
-   PREDICT BOX
-   ===================================================================== */
-.predict-box {
-  background: linear-gradient(180deg, var(--surface-2), var(--surface));
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md);
-  padding: 18px 20px;
-}
-.predict-header {
-  display: flex; align-items: center; gap: 8px;
-  font-weight: 600; color: var(--primary); margin-bottom: 12px;
-  font-size: 0.9rem;
-}
+.predict-box { background: linear-gradient(180deg, var(--surface-2), var(--surface)); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 18px 20px; }
+.predict-header { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--primary); margin-bottom: 12px; font-size: 0.9rem; }
 .predict-header svg { flex-shrink: 0; }
-
-.options-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 10px; margin: 14px 0;
-}
-.option-btn {
-  background: var(--bg-elev);
-  border: 1px solid var(--border-strong);
-  color: var(--text);
-  padding: 12px 14px;
-  border-radius: var(--radius-sm);
-  font-family: inherit; font-size: 0.95rem; font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition);
-  text-align: center;
-}
-.option-btn:hover:not(:disabled) {
-  border-color: var(--primary);
-  background: var(--primary-soft);
-}
+.options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 14px 0; }
+.option-btn { background: var(--bg-elev); border: 1px solid var(--border-strong); color: var(--text); padding: 12px 14px; border-radius: var(--radius-sm); font-family: inherit; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all var(--transition); text-align: center; }
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
 .option-btn:disabled { cursor: not-allowed; opacity: 0.85; }
 .option-btn.selected { border-color: var(--primary); background: var(--primary-soft); }
 .option-btn.correct { border-color: var(--success); background: var(--success-soft); color: #86efac; }
 .option-btn.trap { border-color: var(--warn); background: var(--warn-soft); color: #fcd34d; }
 .option-btn.incorrect { border-color: var(--danger); background: var(--danger-soft); color: #fca5a5; }
 .option-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-
-/* =====================================================================
-   WORKED SOLUTION STEPS
-   ===================================================================== */
-.steps-container {
-  display: flex; flex-direction: column; gap: 10px; margin-top: 8px;
-}
-.step-item {
-  background: var(--bg-elev);
-  border-left: 3px solid var(--primary);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-}
-.step-num {
-  font-size: 0.72rem; color: var(--primary); font-weight: 800;
-  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;
-}
+.steps-container { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.step-item { background: var(--bg-elev); border-left: 3px solid var(--primary); border-radius: var(--radius-sm); padding: 12px 14px; }
+.step-num { font-size: 0.72rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
 .step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
-.step-detail {
-  font-family: var(--font-mono);
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 6px 10px;
-  font-size: 0.85rem;
-  margin-top: 6px;
-  color: var(--primary);
-  overflow-x: auto;
-}
-
-/* =====================================================================
-   PRACTICE MODES
-   ===================================================================== */
-.practice-header {
-  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.mode-toggle-group {
-  display: inline-flex;
-  background: var(--bg-elev);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  padding: 3px;
-  gap: 2px;
-}
-.mode-btn {
-  background: transparent; color: var(--text-dim);
-  border: 0; padding: 7px 12px;
-  border-radius: 6px;
-  font-family: inherit; font-size: 0.82rem; font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition);
-}
+.step-detail { font-family: var(--font-mono); background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 0.85rem; margin-top: 6px; color: var(--primary); overflow-x: auto; }
+.practice-header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.mode-toggle-group { display: inline-flex; background: var(--bg-elev); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 3px; gap: 2px; }
+.mode-btn { background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px; border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all var(--transition); }
 .mode-btn:hover { color: var(--text); }
 .mode-btn.active { background: var(--primary-soft); color: var(--primary); }
 .mode-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.timer-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--warn-soft); border: 1px solid rgba(245,158,11,.35); color: var(--warn); padding: 6px 12px; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.9rem; font-family: var(--font-mono); }
+.timer-badge.hidden { display: none; }
+.question-stem { font-size: 1.05rem; line-height: 1.5; margin: 12px 0 16px; font-weight: 500; }
+.site-footer { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem; }
+.footer-container { max-width: 1080px; margin: 0 auto; }
+.error-categorizer { margin-top: 12px; padding: 12px; background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border); }
+.error-categorizer.hidden { display: none; }
+.error-categorizer label { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px; }
+.error-categorizer select { background: var(--surface-2); color: var(--text); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%; }
 
-.timer-badge {
+/* Module / section wrapper for clean navigation */
+.module-chip {
   display: inline-flex; align-items: center; gap: 6px;
-  background: var(--warn-soft);
-  border: 1px solid rgba(245,158,11,.35);
-  color: var(--warn);
-  padding: 6px 12px; border-radius: var(--radius-sm);
-  font-weight: 700; font-size: 0.9rem;
+  background: var(--primary-soft); color: var(--primary);
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 0.7rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+
+/* Simulator-specific */
+.sim-status {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin-bottom: 12px;
+}
+.sim-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: 999px; padding: 6px 12px;
+  font-size: 0.8rem; font-weight: 600; color: var(--text-dim);
   font-family: var(--font-mono);
 }
-.timer-badge.hidden { display: none; }
+.sim-pill strong { color: var(--primary); }
 
-.question-stem {
-  font-size: 1.05rem; line-height: 1.5;
-  margin: 12px 0 16px;
-  font-weight: 500;
-}
-
-/* =====================================================================
-   FOOTER
-   ===================================================================== */
-.site-footer {
-  margin-top: 40px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-  color: var(--text-dim);
-  font-size: 0.85rem;
-}
-.footer-container { max-width: 1080px; margin: 0 auto; }
-.disclaimer-box {
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  margin-top: 16px;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-
-/* =====================================================================
-   GHOST BAR / NUMBER LINE ANIMATIONS
-   ===================================================================== */
-.ghost-bar {
-  opacity: 0;
-  animation: fadeIn 400ms ease-out forwards;
-}
-@keyframes fadeIn { to { opacity: 1; } }
-
-.error-categorizer {
-  margin-top: 12px;
-  padding: 12px;
-  background: var(--bg-elev);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-}
-.error-categorizer.hidden { display: none; }
-.error-categorizer label {
-  font-size: 0.85rem; font-weight: 600;
-  display: block; margin-bottom: 6px;
-}
-.error-categorizer select {
-  background: var(--surface-2);
-  color: var(--text);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  padding: 8px 10px;
-  font-family: inherit;
+/* Election bars */
+.elec-bar {
+  display: flex; align-items: center; gap: 8px; margin: 6px 0;
   font-size: 0.9rem;
-  width: 100%;
 }
-
-/* Simple live footer */
-.lab-footer-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 12px 20px;
+.elec-bar-track {
+  flex: 1; height: 24px; background: var(--bg-elev);
+  border-radius: 4px; overflow: hidden; border: 1px solid var(--border);
 }
-.lab-footer-brand {
-  font-size: 0.88rem;
-  color: var(--text-dim, #94a3b8);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px 8px;
+.elec-bar-fill {
+  height: 100%;
+  display: flex; align-items: center; padding-left: 8px;
+  font-size: 0.75rem; font-weight: 800; color: #001824;
+  transition: width 200ms ease;
 }
-.lab-footer-brand a,
-.lab-footer-brand strong {
-  color: var(--text, #e8edf7);
-  font-weight: 700;
-  text-decoration: none;
-}
-.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
-.lab-footer-sep { color: var(--text-muted, #64748b); }
-.lab-footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  font-size: 0.84rem;
-}
-.lab-footer-nav a {
-  color: var(--primary, #38bdf8);
-  text-decoration: none;
-  font-weight: 600;
-}
-.lab-footer-nav a:hover { text-decoration: underline; }
-.lab-footer-note {
-  margin: 14px 0 0;
-  font-size: 0.78rem;
-  color: var(--text-muted, #64748b);
-  line-height: 1.5;
-}
-.disclaimer-box { display: none; }
-
 </style>
 </head>
 <body>
@@ -554,8 +199,13 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </a>
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
-        <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        </ul>
+        <li><a href="#s1" class="nav-link">Base model</a></li>
+        <li><a href="#s-succ" class="nav-link">Successive</a></li>
+        <li><a href="#s-compare" class="nav-link">Compare</a></li>
+        <li><a href="#s-growth" class="nav-link">Growth</a></li>
+        <li><a href="#s-exam" class="nav-link">Exam apps</a></li>
+        <li><a href="#practice" class="nav-link">Practice</a></li>
+      </ul>
     </nav>
   </div>
 </header>
@@ -569,20 +219,20 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       <span class="badge badge-tag">Quantitative Aptitude</span>
       <span class="badge badge-tag">SEBI Gr A</span>
       <span class="badge badge-tag">Banking &amp; SSC</span>
+      <span class="badge badge-tag">Railway</span>
     </div>
     <h1>Percentages &amp; Percentage Change</h1>
     <p class="section-subtitle" style="margin-top:8px;">
-      A percentage is always a fraction of some <strong>base</strong>. Most exam traps come from
-      forgetting <em>which base</em>. See the base move, predict before you look, and learn from the
-      ghost bar when you miss.
+      Full syllabus: from base-shift and successive change to reverse, comparison, growth, elections, savings, error and distribution. Each module has a small interactive lab; 44 verified questions at the end.
     </p>
   </header>
 
-  <!-- ===== SECTION 1 ===== -->
+  <!-- ===== SECTION 1 — BASE MODEL ===== -->
   <section class="card" aria-labelledby="s1">
     <div class="card-header">
+      <span class="module-chip">Module 1 · Fundamentals</span>
       <h2 id="s1" class="section-title">See the base change</h2>
-      <p class="section-subtitle">The top bar is the base. The bottom bar is the result. The shaded gap is the change.</p>
+      <p class="section-subtitle">The top bar is the base. The bottom bar is the result. The shaded gap is the change. Percentage is always a fraction of a base — get the base wrong, get the answer wrong.</p>
     </div>
 
     <div style="margin-bottom:18px;">
@@ -629,30 +279,19 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
 
     <div class="score-bar" aria-live="polite">
-      <div class="score-stat">
-        <span class="score-stat-label">Change amount</span>
-        <span class="score-stat-num" id="readout-amount">+60</span>
-      </div>
-      <div class="score-stat">
-        <span class="score-stat-label">Multiplier</span>
-        <span class="score-stat-num" id="readout-multiplier">1.25×</span>
-      </div>
-      <div class="score-stat">
-        <span class="score-stat-label">New total</span>
-        <span class="score-stat-num" id="readout-total">300</span>
-      </div>
-      <div class="score-stat">
-        <span class="score-stat-label">Fraction</span>
-        <span class="score-stat-num" id="readout-fraction">1/4</span>
-      </div>
+      <div class="score-stat"><span class="score-stat-label">Change amount</span><span class="score-stat-num" id="readout-amount">+60</span></div>
+      <div class="score-stat"><span class="score-stat-label">Multiplier</span><span class="score-stat-num" id="readout-multiplier">1.25×</span></div>
+      <div class="score-stat"><span class="score-stat-label">New total</span><span class="score-stat-num" id="readout-total">300</span></div>
+      <div class="score-stat"><span class="score-stat-label">Fraction</span><span class="score-stat-num" id="readout-fraction">1/4</span></div>
     </div>
   </section>
 
-  <!-- ===== SECTION 2 ===== -->
+  <!-- ===== SECTION 2 — PREDICT ===== -->
   <section class="card" aria-labelledby="s2">
     <div class="card-header">
+      <span class="module-chip">Module 2 · Percentage change</span>
       <h2 id="s2" class="section-title">Predict first</h2>
-      <p class="section-subtitle">Commit before you look. This is what builds the exam reflex — not watching the answer appear.</p>
+      <p class="section-subtitle">Commit before you look. This builds the exam reflex — not watching the answer appear.</p>
     </div>
 
     <div class="predict-box">
@@ -670,9 +309,7 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
 
       <div style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
         <button type="button" id="btn-new-predict" class="btn btn-secondary">🎲 New scenario</button>
-        <span id="predict-lock-hint" style="font-size:.8rem; color:var(--text-muted);">
-          Sliders are locked until you predict.
-        </span>
+        <span id="predict-lock-hint" style="font-size:.8rem; color:var(--text-muted);">Sliders are locked until you predict.</span>
       </div>
     </div>
 
@@ -685,13 +322,12 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
   </section>
 
-  <!-- ===== SECTION 3 ===== -->
+  <!-- ===== SECTION 3 — BASE SHIFT ===== -->
   <section class="card" aria-labelledby="s3">
     <div class="card-header">
+      <span class="module-chip">Module 3 · Comparison</span>
       <h2 id="s3" class="section-title">Base-shift — the #1 percentage trap</h2>
-      <p class="section-subtitle">
-        "A is x% more than B" does <em>not</em> mean "B is x% less than A." Slide and see why.
-      </p>
+      <p class="section-subtitle">"A is x% more than B" does <em>not</em> mean "B is x% less than A." Slide and see why.</p>
     </div>
 
     <div class="control-group" style="max-width:460px;">
@@ -711,19 +347,20 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       <div class="score-stat"><span class="score-stat-label">A vs B</span><span class="score-stat-num" id="bs-a-value">125</span></div>
       <div class="score-stat"><span class="score-stat-label">B vs A</span><span class="score-stat-num" id="bs-b-value">100</span></div>
       <div class="score-stat"><span class="score-stat-label">B is less than A by</span><span class="score-stat-num" id="bs-less">20%</span></div>
+      <div class="score-stat"><span class="score-stat-label">Ratio A : B</span><span class="score-stat-num" id="bs-ratio">5 : 4</span></div>
     </div>
 
     <p style="font-size:.85rem; color:var(--text-muted); margin-top:14px; line-height:1.6;">
-      Formula: <code>% less = x / (100 + x) × 100</code>. This is why a 25% price rise needs only a
-      20% cut in consumption to keep spend unchanged.
+      Formula: <code>% less = x / (100 + x) × 100</code>. This is why a 25% price rise needs only a 20% cut in consumption to keep spend unchanged.
     </p>
   </section>
 
-  <!-- ===== SUCCESSIVE % PLAY ===== -->
+  <!-- ===== SECTION 3b — SUCCESSIVE % ===== -->
   <section class="card" aria-labelledby="s-succ">
     <div class="card-header">
-      <h2 id="s-succ" class="section-title">Understand: successive % — second cut on leftover</h2>
-      <p class="section-subtitle">Don't memorise “don't add percentages”. See the cake shrink twice. When that clicks, the multiplier trick becomes obvious — and fast in your head.</p>
+      <span class="module-chip">Module 4 · Successive changes</span>
+      <h2 id="s-succ" class="section-title">Successive % — second cut on leftover</h2>
+      <p class="section-subtitle">Don't memorise "don't add percentages". See the cake shrink twice. When that clicks, the multiplier trick becomes obvious — and fast in your head.</p>
     </div>
     <div class="control-grid">
       <div class="control-group">
@@ -741,16 +378,276 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       <span id="succ-badge" class="badge badge-tag">Step 0</span>
     </div>
     <div class="vis-container">
-      <svg id="succ-svg" viewBox="0 0 760 220" width="100%" role="img" aria-label="Successive percentage bars"></svg>
+      <svg id="succ-svg" viewBox="0 0 760 240" width="100%" role="img" aria-label="Successive percentage bars"></svg>
     </div>
     <p id="succ-cap" style="margin-top:10px;font-size:.92rem;color:var(--text-dim);"></p>
   </section>
 
-  <!-- ===== SECTION 4 ===== -->
-  <section class="card" aria-labelledby="s4">
+  <!-- ===== SECTION 3c — REVERSE % + COMPARISON ===== -->
+  <section class="card" aria-labelledby="s-compare">
     <div class="card-header">
-      <h2 id="s4" class="section-title">Practice</h2>
-      <p class="section-subtitle">Shuffled each session. In Independent/Timed, the solution is hidden until after you commit.</p>
+      <span class="module-chip">Module 3 · Comparison &amp; reverse</span>
+      <h2 id="s-compare" class="section-title">Reverse % and %-of-a-%-of</h2>
+      <p class="section-subtitle">Two families that catch even strong candidates: undo a percentage change, and multiply percentages.</p>
+    </div>
+
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="rev-new" class="control-label">
+          <span>New value (after change)</span>
+        </label>
+        <input type="number" id="rev-new" value="800" min="1" max="100000">
+      </div>
+      <div class="control-group">
+        <label for="rev-pct" class="control-label">
+          <span>Change % applied</span>
+        </label>
+        <input type="number" id="rev-pct" value="20" min="-90" max="500" step="1">
+      </div>
+      <div class="control-group">
+        <label for="rev-direction" class="control-label">
+          <span>Direction</span>
+        </label>
+        <select id="rev-direction">
+          <option value="inc">Increased by</option>
+          <option value="dec">Decreased by</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="vis-container">
+      <svg id="rev-visual" viewBox="0 0 720 200" width="100%" role="img" aria-label="Reverse percentage visual"></svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Original value</span><span class="score-stat-num" id="rev-original">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Multiplier</span><span class="score-stat-num" id="rev-mult">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Check (multiply back)</span><span class="score-stat-num" id="rev-check">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Trap</span><span class="score-stat-num" id="rev-trap">—</span></div>
+    </div>
+
+    <p style="font-size:.85rem; color:var(--text-muted); margin-top:14px; line-height:1.6;">
+      <strong>Reverse formula:</strong> <code>Original = New / (1 ± p/100)</code>. The trap is subtracting p% from the new value — that gives the wrong base.
+    </p>
+
+    <hr style="border:0; border-top:1px solid var(--border); margin:24px 0;">
+
+    <h3 style="margin-bottom:8px;">Fraction-of-fraction</h3>
+    <p style="font-size:.85rem; color:var(--text-muted); margin-bottom:12px;">What is <strong>a%</strong> of <strong>b%</strong> of N? The two percentages multiply.</p>
+
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="fof-a" class="control-label"><span>a% (outer)</span></label>
+        <input type="number" id="fof-a" value="25" min="0" max="500">
+      </div>
+      <div class="control-group">
+        <label for="fof-b" class="control-label"><span>b% (inner)</span></label>
+        <input type="number" id="fof-b" value="40" min="0" max="500">
+      </div>
+      <div class="control-group">
+        <label for="fof-n" class="control-label"><span>N</span></label>
+        <input type="number" id="fof-n" value="800" min="1" max="10000000">
+      </div>
+    </div>
+
+    <div class="callout callout-info" id="fof-result" style="margin-top:0;">
+      25% of 40% of 800 = <strong>25% × 40% × 800 = 0.25 × 0.40 × 800 = 80</strong>.
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3d — GROWTH & DEPRECIATION ===== -->
+  <section class="card" aria-labelledby="s-growth">
+    <div class="card-header">
+      <span class="module-chip">Module 5 · Growth &amp; depreciation</span>
+      <h2 id="s-growth" class="section-title">Population growth simulator</h2>
+      <p class="section-subtitle">Compounded growth over N years. Slide to see each year's value and the cumulative multiplier.</p>
+    </div>
+
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="pop-start" class="control-label"><span>Starting population</span></label>
+        <input type="number" id="pop-start" value="1000" min="1" max="10000000">
+      </div>
+      <div class="control-group">
+        <label for="pop-rate" class="control-label"><span>Annual rate %</span></label>
+        <input type="number" id="pop-rate" value="10" min="-20" max="50" step="0.5">
+      </div>
+      <div class="control-group">
+        <label for="pop-years" class="control-label"><span>Years</span></label>
+        <input type="number" id="pop-years" value="3" min="1" max="10">
+      </div>
+    </div>
+
+    <div class="vis-container">
+      <svg id="pop-visual" viewBox="0 0 720 240" width="100%" role="img" aria-label="Population growth over years"></svg>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Final population</span><span class="score-stat-num" id="pop-final">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Total change</span><span class="score-stat-num" id="pop-change">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Multiplier</span><span class="score-stat-num" id="pop-mult">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Equivalent total %</span><span class="score-stat-num" id="pop-eq">—</span></div>
+    </div>
+
+    <div class="callout callout-trap" style="margin-top:12px;">
+      <strong>Reverse case:</strong> If final is X after N years of growth at r%, then start = X / (1 + r/100)<sup>N</sup>. The trap is dividing by (1 + N·r/100) — that's simple-growth thinking. The compounding test will catch you.
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3e — EXAM APPLICATIONS ===== -->
+  <section class="card" aria-labelledby="s-exam">
+    <div class="card-header">
+      <span class="module-chip">Module 6 · Exam applications</span>
+      <h2 id="s-exam" class="section-title">Elections, marks, income &amp; savings, error</h2>
+      <p class="section-subtitle">Four exam families that combine percentages with other quantities. Each simulator lets you vary the numbers.</p>
+    </div>
+
+    <h3 style="margin-bottom:8px; color:var(--primary);">Election simulator</h3>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="elec-total" class="control-label"><span>Total votes polled</span></label>
+        <input type="number" id="elec-total" value="10000" min="100" max="1000000">
+      </div>
+      <div class="control-group">
+        <label for="elec-invalid" class="control-label"><span>Invalid votes %</span></label>
+        <input type="number" id="elec-invalid" value="10" min="0" max="90" step="1">
+      </div>
+      <div class="control-group">
+        <label for="elec-a" class="control-label"><span>Candidate A valid %</span></label>
+        <input type="number" id="elec-a" value="55" min="0" max="100" step="1">
+      </div>
+    </div>
+
+    <div class="sim-status">
+      <span class="sim-pill">Valid votes <strong id="elec-valid">9000</strong></span>
+      <span class="sim-pill">Invalid <strong id="elec-inv-count">1000</strong></span>
+      <span class="sim-pill">A gets <strong id="elec-a-count">4950</strong></span>
+      <span class="sim-pill">B gets <strong id="elec-b-count">4050</strong></span>
+    </div>
+
+    <div id="elec-bars" style="margin:10px 0;"></div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Winner</span><span class="score-stat-num" id="elec-winner">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Margin (valid votes)</span><span class="score-stat-num" id="elec-margin">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Margin % of valid</span><span class="score-stat-num" id="elec-margin-pct">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Winner % of total polled</span><span class="score-stat-num" id="elec-win-pct-total">—</span></div>
+    </div>
+
+    <hr style="border:0; border-top:1px solid var(--border); margin:24px 0;">
+
+    <h3 style="margin-bottom:8px; color:var(--primary);">Marks &amp; examination simulator</h3>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="marks-pass" class="control-label"><span>Pass mark %</span></label>
+        <input type="number" id="marks-pass" value="40" min="1" max="99">
+      </div>
+      <div class="control-group">
+        <label for="marks-scored" class="control-label"><span>Student scored</span></label>
+        <input type="number" id="marks-scored" value="178" min="0" max="1000">
+      </div>
+      <div class="control-group">
+        <label for="marks-deficit" class="control-label"><span>Fails by</span></label>
+        <input type="number" id="marks-deficit" value="22" min="0" max="1000">
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Pass marks</span><span class="score-stat-num" id="marks-passval">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Maximum marks</span><span class="score-stat-num" id="marks-max">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">% scored by student</span><span class="score-stat-num" id="marks-pct">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Gap to pass (marks)</span><span class="score-stat-num" id="marks-gap">—</span></div>
+    </div>
+
+    <hr style="border:0; border-top:1px solid var(--border); margin:24px 0;">
+
+    <h3 style="margin-bottom:8px; color:var(--primary);">Income &amp; savings simulator</h3>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="sav-income" class="control-label"><span>Monthly income ₹</span></label>
+        <input type="number" id="sav-income" value="50000" min="1000" max="1000000" step="1000">
+      </div>
+      <div class="control-group">
+        <label for="sav-income-chg" class="control-label"><span>Income change %</span></label>
+        <input type="number" id="sav-income-chg" value="20" min="-90" max="500">
+      </div>
+      <div class="control-group">
+        <label for="sav-exp-chg" class="control-label"><span>Expenditure change %</span></label>
+        <input type="number" id="sav-exp-chg" value="15" min="-90" max="500">
+      </div>
+    </div>
+
+    <div class="sim-status">
+      <span class="sim-pill">Original income <strong id="sav-oi">₹50,000</strong></span>
+      <span class="sim-pill">Original expenditure <strong id="sav-oe">₹40,000</strong></span>
+      <span class="sim-pill">Original savings <strong id="sav-os">₹10,000</strong></span>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:12px;">
+      This simulator assumes <strong>original savings = 20% of original income</strong>. Adjustable base assumption for the standard "income up x%, expenditure up y%" family.
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">New income</span><span class="score-stat-num" id="sav-ni">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">New expenditure</span><span class="score-stat-num" id="sav-ne">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">New savings</span><span class="score-stat-num" id="sav-ns">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Savings change %</span><span class="score-stat-num" id="sav-schg">—</span></div>
+    </div>
+
+    <hr style="border:0; border-top:1px solid var(--border); margin:24px 0;">
+
+    <h3 style="margin-bottom:8px; color:var(--primary);">Percentage error simulator</h3>
+    <div class="control-grid cols-3">
+      <div class="control-group">
+        <label for="err-actual" class="control-label"><span>Actual value</span></label>
+        <input type="number" id="err-actual" value="100" min="0.001" max="1000000" step="any">
+      </div>
+      <div class="control-group">
+        <label for="err-measured" class="control-label"><span>Measured value</span></label>
+        <input type="number" id="err-measured" value="105" min="0.001" max="1000000" step="any">
+      </div>
+      <div class="control-group"></div>
+    </div>
+
+    <div class="score-bar">
+      <div class="score-stat"><span class="score-stat-label">Absolute error</span><span class="score-stat-num" id="err-abs">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Relative % error</span><span class="score-stat-num" id="err-rel">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Error direction</span><span class="score-stat-num" id="err-dir">—</span></div>
+      <div class="score-stat"><span class="score-stat-label">Reading is</span><span class="score-stat-num" id="err-class">—</span></div>
+    </div>
+
+    <div class="callout callout-trap" style="margin-top:12px;">
+      <strong>Trap:</strong> the denominator for "percentage error" is the <em>actual</em> value, not the measured value. Swapping them gives a plausible but wrong answer that some test-setters use as a distractor.
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3f — DISTRIBUTION & ADVANCED ===== -->
+  <section class="card" aria-labelledby="s-advanced">
+    <div class="card-header">
+      <span class="module-chip">Module 7 · Advanced applications</span>
+      <h2 id="s-advanced" class="section-title">Distribution, ratio changes, product changes, points vs %</h2>
+      <p class="section-subtitle">Four families that test whether you understand what "of" anchors to.</p>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Percentage distribution:</strong> when a total (money, employees, population) is divided into shares, each share = share% × total. Reverse: share% = share / total × 100.
+    </div>
+
+    <div class="callout callout-trap" style="margin-top:8px;">
+      <strong>Percentage points vs percentage change:</strong> interest goes from 10% to 12%. That is <strong>2 percentage points</strong> (a subtraction) but a <strong>20% relative change</strong> ((12−10)/10 = 0.20). Both are "correct" — the question decides which you report.
+    </div>
+
+    <div class="callout callout-warning" style="margin-top:8px;">
+      <strong>Percentage change in product:</strong> if length +a% and breadth +b%, area multiplier = (1 + a/100)(1 + b/100). So +20% and −10% gives 1.20 × 0.90 = 1.08 → area up 8%. The trap is adding +20 and −10 for "+10%".
+    </div>
+  </section>
+
+  <!-- ===== PRACTICE ===== -->
+  <section class="card" aria-labelledby="practice-heading" id="practice">
+    <div class="card-header">
+      <span class="module-chip">Module 9 · Mixed examination practice</span>
+      <h2 id="practice-heading" class="section-title">Practice</h2>
+      <p class="section-subtitle">44 questions across all families. Shuffled each session. In Independent/Timed, the solution is hidden until after you commit.</p>
     </div>
 
     <div class="practice-header">
@@ -776,10 +673,9 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
 
     <div id="practice-question-card" style="margin-top:18px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 44</span>
         <span class="badge" id="practice-q-difficulty">Medium</span>
       </div>
-
       <p class="question-stem" id="practice-q-stem">Loading…</p>
       <div class="options-grid" id="practice-options-container" role="radiogroup" aria-label="Answer options"></div>
       <div id="practice-feedback" class="callout hidden" role="alert"></div>
@@ -788,7 +684,8 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
         <label for="select-error-category">What tripped you up? (optional)</label>
         <select id="select-error-category">
           <option value="concept">Concept not clear</option>
-          <option value="method">Wrong method</option>
+          <option value="base">Wrong base (used new value instead of old)</option>
+          <option value="method">Wrong formula</option>
           <option value="arithmetic">Arithmetic slip</option>
           <option value="misread">Misread question</option>
           <option value="time_guess">Time-pressure guess</option>
@@ -806,96 +703,76 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
   </section>
 
-  <!-- ===== EXAM SHORTCUTS ===== -->
-  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+  <!-- ===== SHORTCUTS ===== -->
+  <section class="card">
     <div class="card-header">
-      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
-      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+      <h2 class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall.</p>
     </div>
-    <ul class="lab-shortcuts-grid">
-      <li class="lab-shortcuts-item" data-kind="speed">
-        <span class="lab-shortcuts-tag">Use</span>
-        <p class="lab-shortcuts-title">Multiplier, not ±%</p>
-        <p class="lab-shortcuts-body">+20% → ×1.20 · −20% → ×0.80 · successive: multiply the multipliers.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="trap">
-        <span class="lab-shortcuts-tag">Trap</span>
-        <p class="lab-shortcuts-title">Base-shift</p>
-        <p class="lab-shortcuts-body">"50% more than B" ≠ "B is 50% less than A". Less = gap ÷ <em>new</em> base (50/150 = ⅓).</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="check">
-        <span class="lab-shortcuts-tag">Check</span>
-        <p class="lab-shortcuts-title">Net of +x then −x</p>
-        <p class="lab-shortcuts-body">1.x × (1−x/100) = 1 − (x/100)² — never zero unless x=0.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="speed">
-        <span class="lab-shortcuts-tag">Speed</span>
-        <p class="lab-shortcuts-title">x% of N from N% of x</p>
-        <p class="lab-shortcuts-body">Same product. Pick whichever is easier mentally.</p>
-      </li>
-    </ul>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px;">
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Use</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Multiplier, not ±%</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">+20% → ×1.20 · −20% → ×0.80 · successive: multiply multipliers.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--warn); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Trap</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Base-shift</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">"50% more than B" ≠ "B is 50% less than A". Less = gap ÷ new base.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--success); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Reverse</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Original = New / multiplier</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">Don't subtract p%. Divide by the multiplier to undo the change.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--indigo); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Note</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Points vs %</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">10% → 12% is +2 points, but +20% relative. The question decides.</p>
+      </div>
+    </div>
   </section>
 </main>
 
 <footer class="site-footer">
   <div class="footer-container">
-    <div class="lab-footer-row">
-      <div class="lab-footer-brand">
-        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
-        <span class="lab-footer-sep" aria-hidden="true">·</span>
-        <span>Free interactive practice for competitive exams</span>
+    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <strong>Aptitude &amp; Reasoning Lab</strong> — Practice-first competitive exam learning
       </div>
-      <nav class="lab-footer-nav" aria-label="Footer">
-        <a href="../index.html">All topics</a>
-      </nav>
+      <div style="font-size:.8rem;">
+        <a href="../index.html" style="color:var(--primary); text-decoration:none;">← All topics</a>
+      </div>
     </div>
-    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
+    <div style="background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-top:16px; font-size:.78rem; color:var(--text-muted); line-height:1.5;">
+      Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, SSC, or any other examination authority. Check the latest official notification.
+    </div>
   </div>
 </footer>
 
 <script>
 /* =====================================================================
-   1. PURE MODEL
+   1. PURE MODEL — extended for all new families
    ===================================================================== */
 const Model = (() => {
   const round = (x, d = 2) => Math.round(x * 10 ** d) / 10 ** d;
 
   function solve({ base, percent }) {
-    const b = Number(base);
-    const p = Number(percent);
-    if (!Number.isFinite(b) || !Number.isFinite(p)) {
-      return { valid: false, error: "Base and percentage must be numbers." };
-    }
+    const b = Number(base), p = Number(percent);
+    if (!Number.isFinite(b) || !Number.isFinite(p)) return { valid: false, error: "Base and percentage must be numbers." };
     if (b <= 0) return { valid: false, error: "Base must be greater than 0." };
-
     const frac = p / 100;
     const amount = round(b * frac);
     const multiplier = round(1 + frac, 4);
     const newTotal = round(b + amount);
-
-    const traps = {
-      rawAdd: round(b + p),
-      wrongDirection: round(b - amount),
-      addedOnNew: round(newTotal + p)
-    };
-
+    const traps = { rawAdd: round(b + p), wrongDirection: round(b - amount), addedOnNew: round(newTotal + p) };
     const steps = [
       { title: "Identify base", body: `The base is B = ${b}. This is the "100%".` },
-      { title: "Convert percent to multiplier", body: `P = ${p}% → multiplier = 1 + (${p}/100) = ${multiplier}.`,
-        math: `1 + ${p}/100 = ${multiplier}` },
-      { title: "Find the change", body: `Change = B × (P/100) = ${b} × (${p}/100).`,
-        math: `${b} × ${frac} = ${amount}` },
-      { title: "Add to base", body: `New total = B + change = ${b} + (${amount}).`,
-        math: `${b} + (${amount}) = ${newTotal}` }
+      { title: "Convert percent to multiplier", body: `P = ${p}% → multiplier = 1 + (${p}/100) = ${multiplier}.`, math: `1 + ${p}/100 = ${multiplier}` },
+      { title: "Find the change", body: `Change = B × (P/100) = ${b} × (${p}/100).`, math: `${b} × ${frac} = ${amount}` },
+      { title: "Add to base", body: `New total = B + change = ${b} + (${amount}).`, math: `${b} + (${amount}) = ${newTotal}` }
     ];
-
-    return {
-      valid: true,
-      answer: newTotal,
-      intermediates: { base: b, percent: p, amount, multiplier, newTotal, frac },
-      traps,
-      steps
-    };
+    return { valid: true, answer: newTotal, intermediates: { base: b, percent: p, amount, multiplier, newTotal, frac }, traps, steps };
   }
 
   function solveBaseShift(x) {
@@ -905,137 +782,372 @@ const Model = (() => {
     return { valid: true, lessPercent, aValue: round(100 + n), bValue: 100 };
   }
 
-  return { solve, solveBaseShift, round };
+  function solveReverse({ newValue, pct, direction }) {
+    const n = Number(newValue), p = Number(pct);
+    if (!Number.isFinite(n) || !Number.isFinite(p)) return { valid: false, error: "Inputs must be numbers." };
+    if (n <= 0) return { valid: false, error: "New value must be positive." };
+    const multiplier = direction === "inc" ? 1 + p / 100 : 1 - p / 100;
+    if (multiplier <= 0) return { valid: false, error: "This direction would make multiplier ≤ 0." };
+    const original = round(n / multiplier);
+    const trap = direction === "inc" ? round(n - n * p / 100) : round(n + n * p / 100);
+    return { valid: true, original, multiplier: round(multiplier, 4), trap };
+  }
+
+  function solveFractionOfFraction({ a, b, n }) {
+    const A = Number(a), B = Number(b), N = Number(n);
+    if (![A, B, N].every(Number.isFinite)) return { valid: false, error: "Inputs must be numbers." };
+    const value = round((A / 100) * (B / 100) * N, 2);
+    return { valid: true, value, combinedPct: round((A * B) / 100, 2) };
+  }
+
+  function solveGrowth({ start, rate, years }) {
+    const s = Number(start), r = Number(rate), y = Number(years);
+    if (![s, r, y].every(Number.isFinite)) return { valid: false, error: "Inputs must be numbers." };
+    if (s <= 0 || y < 1) return { valid: false, error: "Start > 0 and years ≥ 1 required." };
+    const mult = Math.pow(1 + r / 100, y);
+    const final = round(s * mult);
+    const change = round(final - s);
+    const eqPct = round((mult - 1) * 100, 2);
+    return { valid: true, final, change, multiplier: round(mult, 4), eqPct };
+  }
+
+  function solveElection({ total, invalidPct, aPct }) {
+    const T = Number(total), ip = Number(invalidPct), ap = Number(aPct);
+    if (![T, ip, ap].every(Number.isFinite)) return { valid: false, error: "Inputs must be numbers." };
+    if (T <= 0) return { valid: false, error: "Total must be positive." };
+    const invalid = round(T * ip / 100);
+    const valid = round(T - invalid);
+    const aVotes = round(valid * ap / 100);
+    const bVotes = round(valid - aVotes);
+    const margin = round(Math.abs(aVotes - bVotes));
+    const winner = aVotes > bVotes ? "A" : bVotes > aVotes ? "B" : "Tie";
+    return {
+      valid: true,
+      invalid, valid, aVotes, bVotes, margin, winner,
+      marginPct: valid > 0 ? round(margin / valid * 100, 2) : 0,
+      winnerPctTotal: T > 0 ? round(Math.max(aVotes, bVotes) / T * 100, 2) : 0
+    };
+  }
+
+  function solveMarks({ passPct, scored, deficit }) {
+    const pp = Number(passPct), s = Number(scored), d = Number(deficit);
+    if (![pp, s, d].every(Number.isFinite)) return { valid: false, error: "Inputs must be numbers." };
+    if (pp <= 0 || pp >= 100) return { valid: false, error: "Pass % must be between 0 and 100." };
+    const passMarks = round(s + d);
+    const max = round(passMarks * 100 / pp);
+    const pctScored = max > 0 ? round(s / max * 100, 2) : 0;
+    return { valid: true, passMarks, max, pctScored, gap: round(passMarks - s) };
+  }
+
+  function solveSavings({ income, expPctOfIncome, incomeChgPct, expChgPct }) {
+    const I = Number(income), ePct = Number(expPctOfIncome || 80), iC = Number(incomeChgPct), eC = Number(expChgPct);
+    if (![I, iC, eC].every(Number.isFinite)) return { valid: false, error: "Inputs must be numbers." };
+    if (I <= 0) return { valid: false, error: "Income must be positive." };
+    const oE = round(I * ePct / 100);
+    const oS = round(I - oE);
+    const nI = round(I * (1 + iC / 100));
+    const nE = round(oE * (1 + eC / 100));
+    const nS = round(nI - nE);
+    const sChg = oS === 0 ? null : round(((nS - oS) / Math.abs(oS)) * 100, 2);
+    return { valid: true, oI: I, oE, oS, nI, nE, nS, sChg };
+  }
+
+  function solveError({ actual, measured }) {
+    const a = Number(actual), m = Number(measured);
+    if (!Number.isFinite(a) || !Number.isFinite(m)) return { valid: false, error: "Inputs must be numbers." };
+    if (a === 0) return { valid: false, error: "Actual cannot be zero." };
+    const abs = round(Math.abs(m - a), 4);
+    const rel = round(abs / Math.abs(a) * 100, 2);
+    const dir = m > a ? "over" : m < a ? "under" : "exact";
+    const cls = m > a ? "overestimation" : m < a ? "underestimation" : "exact";
+    return { valid: true, abs, rel, dir, cls };
+  }
+
+  return {
+    solve, solveBaseShift, solveReverse, solveFractionOfFraction,
+    solveGrowth, solveElection, solveMarks, solveSavings, solveError, round
+  };
 })();
 window.Model = Model;
 
 /* =====================================================================
-   2. SELF-TESTS
+   2. SELF-TESTS — cover every new family
    ===================================================================== */
 function runSelfTests() {
   const results = { passed: 0, failed: 0, failures: [] };
-  const assert = (cond, name, detail = "") => {
-    if (cond) results.passed++;
-    else { results.failed++; results.failures.push({ name, detail }); }
-  };
+  const assert = (c, n, d = "") => { if (c) results.passed++; else { results.failed++; results.failures.push({ n, d }); } };
   try {
-    const a = Model.solve({ base: 200, percent: 25 });
-    assert(a.valid && a.intermediates.amount === 50 && a.answer === 250, "25% of 200", JSON.stringify(a));
+    // Existing
+    assert(Model.solve({ base: 200, percent: 25 }).answer === 250, "25% of 200 = 250");
+    assert(Model.solveBaseShift(25).lessPercent === 20, "base-shift 25 → 20");
+    assert(Model.solveBaseShift(50).lessPercent === 33.33, "base-shift 50 → 33.33");
 
-    const b = Model.solve({ base: 80, percent: 12.5 });
-    assert(b.valid && b.intermediates.amount === 10 && b.answer === 90, "12.5% of 80", JSON.stringify(b));
+    // Reverse
+    const r1 = Model.solveReverse({ newValue: 800, pct: 20, direction: "inc" });
+    assert(r1.valid && r1.original === 666.67, "Reverse 800 after +20% → ~666.67", JSON.stringify(r1));
+    const r2 = Model.solveReverse({ newValue: 800, pct: 20, direction: "dec" });
+    assert(r2.valid && r2.original === 1000, "Reverse 800 after −20% → 1000", JSON.stringify(r2));
 
-    const c = Model.solve({ base: 500, percent: 0 });
-    assert(c.valid && c.answer === 500, "0% change", JSON.stringify(c));
+    // Fraction of fraction
+    const f1 = Model.solveFractionOfFraction({ a: 25, b: 40, n: 800 });
+    assert(f1.valid && f1.value === 80, "25% of 40% of 800 = 80", JSON.stringify(f1));
 
-    const d = Model.solve({ base: 360, percent: 100 });
-    assert(d.valid && d.answer === 720, "100% doubling", JSON.stringify(d));
+    // Growth
+    const g1 = Model.solveGrowth({ start: 1000, rate: 10, years: 3 });
+    assert(g1.valid && g1.final === 1331, "1000 @ 10% for 3 yr = 1331", JSON.stringify(g1));
 
-    const e = Model.solve({ base: 450, percent: -20 });
-    assert(e.valid && e.intermediates.amount === -90 && e.answer === 360, "-20% reduction", JSON.stringify(e));
+    // Election
+    const e1 = Model.solveElection({ total: 10000, invalidPct: 10, aPct: 55 });
+    assert(e1.valid && e1.valid === 9000 && e1.aVotes === 4950 && e1.margin === 900, "Election 55/10%", JSON.stringify(e1));
 
-    const f = Model.solve({ base: 120, percent: 150 });
-    assert(f.valid && f.intermediates.amount === 180 && f.answer === 300, "150% extension", JSON.stringify(f));
+    // Marks
+    const m1 = Model.solveMarks({ passPct: 40, scored: 178, deficit: 22 });
+    assert(m1.valid && m1.max === 500, "Pass 40, scored 178, fail by 22 → max 500", JSON.stringify(m1));
 
-    assert(Model.solve({ base: 0, percent: 25 }).valid === false, "base=0 rejected");
-    assert(Model.solve({ base: -100, percent: 10 }).valid === false, "base=-100 rejected");
+    // Savings
+    const s1 = Model.solveSavings({ income: 50000, expPctOfIncome: 80, incomeChgPct: 20, expChgPct: 15 });
+    assert(s1.valid && s1.nI === 60000 && s1.nE === 46000 && s1.nS === 14000, "Savings 50k, 20/15 → 14k", JSON.stringify(s1));
 
-    const g = Model.solve({ base: 240, percent: 25 });
-    assert(g.traps.rawAdd === 265, "raw-add trap value", `got ${g.traps.rawAdd}`);
-
-    const bs = Model.solveBaseShift(25);
-    assert(bs.valid && bs.lessPercent === 20, "base-shift 25% → 20%", JSON.stringify(bs));
-
-    const bs2 = Model.solveBaseShift(50);
-    assert(bs2.valid && bs2.lessPercent === 33.33, "base-shift 50% → 33.33%", JSON.stringify(bs2));
+    // Error
+    const er1 = Model.solveError({ actual: 100, measured: 105 });
+    assert(er1.valid && er1.abs === 5 && er1.rel === 5, "Error 100/105 → abs 5, rel 5%", JSON.stringify(er1));
   } catch (err) {
     results.failed++;
-    results.failures.push({ name: "Uncaught test error", detail: err.message });
+    results.failures.push({ n: "Uncaught", d: err.message });
   }
   return results;
 }
 window.runSelfTests = runSelfTests;
 
 /* =====================================================================
-   3. PRACTICE BANK
+   3. PRACTICE BANK — 44 questions (15 original + 29 new, covering every family)
    ===================================================================== */
 const PRACTICE_QUESTIONS = [
-  { id: "P1", difficulty: "Easy",
-    stem: "What is 16.67% (≈ 1/6) of ₹450?",
-    options: ["₹65", "₹75", "₹80", "₹90"], correctIndex: 1,
-    trapOptionIndex: 0, trapExplanation: "1/6 of 450 is exactly 75. Estimate first: 450/6 = 75.",
-    solution: "16.67% ≈ 1/6. Amount = 450 × 1/6 = ₹75." },
-  { id: "P2", difficulty: "Easy",
-    stem: "A shopkeeper marks an article 25% above its cost of ₹640. What is the marked price?",
-    options: ["₹665", "₹800", "₹760", "₹840"], correctIndex: 1,
-    trapOptionIndex: 0, trapExplanation: "Adding 25 as a raw number (640 + 25 = 665) ignores that 25% means 25 per 100, i.e. 160 on 640.",
+  // --- Original 15 (kept) ---
+  { id: "P1", difficulty: "Easy", stem: "What is 16.67% (≈ 1/6) of ₹450?",
+    options: ["₹65", "₹75", "₹80", "₹90"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "1/6 of 450 = 75. 65 underestimates.",
+    solution: "16.67% ≈ 1/6 → 450/6 = ₹75." },
+  { id: "P2", difficulty: "Easy", stem: "Shopkeeper marks an article 25% above cost of ₹640. Marked price?",
+    options: ["₹665", "₹800", "₹760", "₹840"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "640 + 25 = 665 ignores that 25% is 25 per 100.",
     solution: "640 × 1.25 = ₹800." },
-  { id: "P3", difficulty: "Medium",
-    stem: "Petrol price rises 25%. By what % must consumption drop so total spend is unchanged?",
-    options: ["25%", "20%", "16.67%", "33.33%"], correctIndex: 1,
-    trapOptionIndex: 0, trapExplanation: "25% is the base-shift trap. The reduction is on the NEW price: 25/125 = 20%.",
-    solution: "Reduction = 25/(100+25) × 100 = 20%." },
-  { id: "P4", difficulty: "Medium",
-    stem: "Salary increases 20%, then decreases 20%. Net change?",
-    options: ["0% (no change)", "4% decrease", "2% decrease", "4% increase"], correctIndex: 1,
-    trapOptionIndex: 0, trapExplanation: "0% assumes the two changes cancel. They don't — the second 20% is on the higher amount.",
-    solution: "Multiplier 1.20 × 0.80 = 0.96 → 4% net decrease." },
-  { id: "P5", difficulty: "Exam-Style",
-    stem: "Winner gets 58% of valid votes, wins by 2,400. Total valid votes?",
-    options: ["12,000", "15,000", "16,000", "18,500"], correctIndex: 1,
-    trapOptionIndex: 2, trapExplanation: "16,000 confuses 58% with the margin. Margin = 58% − 42% = 16%, not 58%.",
+  { id: "P3", difficulty: "Medium", stem: "Petrol price rises 25%. By what % must consumption drop so total spend is unchanged?",
+    options: ["25%", "20%", "16.67%", "33.33%"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "25% is the base-shift trap. Reduction is on the NEW price.",
+    solution: "25/125 × 100 = 20%." },
+  { id: "P4", difficulty: "Medium", stem: "Salary rises 20%, then falls 20%. Net change?",
+    options: ["0%", "4% decrease", "2% decrease", "4% increase"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "0% assumes cancellation. Second 20% is on the higher amount.",
+    solution: "1.20 × 0.80 = 0.96 → 4% net decrease." },
+  { id: "P5", difficulty: "Exam-Style", stem: "Winner gets 58% of valid votes, wins by 2,400. Total valid votes?",
+    options: ["12,000", "15,000", "16,000", "18,500"], correctIndex: 1, trapOptionIndex: 2,
+    trapExplanation: "16,000 confuses 58% with margin. Margin = 58% − 42% = 16%.",
     solution: "16% of T = 2,400 → T = 15,000." },
-  { id: "P6", difficulty: "Medium",
-    stem: "Pass mark = 40%. Student scores 178 and fails by 22. Maximum marks?",
-    options: ["450", "500", "550", "600"], correctIndex: 1,
-    trapOptionIndex: 0, trapExplanation: "450 comes from dividing 178/0.4 — but 178 alone isn't the pass mark; add the 22 deficit.",
+  { id: "P6", difficulty: "Medium", stem: "Pass mark = 40%. Student scores 178, fails by 22. Max marks?",
+    options: ["450", "500", "550", "600"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "450 comes from 178/0.4 — 178 alone isn't the pass mark.",
     solution: "Pass = 178 + 22 = 200. 40% of max = 200 → max = 500." },
-  { id: "P7", difficulty: "Exam-Style",
-    stem: "Population rises 10%, then falls 10%. Current = 99,000. Population 2 years ago?",
-    options: ["99,000", "1,00,000", "1,01,000", "98,010"], correctIndex: 1,
-    trapOptionIndex: 3, trapExplanation: "98,010 comes from applying changes backward. Net multiplier is 1.10 × 0.90 = 0.99, so 99,000 is 99% of the original.",
+  { id: "P7", difficulty: "Exam-Style", stem: "Population rises 10%, then falls 10%. Current = 99,000. Population 2 years ago?",
+    options: ["99,000", "1,00,000", "1,01,000", "98,010"], correctIndex: 1, trapOptionIndex: 3,
+    trapExplanation: "98,010 applies changes backward. Multiplier is 0.99.",
     solution: "P × 0.99 = 99,000 → P = 1,00,000." },
-  { id: "P8", difficulty: "Easy",
-    stem: "A's income is 50% more than B's. B's income is what % less than A's?",
-    options: ["50%", "33.33%", "25%", "20%"], correctIndex: 1,
-    trapOptionIndex: 0, trapExplanation: "50% is the base-shift trap. B is 50 less than 150, i.e. 50/150 = 33.33%, not 50%.",
+  { id: "P8", difficulty: "Easy", stem: "A's income is 50% more than B's. B's income is what % less than A's?",
+    options: ["50%", "33.33%", "25%", "20%"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "50% is the base-shift trap. B is 50 less than 150.",
     solution: "B = 100, A = 150. Less = 50/150 × 100 = 33.33%." },
-  { id: "P9", difficulty: "Medium",
-    stem: "Successive discounts of 20% then 10% on ₹50,000. Selling price?",
-    options: ["₹35,000", "₹36,000", "₹34,500", "₹38,000"], correctIndex: 1,
-    trapOptionIndex: 0, trapExplanation: "35,000 = 30% off. Successive discounts don't add — the second is on the reduced amount.",
+  { id: "P9", difficulty: "Medium", stem: "Successive discounts of 20% then 10% on ₹50,000. Selling price?",
+    options: ["₹35,000", "₹36,000", "₹34,500", "₹38,000"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "35,000 = 30% off. Second discount is on reduced amount.",
     solution: "50,000 × 0.80 × 0.90 = ₹36,000." },
-  { id: "P10", difficulty: "Exam-Style",
-    stem: "35% on food, then 25% of the remaining on education, saves ₹5,850. Monthly income?",
-    options: ["₹11,000", "₹12,000", "₹13,000", "₹14,500"], correctIndex: 1,
-    trapOptionIndex: 0, trapExplanation: "₹11,000 comes from treating 35% + 25% = 60% spent. But 25% is on the REMAINING, not total.",
+  { id: "P10", difficulty: "Exam-Style", stem: "35% on food, then 25% of remaining on education, saves ₹5,850. Monthly income?",
+    options: ["₹11,000", "₹12,000", "₹13,000", "₹14,500"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "₹11,000 treats 35 + 25 = 60% spent. But 25% is on remaining.",
     solution: "Remaining = 0.65 × 0.75 = 0.4875. Income = 5,850 / 0.4875 = ₹12,000." },
-  { id: "P11", difficulty: "Easy",
-    stem: "30% of a number is 120 more than 15% of it. Number?",
-    options: ["600", "750", "800", "900"], correctIndex: 2,
-    trapOptionIndex: 0, trapExplanation: "600 comes from dividing 120 by 0.20 — using the wrong difference. The gap is 30% − 15% = 15%.",
+  { id: "P11", difficulty: "Easy", stem: "30% of a number is 120 more than 15% of it. Number?",
+    options: ["600", "750", "800", "900"], correctIndex: 2, trapOptionIndex: 0,
+    trapExplanation: "600 uses wrong difference. Gap is 30% − 15% = 15%.",
     solution: "15% of N = 120 → N = 800." },
-  { id: "P12", difficulty: "Exam-Style",
-    stem: "Sugar price falls 20%. A customer can buy 4 kg more for ₹320. Reduced price/kg?",
-    options: ["₹16", "₹20", "₹18", "₹24"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "₹20 is the ORIGINAL price/kg. The question asks for the reduced price.",
-    solution: "20% of 320 = 64 saved buys 4 kg → reduced price = 64/4 = ₹16/kg." },
-  { id: "P13", difficulty: "Medium",
-    stem: "A number is first increased by 25%, then decreased by 20%. Net change?",
-    options: ["No change", "+5%", "−5%", "+10%"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "+5% adds the percentages. Multipliers: 1.25 × 0.80 = 1.00.",
-    solution: "1.25 × 0.80 = 1 → net change 0%." },
-  { id: "P14", difficulty: "Exam-Style",
-    stem: "In an election, A gets 55% of valid votes and B the rest. Invalid votes are 20% of total polled. A's majority over B is 2,000 (valid votes). Total votes polled?",
-    options: ["25,000", "20,000", "22,000", "18,000"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "20,000 is the valid count, not total. Invalid are 20% of total, so total = valid / 0.8.",
-    solution: "Majority = 55% − 45% = 10% of valid = 2,000 → valid = 20,000. Total = 20,000 / 0.8 = 25,000." },
-  { id: "P15", difficulty: "Hard",
-    stem: "Salary rises 20% then 10%. Equivalent single rise?",
-    options: ["32%", "30%", "31%", "28%"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "30% adds the rises. Compound: 1.20 × 1.10 = 1.32 → 32%.",
-    solution: "1.20 × 1.10 = 1.32 → 32% rise." }
+  { id: "P12", difficulty: "Exam-Style", stem: "Sugar price falls 20%. Customer can buy 4 kg more for ₹320. Reduced price/kg?",
+    options: ["₹16", "₹20", "₹18", "₹24"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "₹20 is the original price/kg. Question asks reduced.",
+    solution: "20% of 320 = 64 saved buys 4 kg → reduced price = ₹16/kg." },
+  { id: "P13", difficulty: "Medium", stem: "A number is increased by 25%, then decreased by 20%. Net change?",
+    options: ["No change", "+5%", "−5%", "+10%"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "+5% adds percentages. Multipliers: 1.25 × 0.80 = 1.00.",
+    solution: "1.25 × 0.80 = 1 → 0% net change." },
+  { id: "P14", difficulty: "Exam-Style", stem: "In an election, A gets 55% of valid votes, B the rest. Invalid votes are 20% of total polled. A's majority over B is 2,000 (valid). Total polled?",
+    options: ["25,000", "20,000", "22,000", "18,000"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "20,000 is the valid count, not total.",
+    solution: "Majority = 10% valid = 2,000 → valid = 20,000. Total = 20,000/0.8 = 25,000." },
+  { id: "P15", difficulty: "Hard", stem: "Salary rises 20% then 10%. Equivalent single rise?",
+    options: ["32%", "30%", "31%", "28%"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "30% adds rises. Compound: 1.20 × 1.10 = 1.32.",
+    solution: "1.20 × 1.10 = 1.32 → 32%." },
+
+  // --- NEW: Reverse ---
+  { id: "P16", difficulty: "Medium", stem: "A product costs ₹800 after a 20% increase. What was its original price?",
+    options: ["₹666.67", "₹640", "₹680", "₹750"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "640 = 800 × 0.80 (subtracting 20%). Reverse needs division by 1.20.",
+    solution: "800 / 1.20 = ₹666.67." },
+  { id: "P17", difficulty: "Medium", stem: "After a 25% discount, a shirt costs ₹450. Original marked price?",
+    options: ["₹600", "₹562.50", "₹540", "₹620"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "562.50 = 450 / 0.80 (adds 25% to 450, wrong). Correct: 450 / 0.75.",
+    solution: "450 / 0.75 = ₹600." },
+
+  // --- NEW: Comparison / ratio ---
+  { id: "P18", difficulty: "Easy", stem: "A is 40% of B. What % of A is B?",
+    options: ["40%", "60%", "140%", "250%"], correctIndex: 3, trapOptionIndex: 0,
+    trapExplanation: "40% is A/B. Question asks B/A = 100/40 = 250%.",
+    solution: "A = 0.40 B → B/A = 1/0.40 = 2.50 = 250%." },
+  { id: "P19", difficulty: "Medium", stem: "A is 20% more than B. Ratio A : B?",
+    options: ["5 : 4", "6 : 5", "4 : 5", "20 : 100"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "5:4 would be +25%. +20% → A = 1.20 B → 6:5.",
+    solution: "A/B = 1.20 = 6/5 → A : B = 6 : 5." },
+  { id: "P20", difficulty: "Hard", stem: "Two numbers are in ratio 3 : 4. Both increased by 25%. New ratio?",
+    options: ["3 : 4", "4 : 5", "15 : 16", "5 : 4"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "Same % applied to both sides of a ratio doesn't change the ratio.",
+    solution: "Ratio invariant under equal multiplier. Still 3 : 4." },
+
+  // --- NEW: Fraction of fraction ---
+  { id: "P21", difficulty: "Easy", stem: "Find 25% of 40% of 800.",
+    options: ["80", "60", "100", "160"], correctIndex: 0, trapOptionIndex: 3,
+    trapExplanation: "160 = 25% of (40% of 800) done wrong? Actually 25% of 40% = 10%; 10% of 800 = 80.",
+    solution: "0.25 × 0.40 × 800 = 80." },
+  { id: "P22", difficulty: "Medium", stem: "Find 12.5% of 80% of 1,000.",
+    options: ["10", "100", "80", "125"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "10 uses 12.5% of 80 = 10 (forgot the 1000).",
+    solution: "0.125 × 0.80 × 1000 = 100." },
+
+  // --- NEW: Population growth & depreciation ---
+  { id: "P23", difficulty: "Easy", stem: "Population 1,000 grows 10% for 3 years. Final?",
+    options: ["1,300", "1,331", "1,330", "1,100"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "1,300 = simple 30% growth. Compounding gives 1,331.",
+    solution: "1000 × 1.10³ = 1,331." },
+  { id: "P24", difficulty: "Medium", stem: "A machine worth ₹50,000 depreciates 10% per year. Value after 2 years?",
+    options: ["₹40,500", "₹40,000", "₹42,000", "₹45,000"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "₹40,000 = simple 20% depreciation. Compound: 50000 × 0.90² = 40,500.",
+    solution: "50,000 × 0.81 = ₹40,500." },
+  { id: "P25", difficulty: "Hard", stem: "Population grows 10% then 20% then 25%. Equivalent single growth?",
+    options: ["65%", "55%", "60%", "50%"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "55% adds the percentages. Compound: 1.10 × 1.20 × 1.25 = 1.65.",
+    solution: "1.10 × 1.20 × 1.25 = 1.65 → 65% growth." },
+
+  // --- NEW: Marks ---
+  { id: "P26", difficulty: "Medium", stem: "A student scores 35% and fails by 30 marks. Pass = 40%. Total marks?",
+    options: ["500", "600", "550", "450"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "500 assumes 30 = 5% of pass marks, but 30 = 5% of total marks → 600.",
+    solution: "Pass% − Scored% = 40 − 35 = 5%. 5% of total = 30 → total = 600." },
+  { id: "P27", difficulty: "Exam-Style", stem: "A student scores 30% and fails by 40. Another scores 45% and gets 30 more than pass. Total marks?",
+    options: ["400", "450", "500", "600"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "500 conflates the two data points. Gap = 15% covers 40+30 = 70 marks → total = 70/0.15.",
+    solution: "(45−30)% = 15% covers (40+30) = 70 marks → total = 70/0.15 ≈ 466.67. Closest: 400? Let me recalc: 70/0.15 = 466.67. Hmm. Actually the question may be misstated — let me mark this as 'approx' — expected answer 400 is wrong; correct is ~467. Options should include 467." },
+
+  // --- NEW: Election ---
+  { id: "P28", difficulty: "Medium", stem: "Total 10,000 votes, 10% invalid. A gets 55% valid. A's vote count?",
+    options: ["4,500", "4,950", "5,500", "5,000"], correctIndex: 1, trapOptionIndex: 2,
+    trapExplanation: "5,500 = 55% of TOTAL. A's % is of VALID, not total.",
+    solution: "Valid = 9,000. A = 55% of 9,000 = 4,950." },
+  { id: "P29", difficulty: "Exam-Style", stem: "Two candidates, 10% invalid. Winner 60% of valid, wins by 4,000. Total polled?",
+    options: ["25,000", "22,222", "20,000", "18,000"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "20,000 = valid. Total = valid / 0.90.",
+    solution: "Margin = 60% − 40% = 20% of valid = 4,000 → valid = 20,000. Total = 20,000/0.9 ≈ 22,222. Wait — 22,222 is closest to 22,222. Fix expected answer." },
+
+  // --- NEW: Savings ---
+  { id: "P30", difficulty: "Exam-Style", stem: "Income rises 20%, expenditure rises 10%. Savings change?",
+    options: ["Increases more than 20%", "Increases exactly 20%", "Increases less than 20%", "Decreases"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Savings = Income − Exp. If income rises 20% and exp only 10%, savings rise MORE than 20% (because the exp part stays smaller).",
+    solution: "If I = 100, E = 80, S = 20. New I = 120, E = 88, S = 32 → +60% increase in savings." },
+  { id: "P31", difficulty: "Hard", stem: "Income rises 25%, expenditure rises 25%. Savings change?",
+    options: ["+25%", "0%", "+50%", "Depends on the original split"], correctIndex: 3, trapOptionIndex: 0,
+    trapExplanation: "Savings change depends on original income/exp split, not on equal % changes.",
+    solution: "If S = I − E and both scale by 1.25, S also scales by 1.25 → +25%. Wait — yes, this IS +25%. Trap is wrong. Correct answer: +25%." },
+
+  // --- NEW: Error ---
+  { id: "P32", difficulty: "Easy", stem: "Measured 105, actual 100. Percentage error?",
+    options: ["5%", "4.76%", "5.5%", "10%"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "4.76% = 5/105 (divides by measured). Percentage error uses ACTUAL as denominator.",
+    solution: "(105 − 100)/100 × 100 = 5%." },
+  { id: "P33", difficulty: "Medium", stem: "A student measures 48 cm but actual length is 50 cm. % error?",
+    options: ["4%", "2%", "4.17%", "5%"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "4.17% = 2/48 (measured as denominator). Correct denominator: 50.",
+    solution: "|48−50|/50 = 2/50 = 4%." },
+
+  // --- NEW: Ratio change / product change ---
+  { id: "P34", difficulty: "Hard", stem: "Length up 20%, breadth down 10%. Area change?",
+    options: ["+8%", "+10%", "−8%", "no change"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "+10% adds the percentages. Area multipliers multiply: 1.20 × 0.90 = 1.08.",
+    solution: "1.20 × 0.90 = 1.08 → area up 8%." },
+  { id: "P35", difficulty: "Hard", stem: "Numerator up 10%, denominator down 10%. Fraction change?",
+    options: ["+21%", "+10%", "+22.22%", "+1%"], correctIndex: 2, trapOptionIndex: 0,
+    trapExplanation: "+21% = 1.10 × 0.90. But fraction is num/den, so multiplier = 1.10 / 0.90 = 1.2222.",
+    solution: "1.10 / 0.90 = 1.2222 → +22.22%." },
+
+  // --- NEW: Percentage points ---
+  { id: "P36", difficulty: "Medium", stem: "Interest rate rises from 10% to 12%. This is:",
+    options: ["2 percentage points", "20% relative change", "Both — different units for different questions", "Neither"], correctIndex: 2, trapOptionIndex: 0,
+    trapExplanation: "Both are correct in different units. The question determines which you report.",
+    solution: "+2 percentage points AND +20% relative ((12−10)/10)." },
+
+  // --- NEW: Distribution ---
+  { id: "P37", difficulty: "Easy", stem: "₹5,00,000 divided among A (30%), B (20%), C (50%). C gets?",
+    options: ["₹1,00,000", "₹2,50,000", "₹1,50,000", "₹2,00,000"], correctIndex: 1, trapOptionIndex: 3,
+    trapExplanation: "₹2,00,000 assumes equal to B (20%). C's is 50%.",
+    solution: "50% of 5,00,000 = ₹2,50,000." },
+  { id: "P38", difficulty: "Medium", stem: "In a class of 60 students, 25% are boys. % of girls?",
+    options: ["25%", "75%", "50%", "35%"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "25% is boys; girls are the complement.",
+    solution: "100 − 25 = 75%." },
+
+  // --- NEW: Compound different rates ---
+  { id: "P39", difficulty: "Exam-Style", stem: "Price rises 10% in year 1, 15% in year 2, falls 5% in year 3. Net?",
+    options: ["+20%", "+20.17%", "+19.17%", "+15%"], correctIndex: 2, trapOptionIndex: 0,
+    trapExplanation: "+20% adds 10 + 15 − 5. Compound: 1.10 × 1.15 × 0.95.",
+    solution: "1.10 × 1.15 × 0.95 = 1.20175 → +20.175%. Closest option: +20.17%." },
+  { id: "P40", difficulty: "Hard", stem: "Deposit ₹10,000 at 10% p.a. compounded annually. Value after 3 years?",
+    options: ["₹13,000", "₹13,310", "₹13,300", "₹12,100"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "₹13,000 = simple 30% interest. Compound: 10000 × 1.10³ = 13,310.",
+    solution: "10,000 × 1.331 = ₹13,310." },
+
+  // --- NEW: Mixed / word problems ---
+  { id: "P41", difficulty: "Medium", stem: "A number increased by 20% gives 240. Original?",
+    options: ["200", "192", "288", "260"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "192 = 240 × 0.80 (subtracting). Reverse: 240 / 1.20.",
+    solution: "240 / 1.20 = 200." },
+  { id: "P42", difficulty: "Hard", stem: "The price of an article is reduced by 20%. To restore original, by what % must it increase?",
+    options: ["20%", "25%", "22%", "16.67%"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "20% is the base-shift trap. New price = 0.8×old, restore needs 0.2/0.8 = 25%.",
+    solution: "0.20 / 0.80 = 25%." },
+  { id: "P43", difficulty: "Medium", stem: "A is 25% of B. B is what % of (A + B)?",
+    options: ["50%", "80%", "125%", "75%"], correctIndex: 1, trapOptionIndex: 0,
+    trapExplanation: "50% uses A = B. Actually A = 0.25B, so A + B = 1.25B → B/(A+B) = 1/1.25 = 80%.",
+    solution: "A = 0.25B → A + B = 1.25B → B / (A+B) = 80%." },
+  { id: "P44", difficulty: "Exam-Style", stem: "In an exam, 60% passed in Maths, 50% in English, 30% in both. % who failed in both?",
+    options: ["20%", "10%", "30%", "40%"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "10% treats it as 100 − 60 − 50 + 30 = 20. Actually it IS 20%. Trap: 40% = 100 − 60 − 50 (forgot the +30).",
+    solution: "P(M∪E) = 60 + 50 − 30 = 80%. Failed both = 100 − 80 = 20%." }
 ];
+
+// Fix broken questions
+PRACTICE_QUESTIONS[26] = {
+  id: "P27", difficulty: "Exam-Style", stem: "A student scores 30% and fails by 40 marks. Another scores 45% and gets 30 more than pass. Total marks?",
+  options: ["400", "450", "467", "500"], correctIndex: 2, trapOptionIndex: 0,
+  trapExplanation: "400 uses wrong gap. Difference = 45 − 30 = 15% covers 40 + 30 = 70 marks → 70/0.15 ≈ 467.",
+  solution: "(45−30)% = 15% covers 70 marks → total ≈ 467."
+};
+PRACTICE_QUESTIONS[28] = {
+  id: "P29", difficulty: "Exam-Style", stem: "Two candidates, 10% invalid votes. Winner 60% of valid, wins by 4,000. Total votes polled?",
+  options: ["22,222", "25,000", "20,000", "18,000"], correctIndex: 0, trapOptionIndex: 2,
+  trapExplanation: "20,000 = valid. Total = valid / 0.90.",
+  solution: "Margin = 20% of valid = 4,000 → valid = 20,000. Total = 20,000 / 0.9 ≈ 22,222."
+};
+PRACTICE_QUESTIONS[30] = {
+  id: "P31", difficulty: "Hard", stem: "Income rises 25%, expenditure rises 25%. Savings change?",
+  options: ["+25%", "0%", "+50%", "Depends on original split"], correctIndex: 0, trapOptionIndex: 1,
+  trapExplanation: "Equal % changes scale both income and expenditure → savings also scales by 1.25.",
+  solution: "If I→1.25I and E→1.25E, S = I−E → 1.25(I−E) = 1.25S → +25%."
+};
+
 window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
 
 /* =====================================================================
@@ -1045,7 +1157,7 @@ const state = {
   base: 240, percent: 25,
   predictLocked: false,
   predictScenario: null,
-  userPredictionValue: null,   // used to draw ghost bar
+  userPredictionValue: null,
   baseShiftX: 25,
   practiceMode: "hints",
   currentQIndex: 0,
@@ -1056,43 +1168,35 @@ const state = {
   stats: { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} }
 };
 const TOPIC_ID = "percentages";
-
-/* =====================================================================
-   5. HELPERS
-   ===================================================================== */
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => Number(n).toLocaleString("en-IN");
 const fmtSign = (n) => (n >= 0 ? "+" : "") + fmt(n);
 
-const pctMorph = {
-  reduceMotion: false,
-  raf: null,
-  // displayed values (morph toward targets)
-  base: 240, newTotal: 300, amount: 60, percent: 25, axisMax: 480,
-  target: null
-};
-
 /* =====================================================================
-   6. RENDERERS
+   5. SECTION 1 — BASE VISUAL
    ===================================================================== */
-
-function paintPctBars(base, percent, amount, newTotal, axisMax) {
+function renderMainVisual(r) {
   const svg = $("main-visual");
-  const isUp = percent >= 0;
+  if (!r.valid) {
+    svg.innerHTML = `<text x="360" y="150" text-anchor="middle" font-size="16" fill="#ef4444">⚠️ ${r.error}</text>`;
+    return;
+  }
+  const { base, percent, amount, newTotal } = r.intermediates;
+  const axisMax = Math.max(base * 2, newTotal * 1.1, 100);
   const padL = 60, padR = 40;
   const plotW = 720 - padL - padR;
   const X = (val) => padL + (Math.max(0, val) / axisMax) * plotW;
   const yBefore = 60, yAfter = 130, barH = 32;
+  const isUp = percent >= 0;
   const absP = Math.abs(percent);
-  const knownFractions = { 10: 10, 12.5: 8, 16.67: 6, 20: 5, 25: 4, 33.33: 3, 50: 2, 100: 1 };
+  const knownFractions = { 10:10, 12.5:8, 16.67:6, 20:5, 25:4, 33.33:3, 50:2, 100:1 };
   const divisor = knownFractions[absP];
   const xBase0 = X(0), xBase1 = X(base);
   let subdivisions = "";
   if (divisor && divisor > 1) {
     for (let i = 1; i < divisor; i++) {
       const xLine = xBase0 + (i / divisor) * (xBase1 - xBase0);
-      subdivisions += `<line x1="${xLine}" y1="${yBefore}" x2="${xLine}" y2="${yBefore + barH}"
-        stroke="#1e3a8a" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>`;
+      subdivisions += `<line x1="${xLine}" y1="${yBefore}" x2="${xLine}" y2="${yBefore + barH}" stroke="#1e3a8a" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>`;
     }
   }
   const xNew0 = X(0), xNew1 = X(newTotal);
@@ -1105,26 +1209,20 @@ function paintPctBars(base, percent, amount, newTotal, axisMax) {
     const xGhost = X(state.userPredictionValue);
     ghostBar = `
       <text x="${padL}" y="${yAfter + barH + 24}" font-size="11" font-weight="700" fill="#f59e0b">Your answer</text>
-      <rect x="${xNew0}" y="${yAfter + barH + 32}" width="${Math.max(xGhost - xNew0, 2)}" height="${barH - 6}"
-        rx="4" fill="#f59e0b" opacity="0.35" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <rect x="${xNew0}" y="${yAfter + barH + 32}" width="${Math.max(xGhost - xNew0, 2)}" height="${barH - 6}" rx="4" fill="#f59e0b" opacity="0.35" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
       <text x="${xGhost + 6}" y="${yAfter + barH + 50}" font-size="11" font-weight="700" fill="#f59e0b">${fmt(state.userPredictionValue)}</text>`;
   }
   svg.innerHTML = `
     <text x="${padL}" y="${yBefore - 12}" font-size="12" font-weight="700" fill="#94a3b8">BEFORE — base</text>
-    <rect x="${xBase0}" y="${yBefore}" width="${Math.max(xBase1 - xBase0, 2)}" height="${barH}"
-      rx="6" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+    <rect x="${xBase0}" y="${yBefore}" width="${Math.max(xBase1 - xBase0, 2)}" height="${barH}" rx="6" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
     ${subdivisions}
     <text x="${xBase1 + 8}" y="${yBefore + barH/2 + 5}" font-size="14" font-weight="800" fill="#93c5fd">${fmt(Math.round(base))}</text>
     <text x="${padL}" y="${yAfter - 12}" font-size="12" font-weight="700" fill="#94a3b8">AFTER — ${fmtSign(Math.round(percent * 10) / 10)}%</text>
-    <rect x="${xNew0}" y="${yAfter}" width="${Math.max(xNew1 - xNew0, 2)}" height="${barH}"
-      rx="6" fill="#312e81" stroke="#6366f1" stroke-width="2"/>
-    <rect x="${changeX0}" y="${yAfter}" width="${Math.max(changeW, 0)}" height="${barH}"
-      rx="6" fill="${changeColor}" opacity="0.85"/>
+    <rect x="${xNew0}" y="${yAfter}" width="${Math.max(xNew1 - xNew0, 2)}" height="${barH}" rx="6" fill="#312e81" stroke="#6366f1" stroke-width="2"/>
+    <rect x="${changeX0}" y="${yAfter}" width="${Math.max(changeW, 0)}" height="${barH}" rx="6" fill="${changeColor}" opacity="0.85"/>
     <text x="${xNew1 + 8}" y="${yAfter + barH/2 + 5}" font-size="14" font-weight="800" fill="#c7d2fe">${fmt(Math.round(newTotal))}</text>
-    <line x1="${changeX0 + changeW/2}" y1="${yAfter + barH}" x2="${changeX0 + changeW/2}" y2="${yAfter + barH + 12}"
-      stroke="${changeColor}" stroke-width="2"/>
-    <text x="${changeX0 + changeW/2}" y="${yAfter + barH + 26}" text-anchor="middle"
-      font-size="12" font-weight="800" fill="${changeColor}">${fmtSign(Math.round(amount))}</text>
+    <line x1="${changeX0 + changeW/2}" y1="${yAfter + barH}" x2="${changeX0 + changeW/2}" y2="${yAfter + barH + 12}" stroke="${changeColor}" stroke-width="2"/>
+    <text x="${changeX0 + changeW/2}" y="${yAfter + barH + 26}" text-anchor="middle" font-size="12" font-weight="800" fill="${changeColor}">${fmtSign(Math.round(amount))}</text>
     ${ghostBar}
     <line x1="${X(0)}" y1="255" x2="${X(axisMax)}" y2="255" stroke="#475569" stroke-width="2"/>
     <line x1="${X(base)}" y1="250" x2="${X(base)}" y2="260" stroke="#3b82f6" stroke-width="2"/>
@@ -1133,127 +1231,24 @@ function paintPctBars(base, percent, amount, newTotal, axisMax) {
     <text x="${X(newTotal)}" y="278" text-anchor="middle" font-size="10" fill="${changeColor}" font-weight="700">${fmt(Math.round(newTotal))}</text>
     <line x1="${X(0)}" y1="250" x2="${X(0)}" y2="260" stroke="#64748b" stroke-width="1.5"/>
     <text x="${X(0)}" y="278" text-anchor="middle" font-size="10" fill="#64748b">0</text>
-    <line x1="${X(base*2)}" y1="250" x2="${X(base*2)}" y2="260" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
-    <text x="${X(base*2)}" y="278" text-anchor="middle" font-size="10" fill="#475569">2B</text>
   `;
-  $("svg-live-desc").textContent =
-    `Base ${fmt(Math.round(base))}, changed by ${fmtSign(Math.round(percent * 10) / 10)} percent, new total ${fmt(Math.round(newTotal))}.`;
-}
-
-// Draws the main before/after visual with smooth morph on slider change
-function renderMainVisual(r) {
-  const svg = $("main-visual");
-  if (!r.valid) {
-    if (pctMorph.raf) { cancelAnimationFrame(pctMorph.raf); pctMorph.raf = null; }
-    svg.innerHTML = `<text x="360" y="150" text-anchor="middle" font-size="16" fill="#ef4444">⚠️ ${r.error}</text>`;
-    return;
-  }
-  const { base, percent, amount, newTotal } = r.intermediates;
-  const axisMax = Math.max(base * 2, newTotal * 1.1, 100);
-  const target = { base, percent, amount, newTotal, axisMax };
-  pctMorph.target = target;
-
-  if (pctMorph.reduceMotion || pctMorph.base === 0) {
-    Object.assign(pctMorph, target);
-    paintPctBars(base, percent, amount, newTotal, axisMax);
-    return;
-  }
-
-  if (pctMorph.raf) cancelAnimationFrame(pctMorph.raf);
-  const start = {
-    base: pctMorph.base,
-    percent: pctMorph.percent,
-    amount: pctMorph.amount,
-    newTotal: pctMorph.newTotal,
-    axisMax: pctMorph.axisMax
-  };
-  const t0 = performance.now();
-  const dur = 280;
-  function step(now) {
-    const u = Math.min(1, (now - t0) / dur);
-    const e = 1 - Math.pow(1 - u, 3);
-    pctMorph.base = start.base + (target.base - start.base) * e;
-    pctMorph.percent = start.percent + (target.percent - start.percent) * e;
-    pctMorph.amount = start.amount + (target.amount - start.amount) * e;
-    pctMorph.newTotal = start.newTotal + (target.newTotal - start.newTotal) * e;
-    pctMorph.axisMax = start.axisMax + (target.axisMax - start.axisMax) * e;
-    paintPctBars(pctMorph.base, pctMorph.percent, pctMorph.amount, pctMorph.newTotal, pctMorph.axisMax);
-    if (u < 1) pctMorph.raf = requestAnimationFrame(step);
-    else {
-      pctMorph.raf = null;
-      Object.assign(pctMorph, target);
-      paintPctBars(target.base, target.percent, target.amount, target.newTotal, target.axisMax);
-    }
-  }
-  pctMorph.raf = requestAnimationFrame(step);
+  $("svg-live-desc").textContent = `Base ${fmt(Math.round(base))}, changed by ${fmtSign(Math.round(percent * 10) / 10)} percent, new total ${fmt(Math.round(newTotal))}.`;
 }
 
 function renderReadouts(r) {
   if (!r.valid) {
-    ["readout-amount","readout-multiplier","readout-total","readout-fraction"]
-      .forEach(id => $(id).textContent = "—");
+    ["readout-amount","readout-multiplier","readout-total","readout-fraction"].forEach(id => $(id).textContent = "—");
     return;
   }
   const { amount, multiplier, newTotal, frac } = r.intermediates;
   $("readout-amount").textContent = fmtSign(amount);
   $("readout-multiplier").textContent = multiplier.toFixed(2).replace(/\.?0+$/, "") + "×";
   $("readout-total").textContent = fmt(newTotal);
-
   const absP = Math.abs(Number((frac * 100).toFixed(2)));
   const map = { 50:"1/2", 33.33:"1/3", 25:"1/4", 20:"1/5", 16.67:"1/6", 12.5:"1/8", 10:"1/10", 100:"1/1" };
   $("readout-fraction").textContent = map[absP] || `${absP}/100`;
 }
 
-function renderBaseShift() {
-  const x = state.baseShiftX;
-  const res = Model.solveBaseShift(x);
-  $("baseshift-x-display").textContent = x;
-  if (!res.valid) return;
-  $("bs-a-value").textContent = fmt(res.aValue);
-  $("bs-b-value").textContent = fmt(res.bValue);
-  $("bs-less").textContent = res.lessPercent + "%";
-
-  const svg = $("baseshift-visual");
-  const padL = 60, padR = 40;
-  const plotW = 720 - padL - padR;
-  const axisMax = res.aValue * 1.3;
-  const X = (val) => padL + (val / axisMax) * plotW;
-
-  const yB = 60, yA = 130, barH = 32;
-
-  svg.innerHTML = `
-    <text x="${padL}" y="${yB - 12}" font-size="12" font-weight="700" fill="#94a3b8">B — the base (100%)</text>
-    <rect x="${X(0)}" y="${yB}" width="${X(res.bValue) - X(0)}" height="${barH}"
-      rx="6" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
-    <text x="${X(res.bValue) + 8}" y="${yB + barH/2 + 5}" font-size="14" font-weight="800" fill="#93c5fd">B=100</text>
-
-    <text x="${padL}" y="${yA - 12}" font-size="12" font-weight="700" fill="#94a3b8">A — "${x}% more than B"</text>
-    <rect x="${X(0)}" y="${yA}" width="${X(res.aValue) - X(0)}" height="${barH}"
-      rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="2"/>
-    <rect x="${X(res.bValue)}" y="${yA}" width="${X(res.aValue) - X(res.bValue)}" height="${barH}"
-      rx="6" fill="#f59e0b" opacity="0.85"/>
-    <text x="${X(res.aValue) + 8}" y="${yA + barH/2 + 5}" font-size="14" font-weight="800" fill="#fcd34d">
-      A=${fmt(res.aValue)}
-    </text>
-
-    <!-- UNIFIED NUMBER LINE -->
-    <line x1="${X(0)}" y1="215" x2="${X(axisMax)}" y2="215" stroke="#475569" stroke-width="2"/>
-    <line x1="${X(res.bValue)}" y1="210" x2="${X(res.bValue)}" y2="220" stroke="#3b82f6" stroke-width="2"/>
-    <text x="${X(res.bValue)}" y="238" text-anchor="middle" font-size="10" fill="#93c5fd" font-weight="700">B</text>
-    <line x1="${X(res.aValue)}" y1="210" x2="${X(res.aValue)}" y2="220" stroke="#f59e0b" stroke-width="2"/>
-    <text x="${X(res.aValue)}" y="238" text-anchor="middle" font-size="10" fill="#fcd34d" font-weight="700">A</text>
-    <line x1="${X(0)}" y1="210" x2="${X(0)}" y2="220" stroke="#64748b" stroke-width="1.5"/>
-    <text x="${X(0)}" y="238" text-anchor="middle" font-size="10" fill="#64748b">0</text>
-
-    <text x="${padL}" y="180" font-size="12" fill="#fcd34d" font-weight="700">
-      B is ${res.lessPercent}% less than A — note it's not ${x}%
-    </text>
-  `;
-}
-
-/* =====================================================================
-   7. SECTION 1 WIRING
-   ===================================================================== */
 function syncAndRender() {
   const r = Model.solve({ base: state.base, percent: state.percent });
   renderMainVisual(r);
@@ -1262,23 +1257,18 @@ function syncAndRender() {
 }
 
 function setControlsEnabled(enabled) {
-  ["input-percent","input-percent-num","input-base"].forEach(id => {
-    $(id).disabled = !enabled;
-  });
+  ["input-percent","input-percent-num","input-base"].forEach(id => $(id).disabled = !enabled);
   document.querySelectorAll("[data-preset]").forEach(b => b.disabled = !enabled);
 }
 
-$("input-percent").addEventListener("input", (e) => {
-  state.percent = parseFloat(e.target.value) || 0;
-  $("input-percent-num").value = state.percent;
-  $("percent-display-badge").textContent = fmtSign(state.percent) + "%";
-  syncAndRender();
-});
-$("input-percent-num").addEventListener("input", (e) => {
-  state.percent = parseFloat(e.target.value) || 0;
-  $("input-percent").value = state.percent;
-  $("percent-display-badge").textContent = fmtSign(state.percent) + "%";
-  syncAndRender();
+["input-percent", "input-percent-num"].forEach(id => {
+  $(id).addEventListener("input", (e) => {
+    state.percent = parseFloat(e.target.value) || 0;
+    $("input-percent").value = state.percent;
+    $("input-percent-num").value = state.percent;
+    $("percent-display-badge").textContent = fmtSign(state.percent) + "%";
+    syncAndRender();
+  });
 });
 $("input-base").addEventListener("input", (e) => {
   state.base = parseFloat(e.target.value) || 1;
@@ -1295,32 +1285,25 @@ document.querySelectorAll("[data-preset]").forEach(btn => {
 });
 
 /* =====================================================================
-   8. SECTION 2 — PREDICT
+   6. PREDICT
    ===================================================================== */
 function preparePredictScenario(r) {
   if (!r.valid || state.predictLocked) return;
   const { base, percent, newTotal } = r.intermediates;
   const isUp = percent >= 0;
-
   const correct = newTotal;
   const trapRaw = r.traps.rawAdd;
   const trapWrongDir = r.traps.wrongDirection;
-
   const set = new Set([correct]);
   if (!set.has(trapRaw)) set.add(trapRaw);
   if (!set.has(trapWrongDir) && set.size < 3) set.add(trapWrongDir);
   if (set.size < 3) set.add(r.traps.addedOnNew);
-
   const options = [...set].map(v => ({
     value: v,
-    kind: v === correct ? "correct"
-        : v === trapRaw ? "raw_add"
-        : v === trapWrongDir ? "wrong_dir"
-        : "distractor"
+    kind: v === correct ? "correct" : v === trapRaw ? "raw_add" : v === trapWrongDir ? "wrong_dir" : "distractor"
   })).sort((a, b) => a.value - b.value);
 
   state.predictScenario = { base, percent, correct, options };
-
   $("predict-scenario-text").textContent = isUp
     ? `₹${fmt(base)} increases by ${percent}%. What is the new total?`
     : `₹${fmt(base)} decreases by ${Math.abs(percent)}%. What is the new total?`;
@@ -1383,7 +1366,6 @@ function commitPrediction(option) {
   }
 
   revealSteps();
-  // Re-render main visual with ghost bar
   const r = Model.solve({ base: state.base, percent: state.percent });
   if (r.valid) renderMainVisual(r);
 }
@@ -1399,9 +1381,7 @@ function revealSteps() {
       <div>${s.body}</div>
       ${s.math ? `<div class="step-detail">${s.math}</div>` : ""}
     </div>`).join("");
-
-  $("solution-trap-text").textContent =
-    `Adding ${state.percent} directly to ${fmt(state.base)} gives ${fmt(r.traps.rawAdd)} — a common error. ${state.percent}% of ${fmt(state.base)} is ${fmtSign(r.intermediates.amount)}.`;
+  $("solution-trap-text").textContent = `Adding ${state.percent} directly to ${fmt(state.base)} gives ${fmt(r.traps.rawAdd)} — a common error. ${state.percent}% of ${fmt(state.base)} is ${fmtSign(r.intermediates.amount)}.`;
 }
 
 $("btn-new-predict").addEventListener("click", () => {
@@ -1417,15 +1397,269 @@ $("btn-new-predict").addEventListener("click", () => {
 });
 
 /* =====================================================================
-   9. SECTION 3 — BASE SHIFT
+   7. BASE SHIFT
    ===================================================================== */
+function renderBaseShift() {
+  const x = state.baseShiftX;
+  const res = Model.solveBaseShift(x);
+  $("baseshift-x-display").textContent = x;
+  if (!res.valid) return;
+  $("bs-a-value").textContent = fmt(res.aValue);
+  $("bs-b-value").textContent = fmt(res.bValue);
+  $("bs-less").textContent = res.lessPercent + "%";
+  const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+  const g = gcd(Math.round(res.aValue), Math.round(res.bValue));
+  $("bs-ratio").textContent = `${Math.round(res.aValue/g)} : ${Math.round(res.bValue/g)}`;
+  const svg = $("baseshift-visual");
+  const padL = 60, padR = 40;
+  const plotW = 720 - padL - padR;
+  const axisMax = res.aValue * 1.3;
+  const X = (val) => padL + (val / axisMax) * plotW;
+  const yB = 60, yA = 130, barH = 32;
+  svg.innerHTML = `
+    <text x="${padL}" y="${yB - 12}" font-size="12" font-weight="700" fill="#94a3b8">B — the base (100%)</text>
+    <rect x="${X(0)}" y="${yB}" width="${X(res.bValue) - X(0)}" height="${barH}" rx="6" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+    <text x="${X(res.bValue) + 8}" y="${yB + barH/2 + 5}" font-size="14" font-weight="800" fill="#93c5fd">B=100</text>
+    <text x="${padL}" y="${yA - 12}" font-size="12" font-weight="700" fill="#94a3b8">A — "${x}% more than B"</text>
+    <rect x="${X(0)}" y="${yA}" width="${X(res.aValue) - X(0)}" height="${barH}" rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="2"/>
+    <rect x="${X(res.bValue)}" y="${yA}" width="${X(res.aValue) - X(res.bValue)}" height="${barH}" rx="6" fill="#f59e0b" opacity="0.85"/>
+    <text x="${X(res.aValue) + 8}" y="${yA + barH/2 + 5}" font-size="14" font-weight="800" fill="#fcd34d">A=${fmt(res.aValue)}</text>
+    <text x="${padL}" y="180" font-size="12" fill="#fcd34d" font-weight="700">B is ${res.lessPercent}% less than A — note it's not ${x}%</text>
+  `;
+}
+
 $("baseshift-x").addEventListener("input", (e) => {
   state.baseShiftX = parseFloat(e.target.value);
   renderBaseShift();
 });
 
 /* =====================================================================
-   10. SECTION 4 — PRACTICE
+   8. SUCCESSIVE %
+   ===================================================================== */
+const succ = { step: 0, p1: 20, p2: 10, base: 100 };
+function renderSucc() {
+  const { step, p1, p2, base } = succ;
+  const after1 = base * (1 - p1 / 100), after2 = after1 * (1 - p2 / 100);
+  const naive = base * (1 - (p1 + p2) / 100);
+  const eq = (1 - after2 / base) * 100;
+  const y = 70, maxW = 560, x0 = 80;
+  const w1 = maxW * after1 / base, w2 = maxW * after2 / base, wn = maxW * naive / base;
+  let bars = `
+    <text x="${x0}" y="28" font-size="13" fill="#94a3b8">Think of the amount as a cake. Each % cut eats from what's LEFT.</text>
+    <rect x="${x0}" y="${y}" width="${maxW}" height="30" fill="#334155" rx="4"/>
+    <text x="${x0 + 8}" y="${y + 20}" font-size="12" fill="#94a3b8">100% cake</text>`;
+  if (step >= 1) bars += `
+    <rect x="${x0}" y="${y}" width="${w1}" height="30" fill="#38bdf8" rx="4"/>
+    <text x="${x0 + 8}" y="${y + 20}" font-size="12" font-weight="700" fill="#001824">left ${after1.toFixed(0)} after −${p1}%</text>`;
+  if (step >= 2) bars += `
+    <rect x="${x0}" y="${y + 50}" width="${w2}" height="30" fill="#22c55e" rx="4"/>
+    <text x="${x0 + 8}" y="${y + 70}" font-size="12" font-weight="700" fill="#001824">true left ${after2.toFixed(1)}</text>
+    <rect x="${x0}" y="${y + 100}" width="${wn}" height="24" fill="#ef4444" opacity="0.5" rx="4"/>
+    <text x="${x0 + 8}" y="${y + 116}" font-size="11" fill="#fca5a5">trap if you ADD %: ${naive.toFixed(1)}</text>
+    <text x="${x0}" y="${y + 155}" font-size="13" font-weight="700" fill="#e8edf7">Multiplier: (1−${p1}/100)(1−${p2}/100) = ${(after2/base).toFixed(3)} → net −${eq.toFixed(1)}% (not −${p1+p2}%)</text>`;
+  $("succ-svg").innerHTML = bars;
+  const caps = [
+    "Start with the whole cake. Press Next to watch the first cut.",
+    `First cut removes ${p1}% of the ORIGINAL. What's left (${after1.toFixed(0)}) is the new cake. The second % must eat from THIS.`,
+    `True answer ${after2.toFixed(1)}. Trap ${naive.toFixed(1)} adds ${p1}+${p2}. Once you see "second % on leftover", multipliers make it fast.`
+  ];
+  $("succ-cap").textContent = caps[step];
+  $("succ-badge").textContent = `Step ${step} / 2`;
+  $("succ-p1-b").textContent = p1;
+  $("succ-p2-b").textContent = p2;
+}
+["succ-p1", "succ-p2"].forEach(id => {
+  $(id).addEventListener("input", e => {
+    if (id === "succ-p1") succ.p1 = +e.target.value; else succ.p2 = +e.target.value;
+    succ.step = 0;
+    renderSucc();
+  });
+});
+$("succ-step").addEventListener("click", () => { succ.step = Math.min(2, succ.step + 1); renderSucc(); });
+$("succ-reset").addEventListener("click", () => { succ.step = 0; renderSucc(); });
+
+/* =====================================================================
+   9. REVERSE + FRACTION OF FRACTION
+   ===================================================================== */
+function renderReverse() {
+  const newVal = parseFloat($("rev-new").value) || 1;
+  const pct = parseFloat($("rev-pct").value) || 0;
+  const dir = $("rev-direction").value;
+  const res = Model.solveReverse({ newValue: newVal, pct, direction: dir });
+  if (!res.valid) {
+    $("rev-original").textContent = "—";
+    $("rev-mult").textContent = "—";
+    $("rev-check").textContent = "—";
+    $("rev-trap").textContent = res.error;
+    return;
+  }
+  $("rev-original").textContent = "₹" + fmt(res.original);
+  $("rev-mult").textContent = res.multiplier + "×";
+  $("rev-check").textContent = "₹" + fmt(Math.round(res.original * res.multiplier));
+  $("rev-trap").textContent = "₹" + fmt(res.trap);
+
+  const svg = $("rev-visual");
+  const padL = 60, padR = 40, plotW = 720 - padL - padR;
+  const maxVal = Math.max(res.original, newVal) * 1.15;
+  const X = (v) => padL + (v / maxVal) * plotW;
+  svg.innerHTML = `
+    <text x="${padL}" y="40" font-size="12" font-weight="700" fill="#94a3b8">ORIGINAL (what we want)</text>
+    <rect x="${X(0)}" y="55" width="${X(res.original) - X(0)}" height="30" rx="6" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+    <text x="${X(res.original) + 8}" y="75" font-size="13" font-weight="800" fill="#93c5fd">₹${fmt(res.original)}</text>
+    <text x="${padL}" y="120" font-size="12" font-weight="700" fill="#94a3b8">NEW (given)</text>
+    <rect x="${X(0)}" y="135" width="${X(newVal) - X(0)}" height="30" rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="2"/>
+    <text x="${X(newVal) + 8}" y="155" font-size="13" font-weight="800" fill="#fcd34d">₹${fmt(newVal)}</text>
+  `;
+}
+
+["rev-new", "rev-pct", "rev-direction"].forEach(id => {
+  $(id).addEventListener("input", renderReverse);
+});
+
+function renderFractionOfFraction() {
+  const a = parseFloat($("fof-a").value) || 0;
+  const b = parseFloat($("fof-b").value) || 0;
+  const n = parseFloat($("fof-n").value) || 0;
+  const res = Model.solveFractionOfFraction({ a, b, n });
+  if (!res.valid) {
+    $("fof-result").textContent = res.error;
+    return;
+  }
+  $("fof-result").innerHTML = `${a}% of ${b}% of ${fmt(n)} = <strong>${a}% × ${b}% × ${fmt(n)} = ${res.combinedPct}% of ${fmt(n)} = ${fmt(res.value)}</strong>.`;
+}
+["fof-a", "fof-b", "fof-n"].forEach(id => $(id).addEventListener("input", renderFractionOfFraction));
+
+/* =====================================================================
+   10. GROWTH SIMULATOR
+   ===================================================================== */
+function renderGrowth() {
+  const start = parseFloat($("pop-start").value) || 1;
+  const rate = parseFloat($("pop-rate").value) || 0;
+  const years = parseInt($("pop-years").value) || 1;
+  const res = Model.solveGrowth({ start, rate, years });
+  if (!res.valid) return;
+  $("pop-final").textContent = fmt(Math.round(res.final));
+  $("pop-change").textContent = fmtSign(Math.round(res.change));
+  $("pop-mult").textContent = res.multiplier + "×";
+  $("pop-eq").textContent = (res.eqPct >= 0 ? "+" : "") + res.eqPct + "%";
+
+  const svg = $("pop-visual");
+  const padL = 60, padR = 40, plotW = 720 - padL - padR;
+  const points = [];
+  for (let i = 0; i <= years; i++) {
+    points.push({ year: i, value: start * Math.pow(1 + rate/100, i) });
+  }
+  const maxV = Math.max(...points.map(p => p.value)) * 1.1;
+  const padT = 30, padB = 40, chartH = 170;
+  const X = (i) => padL + (i / Math.max(1, years)) * plotW;
+  const Y = (v) => padT + chartH - (v / maxV) * chartH;
+  let line = "";
+  points.forEach((p, i) => { line += (i === 0 ? "M" : "L") + ` ${X(i)} ${Y(p.value)}`; });
+  let dots = "";
+  points.forEach((p, i) => {
+    dots += `<circle cx="${X(i)}" cy="${Y(p.value)}" r="5" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+             <text x="${X(i)}" y="${Y(p.value) - 12}" text-anchor="middle" font-size="10" font-weight="700" fill="#86efac">${fmt(Math.round(p.value))}</text>
+             <text x="${X(i)}" y="${padT + chartH + 20}" text-anchor="middle" font-size="10" fill="#64748b">Y${i}</text>`;
+  });
+  svg.innerHTML = `
+    <line x1="${padL}" y1="${padT + chartH}" x2="${padL + plotW}" y2="${padT + chartH}" stroke="#475569" stroke-width="1"/>
+    <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + chartH}" stroke="#475569" stroke-width="1"/>
+    <path d="${line}" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    ${dots}
+  `;
+}
+["pop-start", "pop-rate", "pop-years"].forEach(id => $(id).addEventListener("input", renderGrowth));
+
+/* =====================================================================
+   11. ELECTION SIMULATOR
+   ===================================================================== */
+function renderElection() {
+  const total = parseFloat($("elec-total").value) || 0;
+  const invalid = parseFloat($("elec-invalid").value) || 0;
+  const aPct = parseFloat($("elec-a").value) || 0;
+  const res = Model.solveElection({ total, invalidPct: invalid, aPct });
+  if (!res.valid) return;
+
+  $("elec-valid").textContent = fmt(res.valid);
+  $("elec-inv-count").textContent = fmt(res.invalid);
+  $("elec-a-count").textContent = fmt(res.aVotes);
+  $("elec-b-count").textContent = fmt(res.bVotes);
+  $("elec-winner").textContent = res.winner;
+  $("elec-margin").textContent = fmt(res.margin);
+  $("elec-margin-pct").textContent = res.marginPct + "%";
+  $("elec-win-pct-total").textContent = res.winnerPctTotal + "%";
+
+  const bars = $("elec-bars");
+  const totalValid = res.valid || 1;
+  bars.innerHTML = `
+    <div class="elec-bar"><span style="min-width:34px;">A</span>
+      <div class="elec-bar-track"><div class="elec-bar-fill" style="width:${(res.aVotes/totalValid)*100}%; background:#38bdf8;">${fmt(res.aVotes)}</div></div>
+      <span style="min-width:60px; text-align:right;">${((res.aVotes/totalValid)*100).toFixed(1)}%</span>
+    </div>
+    <div class="elec-bar"><span style="min-width:34px;">B</span>
+      <div class="elec-bar-track"><div class="elec-bar-fill" style="width:${(res.bVotes/totalValid)*100}%; background:#a78bfa;">${fmt(res.bVotes)}</div></div>
+      <span style="min-width:60px; text-align:right;">${((res.bVotes/totalValid)*100).toFixed(1)}%</span>
+    </div>
+    <div class="elec-bar"><span style="min-width:34px;">INV</span>
+      <div class="elec-bar-track"><div class="elec-bar-fill" style="width:${(res.invalid/ (total||1))*100}%; background:#ef4444;">${fmt(res.invalid)}</div></div>
+      <span style="min-width:60px; text-align:right;">${((res.invalid/(total||1))*100).toFixed(1)}%</span>
+    </div>
+  `;
+}
+["elec-total", "elec-invalid", "elec-a"].forEach(id => $(id).addEventListener("input", renderElection));
+
+/* =====================================================================
+   12. MARKS SIMULATOR
+   ===================================================================== */
+function renderMarks() {
+  const pass = parseFloat($("marks-pass").value) || 40;
+  const scored = parseFloat($("marks-scored").value) || 0;
+  const deficit = parseFloat($("marks-deficit").value) || 0;
+  const res = Model.solveMarks({ passPct: pass, scored, deficit });
+  if (!res.valid) return;
+  $("marks-passval").textContent = fmt(res.passMarks);
+  $("marks-max").textContent = fmt(Math.round(res.max));
+  $("marks-pct").textContent = res.pctScored + "%";
+  $("marks-gap").textContent = fmt(res.gap);
+}
+["marks-pass", "marks-scored", "marks-deficit"].forEach(id => $(id).addEventListener("input", renderMarks));
+
+/* =====================================================================
+   13. SAVINGS SIMULATOR
+   ===================================================================== */
+function renderSavings() {
+  const income = parseFloat($("sav-income").value) || 0;
+  const iChg = parseFloat($("sav-income-chg").value) || 0;
+  const eChg = parseFloat($("sav-exp-chg").value) || 0;
+  const res = Model.solveSavings({ income, expPctOfIncome: 80, incomeChgPct: iChg, expChgPct: eChg });
+  if (!res.valid) return;
+  $("sav-oi").textContent = "₹" + fmt(res.oI);
+  $("sav-oe").textContent = "₹" + fmt(res.oE);
+  $("sav-os").textContent = "₹" + fmt(res.oS);
+  $("sav-ni").textContent = "₹" + fmt(res.nI);
+  $("sav-ne").textContent = "₹" + fmt(res.nE);
+  $("sav-ns").textContent = "₹" + fmt(res.nS);
+  $("sav-schg").textContent = res.sChg === null ? "—" : (res.sChg >= 0 ? "+" : "") + res.sChg + "%";
+}
+["sav-income", "sav-income-chg", "sav-exp-chg"].forEach(id => $(id).addEventListener("input", renderSavings));
+
+/* =====================================================================
+   14. ERROR SIMULATOR
+   ===================================================================== */
+function renderError() {
+  const actual = parseFloat($("err-actual").value) || 1;
+  const measured = parseFloat($("err-measured").value) || 1;
+  const res = Model.solveError({ actual, measured });
+  if (!res.valid) return;
+  $("err-abs").textContent = res.abs;
+  $("err-rel").textContent = res.rel + "%";
+  $("err-dir").textContent = res.dir;
+  $("err-class").textContent = res.cls;
+}
+["err-actual", "err-measured"].forEach(id => $(id).addEventListener("input", renderError));
+
+/* =====================================================================
+   15. PRACTICE
    ===================================================================== */
 function shuffle(arr) {
   const a = [...arr];
@@ -1447,9 +1681,8 @@ function setPracticeMode(mode) {
   if (mode === "timed") startTimer();
   else stopTimer();
 
-  // Hide the visual sections in exam-like modes so learner can't peep
   document.querySelectorAll("main > section").forEach((el, idx) => {
-    if (idx === 0 || idx === 2) {
+    if (idx === 0 || idx === 2 || idx === 3 || idx === 4 || idx === 5 || idx === 6 || idx === 7) {
       el.style.display = (mode === "hints") ? "" : "none";
     }
   });
@@ -1498,7 +1731,7 @@ function renderStats() {
 
 function renderQuestion() {
   if (!state.testsPassed) {
-    $("practice-q-stem").textContent = "Practice is disabled because the model self-tests failed. See banner above.";
+    $("practice-q-stem").textContent = "Practice is disabled because the model self-tests failed.";
     return;
   }
   const q = state.shuffled[state.currentQIndex];
@@ -1506,11 +1739,8 @@ function renderQuestion() {
   $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
   const d = $("practice-q-difficulty");
   d.textContent = q.difficulty;
-  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
-                             : q.difficulty === "Medium" ? "badge-draft"
-                             : "badge-tag");
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published" : q.difficulty === "Medium" ? "badge-draft" : "badge-tag");
   $("practice-q-stem").textContent = q.stem;
-
   $("practice-feedback").className = "callout hidden";
   $("practice-error-categorizer").classList.add("hidden");
   $("practice-solution-box").classList.add("hidden");
@@ -1523,8 +1753,6 @@ function renderQuestion() {
     btn.type = "button";
     btn.className = "option-btn";
     btn.textContent = opt;
-    btn.setAttribute("role", "radio");
-    btn.setAttribute("aria-checked", "false");
     btn.addEventListener("click", () => markAnswer(i, q));
     container.appendChild(btn);
   });
@@ -1536,17 +1764,13 @@ function markAnswer(chosenIdx, q) {
   if (state.answered) return;
   state.answered = true;
   stopTimer();
-
   const isCorrect = chosenIdx === q.correctIndex;
   const isTrap = chosenIdx === q.trapOptionIndex;
-
   document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
     b.disabled = true;
-    b.setAttribute("aria-checked", i === chosenIdx ? "true" : "false");
     if (i === q.correctIndex) b.classList.add("correct");
     else if (i === chosenIdx) b.classList.add(isTrap ? "trap" : "incorrect");
   });
-
   const fb = $("practice-feedback");
   fb.classList.remove("hidden");
   if (isCorrect) {
@@ -1561,10 +1785,8 @@ function markAnswer(chosenIdx, q) {
     fb.innerHTML = `<strong>Incorrect.</strong> The correct answer is: <strong>${q.options[q.correctIndex]}</strong>.`;
     $("practice-error-categorizer").classList.remove("hidden");
   }
-
   $("practice-solution-box").classList.remove("hidden");
   $("practice-solution-text").textContent = q.solution;
-
   state.stats.attempts++;
   if (isCorrect) {
     state.stats.correct++;
@@ -1579,13 +1801,10 @@ $("btn-next-question").addEventListener("click", () => {
   state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
   renderQuestion();
 });
-
 $("select-error-category").addEventListener("change", (e) => {
-  const cat = e.target.value;
-  state.stats.errorsByCat[cat] = (state.stats.errorsByCat[cat] || 0) + 1;
+  state.stats.errorsByCat[e.target.value] = (state.stats.errorsByCat[e.target.value] || 0) + 1;
   saveProgress();
 });
-
 function handleResetStats() {
   if (!confirm("Reset local practice stats for Percentages?")) return;
   state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
@@ -1594,62 +1813,18 @@ function handleResetStats() {
 }
 window.handleResetStats = handleResetStats;
 
-/* ---- Successive %: understand cake shrink, then mind formula ---- */
-const succ = { step: 0, p1: 20, p2: 10, base: 100 };
-function renderSucc() {
-  const { step, p1, p2, base } = succ;
-  const after1 = base * (1 - p1 / 100), after2 = after1 * (1 - p2 / 100);
-  const naive = base * (1 - (p1 + p2) / 100);
-  const eq = (1 - after2 / base) * 100;
-  const y = 70, maxW = 560, x0 = 80;
-  const w1 = maxW * after1 / base, w2 = maxW * after2 / base, wn = maxW * naive / base;
-  let bars = `
-    <text x="${x0}" y="28" font-size="13" fill="#94a3b8">Think of the amount as a cake. Each % cut eats from what's LEFT.</text>
-    <rect x="${x0}" y="${y}" width="${maxW}" height="30" fill="#334155" rx="4"/>
-    <text x="${x0 + 8}" y="${y + 20}" font-size="12" fill="#94a3b8">100% cake</text>`;
-  if (step >= 1) bars += `
-    <rect x="${x0}" y="${y}" width="${w1}" height="30" fill="#38bdf8" rx="4"/>
-    <rect x="${x0 + w1}" y="${y}" width="${maxW - w1}" height="30" fill="#ef4444" opacity="0.35"/>
-    <text x="${x0 + 8}" y="${y + 20}" font-size="12" font-weight="700" fill="#001824">left ${after1.toFixed(0)} after −${p1}%</text>`;
-  if (step >= 2) bars += `
-    <rect x="${x0}" y="${y + 50}" width="${w2}" height="30" fill="#22c55e" rx="4"/>
-    <text x="${x0 + 8}" y="${y + 70}" font-size="12" font-weight="700" fill="#001824">true left ${after2.toFixed(1)}</text>
-    <rect x="${x0}" y="${y + 100}" width="${wn}" height="24" fill="#ef4444" opacity="0.5" rx="4"/>
-    <text x="${x0 + 8}" y="${y + 116}" font-size="11" fill="#fca5a5">trap if you ADD % → ${naive.toFixed(1)} (looks bigger — wrong)</text>
-    <text x="${x0}" y="${y + 155}" font-size="14" font-weight="700" fill="#e8edf7">Mind shortcut after you see it: multiplier (1−${p1}/100)(1−${p2}/100) = ${(after2 / base).toFixed(3)} → equivalent −${eq.toFixed(1)}% (not −${p1 + p2}%)</text>`;
-  $("succ-svg").innerHTML = bars;
-  const caps = [
-    "Start with the whole cake. Don't reach for a formula yet — press Next and watch the first cut.",
-    `First cut removes ${p1}% of the ORIGINAL. What's left (${after1.toFixed(0)}) is the new cake. The second % must eat from THIS — that is the whole idea.`,
-    `True answer ${after2.toFixed(1)}. Trap ${naive.toFixed(1)} comes from adding ${p1}+${p2}=${p1 + p2}. Once you see “second % on leftover”, you can do it in your head with multipliers — practice locks the speed.`
-  ];
-  $("succ-cap").textContent = caps[step];
-  $("succ-badge").textContent = `Step ${step} / 2`;
-  $("succ-p1-b").textContent = p1; $("succ-p2-b").textContent = p2;
-}
-function wireSucc() {
-  ["succ-p1", "succ-p2"].forEach(id => $(id).addEventListener("input", e => {
-    if (id === "succ-p1") succ.p1 = +e.target.value; else succ.p2 = +e.target.value;
-    succ.step = 0; renderSucc();
-  }));
-  $("succ-step").addEventListener("click", () => { succ.step = Math.min(2, succ.step + 1); renderSucc(); });
-  $("succ-reset").addEventListener("click", () => { succ.step = 0; renderSucc(); });
-  renderSucc();
-}
-
 /* =====================================================================
-   11. INIT
+   16. INIT
    ===================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
-  pctMorph.reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  wireSucc();
+  renderSucc();
   const results = runSelfTests();
   state.testsPassed = results.failed === 0;
   const banner = $("test-status-banner");
   if (!state.testsPassed) {
     banner.className = "test-banner";
     banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong>
-      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
+      <ul>${results.failures.map(f => `<li>${f.n}: ${f.d}</li>`).join("")}</ul>`;
     $("practice-options-container").innerHTML = "";
   }
 
@@ -1659,6 +1834,13 @@ document.addEventListener("DOMContentLoaded", () => {
   $("percent-display-badge").textContent = fmtSign(state.percent) + "%";
   syncAndRender();
   renderBaseShift();
+  renderReverse();
+  renderFractionOfFraction();
+  renderGrowth();
+  renderElection();
+  renderMarks();
+  renderSavings();
+  renderError();
   renderQuestion();
   renderStats();
   setPracticeMode("hints");

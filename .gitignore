@@ -1,6 +1,11 @@
 # Local helper scripts / experiments (not part of the published lab)
 scratch/
 
+# npm install leftovers from local audits (not part of the published lab)
+node_modules/
+package-lock.json
+package.json
+
 # OS / editor noise
 .DS_Store
 Thumbs.db

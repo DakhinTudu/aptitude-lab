@@ -17,14 +17,24 @@
     return m ? m[1] : "topic";
   }
 
+  function smartSlice(text, max) {
+    const t = String(text || "").trim();
+    if (t.length <= max) return t;
+    const cut = t.slice(0, max);
+    const sp = cut.lastIndexOf(" ");
+    return ((sp > max * 0.5 ? cut.slice(0, sp) : cut).replace(/[—–\-:]+$/, "") || cut).trim();
+  }
+
   function sectionLabel(section, index) {
+    const custom = (section.getAttribute("data-lab-label") || "").trim();
+    if (custom) return custom;
     const h = section.querySelector("h2");
     const raw = (h && h.textContent || "").trim();
     for (const rule of LABEL_RULES) {
       if (rule.re.test(raw)) return rule.label;
     }
     if (index === 0) return "Understand";
-    return raw.split(/[—–-]/)[0].trim().slice(0, 18) || ("Step " + (index + 1));
+    return smartSlice(raw.split(/[—–-]/)[0].trim(), 22) || ("Step " + (index + 1));
   }
 
   function ensureSectionIds(sections) {

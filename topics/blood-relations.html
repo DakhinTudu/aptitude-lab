@@ -479,7 +479,7 @@ select:focus {
     </div>
 
     <div class="vis-container">
-      <svg id="tree-svg" viewBox="0 0 760 340" width="100%" role="img" aria-label="Family tree graph with typed nodes and edges">
+      <svg id="tree-svg" viewBox="0 0 760 380" width="100%" role="img" aria-label="Family tree graph with typed nodes and edges">
         <title>Family tree as a graph</title>
       </svg>
       <p id="svg-live-desc" class="sr-only" aria-live="polite"></p>
@@ -1281,7 +1281,7 @@ function renderTree() {
   const s = Model.getScenario(state.scenarioId);
   if (!s) return;
 
-  const W = 760, H = 340;
+  const W = 760, H = 380;
 
   // Path-play overlay: which edges / nodes have been walked so far
   const hops = Model.pathHops(s) || [];

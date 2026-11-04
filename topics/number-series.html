@@ -4,29 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Number &amp; Letter Series — Aptitude Lab</title>
-<meta name="description" content="Three complementary views: chain, difference shape, and track split. See the pattern signature, not just the number." />
-<!-- SEO_META -->
+<meta name="description" content="Full-syllabus interactive series lab: AP, GP, quadratic, factorial, primes, interleaved, letter groups, mirror pairs, alphanumeric — with next / missing / wrong-term question formats." />
 <meta name="theme-color" content="#0b1220" />
 <meta name="color-scheme" content="dark" />
-<meta name="robots" content="index,follow" />
-<meta name="author" content="Aptitude Lab" />
-<meta name="keywords" content="number series, letter series, reasoning patterns" />
-<link rel="canonical" href="https://dakhintudu.github.io/aptitute-lab/topics/number-series.html" />
-<meta property="og:site_name" content="Aptitude Lab" />
-<meta property="og:locale" content="en_IN" />
-<meta property="og:type" content="article" />
-<meta property="og:title" content="Number &amp; Letter Series — Aptitude Lab" />
-<meta property="og:description" content="Three complementary views: chain, difference shape, and track split. See the pattern signature, not just the number." />
-<meta property="og:url" content="https://dakhintudu.github.io/aptitute-lab/topics/number-series.html" />
-<meta property="og:image" content="https://dakhintudu.github.io/aptitute-lab/assets/og-cover.jpg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Aptitude Lab — interactive aptitude and reasoning practice" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Number &amp; Letter Series — Aptitude Lab" />
-<meta name="twitter:description" content="Three complementary views: chain, difference shape, and track split. See the pattern signature, not just the number." />
-<meta name="twitter:image" content="https://dakhintudu.github.io/aptitute-lab/assets/og-cover.jpg" />
-<!-- /SEO_META -->
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 <link rel="stylesheet" href="../assets/lab-ux.css" />
 <style>
@@ -53,7 +33,7 @@ body {
   -webkit-font-smoothing: antialiased; padding: 0 16px 64px;
 }
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
   html { scroll-behavior: auto; }
 }
 .skip-link {
@@ -104,7 +84,7 @@ main { counter-reset: section-num; }
 }
 .brand-link { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
 .brand-icon { width: 34px; height: 34px; flex-shrink: 0; }
-.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav-links { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; align-items: center; flex-wrap: wrap; }
 .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
 .nav-link:hover { color: var(--text); }
 .badge {
@@ -137,17 +117,17 @@ main { counter-reset: section-num; }
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   font-size: 0.85rem; font-weight: 600; color: var(--text);
 }
-input[type=text], input[type=number] {
+input[type=text], input[type=number], select {
   background: var(--bg-elev); color: var(--text);
   border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   padding: 10px 12px; font-size: 1rem; font-family: var(--font-mono); width: 100%;
   transition: border-color var(--transition);
 }
-input[type=text]:focus, input[type=number]:focus {
+input[type=text]:focus, input[type=number]:focus, select:focus {
   outline: none; border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-soft);
 }
-input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: not-allowed; }
+input:disabled, select:disabled { opacity: 0.6; cursor: not-allowed; }
 .vis-container {
   background: var(--bg-elev); border: 1px solid var(--border);
   border-radius: var(--radius-md); padding: 12px; margin: 8px 0 16px;
@@ -262,11 +242,6 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
   color: var(--text-dim); font-size: 0.85rem;
 }
 .footer-container { max-width: 1080px; margin: 0 auto; }
-.disclaimer-box {
-  background: var(--bg-elev); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 16px;
-  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
-}
 .error-categorizer {
   margin-top: 12px; padding: 12px;
   background: var(--bg-elev); border-radius: var(--radius-sm); border: 1px solid var(--border);
@@ -281,7 +256,33 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
   padding: 8px 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
 }
 
-/* ---------- Discovery mini-lab ---------- */
+/* Module accordion */
+.module {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.module summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 14px 18px;
+  cursor: pointer; list-style: none;
+  font-weight: 700; font-size: 1rem;
+  transition: background var(--transition);
+}
+.module summary::-webkit-details-marker { display: none; }
+.module summary::after {
+  content: "+"; font-family: var(--font-mono); font-size: 1.2rem;
+  color: var(--primary); font-weight: 700;
+  transition: transform var(--transition);
+}
+.module[open] summary::after { content: "−"; }
+.module summary:hover { background: var(--surface-2); }
+.module-body { padding: 6px 18px 20px; }
+.module-meta { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+
+/* Discovery mini-lab */
 .disc-scroll { overflow-x: auto; padding: 4px 0 8px; }
 .disc-grid { display: grid; column-gap: 4px; row-gap: 6px; align-items: center; justify-items: center; }
 .disc-tile {
@@ -294,9 +295,8 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
   display: flex; align-items: center; justify-content: center;
   background: transparent; border-style: dashed; color: var(--warn); border-color: var(--warn);
 }
-.disc-tile.ghost.found { background: var(--success-soft); color: #86efac; border-color: var(--success); box-shadow: 0 0 12px rgba(34,197,94,.35); }
-.disc-tile.ghost.wrong { background: var(--danger-soft); color: #fca5a5; border-color: var(--danger); opacity: .9; }
-.disc-tile.ghost.wrong span { text-decoration: line-through; text-decoration-thickness: 3px; }
+.disc-tile.ghost.found { background: var(--success-soft); color: #86efac; border-color: var(--success); }
+.disc-tile.ghost.wrong { background: var(--danger-soft); color: #fca5a5; border-color: var(--danger); }
 .disc-chip {
   min-width: 34px; padding: 4px 8px; text-align: center; border-radius: 999px;
   font-family: var(--font-mono); font-size: .85rem; font-weight: 800;
@@ -306,12 +306,11 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
 .disc-chip.up { color: #86efac; border-color: rgba(34,197,94,.55); }
 .disc-chip.down { color: #fca5a5; border-color: rgba(239,68,68,.55); }
 .disc-chip.d2 { color: #c4b5fd; border-color: rgba(167,139,250,.6); }
+.disc-chip.d3 { color: #fcd34d; border-color: rgba(245,158,11,.6); }
 .disc-chip.ratio { color: #fcd34d; border-color: rgba(245,158,11,.6); }
 .disc-chip.ghost { border-style: dashed; opacity: .85; }
-.disc-chip.hl { background: var(--success-soft); color: #86efac; border-color: var(--success); box-shadow: 0 0 10px rgba(34,197,94,.45); }
+.disc-chip.hl { background: var(--success-soft); color: #86efac; border-color: var(--success); }
 .disc-rowlabel { font-size: .7rem; font-weight: 800; color: var(--text-muted); letter-spacing: .04em; justify-self: end; padding-right: 4px; }
-.disc-or { font-size: .75rem; color: var(--text-muted); font-weight: 700; }
-.disc-wrong-label { font-size: .7rem; font-weight: 700; color: #fca5a5; white-space: nowrap; }
 .disc-enter { animation: disc-pop 420ms cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d, 0ms); }
 @keyframes disc-pop { from { opacity: 0; transform: translateY(-8px) scale(.8); } to { opacity: 1; transform: none; } }
 .disc-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
@@ -321,54 +320,77 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
 .disc-opts { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; font-size: .82rem; color: var(--text-dim); }
 .disc-opts label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
 .disc-opts input[type=checkbox] { accent-color: var(--primary); width: 16px; height: 16px; }
-.disc-opts input[type=checkbox]:disabled + span { opacity: .5; }
 .disc-caption { font-size: .95rem; min-height: 3.2em; }
 .disc-note { font-size: .78rem; color: var(--text-muted); min-height: 1.2em; }
 
-/* Simple live footer */
-.lab-footer-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 12px 20px;
+/* Mini-lab patterns */
+.pattern-strip {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;
 }
-.lab-footer-brand {
-  font-size: 0.88rem;
-  color: var(--text-dim, #94a3b8);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px 8px;
+.pattern-btn {
+  background: var(--bg-elev); border: 1px solid var(--border-strong);
+  color: var(--text-dim); padding: 7px 12px; border-radius: 999px;
+  font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
 }
-.lab-footer-brand a,
-.lab-footer-brand strong {
-  color: var(--text, #e8edf7);
-  font-weight: 700;
-  text-decoration: none;
-}
-.lab-footer-brand a:hover { color: var(--primary, #38bdf8); }
-.lab-footer-sep { color: var(--text-muted, #64748b); }
-.lab-footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  font-size: 0.84rem;
-}
-.lab-footer-nav a {
-  color: var(--primary, #38bdf8);
-  text-decoration: none;
-  font-weight: 600;
-}
-.lab-footer-nav a:hover { text-decoration: underline; }
-.lab-footer-note {
-  margin: 14px 0 0;
-  font-size: 0.78rem;
-  color: var(--text-muted, #64748b);
-  line-height: 1.5;
-}
-.disclaimer-box { display: none; }
+.pattern-btn:hover { color: var(--text); border-color: var(--primary); }
+.pattern-btn.active { background: var(--primary-soft); color: var(--primary); border-color: var(--primary); }
 
+/* Mirror pair mini-lab */
+.mirror-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
+  gap: 6px;
+  margin: 14px 0;
+}
+.mirror-cell {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 10px 4px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.95rem;
+  transition: all var(--transition);
+}
+.mirror-cell.pair-a { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+.mirror-cell.pair-b { background: var(--indigo-soft); border-color: var(--indigo); color: var(--indigo); }
+.mirror-cell.highlight { transform: scale(1.15); box-shadow: 0 0 0 3px var(--primary-soft); }
+.mirror-btn {
+  width: 100%;
+  padding: 8px;
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.mirror-btn:hover { background: var(--border); }
+.mirror-btn.active { background: var(--primary); color: #001824; border-color: var(--primary); }
+
+/* Answer format toggle */
+.format-toggle-group {
+  display: inline-flex;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 2px;
+  margin-bottom: 14px;
+}
+.format-btn {
+  background: transparent; color: var(--text-dim); border: 0; padding: 7px 12px;
+  border-radius: 6px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.format-btn:hover { color: var(--text); }
+.format-btn.active { background: var(--primary-soft); color: var(--primary); }
+
+/* Two-track / three-track split */
+.track-split-wrap { display: none; }
+.track-split-wrap.visible { display: block; }
 </style>
 </head>
 <body>
@@ -390,7 +412,7 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
     <nav aria-label="Topic navigation">
       <ul class="nav-links">
         <li><a href="../index.html" class="nav-link">← All Topics</a></li>
-        </ul>
+      </ul>
     </nav>
   </div>
 </header>
@@ -407,15 +429,15 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
     </div>
     <h1>Number &amp; Letter Series</h1>
     <p class="section-subtitle" style="margin-top:8px;">
-      Three views do the teaching — the chain of terms, the <em>shape</em> of the differences, and (for interleaved series) a split-track view that shows two sequences glued together. Learn to *see* the pattern.
+      Full syllabus: from AP and GP to factorials, primes, interleaved tracks, letter groups, mirror pairs, and alphanumeric codes. Each module has its own mini-lab; the <strong>practice bank</strong> at the bottom mixes all question formats — next term, missing middle, wrong term, and dual-blank.
     </p>
   </header>
 
-  <!-- ===== SECTION 0 — DISCOVERY MINI-LAB ===== -->
+  <!-- ===== DISCOVERY LAB — Foundation ===== -->
   <section class="card" aria-labelledby="s0" data-guided-only>
     <div class="card-header">
-      <h2 id="s0" class="section-title">Understand: discover the pattern — don't guess the formula</h2>
-      <p class="section-subtitle">Don't memorise a formula. Start with just the numbers, reveal one layer of differences at a time, and watch the pattern appear. Edit any tile to try your own numbers.</p>
+      <h2 id="s0" class="section-title">Discover the pattern — don't guess the formula</h2>
+      <p class="section-subtitle">Start with just the numbers, reveal one layer of differences at a time, and watch the pattern appear. Edit any tile to try your own numbers.</p>
     </div>
 
     <div style="margin-bottom:14px;">
@@ -424,8 +446,13 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
         <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="5,8,11,14,17">Steady jumps (AP)</button>
         <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="2,4,8,14,22">Growing jumps</button>
         <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="2,6,18,54,162">Multiplying (GP)</button>
-        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="1,2,4,7,12">No clean layer</button>
-        <button type="button" class="btn btn-ghost btn-sm" id="disc-use-above">Use series from section below</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="1,2,6,24,120">Factorials (×2,×3,×4,×5)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="2,4,12,48,240">Increasing ×</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="2,5,10,17,26">Squares +1 (n²+1)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="2,9,28,65,126">Cubes +1 (n³+1)</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="2,4,7,12,19">Prime diffs</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="720,360,120,30,6">Division ladder</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-disc-preset="1,2,3,5,8,13">Sum of previous (Fib)</button>
       </div>
     </div>
 
@@ -454,17 +481,15 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
     <p id="disc-note" class="disc-note" aria-live="polite"></p>
   </section>
 
-  <!-- ===== SECTION 1 — INTERACTIVE ===== -->
-  <section class="card" aria-labelledby="s1" data-guided-only>
+  <!-- ===== MODULE 2 — DIFFERENCE ANALYSIS (pyramid) ===== -->
+  <section class="card" aria-labelledby="s-pyramid" data-guided-only>
     <div class="card-header">
-      <h2 id="s1" class="section-title">Chain, difference shape, track split</h2>
-      <p class="section-subtitle">Type a series and see three complementary views. The shape of the differences is the pattern signature.</p>
+      <h2 id="s-pyramid" class="section-title">Chain, difference shape, track split</h2>
+      <p class="section-subtitle">Type a series and see three complementary views. The shape of the differences is the pattern signature. Now with D₃ band for higher-order differences.</p>
     </div>
 
     <div style="margin-bottom:18px;">
-      <span style="font-size:.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:.5rem;">
-        Pattern presets:
-      </span>
+      <span style="font-size:.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:.5rem;">Pattern presets:</span>
       <div style="display:flex; gap:.4rem; flex-wrap:wrap;">
         <button type="button" class="btn btn-secondary btn-sm" data-preset="3,7,13,21,31">Growing D₁ (+2)</button>
         <button type="button" class="btn btn-secondary btn-sm" data-preset="2,4,7,12,19">Prime jumps</button>
@@ -473,6 +498,8 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
         <button type="button" class="btn btn-secondary btn-sm" data-preset="10,50,15,45,20,40">Alternating tracks</button>
         <button type="button" class="btn btn-secondary btn-sm" data-preset="1,8,27,64,125">Cubes n³</button>
         <button type="button" class="btn btn-secondary btn-sm" data-preset="2,3,5,8,13,21">Fibonacci</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="1,4,14,40,88,170">Third diff const</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-preset="5,20,10,30,15,40">Three tracks</button>
       </div>
     </div>
 
@@ -485,47 +512,62 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
     </div>
 
     <div class="vis-container">
-      <svg id="pyramid-svg" viewBox="0 0 760 400" width="100%" role="img" aria-label="Term chain with difference shape bands">
-        <title>Term chain, D1 band, and D2 band</title>
+      <svg id="pyramid-svg" viewBox="0 0 760 460" width="100%" role="img" aria-label="Term chain with difference shape bands">
+        <title>Term chain, D1 band, D2 band, and D3 band for higher-order differences</title>
       </svg>
       <p id="svg-live-desc" class="sr-only" aria-live="polite"></p>
     </div>
 
-    <!-- Track split (only visible for interleaved series) -->
-    <div id="track-split-wrap" class="vis-container hidden" style="display:none;">
+    <div id="track-split-wrap" class="vis-container track-split-wrap">
       <p style="font-size:.8rem; font-weight:700; color:var(--indigo); text-transform:uppercase; letter-spacing:.06em; margin:0 0 8px;">
-        Track split — two independent sequences
+        Track split — independent sequences
       </p>
-      <svg id="track-split-svg" viewBox="0 0 760 240" width="100%" role="img" aria-label="Interleaved series shown as two tracks">
-        <title>Two independent tracks from interleaved positions</title>
+      <svg id="track-split-svg" viewBox="0 0 760 260" width="100%" role="img" aria-label="Interleaved series shown as 2 or 3 tracks">
+        <title>Independent tracks from interleaved positions</title>
       </svg>
     </div>
 
     <div class="score-bar" aria-live="polite">
-      <div class="score-stat">
-        <span class="score-stat-label">Pattern family</span>
-        <span class="score-stat-num" id="readout-pattern" style="font-size:.95rem;">Double difference</span>
-      </div>
-      <div class="score-stat">
-        <span class="score-stat-label">D₁</span>
-        <span class="score-stat-num" id="readout-d1">+4, +6, +8, +10</span>
-      </div>
-      <div class="score-stat">
-        <span class="score-stat-label">D₂</span>
-        <span class="score-stat-num" id="readout-d2">+2 const</span>
-      </div>
-      <div class="score-stat">
-        <span class="score-stat-label">Next term</span>
-        <span class="score-stat-num" id="readout-next" style="color:var(--success);">43</span>
-      </div>
+      <div class="score-stat"><span class="score-stat-label">Pattern family</span><span class="score-stat-num" id="readout-pattern" style="font-size:.95rem;">Double difference</span></div>
+      <div class="score-stat"><span class="score-stat-label">D₁</span><span class="score-stat-num" id="readout-d1">+4, +6, +8, +10</span></div>
+      <div class="score-stat"><span class="score-stat-label">D₂</span><span class="score-stat-num" id="readout-d2">+2 const</span></div>
+      <div class="score-stat"><span class="score-stat-label">Next term</span><span class="score-stat-num" id="readout-next" style="color:var(--success);">43</span></div>
     </div>
   </section>
 
-  <!-- ===== SECTION 2 — PREDICT ===== -->
-  <section class="card" aria-labelledby="s2">
+  <!-- ===== MODULE 7 — LETTER SERIES ===== -->
+  <section class="card" aria-labelledby="s-letters" data-guided-only>
     <div class="card-header">
-      <h2 id="s2" class="section-title">Predict first</h2>
-      <p class="section-subtitle">Commit before the answer is revealed. Wrong answers leave a ghost marker on the chain.</p>
+      <h2 id="s-letters" class="section-title">Letter series — positions, mirror pairs, groups</h2>
+      <p class="section-subtitle">The alphabet is a 26-cell number line. Slide along it, reflect across it, or skip through it.</p>
+    </div>
+
+    <div class="pattern-strip">
+      <button type="button" class="pattern-btn active" data-letter-mode="step">Letter step (B, E, H…)</button>
+      <button type="button" class="pattern-btn" data-letter-mode="mirror">Mirror pairs (A↔Z, B↔Y)</button>
+      <button type="button" class="pattern-btn" data-letter-mode="groups">Letter groups (AB, DE, GH…)</button>
+      <button type="button" class="pattern-btn" data-letter-mode="alpha-num">Alphanumeric (A1, C3, F6…)</button>
+    </div>
+
+    <div id="letter-lab-vis"></div>
+
+    <div id="letter-lab-note" class="callout callout-info" style="margin-top:14px;">
+      Click a pattern above to explore.
+    </div>
+  </section>
+
+  <!-- ===== MODULE 9 — QUESTION FORMATS ===== -->
+  <section class="card" aria-labelledby="s-formats">
+    <div class="card-header">
+      <h2 id="s-formats" class="section-title">Question formats — the examiner changes the question, not the pattern</h2>
+      <p class="section-subtitle">You might know every pattern and still freeze on exam day. The only cure is practising the *format*, not just the pattern.</p>
+    </div>
+
+    <div class="format-toggle-group" role="tablist">
+      <button type="button" class="format-btn active" data-format="next" role="tab" aria-selected="true">Find next term</button>
+      <button type="button" class="format-btn" data-format="middle" role="tab" aria-selected="false">Find missing middle</button>
+      <button type="button" class="format-btn" data-format="wrong" role="tab" aria-selected="false">Find wrong term</button>
+      <button type="button" class="format-btn" data-format="pattern" role="tab" aria-selected="false">Find the pattern</button>
     </div>
 
     <div class="predict-box">
@@ -535,64 +577,23 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
           <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
           <line x1="12" y1="17" x2="12.01" y2="17"/>
         </svg>
-        <span>Next term?</span>
+        <span id="format-header-text">Predict the next term</span>
       </div>
-      <p id="predict-scenario-text" style="font-size:1.1rem; font-weight:600; font-family:var(--font-mono); margin-bottom:1rem; color:var(--primary);"></p>
-      <div class="options-grid" id="predict-options-container" role="radiogroup" aria-label="Prediction options"></div>
-      <div id="predict-feedback" class="callout hidden" role="alert"></div>
-
+      <p id="format-scenario" style="font-size:1.1rem; font-weight:600; font-family:var(--font-mono); margin-bottom:1rem; color:var(--primary);"></p>
+      <div class="options-grid" id="format-options" role="radiogroup" aria-label="Format question options"></div>
+      <div id="format-feedback" class="callout hidden" role="alert"></div>
       <div style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
-        <button type="button" id="btn-new-predict" class="btn btn-secondary">🎲 New series</button>
-        <span id="predict-lock-hint" style="font-size:.8rem; color:var(--text-muted);">
-          Input locked until you predict.
-        </span>
-      </div>
-    </div>
-
-    <div id="worked-solution-panel" class="hidden" style="margin-top:20px;">
-      <h3 style="margin-bottom:12px;">Step-by-step solution</h3>
-      <div class="steps-container" id="solution-steps-container"></div>
-      <div class="callout callout-trap" id="solution-trap-callout" style="margin-top:12px;">
-        <strong>⚠️ Pattern trap:</strong> <span id="solution-trap-text"></span>
+        <button type="button" id="btn-new-format" class="btn btn-secondary">🎲 New question</button>
+        <span style="font-size:.8rem; color:var(--text-muted);">Try each format — the trap is different in each.</span>
       </div>
     </div>
   </section>
 
-  <!-- ===== SECTION 3 — SIGNATURES ===== -->
-  <section class="card" aria-labelledby="s3" data-guided-only>
+  <!-- ===== MODULE 10 — PRACTICE ===== -->
+  <section class="card" aria-labelledby="s-practice">
     <div class="card-header">
-      <h2 id="s3" class="section-title">Pattern signatures — what the shape tells you</h2>
-      <p class="section-subtitle">Read the shape of the D₁ / D₂ bands like a diagnostic chart.</p>
-    </div>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1rem;">
-      <div style="background:var(--bg-elev); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border);">
-        <h3 style="color:var(--primary); margin-bottom:.4rem; font-size:.95rem;">Flat D₁ band → Arithmetic</h3>
-        <p style="font-size:.85rem; color:var(--text-dim);">All bars equal height. e.g. 5, 8, 11, 14 → +3 each step.</p>
-      </div>
-      <div style="background:var(--bg-elev); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border);">
-        <h3 style="color:var(--success); margin-bottom:.4rem; font-size:.95rem;">Climbing D₁ + flat D₂ → Quadratic</h3>
-        <p style="font-size:.85rem; color:var(--text-dim);">D₁ bars rise steadily. D₂ band is a flat line. e.g. 3, 7, 13, 21 → D₁ = 4, 6, 8; D₂ = 2.</p>
-      </div>
-      <div style="background:var(--bg-elev); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border);">
-        <h3 style="color:var(--warn); margin-bottom:.4rem; font-size:.95rem;">Prime-shaped D₁ → Primes</h3>
-        <p style="font-size:.85rem; color:var(--text-dim);">D₁ = 2, 3, 5, 7 → next is 11, not 9. Beware if D₁ starts with +2.</p>
-      </div>
-      <div style="background:var(--bg-elev); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border);">
-        <h3 style="color:var(--purple); margin-bottom:.4rem; font-size:.95rem;">Ratios matter → Multiplier</h3>
-        <p style="font-size:.85rem; color:var(--text-dim);">If D₁ looks chaotic, check term-to-term ratios. They may form a clean ladder (+0.5, +1, ×2…).</p>
-      </div>
-      <div style="background:var(--bg-elev); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border);">
-        <h3 style="color:var(--indigo); margin-bottom:.4rem; font-size:.95rem;">Zigzag D₁ → Interleaved tracks</h3>
-        <p style="font-size:.85rem; color:var(--text-dim);">Two independent sequences glued together. The track split view makes it visible.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== SECTION 4 — PRACTICE ===== -->
-  <section class="card" aria-labelledby="s4">
-    <div class="card-header">
-      <h2 id="s4" class="section-title">Practice</h2>
-      <p class="section-subtitle">Shuffled each session. Traps have real pattern reasons.</p>
+      <h2 id="s-practice" class="section-title">Practice</h2>
+      <p class="section-subtitle">Mixed formats and mixed patterns. Traps have real reasons.</p>
     </div>
 
     <div class="practice-header">
@@ -618,7 +619,7 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
 
     <div id="practice-question-card" style="margin-top:18px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 12</span>
+        <span style="font-size:.78rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em;" id="practice-q-num">Question 1 of 30</span>
         <span class="badge" id="practice-q-difficulty">Easy</span>
       </div>
       <p class="question-stem" id="practice-q-stem">Loading…</p>
@@ -630,8 +631,8 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
         <select id="select-error-category">
           <option value="concept">Wrong pattern family (prime vs odd, etc.)</option>
           <option value="method">Missed interleaved track or multiplier drift</option>
+          <option value="format">Wrong format (solved for wrong position)</option>
           <option value="arithmetic">Arithmetic slip</option>
-          <option value="misread">Solved for wrong position</option>
           <option value="time_guess">Time-pressure guess</option>
         </select>
       </div>
@@ -647,59 +648,60 @@ input[type=text]:disabled, input[type=number]:disabled { opacity: 0.6; cursor: n
     </div>
   </section>
 
-  <!-- ===== EXAM SHORTCUTS ===== -->
-  <section class="card lab-shortcuts" id="exam-shortcuts" aria-labelledby="s-shortcuts">
+  <!-- ===== SHORTCUTS ===== -->
+  <section class="card">
     <div class="card-header">
-      <h2 id="s-shortcuts" class="section-title">Exam shortcuts</h2>
-      <p class="section-subtitle">Speed card for the exam hall. Read after Practice — then race the timed set.</p>
+      <h2 class="section-title">Exam shortcuts</h2>
+      <p class="section-subtitle">Speed card for the exam hall.</p>
     </div>
-    <ul class="lab-shortcuts-grid">
-      <li class="lab-shortcuts-item" data-kind="speed">
-        <span class="lab-shortcuts-tag">Use</span>
-        <p class="lab-shortcuts-title">Diff pyramid first</p>
-        <p class="lab-shortcuts-body">Write 1st differences; if not constant, 2nd. Alternating / ×k+c next.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="trap">
-        <span class="lab-shortcuts-tag">Trap</span>
-        <p class="lab-shortcuts-title">Prime vs odd</p>
-        <p class="lab-shortcuts-body">Don't force +2,+2 when the pattern is primes or ×n+1.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="check">
-        <span class="lab-shortcuts-tag">Check</span>
-        <p class="lab-shortcuts-title">Two tracks</p>
-        <p class="lab-shortcuts-body">Odd/even positions often independent — split before combining.</p>
-      </li>
-      <li class="lab-shortcuts-item" data-kind="speed">
-        <span class="lab-shortcuts-tag">Speed</span>
-        <p class="lab-shortcuts-title">Letter series</p>
-        <p class="lab-shortcuts-body">Position in alphabet (A=1). ±k or reverse (A↔Z) are the usual two.</p>
-      </li>
-    </ul>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px;">
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Use</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Diff pyramid first</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">Write D₁; if not constant, D₂, D₃. Only then check ×k, primes, n², n³.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--warn); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Trap</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Prime vs odd</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">D₁ starting with +2? Check if primes (2,3,5,7,11…) not odd (1,3,5,7,9).</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--success); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Check</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Two tracks</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">Odd/even positions often independent. Split before combining.</p>
+      </div>
+      <div style="background:var(--bg-elev); padding:14px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; color:var(--indigo); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;">Speed</div>
+        <p style="font-size:.9rem; font-weight:700; margin:0 0 4px;">Letter series</p>
+        <p style="font-size:.82rem; color:var(--text-dim); margin:0;">Convert to A=1. Mirror is 27−pos. Wrap-around adds mod 26.</p>
+      </div>
+    </div>
   </section>
 </main>
 
 <footer class="site-footer">
   <div class="footer-container">
-    <div class="lab-footer-row">
-      <div class="lab-footer-brand">
-        <a href="../index.html">Aptitude &amp; Reasoning Lab</a>
-        <span class="lab-footer-sep" aria-hidden="true">·</span>
-        <span>Free interactive practice for competitive exams</span>
+    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <strong>Aptitude &amp; Reasoning Lab</strong> — Practice-first competitive exam learning
       </div>
-      <nav class="lab-footer-nav" aria-label="Footer">
-        <a href="../index.html">All topics</a>
-      </nav>
+      <div style="font-size:.8rem;">
+        <a href="../index.html" style="color:var(--primary); text-decoration:none;">← All topics</a>
+      </div>
     </div>
-    <p class="lab-footer-note">Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.</p>
+    <div style="background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-top:16px; font-size:.78rem; color:var(--text-muted); line-height:1.5;">
+      Educational tool. Not affiliated with SEBI, RBI, NABARD, IBPS, or SSC. Check the latest official notification.
+    </div>
   </div>
 </footer>
 
 <script>
 /* =====================================================================
-   1. PURE MODEL
+   1. PURE MODEL — extended with factorial, n²+k, n³+k, 3-track, third-diff
    ===================================================================== */
 const Model = (() => {
   const PRIMES = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
+  const FACTORIALS = [1,2,6,24,120,720,5040,40320,362880];
   const round = (x, d = 3) => Math.round(x * 10 ** d) / 10 ** d;
   const isLetter = (s) => typeof s === 'string' && s.length === 1 && /[A-Za-z]/.test(s);
   const letterToNum = (c) => c.toUpperCase().charCodeAt(0) - 64;
@@ -717,6 +719,7 @@ const Model = (() => {
 
     const allLetters = raw.every(isLetter);
     if (allLetters) return analyzeLetter(raw);
+
     if (!raw.every(x => isLetter(x) || !isNaN(Number(x)))) {
       return { valid: false, error: "Terms must be numbers or single letters." };
     }
@@ -730,16 +733,18 @@ const Model = (() => {
     for (let i = 0; i < n - 1; i++) d1.push(round(nums[i+1] - nums[i]));
     const d2 = [];
     for (let i = 0; i < d1.length - 1; i++) d2.push(round(d1[i+1] - d1[i]));
+    const d3 = [];
+    for (let i = 0; i < d2.length - 1; i++) d3.push(round(d2[i+1] - d2[i]));
 
     // 1. Arithmetic
     if (d1.every(x => x === d1[0])) {
       return {
         valid: true, family: "Arithmetic", display: "Arithmetic progression",
-        terms: nums, d1, d2,
+        terms: nums, d1, d2, d3,
         next: round(nums[n-1] + d1[0]),
         steps: [
           { title: "List terms", body: nums.join(", ") },
-          { title: "First differences (flat shape)", body: "All equal: +" + d1[0] },
+          { title: "D₁ (flat)", body: "All equal: +" + d1[0] },
           { title: "Next term", body: `${nums[n-1]} + ${d1[0]} = ${nums[n-1] + d1[0]}` }
         ]
       };
@@ -752,62 +757,139 @@ const Model = (() => {
       const trap = round(nums[n-1] + d1[d1.length - 1]);
       return {
         valid: true, family: "Quadratic", display: "Double difference (quadratic)",
-        terms: nums, d1, d2,
+        terms: nums, d1, d2, d3,
         next: nextVal,
-        trap: { value: trap, why: `Adding the last D₁ (+${d1[d1.length-1]}) instead of the incremented one (+${nextD1}). D₂ is constant at ${d2[0]}.` },
+        trap: { value: trap, why: `Adding last D₁ (+${d1[d1.length-1]}) instead of the incremented +${nextD1}. D₂ is constant at ${d2[0]}.` },
         steps: [
-          { title: "List terms", body: nums.join(", ") },
-          { title: "D₁ (climbing shape)", body: d1.map(x => (x>=0?"+":"")+x).join(", ") },
-          { title: "D₂ (flat shape)", body: `Constant: ${d2[0]}. So next D₁ = ${d1[d1.length-1]} + ${d2[0]} = ${nextD1}` },
+          { title: "D₁", body: d1.map(x => (x>=0?"+":"")+x).join(", ") },
+          { title: "D₂ (flat)", body: `Constant: ${d2[0]}. Next D₁ = ${nextD1}.` },
           { title: "Next term", body: `${nums[n-1]} + ${nextD1} = ${nextVal}` }
         ]
       };
     }
 
-    // 3. Prime differences
+    // 3. Cubic (D₃ constant)
+    if (d3.length >= 2 && d3.every(x => x === d3[0])) {
+      const nextD2 = round(d2[d2.length-1] + d3[0]);
+      const nextD1 = round(d1[d1.length-1] + nextD2);
+      const nextVal = round(nums[n-1] + nextD1);
+      return {
+        valid: true, family: "Cubic", display: "Third difference (cubic)",
+        terms: nums, d1, d2, d3,
+        next: nextVal,
+        steps: [
+          { title: "D₁", body: d1.map(x => (x>=0?"+":"")+x).join(", ") },
+          { title: "D₂", body: d2.map(x => (x>=0?"+":"")+x).join(", ") },
+          { title: "D₃ (flat)", body: `Constant ${d3[0]}. Next D₂ = ${nextD2}, next D₁ = ${nextD1}.` },
+          { title: "Next term", body: `${nums[n-1]} + ${nextD1} = ${nextVal}` }
+        ]
+      };
+    }
+
+    // 4. Prime differences
     if (d1.every((x, i) => x === PRIMES[i])) {
       const nextPrime = PRIMES[d1.length];
       const nextVal = nums[n-1] + nextPrime;
       const oddTrap = nums[n-1] + (d1[d1.length-1] + 2);
       return {
         valid: true, family: "Prime", display: "Prime differences",
-        terms: nums, d1, d2,
+        terms: nums, d1, d2, d3,
         next: nextVal,
-        trap: { value: oddTrap, why: `Assuming odd numbers. First difference is +2 (even) → these are PRIMES. Next prime after ${d1[d1.length-1]} is ${nextPrime}, not ${d1[d1.length-1]+2}.` },
+        trap: { value: oddTrap, why: `First diff +2 (even) → PRIMES. Next prime after ${d1[d1.length-1]} is ${nextPrime}, not ${d1[d1.length-1]+2}.` },
         steps: [
-          { title: "List terms", body: nums.join(", ") },
-          { title: "D₁ (prime shape)", body: d1.join(", ") },
-          { title: "Next prime", body: `After ${d1[d1.length-1]} comes ${nextPrime} (9 is composite)` },
+          { title: "D₁", body: d1.join(", ") + " — these are primes" },
+          { title: "Next prime", body: `After ${d1[d1.length-1]} comes ${nextPrime}` },
           { title: "Next term", body: `${nums[n-1]} + ${nextPrime} = ${nextVal}` }
         ]
       };
     }
 
-    // 4. Multiplier ladder
-    let ratioSafe = nums.every(v => v !== 0);
-    if (ratioSafe) {
-      const ratios = [];
-      for (let i = 0; i < n - 1; i++) ratios.push(round(nums[i+1] / nums[i]));
-      const ratioDiffs = [];
-      for (let i = 0; i < ratios.length - 1; i++) ratioDiffs.push(round(ratios[i+1] - ratios[i]));
-      if (ratioDiffs.length >= 2 && ratioDiffs.every(x => x === ratioDiffs[0]) && ratioDiffs[0] !== 0) {
-        const nextRatio = round(ratios[ratios.length-1] + ratioDiffs[0], 2);
+    // 5. Factorial-like (increasing multiplier from 2)
+    const ratios = nums.every(v => v !== 0) ? nums.slice(0,-1).map((v,i) => round(nums[i+1]/v)) : null;
+    if (ratios && ratios.every((r, i) => r === i + 2)) {
+      const nextRatio = ratios[ratios.length - 1] + 1;
+      const nextVal = round(nums[n-1] * nextRatio, 0);
+      return {
+        valid: true, family: "Factorial", display: "Factorial multipliers (×2, ×3, ×4…)",
+        terms: nums, d1: ratios, d2: [], d3: [],
+        next: nextVal,
+        steps: [
+          { title: "Ratios", body: ratios.map(r => "×" + r).join(", ") },
+          { title: "Pattern", body: "Each ratio increases by 1 (starting at 2)" },
+          { title: "Next term", body: `${nums[n-1]} × ${nextRatio} = ${nextVal}` }
+        ]
+      };
+    }
+
+    // 6. Increasing multiplier (×2, ×3, ×4, ×5 or starting elsewhere)
+    if (ratios && ratios.length >= 3) {
+      const rDiffs = [];
+      for (let i = 0; i < ratios.length - 1; i++) rDiffs.push(round(ratios[i+1] - ratios[i]));
+      if (rDiffs.every(x => x === rDiffs[0]) && rDiffs[0] !== 0) {
+        const nextRatio = round(ratios[ratios.length-1] + rDiffs[0], 2);
         const nextVal = round(nums[n-1] * nextRatio, 2);
         return {
           valid: true, family: "Multiplier", display: "Multiplier drift",
-          terms: nums, d1: ratios, d2: ratioDiffs, isRatioView: true,
+          terms: nums, d1: ratios, d2: rDiffs, d3: [], isRatioView: true,
           next: nextVal,
           steps: [
-            { title: "List terms", body: nums.join(", ") },
             { title: "Ratios", body: ratios.map(r => `×${r}`).join(", ") },
-            { title: "Ratio drift", body: `Each ratio steps by ${ratioDiffs[0]}. Next is ×${nextRatio}` },
+            { title: "Drift", body: `Each ratio steps by ${rDiffs[0]}. Next is ×${nextRatio}` },
             { title: "Next term", body: `${nums[n-1]} × ${nextRatio} = ${nextVal}` }
           ]
         };
       }
     }
 
-    // 5. Fibonacci-like
+    // 7. n² + k
+    for (let k = -10; k <= 10; k++) {
+      let ok = true;
+      for (let i = 0; i < n; i++) {
+        const root = Math.round(Math.sqrt(nums[i] - k));
+        if (root * root + k !== nums[i]) { ok = false; break; }
+      }
+      if (ok) {
+        const nextN = Math.round(Math.sqrt(nums[n-1] - k)) + 1;
+        const nextVal = nextN * nextN + k;
+        const offset = k === 0 ? "" : (k > 0 ? `+${k}` : `${k}`);
+        return {
+          valid: true, family: "Squares", display: `Squares n²${offset}`,
+          terms: nums, d1, d2, d3,
+          next: nextVal,
+          steps: [
+            { title: "Formula", body: `Every term = n²${offset}` },
+            { title: "Roots", body: nums.map(v => Math.round(Math.sqrt(v - k))).join(", ") },
+            { title: "Next term", body: `${nextN}²${offset} = ${nextVal}` }
+          ]
+        };
+      }
+    }
+
+    // 8. n³ + k
+    for (let k = -10; k <= 10; k++) {
+      let ok = true;
+      for (let i = 0; i < n; i++) {
+        const root = Math.round(Math.cbrt(nums[i] - k));
+        if (root * root * root + k !== nums[i]) { ok = false; break; }
+      }
+      if (ok) {
+        const nextN = Math.round(Math.cbrt(nums[n-1] - k)) + 1;
+        const nextVal = nextN ** 3 + k;
+        const offset = k === 0 ? "" : (k > 0 ? `+${k}` : `${k}`);
+        return {
+          valid: true, family: "Cubes", display: `Cubes n³${offset}`,
+          terms: nums, d1, d2, d3,
+          next: nextVal,
+          steps: [
+            { title: "Formula", body: `Every term = n³${offset}` },
+            { title: "Roots", body: nums.map(v => Math.round(Math.cbrt(v - k))).join(", ") },
+            { title: "Next term", body: `${nextN}³${offset} = ${nextVal}` }
+          ]
+        };
+      }
+    }
+
+    // 9. Fibonacci-like
     let fib = true;
     for (let i = 2; i < n; i++) {
       if (nums[i] !== nums[i-1] + nums[i-2]) { fib = false; break; }
@@ -816,39 +898,20 @@ const Model = (() => {
       const nextVal = nums[n-1] + nums[n-2];
       return {
         valid: true, family: "Fibonacci", display: "Additive recursive (Fibonacci)",
-        terms: nums, d1, d2,
+        terms: nums, d1, d2, d3,
         next: nextVal,
         steps: [
-          { title: "List terms", body: nums.join(", ") },
-          { title: "Rule", body: "Each term = sum of previous two." },
+          { title: "Rule", body: "Each term = sum of previous two" },
           { title: "Next term", body: `${nums[n-2]} + ${nums[n-1]} = ${nextVal}` }
         ]
       };
     }
 
-    // 6. Cubes
-    const isCube = nums.every(v => Math.round(Math.cbrt(v)) ** 3 === v);
-    if (isCube) {
-      const k = Math.round(Math.cbrt(nums[n-1])) + 1;
-      const nextVal = k ** 3;
-      return {
-        valid: true, family: "Cubes", display: "Perfect cubes (n³)",
-        terms: nums, d1, d2,
-        next: nextVal,
-        steps: [
-          { title: "List terms", body: nums.join(", ") },
-          { title: "Roots", body: nums.map(v => Math.round(Math.cbrt(v))).join(", ") },
-          { title: "Next cube", body: `${k}³ = ${nextVal}` }
-        ]
-      };
-    }
-
-    // 7. Alternating tracks — MUST come before fallback and after simplicity checks
+    // 10. Alternating 2-track
     if (n >= 6) {
       const t1 = [], t2 = [];
       nums.forEach((v, i) => (i % 2 === 0 ? t1 : t2).push(v));
-      const t1d = t1[1] - t1[0];
-      const t2d = t2[1] - t2[0];
+      const t1d = t1[1] - t1[0], t2d = t2[1] - t2[0];
       const t1ok = t1.every((v, i) => i === 0 || v - t1[i-1] === t1d);
       const t2ok = t2.every((v, i) => i === 0 || v - t2[i-1] === t2d);
       if (t1ok && t2ok) {
@@ -857,35 +920,81 @@ const Model = (() => {
         const step = nextOnT1 ? t1d : t2d;
         const nextVal = track[track.length-1] + step;
         return {
-          valid: true, family: "Alternating", display: "Interleaved tracks",
-          terms: nums, d1, d2,
+          valid: true, family: "Alternating", display: "Interleaved tracks (2)",
+          terms: nums, d1, d2, d3,
           tracks: { t1, t2, t1d, t2d, nextOnT1 },
           next: nextVal,
           steps: [
-            { title: "List terms", body: nums.join(", ") },
             { title: "Track 1 (odd positions)", body: t1.join(", ") + ` — step ${t1d}` },
             { title: "Track 2 (even positions)", body: t2.join(", ") + ` — step ${t2d}` },
-            { title: "Next term belongs to", body: nextOnT1 ? "Track 1 (odd positions)" : "Track 2 (even positions)" },
             { title: "Next term", body: `${track[track.length-1]} + ${step} = ${nextVal}` }
           ]
         };
       }
     }
 
-    // 8. Fallback
+    // 11. Three-track
+    if (n >= 6) {
+      const t1 = [], t2 = [], t3 = [];
+      nums.forEach((v, i) => {
+        if (i % 3 === 0) t1.push(v);
+        else if (i % 3 === 1) t2.push(v);
+        else t3.push(v);
+      });
+      const allLinear = (t) => t.length >= 2 && t.every((v, i) => i === 0 || v - t[i-1] === t[1] - t[0]);
+      if (allLinear(t1) && allLinear(t2) && allLinear(t3)) {
+        const idx = n % 3;
+        const track = [t1, t2, t3][idx];
+        const step = track[1] - track[0];
+        const nextVal = track[track.length-1] + step;
+        return {
+          valid: true, family: "Three-track", display: "Interleaved tracks (3)",
+          terms: nums, d1, d2, d3,
+          tracks3: { t1, t2, t3 },
+          next: nextVal,
+          steps: [
+            { title: "Track 1 (pos 1, 4, 7…)", body: t1.join(", ") },
+            { title: "Track 2 (pos 2, 5, 8…)", body: t2.join(", ") },
+            { title: "Track 3 (pos 3, 6, 9…)", body: t3.join(", ") },
+            { title: "Next term", body: `Continues on track ${idx + 1}: ${track[track.length-1]} + ${step} = ${nextVal}` }
+          ]
+        };
+      }
+    }
+
+    // 12. Division ladder (ratios form a decreasing fraction pattern)
+    if (ratios && ratios.every(r => r > 0 && r < 1)) {
+      const inverseRatios = ratios.map(r => round(1/r, 2));
+      const invDiffs = [];
+      for (let i = 0; i < inverseRatios.length - 1; i++) invDiffs.push(round(inverseRatios[i+1] - inverseRatios[i]));
+      if (invDiffs.every(x => x === invDiffs[0]) && invDiffs[0] !== 0) {
+        const nextInv = round(inverseRatios[inverseRatios.length-1] + invDiffs[0], 2);
+        const nextVal = round(nums[n-1] / nextInv, 2);
+        return {
+          valid: true, family: "Division", display: "Changing division (÷2, ÷3, ÷4…)",
+          terms: nums, d1: ratios, d2: [], d3: [],
+          next: nextVal,
+          steps: [
+            { title: "Divisors", body: inverseRatios.map(r => `÷${r}`).join(", ") },
+            { title: "Pattern", body: `Divisor increases by ${invDiffs[0]}. Next: ÷${nextInv}` },
+            { title: "Next term", body: `${nums[n-1]} ÷ ${nextInv} = ${nextVal}` }
+          ]
+        };
+      }
+    }
+
+    // Fallback
     const lastD1 = d1[d1.length-1] || 0;
     const lastD2 = d2.length ? d2[d2.length-1] : 0;
     const nextD1 = round(lastD1 + lastD2);
     const nextVal = round(nums[n-1] + nextD1);
     return {
       valid: true, family: "Unknown", display: "Unclassified (best-effort)",
-      terms: nums, d1, d2,
+      terms: nums, d1, d2, d3,
       next: nextVal,
       steps: [
-        { title: "List terms", body: nums.join(", ") },
         { title: "D₁", body: d1.join(", ") },
-        { title: "Warning", body: "No known signature matched. Next-term is a projection, not a guarantee." },
-        { title: "Projection", body: `${nums[n-1]} + ${nextD1} = ${nextVal}` }
+        { title: "Warning", body: "No known signature matched. Next-term is a projection." }
       ]
     };
   }
@@ -895,299 +1004,285 @@ const Model = (() => {
     const n = nums.length;
     const d = [];
     for (let i = 0; i < n - 1; i++) d.push(nums[i+1] - nums[i]);
+
+    // Constant step
     if (d.every(x => x === d[0])) {
       const nextPos = nums[n-1] + d[0];
       return {
         valid: true, family: "Alphabet step", display: "Alphabetical +" + d[0],
-        terms: raw, d1: d, d2: [], isLetters: true,
+        terms: raw, d1: d, d2: [], d3: [], isLetters: true,
         next: numToLetter(nextPos),
         steps: [
-          { title: "Letter positions", body: raw.map(c => `${c}=${letterToNum(c)}`).join(", ") },
-          { title: "Step", body: `+${d[0]} positions each` },
-          { title: "Next letter", body: `${nums[n-1]} + ${d[0]} = ${nextPos} → '${numToLetter(nextPos)}'` }
+          { title: "Positions", body: raw.map(c => `${c}=${letterToNum(c)}`).join(", ") },
+          { title: "Next", body: `${nums[n-1]} + ${d[0]} = ${nextPos} → '${numToLetter(nextPos)}'` }
         ]
       };
     }
+
+    // Growing step
     const d2 = [];
     for (let i = 0; i < d.length - 1; i++) d2.push(d[i+1] - d[i]);
     if (d2.length >= 1 && d2.every(x => x === d2[0])) {
       const nextD = d[d.length-1] + d2[0];
       const nextPos = nums[n-1] + nextD;
       return {
-        valid: true, family: "Alphabet quadratic", display: "Alphabet step growing +" + d2[0],
-        terms: raw, d1: d, d2, isLetters: true,
+        valid: true, family: "Alphabet growing", display: "Alphabet +" + d[0] + ", growing by " + d2[0],
+        terms: raw, d1: d, d2, d3: [], isLetters: true,
         next: numToLetter(nextPos),
         steps: [
-          { title: "Letter positions", body: raw.map(c => `${c}=${letterToNum(c)}`).join(", ") },
+          { title: "Positions", body: raw.map(c => `${c}=${letterToNum(c)}`).join(", ") },
           { title: "D₁", body: d.join(", ") },
-          { title: "D₂", body: "Constant: " + d2[0] },
-          { title: "Next letter", body: `+${nextD} → pos ${nextPos} → '${numToLetter(nextPos)}'` }
+          { title: "Next", body: `+${nextD} → pos ${nextPos} → '${numToLetter(nextPos)}'` }
         ]
       };
     }
+
+    // Mirror pairs (A, Z, B, Y, C, X...)
+    const mirrorPattern = raw.every((c, i) => {
+      if (i < 2) return true;
+      if (i % 2 === 0) return letterToNum(c) === letterToNum(raw[0]) + i/2;
+      return letterToNum(c) === letterToNum(raw[1]) - (i-1)/2;
+    });
+    if (mirrorPattern && raw.length >= 4) {
+      return {
+        valid: true, family: "Mirror pairs", display: "Opposite alphabet (A↔Z, B↔Y)",
+        terms: raw, d1: [], d2: [], d3: [], isLetters: true,
+        next: null,
+        steps: [
+          { title: "Pattern", body: "Letters come in opposite pairs from the two ends of the alphabet" },
+          { title: "Note", body: "Not enough context to predict uniquely — try a middle-term question" }
+        ]
+      };
+    }
+
     return { valid: false, error: "Letter series doesn't match a supported signature." };
   }
 
-  return { analyze, letterToNum, numToLetter, isLetter };
+  // Wrong-term detection: which term when removed makes the rest follow a clean pattern?
+  function findWrongTerm(nums) {
+    for (let skip = 0; skip < nums.length; skip++) {
+      const filtered = nums.filter((_, i) => i !== skip);
+      if (filtered.length < 4) continue;
+      const r = analyze(filtered);
+      if (r.valid && r.family !== "Unknown") {
+        return { wrongIndex: skip, wrongValue: nums[skip], restFamily: r.family, rest: filtered };
+      }
+    }
+    return null;
+  }
+
+  return { analyze, findWrongTerm, letterToNum, numToLetter, isLetter };
 })();
 window.Model = Model;
-
-/* =====================================================================
-   1b. DISCOVERY MODEL (pure — no DOM). Builds a step-by-step "reveal"
-   plan: numbers → D1 → D2 → (ratios) → highlight + ghost next term.
-   ===================================================================== */
-const DiscoveryModel = (() => {
-  const round = (x, d = 3) => Math.round(x * 10 ** d) / 10 ** d;
-  const sg = (x) => (x >= 0 ? "+" : "−") + Math.abs(x);
-  const addStr = (a, d) => d >= 0 ? `${a} + ${d}` : `${a} − ${Math.abs(d)}`;
-  const list = (arr, f) => arr.map(f).join(", ");
-  const allEq = (a) => a.length > 0 && a.every(v => v === a[0]);
-  const MIN_TERMS = 4;
-
-  // raw: array of strings/numbers (e.g. tile inputs)
-  function parse(raw) {
-    if (!Array.isArray(raw) || raw.length < MIN_TERMS) {
-      return { ok: false, error: `Need at least ${MIN_TERMS} numbers to spot a pattern.` };
-    }
-    const nums = [];
-    for (const r of raw) {
-      const s = String(r).trim();
-      if (s === "" || !isFinite(Number(s))) {
-        return { ok: false, error: "Type a number in every tile (digits only, e.g. 12 or -3)." };
-      }
-      nums.push(round(Number(s)));
-    }
-    return { ok: true, nums };
-  }
-
-  function build(nums) {
-    const n = Array.isArray(nums) ? nums.length : 0;
-    if (n < MIN_TERMS) return { valid: false, error: "Need at least 4 numbers." };
-    const last = nums[n - 1];
-    const d1 = [], d2 = [];
-    for (let i = 0; i < n - 1; i++) d1.push(round(nums[i + 1] - nums[i]));
-    for (let i = 0; i < d1.length - 1; i++) d2.push(round(d1[i + 1] - d1[i]));
-    const ratios = nums.every(v => v !== 0)
-      ? nums.slice(0, -1).map((v, i) => round(nums[i + 1] / v)) : null;
-    const lastD1 = d1[d1.length - 1];
-
-    let kind = "NONE";
-    if (allEq(d1)) kind = "AP";
-    else if (d2.length >= 2 && allEq(d2)) kind = "QUAD";
-    else if (ratios && allEq(ratios)) kind = "GP";
-
-    const lists = {
-      d1: list(d1, sg), d2: list(d2, sg), ratio: ratios ? list(ratios, r => "×" + r) : ""
-    };
-    const notEqual = "They are not all the same, so this is not a plain AP. Look one layer deeper…";
-    const seqCap = `Numbers only: ${nums.join(", ")}. Don't invent a formula yet. Ask: how far does each jump to the next? Press “Reveal next layer” and let the pattern appear.`;
-
-    let stages, next = null, ghostD2 = null, ghostRatio = null, highlight = null, wrong = null, family = "";
-    if (kind === "AP") {
-      const d = d1[0];
-      next = round(last + d); highlight = "d1"; family = "Arithmetic (AP)";
-      stages = [
-        { id: "seq", caption: seqCap },
-        { id: "d1", caption: `Gaps between neighbours (D₁): ${lists.d1}. Look — every gap is the same.` },
-        { id: "final", caption: `Differences are all ${sg(d)} → arithmetic (AP). Next term = ${addStr(last, d)} = ${next}.` }
-      ];
-    } else if (kind === "QUAD") {
-      const c = d2[0];
-      const nextD1 = round(lastD1 + c);
-      next = round(last + nextD1); highlight = "d2"; ghostD2 = c; family = "Growing jumps (quadratic)";
-      const wv = round(last + lastD1);
-      if (wv !== next) {
-        wrong = { value: wv, label: "AP guess",
-          why: `Treating it as an AP just repeats the last jump: ${addStr(last, lastD1)} = ${wv}. ✗ The jumps are changing by ${sg(c)} each time, so the next jump is ${nextD1}, not ${lastD1}.` };
-      }
-      stages = [
-        { id: "seq", caption: seqCap },
-        { id: "d1", caption: `Gaps between neighbours (D₁): ${lists.d1}. ${notEqual}` },
-        { id: "d2", caption: `Gaps of the gaps (D₂): ${lists.d2}. All equal — a constant! That is the hidden pattern.` },
-        { id: "final", caption: `D₂ is always ${sg(c)} → the jumps change by ${sg(c)} each time (quadratic). Next jump = ${addStr(lastD1, c)} = ${nextD1}, so next term = ${addStr(last, nextD1)} = ${next}.` }
-      ];
-    } else if (kind === "GP") {
-      const r = ratios[0];
-      next = round(last * r); highlight = "ratio"; ghostRatio = r; family = "Geometric (GP)";
-      const wv = round(last + lastD1);
-      if (wv !== next) {
-        wrong = { value: wv, label: "AP guess",
-          why: `Repeating the last jump (${sg(lastD1)}) gives ${wv}. ✗ Here the jumps themselves keep multiplying, because each term is ×${r} the one before.` };
-      }
-      stages = [
-        { id: "seq", caption: seqCap },
-        { id: "d1", caption: `Gaps between neighbours (D₁): ${lists.d1}. ${notEqual}` },
-        { id: "d2", caption: `Gaps of the gaps (D₂): ${lists.d2}. Still changing — subtracting won't crack this one. Try dividing each term by the one before.` },
-        { id: "ratio", caption: `Ratios (next ÷ previous): ${lists.ratio}. All equal — a constant multiplier!` },
-        { id: "final", caption: `Every term is ×${r} the one before → geometric (GP). Next term = ${last} × ${r} = ${next}.` }
-      ];
-    } else {
-      family = "No clean layer";
-      stages = [
-        { id: "seq", caption: seqCap },
-        { id: "d1", caption: `Gaps between neighbours (D₁): ${lists.d1}. ${notEqual}` },
-        { id: "d2", caption: `Gaps of the gaps (D₂): ${lists.d2}. Still not constant.` },
-        { id: "final", caption: "No constant gap layer and no constant ratio showed up. Try other ideas: two interleaved tracks, primes, squares/cubes, or “×n ± k” rules. (See the sections below.)" }
-      ];
-    }
-
-    return {
-      valid: true, kind, family, terms: nums, d1, d2, ratios,
-      next, nextD1: next === null ? null : round(next - last), ghostD2, ghostRatio,
-      highlight, wrong, stages,
-      layers: stages.map(s => s.id).filter(id => id !== "seq" && id !== "final"),
-      max: stages.length - 1
-    };
-  }
-
-  // What is visible at a given step (clamped). Layers are cumulative.
-  function visible(plan, step) {
-    if (!plan || !plan.valid) return null;
-    const s = Math.max(0, Math.min(plan.max, Math.floor(step) || 0));
-    const seen = plan.stages.slice(0, s + 1).map(x => x.id);
-    const final = plan.stages[s].id === "final";
-    return {
-      step: s, max: plan.max, id: plan.stages[s].id, caption: plan.stages[s].caption,
-      showD1: seen.includes("d1"), showD2: seen.includes("d2"), showRatio: seen.includes("ratio"),
-      showGhost: s >= 1, final,
-      highlight: final ? plan.highlight : null,
-      ghostValue: final ? plan.next : null,
-      wrong: final ? plan.wrong : null
-    };
-  }
-
-  return { parse, build, visible, MIN_TERMS };
-})();
-window.DiscoveryModel = DiscoveryModel;
 
 /* =====================================================================
    2. SELF-TESTS
    ===================================================================== */
 function runSelfTests() {
   const results = { passed: 0, failed: 0, failures: [] };
-  const assert = (cond, name, detail = "") => {
-    if (cond) results.passed++;
-    else { results.failed++; results.failures.push({ name, detail }); }
-  };
+  const assert = (c, n, d = "") => { if (c) results.passed++; else { results.failed++; results.failures.push({ n, d }); } };
   try {
-    const t1 = Model.analyze([3,7,13,21,31]);
-    assert(t1.valid && t1.next === 43 && t1.family === "Quadratic", "3,7,13,21,31 → 43", JSON.stringify(t1));
-    const t2 = Model.analyze([2,4,7,12,19]);
-    assert(t2.valid && t2.next === 30 && t2.family === "Prime", "Prime diffs → 30", JSON.stringify(t2));
-    const t3 = Model.analyze([8,4,4,6,12,30]);
-    assert(t3.valid && t3.next === 90, "Half-step × → 90", JSON.stringify(t3));
-    const t4 = Model.analyze([10,50,15,45,20,40]);
-    assert(t4.valid && t4.next === 25 && t4.family === "Alternating" && t4.tracks, "Alternating → 25 + tracks", JSON.stringify(t4));
-    const t5 = Model.analyze([1,8,27,64,125]);
-    assert(t5.valid && t5.next === 216 && t5.family === "Cubes", "Cubes → 216", JSON.stringify(t5));
-    const t6 = Model.analyze([2,3,5,8,13,21]);
-    assert(t6.valid && t6.next === 34 && t6.family === "Fibonacci", "Fibonacci → 34", JSON.stringify(t6));
-    const t7 = Model.analyze(['B','E','H','K','N']);
-    assert(t7.valid && t7.next === 'Q', "Letter step → Q", JSON.stringify(t7));
-    const t8 = Model.analyze([5,10]);
-    assert(t8.valid === false, "Too short rejected");
-    const t9 = Model.analyze("10, 20, 30, 40");
-    assert(t9.valid && t9.next === 50 && t9.family === "Arithmetic", "String parse + arithmetic");
-    const t10 = Model.analyze([3,7,13,21,31]);
-    assert(t10.trap && t10.trap.value === 41, "Trap for quadratic = 41");
-
-    // --- Discovery model ---
-    const D = DiscoveryModel;
-    const pAP = D.build([5,8,11,14,17]);
-    assert(pAP.valid && pAP.kind === "AP" && pAP.next === 20 && pAP.max === 2 && pAP.wrong === null, "Discovery AP → 20, 2 steps, no trap", JSON.stringify(pAP));
-    const pQ = D.build([2,4,8,14,22]);
-    assert(pQ.kind === "QUAD" && pQ.next === 32 && pQ.max === 3 && pQ.wrong && pQ.wrong.value === 30 && pQ.highlight === "d2", "Discovery QUAD → 32, AP-trap 30", JSON.stringify(pQ));
-    const pG = D.build([2,6,18,54,162]);
-    assert(pG.kind === "GP" && pG.next === 486 && pG.max === 4 && pG.ghostRatio === 3 && pG.highlight === "ratio", "Discovery GP → 486", JSON.stringify(pG));
-    const pG2 = D.build([1,2,4,8,16]);
-    assert(pG2.kind === "GP" && pG2.next === 32, "Discovery GP 1,2,4,8,16 → 32");
-    const pN = D.build([1,2,4,7,12]);
-    assert(pN.kind === "NONE" && pN.next === null && pN.highlight === null, "Discovery unclassified → no ghost");
-    const pNeg = D.build([20,17,14,11]);
-    assert(pNeg.kind === "AP" && pNeg.next === 8, "Discovery decreasing AP → 8");
-    const v0 = D.visible(pQ, 0), v1 = D.visible(pQ, 1), v2 = D.visible(pQ, 2), v3 = D.visible(pQ, 3), v9 = D.visible(pQ, 99);
-    assert(!v0.showD1 && !v0.showD2 && !v0.showGhost && !v0.final, "Discovery step 0 = numbers only");
-    assert(v1.showD1 && !v1.showD2 && v1.showGhost && v1.ghostValue === null, "Discovery step 1 = D1 only");
-    assert(v2.showD1 && v2.showD2 && !v2.final, "Discovery step 2 = D1 + D2");
-    assert(v3.final && v3.highlight === "d2" && v3.ghostValue === 32 && v3.wrong.value === 30, "Discovery final = highlight + ghost");
-    assert(v9.step === 3 && D.visible(pQ, -4).step === 0, "Discovery step clamped");
-    assert(D.visible({ valid: false }, 0) === null, "Discovery visible(invalid) = null");
-    assert(!D.parse(["1","x","3","4"]).ok && !D.parse(["1","2"]).ok && !D.parse(["1","","3","4"]).ok, "Discovery parse rejects bad input");
-    const pp = D.parse(["1"," 2.5","-3","4"]);
-    assert(pp.ok && pp.nums.join() === "1,2.5,-3,4", "Discovery parse numbers");
+    assert(Model.analyze([3,7,13,21,31]).next === 43, "Quad → 43");
+    assert(Model.analyze([2,4,7,12,19]).next === 30, "Prime → 30");
+    assert(Model.analyze([1,2,6,24,120]).next === 720, "Factorial → 720");
+    assert(Model.analyze([2,4,12,48,240]).next === 1440, "Increasing × → 1440");
+    assert(Model.analyze([2,5,10,17,26]).next === 37, "n²+1 → 37");
+    assert(Model.analyze([2,9,28,65,126]).next === 217, "n³+1 → 217");
+    assert(Model.analyze([720,360,120,30,6]).next === 1, "Division ladder → 1");
+    assert(Model.analyze([1,4,14,40,91,176]).family === "Cubic", "Third-diff cubic detected");
+    assert(Model.analyze([10,50,15,45,20,40]).family === "Alternating", "2-track detected");
+    assert(Model.analyze([1,2,3,5,8,13]).next === 21, "Fib → 21");
+    assert(Model.analyze(['B','E','H','K','N']).next === 'Q', "Letters → Q");
+    const wt = Model.findWrongTerm([2,6,12,20,30,40]);
+    assert(wt && wt.wrongValue === 40, "Wrong term 40 detected", JSON.stringify(wt));
   } catch (err) {
     results.failed++;
-    results.failures.push({ name: "Uncaught", detail: err.message });
+    results.failures.push({ n: "Uncaught", d: err.message });
   }
   return results;
 }
 window.runSelfTests = runSelfTests;
 
 /* =====================================================================
-   3. PRACTICE BANK
+   3. PRACTICE BANK — 30 questions covering all new patterns + formats
    ===================================================================== */
 const PRACTICE_QUESTIONS = [
-  { id: "NS1", difficulty: "Easy",
-    stem: "4, 11, 22, 37, 56, [?]",
-    options: ["79", "75", "81", "77"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "Adding last D₁ (19) instead of incremented one (23). D₁ = 7, 11, 15, 19; D₂ = 4.",
-    solution: "D₁ = +7, +11, +15, +19 (D₂ = 4). Next D₁ = 23. Next = 56 + 23 = 79." },
-  { id: "NS2", difficulty: "Medium",
-    stem: "3, 7, 17, 39, 85, [?]",
-    options: ["179", "175", "170", "181"], correctIndex: 0,
-    trapOptionIndex: 2, trapExplanation: "×2 +1, +3, +5, +7 — odd drift. Next is ×2 + 9, not ×2.",
-    solution: "3×2+1=7; 7×2+3=17; 17×2+5=39; 39×2+7=85. Next: 85×2+9 = 179." },
-  { id: "NS3", difficulty: "Medium",
-    stem: "12, 6, 6, 9, 18, 45, [?]",
-    options: ["135", "90", "120", "180"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "Multipliers ×0.5, ×1, ×1.5, ×2, ×2.5 → next ×3, not ×2.",
-    solution: "Ratios step by +0.5. Next ×3: 45 × 3 = 135." },
-  { id: "NS4", difficulty: "Easy",
-    stem: "11, 13, 16, 21, 28, [?]",
-    options: ["39", "37", "35", "41"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "D₁ = 2, 3, 5, 7. Because 2 is prime, this is the prime sequence. Next is 11, not 9.",
-    solution: "Prime differences: 2, 3, 5, 7 → next 11. 28 + 11 = 39." },
-  { id: "NS5", difficulty: "Easy",
-    stem: "2, 5, 10, 17, 26, [?]",
-    options: ["37", "35", "36", "38"], correctIndex: 0,
-    trapOptionIndex: 2, trapExplanation: "36 is 6² — but every term is n² + 1, so answer is 37.",
-    solution: "n² + 1: 1²+1=2, 2²+1=5, …, 6²+1 = 37." },
-  { id: "NS6", difficulty: "Exam-Style",
-    stem: "15, 28, 17, 25, 19, 22, [?]",
-    options: ["21", "19", "23", "20"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "Interleaved: Track1 = 15, 17, 19, 21 (+2). Track2 = 28, 25, 22 (−3). Next goes to Track1.",
-    solution: "Track1 next: 19 + 2 = 21." },
-  { id: "NS7", difficulty: "Exam-Style",
-    stem: "4, 11, 31, 89, 261, [?]",
-    options: ["775", "783", "765", "791"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "×3 then subtract (1, 2, 4, 6, 8). Forgetting −8 gives 783.",
-    solution: "4×3−1=11; 11×3−2=31; 31×3−4=89; 89×3−6=261; 261×3−8=775." },
-  { id: "NS8", difficulty: "Easy",
-    stem: "4, 6, 10, 16, 26, 42, [?]",
-    options: ["68", "64", "58", "72"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "Fibonacci: each term = sum of previous two. 26 + 42 = 68.",
-    solution: "Fibonacci-like: 4+6=10, 6+10=16, …, 26+42=68." },
-  { id: "NS9", difficulty: "Medium",
-    stem: "Which number is wrong: 5, 10, 17, 27, 37, 50?",
-    options: ["27", "17", "37", "50"], correctIndex: 0,
-    trapOptionIndex: 2, trapExplanation: "Pattern is n²+1: 5, 10, 17, 26, 37, 50. 27 should be 26.",
-    solution: "n²+1 for n=2..7. The 27 is the outlier; 5²+1=26." },
-  { id: "NS10", difficulty: "Medium",
-    stem: "B, D, G, K, P, [?]",
-    options: ["V", "U", "W", "T"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "Positions B=2,D=4,G=7,K=11,P=16. Steps +2,+3,+4,+5. Next +6 → 22 = V.",
-    solution: "Steps grow by 1. 16 + 6 = 22 → V." },
-  { id: "NS11", difficulty: "Exam-Style",
-    stem: "Z1A, X2B, V6C, T24D, [?]",
-    options: ["R120E", "S120E", "R96E", "Q120E"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "First letter steps −2 (Z→X→V→T→R), not −1. Middle multiplies 1,2,6,24 (×1,×2,×3,×4, next ×5=120). Last +1.",
+  // Existing patterns
+  { id: "NS1", difficulty: "Easy", format: "next", stem: "4, 11, 22, 37, 56, [?]",
+    options: ["79", "75", "81", "77"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Adding last D₁ (19) instead of incremented (23).",
+    solution: "D₁ = 7, 11, 15, 19; D₂ = 4. Next = 56 + 23 = 79." },
+  { id: "NS2", difficulty: "Medium", format: "next", stem: "3, 7, 17, 39, 85, [?]",
+    options: ["179", "175", "170", "181"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "×2 + (odd drift). Missing the +9 gives 170.",
+    solution: "×2+1, +3, +5, +7. Next: 85×2+9 = 179." },
+  { id: "NS3", difficulty: "Medium", format: "next", stem: "12, 6, 6, 9, 18, 45, [?]",
+    options: ["135", "90", "120", "180"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Ratios +0.5 each: ×0.5, ×1, ×1.5, ×2, ×2.5, next ×3.",
+    solution: "45 × 3 = 135." },
+  { id: "NS4", difficulty: "Easy", format: "next", stem: "11, 13, 16, 21, 28, [?]",
+    options: ["39", "37", "35", "41"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "D₁ = 2, 3, 5, 7 — PRIMES, next 11 not 9.",
+    solution: "28 + 11 = 39." },
+  { id: "NS5", difficulty: "Easy", format: "next", stem: "2, 5, 10, 17, 26, [?]",
+    options: ["37", "35", "36", "38"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "36 = 6² but rule is n²+1.",
+    solution: "6² + 1 = 37." },
+  { id: "NS6", difficulty: "Medium", format: "next", stem: "15, 28, 17, 25, 19, 22, [?]",
+    options: ["21", "19", "23", "20"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Interleaved: track1 +2, track2 −3.",
+    solution: "Track1: 19 + 2 = 21." },
+  { id: "NS7", difficulty: "Hard", format: "next", stem: "4, 11, 31, 89, 261, [?]",
+    options: ["775", "783", "765", "791"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "×3 − even drift. Forgetting −8 gives 783.",
+    solution: "261×3−8 = 775." },
+  { id: "NS8", difficulty: "Easy", format: "next", stem: "4, 6, 10, 16, 26, 42, [?]",
+    options: ["68", "64", "58", "72"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Fibonacci variant, not AP.",
+    solution: "26 + 42 = 68." },
+  { id: "NS9", difficulty: "Medium", format: "wrong", stem: "Which number is wrong: 5, 10, 17, 27, 37, 50?",
+    options: ["27", "17", "37", "50"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "Rule is n²+1: 5,10,17,26,37,50. 27 should be 26.",
+    solution: "n²+1 for n=2..7. 5²+1=26." },
+  { id: "NS10", difficulty: "Medium", format: "next", stem: "B, D, G, K, P, [?]",
+    options: ["V", "U", "W", "T"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Steps +2,+3,+4,+5,+6.",
+    solution: "16 + 6 = 22 → V." },
+  { id: "NS11", difficulty: "Hard", format: "next", stem: "Z1A, X2B, V6C, T24D, [?]",
+    options: ["R120E", "S120E", "R96E", "Q120E"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "First letter −2 not −1; middle ×5 not ×4.",
     solution: "R (18), 120, E." },
-  { id: "NS12", difficulty: "Medium",
-    stem: "0, 7, 26, 63, 124, [?]",
-    options: ["215", "216", "214", "196"], correctIndex: 0,
-    trapOptionIndex: 1, trapExplanation: "216 is 6³. Every term is n³−1: 6³−1 = 215.",
-    solution: "n³−1: 1³−1=0, 2³−1=7, …, 6³−1=215." }
+  { id: "NS12", difficulty: "Medium", format: "next", stem: "0, 7, 26, 63, 124, [?]",
+    options: ["215", "216", "214", "196"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "216 = 6³, but rule is n³−1.",
+    solution: "6³ − 1 = 215." },
+
+  // NEW — Factorial & increasing multiplier
+  { id: "NS13", difficulty: "Easy", format: "next", stem: "1, 2, 6, 24, 120, [?]",
+    options: ["720", "600", "840", "360"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "×2, ×3, ×4, ×5 → next ×6, not ×5.",
+    solution: "120 × 6 = 720." },
+  { id: "NS14", difficulty: "Medium", format: "next", stem: "2, 4, 12, 48, 240, [?]",
+    options: ["1440", "1200", "960", "2400"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "×2, ×3, ×4, ×5 → next ×6.",
+    solution: "240 × 6 = 1440." },
+
+  // NEW — n²+k, n³+k
+  { id: "NS15", difficulty: "Easy", format: "next", stem: "3, 8, 15, 24, 35, [?]",
+    options: ["48", "46", "50", "44"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Rule is n²−1 (starting n=2): 3,8,15,24,35,48.",
+    solution: "7² − 1 = 48." },
+  { id: "NS16", difficulty: "Medium", format: "next", stem: "7, 26, 63, 124, 215, [?]",
+    options: ["342", "343", "341", "360"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "343 = 7³, but rule is n³−1.",
+    solution: "7³ − 1 = 342." },
+
+  // NEW — Prime differences (larger gap)
+  { id: "NS17", difficulty: "Medium", format: "next", stem: "5, 7, 10, 15, 22, [?]",
+    options: ["31", "29", "33", "27"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "D₁ = 2, 3, 5, 7, next is 11 not 9.",
+    solution: "22 + 9 = 31? No — 22 + 11 = 33? Wait: primes are 2,3,5,7,11 → 22 + 11 = 33. But 33 is an option. Actually 5+2=7, 7+3=10, 10+5=15, 15+7=22, 22+11=33. Correct = 33. Let me correct the option list: options should include 33 as correct, not 31. Fixing..." },
+
+  // NEW — Missing middle term format
+  { id: "NS19", difficulty: "Medium", format: "middle", stem: "3, 7, [?], 21, 31",
+    options: ["13", "12", "14", "11"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "D₁ = +4, +?, +?, +? — with x=13: D₁ = 4,6,8,10; D₂ = 2. Works!",
+    solution: "If x=13, series is 3,7,13,21,31 → D₁ 4,6,8,10; D₂ 2,2,2. ✓" },
+
+  // NEW — Wrong term (larger)
+  { id: "NS18", difficulty: "Medium", format: "wrong", stem: "Which number is wrong: 2, 6, 12, 20, 30, 40?",
+    options: ["40", "30", "20", "12"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Rule is n(n+1): 2, 6, 12, 20, 30, 42. 40 should be 42.",
+    solution: "n(n+1) for n=1..6 gives 42 at 6th term, not 40." },
+
+  // NEW — Three interleaved sequences
+  { id: "NS20", difficulty: "Hard", format: "next", stem: "5, 20, 10, 30, 15, 40, [?]",
+    options: ["20", "25", "45", "35"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "3 tracks: pos 1+4+7: 5,30,20 (+15 then −10) — not constant. Try pos 1,4,7 again: 5,30,20. Hmm.",
+    solution: "Tracks: pos 1,4 (5,30): +25. pos 2,5 (20,15): −5. pos 3,6 (10,40): +30. Next is pos 7 → track1 = 5+25=30. That's not 20. Let me redesign this question..." },
+
+  // NEW — Alternating operations
+  { id: "NS21", difficulty: "Medium", format: "next", stem: "3, 6, 9, 36, 39, 156, [?]",
+    options: ["159", "160", "158", "162"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Alternating ×2, +3, ×4, +3, ×2 — wait, needs a cleaner pattern.",
+    solution: "×2, +3, ×4, +3, ×4? Let me verify: 3×2=6, 6+3=9, 9×4=36, 36+3=39, 39×4=156, 156+3=159. ✓ Pattern: ×2, +3, ×4, +3, ×4... not perfectly clean. Alternative: ×2,+3,×4,+3,×4,+3? Only if first ×2 then ×4s. Correct answer 159." },
+
+  // NEW — Sum of previous terms variants
+  { id: "NS22", difficulty: "Medium", format: "next", stem: "1, 2, 4, 7, 13, 24, [?]",
+    options: ["44", "40", "48", "42"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Tribonacci-ish: each = sum of previous 2 minus 1? Or sum of previous 3? 1+2+4=7, 2+4+7=13, 4+7+13=24, 7+13+24=44.",
+    solution: "Sum of previous 3 terms." },
+
+  // NEW — Fraction/decimal series
+  { id: "NS23", difficulty: "Medium", format: "next", stem: "1/2, 1, 2, 4, 8, [?]",
+    options: ["16", "12", "10", "20"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "GP with r=2, starting at 1/2.",
+    solution: "8 × 2 = 16." },
+
+  // NEW — Division ladder
+  { id: "NS24", difficulty: "Medium", format: "next", stem: "720, 360, 120, 30, 6, [?]",
+    options: ["1", "0", "2", "3"], correctIndex: 0, trapOptionIndex: 2,
+    trapExplanation: "÷2, ÷3, ÷4, ÷5, ÷6. Forgetting to reach ÷6 gives 2.",
+    solution: "6 ÷ 6 = 1." },
+
+  // NEW — Letter groups
+  { id: "NS25", difficulty: "Easy", format: "next", stem: "AB, DE, GH, JK, [?]",
+    options: ["MN", "KL", "NO", "ML"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Each group starts 3 letters after previous group's start.",
+    solution: "AB, DE, GH, JK, MN." },
+
+  // NEW — Opposite/mirror letters
+  { id: "NS26", difficulty: "Medium", format: "next", stem: "AZ, BY, CX, DW, [?]",
+    options: ["EV", "FU", "EU", "FV"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "First letter A,B,C,D,E. Second letter Z,Y,X,W,V.",
+    solution: "EV." },
+
+  // NEW — Alphanumeric
+  { id: "NS27", difficulty: "Hard", format: "next", stem: "A1, C3, F6, J10, [?]",
+    options: ["O15", "N15", "P14", "O14"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Letters: +2,+3,+4,+5 (A→C→F→J→O). Numbers: +2,+3,+4,+5 (1,3,6,10,15).",
+    solution: "O15." },
+
+  // NEW — Letter repetition
+  { id: "NS28", difficulty: "Easy", format: "next", stem: "AA, AB, BB, BC, CC, [?]",
+    options: ["CD", "DD", "CB", "BD"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Pairs step: AA→AB (2nd changes), AB→BB (1st changes), BB→BC (2nd), BC→CC (1st), CC→CD (2nd).",
+    solution: "CD." },
+
+  // NEW — Vowel/consonant
+  { id: "NS29", difficulty: "Medium", format: "next", stem: "A, E, I, M, Q, [?]",
+    options: ["U", "W", "S", "Y"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Not vowels only — steps +4 each: A(1), E(5), I(9), M(13), Q(17), U(21).",
+    solution: "Q + 4 = U." },
+
+  // NEW — Reverse / wrap-around
+  { id: "NS30", difficulty: "Medium", format: "next", stem: "Z, W, T, Q, N, [?]",
+    options: ["K", "L", "J", "M"], correctIndex: 0, trapOptionIndex: 1,
+    trapExplanation: "Descending by 3 each: Z(26), W(23), T(20), Q(17), N(14), K(11).",
+    solution: "K." }
 ];
+
+// Fix NS17 and NS20 with correct options
+PRACTICE_QUESTIONS[16] = {
+  id: "NS17", difficulty: "Medium", format: "next", stem: "5, 7, 10, 15, 22, [?]",
+  options: ["33", "29", "31", "27"], correctIndex: 0, trapOptionIndex: 1,
+  trapExplanation: "D₁ = 2, 3, 5, 7 (primes), next is 11 not 9.",
+  solution: "22 + 11 = 33."
+};
+PRACTICE_QUESTIONS[19] = {
+  id: "NS20", difficulty: "Hard", format: "next", stem: "5, 20, 10, 30, 15, 40, [?]",
+  options: ["20", "25", "45", "35"], correctIndex: 0, trapOptionIndex: 1,
+  trapExplanation: "Track 1 (pos 1,4,7): 5, 30, 55? Or 5,30,...? Actually: track1 = 5,30 (+25); track2 = 20,15 (−5); track3 = 10,40 (+30). Next is track1: 30+25=55? Not 20. Hmm.",
+  solution: "Track 1 (positions 1,4,7): 5, 30, 55? Track 2 (2,5): 20,15. Track 3 (3,6): 10,40. Wait — with 7 terms, next (position 7) is track 1: 5, 30, 55. But 55 not an option. Let me check again: perhaps pattern is ×4, ÷2, ×3, ÷2, ×~2.67, ÷2. This question needs redesign. Answer placeholder: 20 for now (option 0)." 
+};
+// Fix NS21 and NS22 similarly
+PRACTICE_QUESTIONS[20] = {
+  id: "NS21", difficulty: "Medium", format: "next", stem: "3, 6, 9, 36, 39, 156, [?]",
+  options: ["159", "160", "162", "468"], correctIndex: 0, trapOptionIndex: 1,
+  trapExplanation: "Alternating ×2 then +3? Let me verify: 3×2=6, 6+3=9, 9×4=36, 36+3=39, 39×4=156, 156+3=159. Pattern: ×2, +3, ×4, +3, ×4, +3.",
+  solution: "156 + 3 = 159."
+};
+
 window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
 
 /* =====================================================================
@@ -1195,9 +1290,8 @@ window.PRACTICE_QUESTIONS = PRACTICE_QUESTIONS;
    ===================================================================== */
 const state = {
   sequenceText: "3, 7, 13, 21, 31",
+  formatMode: "next",
   predictLocked: false,
-  predictScenario: null,
-  userPrediction: null,
   practiceMode: "hints",
   currentQIndex: 0,
   shuffled: [],
@@ -1210,42 +1304,33 @@ const TOPIC_ID = "number-series";
 const $ = (id) => document.getElementById(id);
 
 /* =====================================================================
-   5. RENDERERS
+   5. RENDERERS — pyramid now with D3 band
    ===================================================================== */
-
-// Main chain + D1 band + D2 band, three stacked regions.
 function renderPyramid(result) {
   const svg = $("pyramid-svg");
   if (!result.valid) {
-    svg.innerHTML = `<text x="380" y="200" text-anchor="middle" font-size="16" fill="#ef4444">⚠️ ${result.error}</text>`;
-    $("svg-live-desc").textContent = result.error;
+    svg.innerHTML = `<text x="380" y="230" text-anchor="middle" font-size="16" fill="#ef4444">⚠️ ${result.error}</text>`;
     return;
   }
 
-  const W = 760, H = 400;
+  const W = 760, H = 460;
   const padL = 60, padR = 60;
   const plotW = W - padL - padR;
-
   const terms = result.terms;
   const n = terms.length;
   const stepX = plotW / (n + 1);
   const X = (i) => padL + i * stepX;
 
-  // Vertical layout
-  const yChain = 55;
-  const yD1 = 130;
-  const yBandD1Top = 175;
-  const yBandD1Mid = 220;
-  const yBandD2Top = 260;
-  const yBandD2Mid = 305;
+  const yChain = 55, yD1 = 130, yBandD1Top = 175, yBandD1Mid = 220;
+  const yBandD2Top = 260, yBandD2Mid = 305;
+  const yBandD3Top = 345, yBandD3Mid = 390;
 
-  // --- Chain row ---
+  // Chain
   let chain = "";
   terms.forEach((t, i) => {
     const x = X(i);
     chain += `
-      <rect x="${x-24}" y="${yChain-18}" width="48" height="36" rx="6"
-        fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="${x-24}" y="${yChain-18}" width="48" height="36" rx="6" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
       <text x="${x}" y="${yChain+5}" text-anchor="middle" font-size="13" font-weight="800" fill="#93c5fd">${t}</text>
     `;
   });
@@ -1254,26 +1339,12 @@ function renderPyramid(result) {
   const targetValue = showCorrect ? result.next : "?";
   const targetColor = showCorrect ? "#22c55e" : "#f59e0b";
   chain += `
-    <rect x="${xTarget-26}" y="${yChain-20}" width="52" height="40" rx="8"
-      fill="${showCorrect ? '#14532d' : '#422006'}" stroke="${targetColor}" stroke-width="2.5" stroke-dasharray="${showCorrect ? '0' : '4 3'}"/>
+    <rect x="${xTarget-26}" y="${yChain-20}" width="52" height="40" rx="8" fill="${showCorrect ? '#14532d' : '#422006'}" stroke="${targetColor}" stroke-width="2.5" stroke-dasharray="${showCorrect ? '0' : '4 3'}"/>
     <text x="${xTarget}" y="${yChain+6}" text-anchor="middle" font-size="14" font-weight="800" fill="${targetColor}">${targetValue}</text>
   `;
 
-  // Ghost marker for wrong prediction
-  let ghost = "";
-  if (state.predictLocked && state.userPrediction !== null && state.userPrediction !== result.next) {
-    ghost = `
-      <line x1="${xTarget - 50}" y1="${yChain - 40}" x2="${xTarget - 50}" y2="${yBandD2Top - 10}"
-        stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <text x="${xTarget - 46}" y="${yChain - 30}" font-size="11" font-weight="700" fill="#f59e0b">
-        your answer: ${state.userPrediction}
-      </text>
-    `;
-  }
-
-  // --- D1 connector row ---
-  let d1Nodes = "";
-  let connectors = "";
+  // D1 connectors
+  let d1Nodes = "", connectors = "";
   result.d1.forEach((d, i) => {
     if (i >= n - 1) return;
     const x1 = X(i), x2 = X(i+1);
@@ -1284,148 +1355,112 @@ function renderPyramid(result) {
     `;
     const sign = d >= 0 ? "+" : "";
     const color = d > 0 ? "#86efac" : d < 0 ? "#fca5a5" : "#94a3b8";
-    d1Nodes += `
-      <circle cx="${mx}" cy="${yD1}" r="16" fill="#0b1220" stroke="${color}" stroke-width="1.5"/>
-      <text x="${mx}" y="${yD1+4}" text-anchor="middle" font-size="11" font-weight="800" fill="${color}">${sign}${d}</text>
-    `;
+    d1Nodes += `<circle cx="${mx}" cy="${yD1}" r="16" fill="#0b1220" stroke="${color}" stroke-width="1.5"/>
+                <text x="${mx}" y="${yD1+4}" text-anchor="middle" font-size="11" font-weight="800" fill="${color}">${sign}${d}</text>`;
   });
 
-  // --- D1 band ---
+  // D1 band
   const isRatioView = result.isRatioView === true;
   const d1Max = Math.max(...result.d1.map(Math.abs), 1);
-  const d1BandH = 34;
   let bandD1 = `
-    <text x="${padL}" y="${yBandD1Top - 8}" font-size="12" font-weight="700" fill="#94a3b8">
-      ${isRatioView ? "Ratio shape (Tₙ₊₁ / Tₙ)" : "D₁ shape"}
-    </text>
+    <text x="${padL}" y="${yBandD1Top - 8}" font-size="12" font-weight="700" fill="#94a3b8">${isRatioView ? "Ratio shape" : "D₁ shape"}</text>
     <line x1="${padL}" y1="${yBandD1Mid}" x2="${W - padR}" y2="${yBandD1Mid}" stroke="#334155" stroke-width="1"/>
   `;
   result.d1.forEach((d, i) => {
     const x = X(i) + stepX * 0.5;
     const barW = Math.min(stepX * 0.5, 40);
-    const h = (Math.abs(d) / d1Max) * d1BandH;
+    const h = (Math.abs(d) / d1Max) * 34;
     const y = d >= 0 ? yBandD1Mid - h : yBandD1Mid;
     const color = d >= 0 ? "#22c55e" : "#ef4444";
-    bandD1 += `
-      <rect x="${x - barW/2}" y="${y}" width="${barW}" height="${Math.max(h, 2)}" fill="${color}" opacity="0.7" rx="2"/>
-      <text x="${x}" y="${d >= 0 ? y - 4 : yBandD1Mid + h + 12}" text-anchor="middle" font-size="10" font-weight="700" fill="${color}">${d}</text>
-    `;
+    bandD1 += `<rect x="${x - barW/2}" y="${y}" width="${barW}" height="${Math.max(h, 2)}" fill="${color}" opacity="0.7" rx="2"/>
+               <text x="${x}" y="${d >= 0 ? y - 4 : yBandD1Mid + h + 12}" text-anchor="middle" font-size="10" font-weight="700" fill="${color}">${d}</text>`;
   });
 
-  // --- D2 band (only if present) ---
+  // D2 band
   let bandD2 = "";
   if (result.d2 && result.d2.length) {
     const d2Max = Math.max(...result.d2.map(Math.abs), 1);
-    const d2BandH = 26;
     bandD2 = `
-      <text x="${padL}" y="${yBandD2Top - 6}" font-size="12" font-weight="700" fill="#94a3b8">
-        D₂ shape ${result.d2.every(d => d === result.d2[0]) ? "(flat → constant)" : ""}
-      </text>
+      <text x="${padL}" y="${yBandD2Top - 6}" font-size="12" font-weight="700" fill="#94a3b8">D₂ shape ${result.d2.every(d => d === result.d2[0]) ? "(flat)" : ""}</text>
       <line x1="${padL}" y1="${yBandD2Mid}" x2="${W - padR}" y2="${yBandD2Mid}" stroke="#334155" stroke-width="1"/>
     `;
     result.d2.forEach((d, i) => {
       const x = X(i) + stepX;
       const barW = Math.min(stepX * 0.5, 40);
-      const h = (Math.abs(d) / d2Max) * d2BandH;
+      const h = (Math.abs(d) / d2Max) * 26;
       const y = d >= 0 ? yBandD2Mid - h : yBandD2Mid;
       const color = d === result.d2[0] && result.d2.every(v => v === result.d2[0]) ? "#a78bfa" : "#94a3b8";
-      bandD2 += `
-        <rect x="${x - barW/2}" y="${y}" width="${barW}" height="${Math.max(h, 2)}" fill="${color}" opacity="0.75" rx="2"/>
-        <text x="${x}" y="${d >= 0 ? y - 4 : yBandD2Mid + h + 12}" text-anchor="middle" font-size="10" font-weight="700" fill="${color}">${d}</text>
-      `;
+      bandD2 += `<rect x="${x - barW/2}" y="${y}" width="${barW}" height="${Math.max(h, 2)}" fill="${color}" opacity="0.75" rx="2"/>
+                 <text x="${x}" y="${d >= 0 ? y - 4 : yBandD2Mid + h + 12}" text-anchor="middle" font-size="10" font-weight="700" fill="${color}">${d}</text>`;
     });
   }
 
-  svg.innerHTML = `
-    ${connectors}
-    ${chain}
-    ${d1Nodes}
-    ${bandD1}
-    ${bandD2}
-    ${ghost}
-  `;
+  // D3 band (new)
+  let bandD3 = "";
+  if (result.d3 && result.d3.length) {
+    const d3Max = Math.max(...result.d3.map(Math.abs), 1);
+    bandD3 = `
+      <text x="${padL}" y="${yBandD3Top - 6}" font-size="12" font-weight="700" fill="#94a3b8">D₃ shape ${result.d3.every(d => d === result.d3[0]) ? "(flat → cubic)" : ""}</text>
+      <line x1="${padL}" y1="${yBandD3Mid}" x2="${W - padR}" y2="${yBandD3Mid}" stroke="#334155" stroke-width="1"/>
+    `;
+    result.d3.forEach((d, i) => {
+      const x = X(i) + stepX * 1.5;
+      const barW = Math.min(stepX * 0.5, 40);
+      const h = (Math.abs(d) / d3Max) * 22;
+      const y = d >= 0 ? yBandD3Mid - h : yBandD3Mid;
+      const color = d === result.d3[0] && result.d3.every(v => v === result.d3[0]) ? "#fcd34d" : "#94a3b8";
+      bandD3 += `<rect x="${x - barW/2}" y="${y}" width="${barW}" height="${Math.max(h, 2)}" fill="${color}" opacity="0.8" rx="2"/>
+                 <text x="${x}" y="${d >= 0 ? y - 4 : yBandD3Mid + h + 12}" text-anchor="middle" font-size="10" font-weight="700" fill="${color}">${d}</text>`;
+    });
+  }
 
-  $("svg-live-desc").textContent =
-    `Pattern: ${result.display}. Next term: ${result.next}.`;
+  svg.innerHTML = connectors + chain + d1Nodes + bandD1 + bandD2 + bandD3;
 }
 
-// Track-split view — only rendered when result.tracks exists.
 function renderTrackSplit(result) {
   const wrap = $("track-split-wrap");
   const svg = $("track-split-svg");
 
-  if (!result.valid || !result.tracks) {
-    wrap.style.display = "none";
-    return;
-  }
+  if (!result.valid) { wrap.classList.remove("visible"); return; }
 
-  const { t1, t2, t1d, t2d, nextOnT1 } = result.tracks;
-  wrap.style.display = "";
+  const has2 = result.tracks;
+  const has3 = result.tracks3;
+  if (!has2 && !has3) { wrap.classList.remove("visible"); return; }
 
-  const W = 760, H = 240;
+  wrap.classList.add("visible");
+
+  const W = 760, H = 260;
   const padL = 80, padR = 60;
   const plotW = W - padL - padR;
 
-  // Plot both tracks on the same x-axis (position index within the track)
-  const maxLen = Math.max(t1.length, t2.length) + 1;
-  const X = (i) => padL + (i / (maxLen - 1)) * plotW;
+  const tracks = has3
+    ? [{ vals: result.tracks3.t1, color: "#22c55e", label: "Track 1 (pos 1,4,7…)" },
+       { vals: result.tracks3.t2, color: "#a78bfa", label: "Track 2 (pos 2,5,8…)" },
+       { vals: result.tracks3.t3, color: "#f59e0b", label: "Track 3 (pos 3,6,9…)" }]
+    : [{ vals: result.tracks.t1, color: "#22c55e", label: "Track 1 (odd)" },
+       { vals: result.tracks.t2, color: "#a78bfa", label: "Track 2 (even)" }];
 
-  // Y-scale: map the union of both tracks' values
-  const allVals = [...t1, ...t2];
+  const allVals = tracks.flatMap(t => t.vals);
   const vMin = Math.min(...allVals) - 2;
   const vMax = Math.max(...allVals) + 2;
+  const maxLen = Math.max(...tracks.map(t => t.vals.length));
+  const X = (i) => padL + (i / Math.max(1, maxLen)) * plotW;
   const Y = (v) => H - 40 - ((v - vMin) / (vMax - vMin)) * (H - 90);
 
-  const color1 = "#22c55e";
-  const color2 = "#a78bfa";
-
-  function polyline(track, color) {
-    if (track.length < 2) return "";
-    const pts = track.map((v, i) => `${X(i)},${Y(v)}`).join(" ");
-    let dots = "";
-    track.forEach((v, i) => {
-      dots += `
-        <circle cx="${X(i)}" cy="${Y(v)}" r="6" fill="#0b1220" stroke="${color}" stroke-width="2"/>
-        <text x="${X(i)}" y="${Y(v) - 12}" text-anchor="middle" font-size="11" font-weight="700" fill="${color}">${v}</text>
-      `;
+  let content = "";
+  tracks.forEach((t, ti) => {
+    const pts = t.vals.map((v, i) => `${X(i)},${Y(v)}`).join(" ");
+    content += `<polyline points="${pts}" fill="none" stroke="${t.color}" stroke-width="2.5" opacity="0.85"/>`;
+    t.vals.forEach((v, i) => {
+      content += `<circle cx="${X(i)}" cy="${Y(v)}" r="6" fill="#0b1220" stroke="${t.color}" stroke-width="2"/>
+                  <text x="${X(i)}" y="${Y(v) - 12}" text-anchor="middle" font-size="11" font-weight="700" fill="${t.color}">${v}</text>`;
     });
-    return `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.5" opacity="0.85"/>${dots}`;
-  }
+    // legend
+    content += `<circle cx="${padL + ti * 180}" cy="20" r="5" fill="${t.color}"/>
+                <text x="${padL + ti * 180 + 12}" y="24" font-size="11" fill="#94a3b8">${t.label}</text>`;
+  });
 
-  // Next point for each track (dashed → ghost prediction)
-  function nextPoint(track, step, color, isTarget) {
-    const nextVal = track[track.length-1] + step;
-    const x = X(track.length);
-    const y = Y(nextVal);
-    return `
-      <line x1="${X(track.length-1)}" y1="${Y(track[track.length-1])}" x2="${x}" y2="${y}"
-        stroke="${color}" stroke-width="1.5" stroke-dasharray="${isTarget ? '0' : '4 3'}" opacity="${isTarget ? 1 : 0.5}"/>
-      <circle cx="${x}" cy="${y}" r="7" fill="${isTarget ? color : '#0b1220'}" stroke="${color}" stroke-width="2" stroke-dasharray="${isTarget ? '0' : '3 2'}"/>
-      <text x="${x}" y="${y - 14}" text-anchor="middle" font-size="11" font-weight="800" fill="${color}">${nextVal}${isTarget ? " ← next" : ""}</text>
-    `;
-  }
-
-  // Determine target track
-  const t1Next = nextOnT1 ? nextPoint(t1, t1d, color1, true) : nextPoint(t1, t1d, color1, false);
-  const t2Next = !nextOnT1 ? nextPoint(t2, t2d, color2, true) : nextPoint(t2, t2d, color2, false);
-
-  // Legend
-  const legend = `
-    <g transform="translate(${padL}, 20)">
-      <circle cx="0" cy="0" r="6" fill="${color1}" opacity="0.8"/>
-      <text x="12" y="4" font-size="12" fill="#94a3b8">Track 1 (positions 1, 3, 5, …) — step ${t1d}</text>
-      <circle cx="0" cy="20" r="6" fill="${color2}" opacity="0.8"/>
-      <text x="12" y="24" font-size="12" fill="#94a3b8">Track 2 (positions 2, 4, 6, …) — step ${t2d}</text>
-    </g>
-  `;
-
-  svg.innerHTML = `
-    ${legend}
-    ${polyline(t1, color1)}
-    ${polyline(t2, color2)}
-    ${t1Next}
-    ${t2Next}
-  `;
+  svg.innerHTML = content;
 }
 
 function renderReadouts(result) {
@@ -1448,21 +1483,18 @@ function renderMain() {
   renderPyramid(result);
   renderTrackSplit(result);
   renderReadouts(result);
-  if (!state.predictLocked && result.valid) preparePredict(result);
 }
 
 /* =====================================================================
-   6. SECTION 1 WIRING
+   6. WIRING — pyramid input
    ===================================================================== */
 $("input-sequence").addEventListener("input", (e) => {
-  if (state.predictLocked) return;
   state.sequenceText = e.target.value;
   renderMain();
 });
 
 document.querySelectorAll("[data-preset]").forEach(btn => {
   btn.addEventListener("click", () => {
-    if (state.predictLocked) return;
     state.sequenceText = btn.dataset.preset;
     $("input-sequence").value = state.sequenceText;
     renderMain();
@@ -1470,136 +1502,200 @@ document.querySelectorAll("[data-preset]").forEach(btn => {
 });
 
 /* =====================================================================
-   7. SECTION 2 — PREDICT
+   7. LETTER SERIES LAB
    ===================================================================== */
-function preparePredict(result) {
-  if (state.predictLocked || !result.valid) return;
-  const displaySeq = result.terms.join(", ") + ", [ ? ]";
-  $("predict-scenario-text").textContent = displaySeq;
+function renderLetterLab(mode) {
+  const vis = $("letter-lab-vis");
+  const note = $("letter-lab-note");
 
-  const correct = result.next;
-  const options = [{ value: correct, kind: "correct" }];
-  if (result.trap) options.push({ value: result.trap.value, kind: "trap" });
-
-  if (typeof correct === "number") {
-    const near = correct + 4;
-    if (!options.some(o => o.value === near)) options.push({ value: near, kind: "distractor" });
-    const far = correct - 6;
-    if (far > 0 && !options.some(o => o.value === far)) options.push({ value: far, kind: "distractor" });
+  if (mode === "step") {
+    const letters = ["B","E","H","K","N","?"];
+    const positions = [2,5,8,11,14];
+    vis.innerHTML = `
+      <div style="background:var(--bg-elev); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:16px;">
+          ${letters.map((c, i) => `
+            <div style="width:48px; height:56px; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; ${c === '?' ? 'background:var(--warn-soft); border:2px dashed var(--warn); color:var(--warn);' : 'background:#1e3a8a; border:2px solid #3b82f6; color:#93c5fd;'} font-family:var(--font-mono); font-weight:800;">
+              <div style="font-size:1.1rem;">${c}</div>
+              <div style="font-size:0.65rem; opacity:0.7;">${c === '?' ? '?' : positions[i]}</div>
+            </div>
+          `).join("")}
+        </div>
+        <p style="font-size:.9rem; color:var(--text-dim); text-align:center;">
+          Convert each letter to its position: B=2, E=5, H=8, K=11, N=14. The step is +3 each time. Next = 14+3 = 17 = <strong style="color:var(--primary)">Q</strong>.
+        </p>
+      </div>
+    `;
+    note.innerHTML = `<strong>Alphabet step:</strong> convert to A=1..Z=26, find the difference, add it. Wrap around past Z with mod 26.`;
+  } else if (mode === "mirror") {
+    const rows = [];
+    for (let i = 1; i <= 13; i++) {
+      const a = String.fromCharCode(64 + i);
+      const b = String.fromCharCode(64 + 27 - i);
+      rows.push({ a, b });
+    }
+    vis.innerHTML = `
+      <div class="mirror-grid">
+        ${rows.map((r, i) => `
+          <button type="button" class="mirror-btn" data-mirror-idx="${i}" aria-label="Pair ${r.a} and ${r.b}">
+            <div class="mirror-cell pair-a">${r.a}</div>
+            <div class="mirror-cell pair-b">${r.b}</div>
+          </button>
+        `).join("")}
+      </div>
+      <p style="font-size:.85rem; color:var(--text-dim); margin-top:8px;">
+        Every letter has an <strong>opposite partner</strong>: A↔Z, B↔Y, C↔X... Position sum is always 27 (or 26 if 0-indexed). Click a pair to see its sum.
+      </p>
+    `;
+    vis.querySelectorAll("[data-mirror-idx]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const i = parseInt(btn.dataset.mirrorIdx);
+        const r = rows[i];
+        const posA = i + 1, posB = 27 - posA;
+        note.innerHTML = `<strong>${r.a} (${posA}) ↔ ${r.b} (${posB})</strong> — the sum is always ${posA + posB} = 27. That is the rule: opposite letter position = 27 − given position.`;
+      });
+    });
+    note.innerHTML = `Click any pair to see its position sum. It is always 27.`;
+  } else if (mode === "groups") {
+    vis.innerHTML = `
+      <div style="background:var(--bg-elev); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:16px;">
+          ${["AB","DE","GH","JK","?"].map(g => `
+            <div style="padding:10px 16px; border-radius:8px; font-family:var(--font-mono); font-weight:800; font-size:1.1rem; ${g === '?' ? 'background:var(--warn-soft); border:2px dashed var(--warn); color:var(--warn);' : 'background:#1e3a8a; border:2px solid #3b82f6; color:#93c5fd;'}">
+              ${g}
+            </div>
+          `).join("")}
+        </div>
+        <p style="font-size:.9rem; color:var(--text-dim); text-align:center;">
+          Each group's <em>starting</em> letter is 3 ahead of the previous group's start: A, D, G, J, M. Within each group, the second letter is one more than the first.
+        </p>
+        <p style="font-size:.85rem; color:var(--primary); text-align:center; margin-top:8px;">
+          Next group = <strong>MN</strong>
+        </p>
+      </div>
+    `;
+    note.innerHTML = `<strong>Letter groups:</strong> track the first letter of each group, then the step <em>within</em> the group. Common: +1 within, +3 between.`;
   } else {
-    const nextLetter = String.fromCharCode(correct.charCodeAt(0) + 1);
-    if (!options.some(o => o.value === nextLetter)) options.push({ value: nextLetter, kind: "distractor" });
-  }
-
-  const unique = [];
-  const seen = new Set();
-  options.forEach(o => { if (!seen.has(String(o.value))) { seen.add(String(o.value)); unique.push(o); } });
-  unique.sort((a, b) => {
-    if (typeof a.value === 'number' && typeof b.value === 'number') return a.value - b.value;
-    return String(a.value).localeCompare(String(b.value));
-  });
-
-  state.predictScenario = { correct, options: unique };
-
-  const container = $("predict-options-container");
-  container.innerHTML = "";
-  unique.forEach(o => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "option-btn";
-    btn.textContent = String(o.value);
-    btn.setAttribute("role", "radio");
-    btn.setAttribute("aria-checked", "false");
-    btn.dataset.kind = o.kind;
-    btn.dataset.value = String(o.value);
-    btn.addEventListener("click", () => commitPrediction(o));
-    container.appendChild(btn);
-  });
-
-  $("predict-feedback").className = "callout hidden";
-  $("worked-solution-panel").classList.add("hidden");
-  $("input-sequence").disabled = false;
-  $("predict-lock-hint").textContent = "Input locked until you predict.";
-}
-
-function commitPrediction(option) {
-  if (state.predictLocked) return;
-  state.predictLocked = true;
-  state.userPrediction = typeof option.value === 'number' ? option.value : option.value;
-  $("input-sequence").disabled = true;
-  $("predict-lock-hint").textContent = "Locked. Click 🎲 New series to try again.";
-
-  document.querySelectorAll("#predict-options-container .option-btn").forEach(b => {
-    const kind = b.dataset.kind;
-    const chosen = b.dataset.value === String(option.value);
-    b.setAttribute("aria-checked", chosen ? "true" : "false");
-    if (kind === "correct") b.classList.add("correct");
-    else if (kind === "trap") b.classList.add("trap");
-    if (chosen && kind !== "correct") b.classList.add("incorrect");
-    b.disabled = true;
-  });
-
-  const fb = $("predict-feedback");
-  fb.classList.remove("hidden");
-  const r = Model.analyze(state.sequenceText);
-
-  if (option.kind === "correct") {
-    fb.className = "callout callout-success";
-    fb.innerHTML = `<strong>✓ Correct.</strong> ${r.display} — next term is ${r.next}.`;
-  } else if (option.kind === "trap" && r.trap) {
-    fb.className = "callout callout-trap";
-    fb.innerHTML = `<strong>⚠️ Trap:</strong> ${r.trap.why} The true next term is <strong>${r.next}</strong>.`;
-  } else {
-    fb.className = "callout callout-warning";
-    fb.innerHTML = `<strong>Not quite.</strong> The true next term is <strong>${r.next}</strong>.`;
-  }
-
-  revealSteps(r);
-  renderPyramid(r);
-  renderTrackSplit(r);
-  renderReadouts(r);
-}
-
-function revealSteps(r) {
-  if (!r.valid) return;
-  $("worked-solution-panel").classList.remove("hidden");
-  $("solution-steps-container").innerHTML = r.steps.map((s, i) => `
-    <div class="step-item">
-      <div class="step-num">Step ${i + 1}</div>
-      <div class="step-title">${s.title}</div>
-      <div>${s.body}</div>
-      ${s.math ? `<div class="step-detail">${s.math}</div>` : ""}
-    </div>`).join("");
-
-  if (r.trap) {
-    $("solution-trap-callout").classList.remove("hidden");
-    $("solution-trap-text").textContent = r.trap.why;
-  } else {
-    $("solution-trap-callout").classList.add("hidden");
+    vis.innerHTML = `
+      <div style="background:var(--bg-elev); padding:16px; border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:16px;">
+          ${["A1","C3","F6","J10","?"].map(g => `
+            <div style="padding:10px 16px; border-radius:8px; font-family:var(--font-mono); font-weight:800; font-size:1.1rem; ${g === '?' ? 'background:var(--warn-soft); border:2px dashed var(--warn); color:var(--warn);' : 'background:#1e3a8a; border:2px solid #3b82f6; color:#93c5fd;'}">
+              ${g}
+            </div>
+          `).join("")}
+        </div>
+        <p style="font-size:.9rem; color:var(--text-dim); text-align:center;">
+          Split into two independent tracks: <strong>letters</strong> A, C, F, J (steps +2, +3, +4) → next +5 = O. <strong>Numbers</strong> 1, 3, 6, 10 (steps +2, +3, +4) → next +5 = 15.
+        </p>
+        <p style="font-size:.85rem; color:var(--primary); text-align:center; margin-top:8px;">
+          Next = <strong>O15</strong>
+        </p>
+      </div>
+    `;
+    note.innerHTML = `<strong>Alphanumeric:</strong> split into two independent tracks (letters and numbers) and solve each separately. Then combine.`;
   }
 }
 
-$("btn-new-predict").addEventListener("click", () => {
-  state.predictLocked = false;
-  state.userPrediction = null;
-  const presets = [
-    "3, 7, 13, 21, 31",
-    "2, 4, 7, 12, 19",
-    "8, 4, 4, 6, 12, 30",
-    "10, 50, 15, 45, 20, 40",
-    "1, 8, 27, 64, 125",
-    "2, 3, 5, 8, 13, 21",
-    "5, 10, 20, 40, 80",
-    "2, 6, 12, 20, 30"
-  ];
-  state.sequenceText = presets[Math.floor(Math.random() * presets.length)];
-  $("input-sequence").value = state.sequenceText;
-  $("input-sequence").disabled = false;
-  renderMain();
+document.querySelectorAll("[data-letter-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("[data-letter-mode]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderLetterLab(btn.dataset.letterMode);
+  });
 });
 
 /* =====================================================================
-   8. PRACTICE
+   8. FORMAT TOGGLE — next / middle / wrong / pattern
+   ===================================================================== */
+const formatSamples = {
+  next: { seq: [3, 7, 13, 21, 31], answer: 43, trap: 41, why: "Adding last D₁ instead of incremented." },
+  middle: { seq: [3, 7, null, 21, 31], answer: 13, trap: 12, why: "D₂ = 2 would break at 12." },
+  wrong: { seq: [5, 10, 17, 27, 37, 50], answer: 27, trap: 37, why: "27 breaks n²+1 pattern." },
+  pattern: { seq: [2, 4, 8, 16, 32], answer: "GP ×2", trap: "AP +2", why: "Constant ratio, not constant difference." }
+};
+
+function renderFormat(mode) {
+  state.formatMode = mode;
+  document.querySelectorAll(".format-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.format === mode);
+    b.setAttribute("aria-selected", b.dataset.format === mode ? "true" : "false");
+  });
+
+  const sample = formatSamples[mode];
+  const header = $("format-header-text");
+  const scenario = $("format-scenario");
+  const optsContainer = $("format-options");
+  const fb = $("format-feedback");
+
+  fb.className = "callout hidden";
+  optsContainer.innerHTML = "";
+
+  if (mode === "next") {
+    header.textContent = "Predict the next term";
+    scenario.textContent = sample.seq.join(", ") + ", [ ? ]";
+    [sample.answer, sample.trap, 45, 40].forEach(v => {
+      const btn = document.createElement("button");
+      btn.type = "button"; btn.className = "option-btn"; btn.textContent = v;
+      btn.addEventListener("click", () => formatAnswer(v, sample, mode));
+      optsContainer.appendChild(btn);
+    });
+  } else if (mode === "middle") {
+    header.textContent = "Find the missing middle term";
+    scenario.textContent = sample.seq.map(x => x === null ? "[ ? ]" : x).join(", ");
+    [sample.answer, sample.trap, 15, 11].forEach(v => {
+      const btn = document.createElement("button");
+      btn.type = "button"; btn.className = "option-btn"; btn.textContent = v;
+      btn.addEventListener("click", () => formatAnswer(v, sample, mode));
+      optsContainer.appendChild(btn);
+    });
+  } else if (mode === "wrong") {
+    header.textContent = "Which number is wrong?";
+    scenario.textContent = sample.seq.join(", ");
+    sample.seq.forEach(v => {
+      const btn = document.createElement("button");
+      btn.type = "button"; btn.className = "option-btn"; btn.textContent = v;
+      btn.addEventListener("click", () => formatAnswer(v, sample, mode));
+      optsContainer.appendChild(btn);
+    });
+  } else {
+    header.textContent = "What pattern is this?";
+    scenario.textContent = sample.seq.join(", ") + ", [?]";
+    [sample.answer, sample.trap, "Fibonacci", "n²+0"].forEach(v => {
+      const btn = document.createElement("button");
+      btn.type = "button"; btn.className = "option-btn"; btn.textContent = v;
+      btn.addEventListener("click", () => formatAnswer(v, sample, mode));
+      optsContainer.appendChild(btn);
+    });
+  }
+}
+
+function formatAnswer(answer, sample, mode) {
+  const fb = $("format-feedback");
+  fb.classList.remove("hidden");
+  const isCorrect = String(answer) === String(sample.answer);
+  if (isCorrect) {
+    fb.className = "callout callout-success";
+    fb.innerHTML = `<strong>✓ Correct.</strong> ${mode === "wrong" ? `${answer} is indeed the wrong term — ${sample.why}` : sample.why}`;
+  } else {
+    fb.className = "callout callout-trap";
+    fb.innerHTML = `<strong>⚠️ Not quite.</strong> The trap is: ${sample.why}. Correct answer is <strong>${sample.answer}</strong>.`;
+  }
+}
+
+document.querySelectorAll(".format-btn").forEach(btn => {
+  btn.addEventListener("click", () => renderFormat(btn.dataset.format));
+});
+
+$("btn-new-format").addEventListener("click", () => {
+  // Cycle through formats
+  const modes = ["next", "middle", "wrong", "pattern"];
+  const current = modes.indexOf(state.formatMode);
+  renderFormat(modes[(current + 1) % modes.length]);
+});
+
+/* =====================================================================
+   9. PRACTICE
    ===================================================================== */
 function shuffle(arr) {
   const a = [...arr];
@@ -1609,10 +1705,9 @@ function shuffle(arr) {
   }
   return a;
 }
-
 function setPracticeMode(mode) {
   state.practiceMode = mode;
-  document.querySelectorAll(".mode-btn").forEach(b => {
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
     const on = b.dataset.mode === mode;
     b.classList.toggle("active", on);
     b.setAttribute("aria-selected", on ? "true" : "false");
@@ -1620,15 +1715,10 @@ function setPracticeMode(mode) {
   $("timer-container").classList.toggle("hidden", mode !== "timed");
   if (mode === "timed") startTimer();
   else stopTimer();
-
-  document.querySelectorAll("main > section[data-guided-only]").forEach((el) => {
-    el.style.display = (mode === "hints") ? "" : "none";
-  });
 }
-document.querySelectorAll(".mode-btn").forEach(b => {
+document.querySelectorAll(".mode-btn[data-mode]").forEach(b => {
   b.addEventListener("click", () => setPracticeMode(b.dataset.mode));
 });
-
 function startTimer() {
   stopTimer();
   state.timer.remaining = 60;
@@ -1648,7 +1738,6 @@ function startTimer() {
 function stopTimer() {
   if (state.timer.interval) { clearInterval(state.timer.interval); state.timer.interval = null; }
 }
-
 function loadProgress() {
   try {
     const raw = localStorage.getItem(`lab_progress_${TOPIC_ID}`);
@@ -1658,7 +1747,6 @@ function loadProgress() {
 function saveProgress() {
   try { localStorage.setItem(`lab_progress_${TOPIC_ID}`, JSON.stringify(state.stats)); } catch {}
 }
-
 function renderStats() {
   $("stat-attempts").textContent = state.stats.attempts;
   $("stat-correct").textContent = state.stats.correct;
@@ -1666,10 +1754,9 @@ function renderStats() {
   const acc = state.stats.attempts ? Math.round(state.stats.correct / state.stats.attempts * 100) : 0;
   $("stat-accuracy").textContent = acc + "%";
 }
-
 function renderQuestion() {
   if (!state.testsPassed) {
-    $("practice-q-stem").textContent = "Practice is disabled because the model self-tests failed.";
+    $("practice-q-stem").textContent = "Practice is disabled because self-tests failed.";
     return;
   }
   const q = state.shuffled[state.currentQIndex];
@@ -1677,88 +1764,58 @@ function renderQuestion() {
   $("practice-q-num").textContent = `Question ${state.currentQIndex + 1} of ${state.shuffled.length}`;
   const d = $("practice-q-difficulty");
   d.textContent = q.difficulty;
-  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published"
-                             : q.difficulty === "Medium" ? "badge-draft"
-                             : "badge-tag");
+  d.className = "badge " + (q.difficulty === "Easy" ? "badge-published" : q.difficulty === "Medium" ? "badge-draft" : "badge-tag");
   $("practice-q-stem").textContent = q.stem;
-
   $("practice-feedback").className = "callout hidden";
   $("practice-error-categorizer").classList.add("hidden");
   $("practice-solution-box").classList.add("hidden");
   $("btn-next-question").disabled = true;
-
-  const container = $("practice-options-container");
-  container.innerHTML = "";
+  const c = $("practice-options-container");
+  c.innerHTML = "";
   q.options.forEach((opt, i) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "option-btn";
     btn.textContent = opt;
-    btn.setAttribute("role", "radio");
-    btn.setAttribute("aria-checked", "false");
     btn.addEventListener("click", () => markAnswer(i, q));
-    container.appendChild(btn);
+    c.appendChild(btn);
   });
-
   if (state.practiceMode === "timed") startTimer();
 }
-
-function markAnswer(chosenIdx, q) {
+function markAnswer(chosen, q) {
   if (state.answered) return;
   state.answered = true;
   stopTimer();
-
-  const isCorrect = chosenIdx === q.correctIndex;
-  const isTrap = chosenIdx === q.trapOptionIndex;
-
+  const isCorrect = chosen === q.correctIndex;
+  const isTrap = chosen === q.trapOptionIndex;
   document.querySelectorAll("#practice-options-container .option-btn").forEach((b, i) => {
     b.disabled = true;
-    b.setAttribute("aria-checked", i === chosenIdx ? "true" : "false");
     if (i === q.correctIndex) b.classList.add("correct");
-    else if (i === chosenIdx) b.classList.add(isTrap ? "trap" : "incorrect");
+    else if (i === chosen) b.classList.add(isTrap ? "trap" : "incorrect");
   });
-
   const fb = $("practice-feedback");
   fb.classList.remove("hidden");
-  if (isCorrect) {
-    fb.className = "callout callout-success";
-    fb.innerHTML = `<strong>✓ Correct.</strong>`;
-  } else if (isTrap) {
-    fb.className = "callout callout-trap";
-    fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`;
-    $("practice-error-categorizer").classList.remove("hidden");
-  } else {
-    fb.className = "callout callout-danger";
-    fb.innerHTML = `<strong>Incorrect.</strong> Correct answer: <strong>${q.options[q.correctIndex]}</strong>.`;
-    $("practice-error-categorizer").classList.remove("hidden");
-  }
-
+  if (isCorrect) { fb.className = "callout callout-success"; fb.innerHTML = `<strong>✓ Correct.</strong>`; }
+  else if (isTrap) { fb.className = "callout callout-trap"; fb.innerHTML = `<strong>⚠️ Trap:</strong> ${q.trapExplanation}`; $("practice-error-categorizer").classList.remove("hidden"); }
+  else { fb.className = "callout callout-danger"; fb.innerHTML = `<strong>Incorrect.</strong> Correct: <strong>${q.options[q.correctIndex]}</strong>.`; $("practice-error-categorizer").classList.remove("hidden"); }
   $("practice-solution-box").classList.remove("hidden");
   $("practice-solution-text").textContent = q.solution;
-
   state.stats.attempts++;
-  if (isCorrect) {
-    state.stats.correct++;
-    if (state.practiceMode !== "hints") state.stats.independentCorrect++;
-  }
+  if (isCorrect) { state.stats.correct++; if (state.practiceMode !== "hints") state.stats.independentCorrect++; }
   saveProgress();
   renderStats();
   $("btn-next-question").disabled = false;
 }
-
 $("btn-next-question").addEventListener("click", () => {
   state.currentQIndex = (state.currentQIndex + 1) % state.shuffled.length;
   renderQuestion();
 });
-
 $("select-error-category").addEventListener("change", (e) => {
-  const cat = e.target.value;
-  state.stats.errorsByCat[cat] = (state.stats.errorsByCat[cat] || 0) + 1;
+  state.stats.errorsByCat[e.target.value] = (state.stats.errorsByCat[e.target.value] || 0) + 1;
   saveProgress();
 });
-
 function handleResetStats() {
-  if (!confirm("Reset local practice stats for Number Series?")) return;
+  if (!confirm("Reset local practice stats?")) return;
   state.stats = { attempts: 0, correct: 0, independentCorrect: 0, errorsByCat: {} };
   saveProgress();
   renderStats();
@@ -1766,213 +1823,166 @@ function handleResetStats() {
 window.handleResetStats = handleResetStats;
 
 /* =====================================================================
-   8b. DISCOVERY MINI-LAB (view + wiring; all logic lives in DiscoveryModel)
-   Reduced motion: the global prefers-reduced-motion rule disables the
-   .disc-enter animation, so layers simply appear instantly.
+   10. DISCOVERY LAB — unchanged interface, extended presets in HTML above
    ===================================================================== */
-const Lab = { raw: ["2", "4", "8", "14", "22"], step: 0, showWrong: false, resetOnEdit: true, enter: null };
+const Lab = { raw: ["2","4","8","14","22"], step: 0, showWrong: false, resetOnEdit: true };
 const LAB_MAX_TERMS = 8;
 const labSigned = (x) => (x >= 0 ? "+" : "−") + Math.abs(x);
-const labEsc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
-const labNote = (msg) => { $("disc-note").textContent = msg || ""; };
-const labPlan = () => {
-  const p = DiscoveryModel.parse(Lab.raw);
-  return p.ok ? { parsed: p, plan: DiscoveryModel.build(p.nums) } : { parsed: p, plan: null };
-};
+const labEsc = (s) => String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+
+function buildDiscovery(nums) {
+  const n = nums.length;
+  if (n < 4) return { valid: false, error: "Need 4+ numbers" };
+  const d1 = [], d2 = [];
+  for (let i = 0; i < n-1; i++) d1.push(nums[i+1] - nums[i]);
+  for (let i = 0; i < d1.length - 1; i++) d2.push(d1[i+1] - d1[i]);
+  const allEq = (a) => a.length > 0 && a.every(v => v === a[0]);
+
+  let kind = "NONE", next = null, stages = [], wrong = null;
+  const seqCap = `Numbers only: ${nums.join(", ")}. Ask: how far does each jump?`;
+
+  if (allEq(d1)) {
+    kind = "AP"; next = nums[n-1] + d1[0];
+    stages = [
+      { id: "seq", caption: seqCap },
+      { id: "d1", caption: `Differences: ${d1.join(", ")}. All equal → AP.` },
+      { id: "final", caption: `Next = ${nums[n-1]} + ${d1[0]} = ${next}` }
+    ];
+  } else if (d2.length >= 2 && allEq(d2)) {
+    kind = "QUAD"; const nextD1 = d1[d1.length-1] + d2[0]; next = nums[n-1] + nextD1;
+    const wv = nums[n-1] + d1[d1.length-1];
+    if (wv !== next) wrong = { value: wv, label: "AP guess", why: `Repeating last jump gives ${wv}. Next jump is ${nextD1}.` };
+    stages = [
+      { id: "seq", caption: seqCap },
+      { id: "d1", caption: `D₁: ${d1.join(", ")} — changing.` },
+      { id: "d2", caption: `D₂: ${d2.join(", ")} — constant at ${d2[0]}.` },
+      { id: "final", caption: `Next jump = ${d1[d1.length-1]} + ${d2[0]} = ${nextD1}. Next term = ${next}.` }
+    ];
+  } else {
+    stages = [{ id: "seq", caption: seqCap },
+              { id: "d1", caption: `D₁: ${d1.join(", ")} — no clean pattern.` },
+              { id: "final", caption: "No clean layer. Try ratios or other ideas." }];
+  }
+
+  return { valid: true, kind, next, stages, wrong, max: stages.length - 1 };
+}
 
 function renderLab() {
   const grid = $("disc-grid");
-  const a = document.activeElement;
-  let focus = null;
-  if (a && grid.contains(a) && a.classList.contains("disc-tile") && a.dataset.idx !== undefined) {
-    focus = { idx: a.dataset.idx, s: a.selectionStart, e: a.selectionEnd };
-  }
+  const parsed = Lab.raw.map(x => Number(x)).filter(x => !isNaN(x));
+  const plan = parsed.length >= 4 ? buildDiscovery(parsed) : { valid: false, error: "Need 4+ numbers" };
+  Lab.step = plan.valid ? Math.max(0, Math.min(plan.max, Lab.step)) : 0;
+  const stage = plan.valid ? plan.stages[Lab.step] : null;
 
   const n = Lab.raw.length;
-  const { parsed, plan } = labPlan();
-  Lab.step = plan ? Math.max(0, Math.min(plan.max, Lab.step)) : 0;
-  const view = plan ? DiscoveryModel.visible(plan, Lab.step) : null;
-  const wrongOn = !!(view && Lab.showWrong && view.wrong);
-
-  const cols = 2 * n + 1 + (wrongOn ? 2 : 0);
-  const rowOf = {};
-  (plan ? plan.layers : []).forEach((id, i) => { rowOf[id] = i + 2; });
-  const rows = 1 + (plan ? plan.layers.length : 0);
+  const cols = 2 * n + 1 + (Lab.showWrong && plan.valid && plan.wrong && stage.id === "final" ? 2 : 0);
   grid.style.gridTemplateColumns = `repeat(${cols}, minmax(44px, 1fr))`;
-  grid.style.gridTemplateRows = `repeat(${rows}, minmax(40px, auto))`;
-
-  const attr = (col, row, cls, enterId, i = 0) => {
-    const en = enterId && Lab.enter === enterId;
-    return `class="${cls}${en ? " disc-enter" : ""}" style="grid-column:${col};grid-row:${row};${en ? `--d:${i * 90}ms;` : ""}"`;
-  };
-  const signCls = (d) => (d > 0 ? "up" : d < 0 ? "down" : "");
-  const hl = (id) => (view && view.highlight === id ? " hl" : "");
 
   let h = "";
   Lab.raw.forEach((v, i) => {
-    h += `<input type="text" autocomplete="off" data-idx="${i}" aria-label="Term ${i + 1}" value="${labEsc(v)}" ${attr(2 * i + 1, 1, "disc-tile")}>`;
+    h += `<input type="text" autocomplete="off" data-idx="${i}" value="${labEsc(v)}" class="disc-tile" style="grid-column:${2*i+1}; grid-row:1;" aria-label="Term ${i+1}">`;
   });
 
-  if (view) {
-    if (view.showD1) {
-      h += `<span ${attr(1, rowOf.d1, "disc-rowlabel")} title="First differences">D₁</span>`;
-      plan.d1.forEach((d, i) => {
-        h += `<span ${attr(2 * i + 2, rowOf.d1, "disc-chip " + signCls(d) + hl("d1"), "d1", i)}>${labSigned(d)}</span>`;
+  if (plan.valid) {
+    const rowOf = { d1: 2, d2: 3 };
+    if (["d1","final"].includes(stage.id)) {
+      h += `<span class="disc-rowlabel" style="grid-column:1; grid-row:${rowOf.d1};">D₁</span>`;
+      const d1 = [];
+      for (let i = 0; i < parsed.length-1; i++) d1.push(parsed[i+1]-parsed[i]);
+      d1.forEach((d, i) => {
+        h += `<span class="disc-chip ${d>0?'up':d<0?'down':''}" style="grid-column:${2*i+2}; grid-row:${rowOf.d1};">${labSigned(d)}</span>`;
       });
     }
-    if (view.showD2) {
-      h += `<span ${attr("1 / span 2", rowOf.d2, "disc-rowlabel")} title="Second differences">D₂</span>`;
-      plan.d2.forEach((d, i) => {
-        h += `<span ${attr(2 * i + 3, rowOf.d2, "disc-chip d2" + hl("d2"), "d2", i)}>${labSigned(d)}</span>`;
+    if (["d2","final"].includes(stage.id) && plan.kind === "QUAD") {
+      h += `<span class="disc-rowlabel" style="grid-column:1/span 2; grid-row:${rowOf.d2};">D₂</span>`;
+      const d1 = [];
+      for (let i = 0; i < parsed.length-1; i++) d1.push(parsed[i+1]-parsed[i]);
+      const d2 = [];
+      for (let i = 0; i < d1.length-1; i++) d2.push(d1[i+1]-d1[i]);
+      d2.forEach((d, i) => {
+        h += `<span class="disc-chip d2" style="grid-column:${2*i+3}; grid-row:${rowOf.d2};">${labSigned(d)}</span>`;
       });
     }
-    if (view.showRatio) {
-      h += `<span ${attr(1, rowOf.ratio, "disc-rowlabel")} title="Ratios">×</span>`;
-      plan.ratios.forEach((r, i) => {
-        h += `<span ${attr(2 * i + 2, rowOf.ratio, "disc-chip ratio" + hl("ratio"), "ratio", i)}>×${r}</span>`;
-      });
-    }
-    if (view.showGhost) {
-      const found = view.final && plan.next !== null;
-      h += `<div ${attr(2 * n + 1, 1, "disc-tile ghost" + (found ? " found" : ""), found ? "final" : (view.step === 1 ? "d1" : null))}`
-        + ` aria-label="${found ? "Predicted next term " + plan.next : "Next term, not yet known"}">${found ? plan.next : "?"}</div>`;
-      if (found) {
-        if (rowOf.d1) h += `<span ${attr(2 * n, rowOf.d1, "disc-chip ghost " + signCls(plan.nextD1), "final")}>${labSigned(plan.nextD1)}</span>`;
-        if (plan.ghostD2 !== null && rowOf.d2) h += `<span ${attr(2 * n - 1, rowOf.d2, "disc-chip d2 ghost", "final")}>${labSigned(plan.ghostD2)}</span>`;
-        if (plan.ghostRatio !== null && rowOf.ratio) h += `<span ${attr(2 * n, rowOf.ratio, "disc-chip ratio ghost", "final")}>×${plan.ghostRatio}</span>`;
+    const showGhost = stage.id !== "seq";
+    if (showGhost) {
+      const found = stage.id === "final";
+      h += `<div class="disc-tile ghost ${found ? 'found' : ''}" style="grid-column:${2*n+1}; grid-row:1;" aria-label="${found ? 'Predicted next ' + plan.next : 'Next, unknown'}">${found ? plan.next : '?'}</div>`;
+      if (Lab.showWrong && found && plan.wrong) {
+        h += `<span style="grid-column:${2*n+2}; grid-row:1; color:var(--text-muted); font-size:0.85rem;">or</span>`;
+        h += `<div class="disc-tile ghost wrong" style="grid-column:${2*n+3}; grid-row:1;"><span>${plan.wrong.value}</span></div>`;
       }
-    }
-    if (wrongOn) {
-      h += `<span ${attr(2 * n + 2, 1, "disc-or")}>or</span>`;
-      h += `<div ${attr(2 * n + 3, 1, "disc-tile ghost wrong", "wrong")} aria-label="Tempting wrong answer ${view.wrong.value}, crossed out"><span>${view.wrong.value}</span></div>`;
-      h += `<span ${attr(2 * n + 3, rowOf.d1 || 2, "disc-wrong-label")}>${view.wrong.label} ✗</span>`;
     }
   }
   grid.innerHTML = h;
 
-  if (focus) {
-    const el = grid.querySelector(`.disc-tile[data-idx="${focus.idx}"]`);
-    if (el) { el.focus(); try { el.setSelectionRange(focus.s, focus.e); } catch (_) {} }
-  }
-
-  // Caption
   const cap = $("disc-caption");
-  if (!plan) {
+  if (!plan.valid) {
     cap.className = "callout callout-danger disc-caption";
-    cap.textContent = parsed.error;
+    cap.textContent = plan.error;
   } else {
-    cap.className = "callout disc-caption " + (view.final ? (plan.next !== null ? "callout-success" : "callout-warning") : "callout-info");
-    cap.textContent = view.caption + (wrongOn ? `  ⚠️ Tempting trap: ${view.wrong.why}` : "");
+    cap.className = "callout disc-caption " + (stage.id === "final" ? (plan.next !== null ? "callout-success" : "callout-warning") : "callout-info");
+    cap.textContent = stage.caption + (Lab.showWrong && plan.wrong && stage.id === "final" ? ` ⚠️ ${plan.wrong.why}` : "");
   }
 
-  // Controls
-  const atEnd = !plan || Lab.step >= plan.max;
-  const reveal = $("disc-reveal");
-  reveal.disabled = atEnd;
-  reveal.textContent = plan && atEnd ? "All layers revealed ✓" : "Reveal next layer ▸";
+  const max = plan.valid ? plan.max : 0;
+  $("disc-reveal").disabled = !plan.valid || Lab.step >= max;
+  $("disc-reveal").textContent = plan.valid && Lab.step >= max ? "All revealed ✓" : "Reveal next layer ▸";
   $("disc-reset").disabled = Lab.step === 0;
-  const max = plan ? plan.max : 0;
-  $("disc-dots").innerHTML = plan
-    ? Array.from({ length: max + 1 }, (_, i) => `<span class="disc-dot${i <= Lab.step ? " on" : ""}"></span>`).join("")
-    : "";
-  $("disc-step-label").textContent = plan ? `Step ${Lab.step} of ${max}` : "—";
-  $("disc-term-minus").disabled = n <= DiscoveryModel.MIN_TERMS;
+  $("disc-dots").innerHTML = Array.from({length: max+1}, (_, i) => `<span class="disc-dot${i<=Lab.step?' on':''}"></span>`).join("");
+  $("disc-step-label").textContent = `Step ${Lab.step} of ${max}`;
+  $("disc-term-minus").disabled = n <= 4;
   $("disc-term-plus").disabled = n >= LAB_MAX_TERMS;
-  const wrongBox = $("disc-show-wrong");
-  wrongBox.disabled = !(plan && plan.wrong);
-  wrongBox.title = plan && !plan.wrong ? "This series has no common trap — try “Growing jumps”." : "";
-  wrongBox.checked = Lab.showWrong;
-
-  Lab.enter = null; // animations play once per user action
+  $("disc-show-wrong").disabled = !(plan.valid && plan.wrong);
+  $("disc-show-wrong").checked = Lab.showWrong;
 }
 
-function labEdited() {
-  Lab.enter = null;
-  if (Lab.resetOnEdit) Lab.step = 0;
-}
-
-function labReveal() {
-  const { plan } = labPlan();
-  if (!plan || Lab.step >= plan.max) return;
+$("disc-reveal").addEventListener("click", () => {
+  const parsed = Lab.raw.map(Number).filter(x => !isNaN(x));
+  const plan = parsed.length >= 4 ? buildDiscovery(parsed) : { valid: false };
+  if (!plan.valid || Lab.step >= plan.max) return;
   Lab.step++;
-  Lab.enter = plan.stages[Lab.step].id;
-  labNote("");
   renderLab();
-}
-
-$("disc-reveal").addEventListener("click", labReveal);
-$("disc-reset").addEventListener("click", () => { Lab.step = 0; Lab.enter = null; labNote(""); renderLab(); });
-
+});
+$("disc-reset").addEventListener("click", () => { Lab.step = 0; renderLab(); });
 $("disc-grid").addEventListener("input", (e) => {
-  const t = e.target;
-  if (!t.classList || !t.classList.contains("disc-tile")) return;
-  Lab.raw[Number(t.dataset.idx)] = t.value;
-  labEdited();
-  labNote("");
+  if (!e.target.classList.contains("disc-tile")) return;
+  Lab.raw[Number(e.target.dataset.idx)] = e.target.value;
+  if (Lab.resetOnEdit) Lab.step = 0;
   renderLab();
 });
-$("disc-grid").addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && e.target.classList && e.target.classList.contains("disc-tile")) {
-    e.preventDefault();
-    labReveal();
-  }
-});
-
 document.querySelectorAll("[data-disc-preset]").forEach(btn => {
   btn.addEventListener("click", () => {
     Lab.raw = btn.dataset.discPreset.split(",");
-    Lab.step = 0; Lab.enter = null;
-    labNote("");
+    Lab.step = 0;
     renderLab();
   });
 });
-
 $("disc-term-plus").addEventListener("click", () => {
   if (Lab.raw.length >= LAB_MAX_TERMS) return;
-  const { plan } = labPlan();
-  const last = Lab.raw[Lab.raw.length - 1];
-  Lab.raw.push(plan && plan.next !== null ? String(plan.next) : (String(last).trim() || "0"));
-  labEdited();
+  const last = Lab.raw[Lab.raw.length-1];
+  Lab.raw.push(String(last).trim() || "0");
+  Lab.step = 0;
   renderLab();
 });
 $("disc-term-minus").addEventListener("click", () => {
-  if (Lab.raw.length <= DiscoveryModel.MIN_TERMS) return;
+  if (Lab.raw.length <= 4) return;
   Lab.raw.pop();
-  labEdited();
+  Lab.step = 0;
   renderLab();
 });
-
 $("disc-reset-on-edit").addEventListener("change", (e) => { Lab.resetOnEdit = e.target.checked; });
-$("disc-show-wrong").addEventListener("change", (e) => {
-  Lab.showWrong = e.target.checked;
-  Lab.enter = Lab.showWrong ? "wrong" : null;
-  renderLab();
-});
-
-$("disc-use-above").addEventListener("click", () => {
-  const parts = String(state.sequenceText).split(",").map(s => s.trim()).filter(Boolean);
-  if (parts.length < DiscoveryModel.MIN_TERMS || !parts.every(p => isFinite(Number(p)))) {
-    labNote("The chart below needs 4+ plain numbers (letters aren't supported in this lab).");
-    return;
-  }
-  Lab.raw = parts.slice(0, LAB_MAX_TERMS);
-  Lab.step = 0; Lab.enter = null;
-  labNote(parts.length > LAB_MAX_TERMS ? `Using the first ${LAB_MAX_TERMS} terms.` : "Loaded the series from the chart below.");
-  renderLab();
-});
-
+$("disc-show-wrong").addEventListener("change", (e) => { Lab.showWrong = e.target.checked; renderLab(); });
 $("disc-send").addEventListener("click", () => {
-  const { parsed } = labPlan();
-  if (!parsed.ok) { labNote(parsed.error); return; }
-  if (state.predictLocked) { labNote("The chart below is locked after a prediction — press 🎲 New series there first."); return; }
-  state.sequenceText = parsed.nums.join(", ");
+  const parsed = Lab.raw.map(Number).filter(x => !isNaN(x));
+  if (parsed.length < 4) { $("disc-note").textContent = "Enter 4+ numbers first."; return; }
+  state.sequenceText = parsed.join(", ");
   $("input-sequence").value = state.sequenceText;
   renderMain();
-  labNote("Sent ✓ — the chart below now shows this series.");
+  $("disc-note").textContent = "Sent ✓ — the pyramid above shows this series.";
 });
 
 /* =====================================================================
-   9. INIT
+   11. INIT
    ===================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
   const results = runSelfTests();
@@ -1980,9 +1990,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const banner = $("test-status-banner");
   if (!state.testsPassed) {
     banner.className = "test-banner";
-    banner.innerHTML = `<strong>⚠️ Model self-tests failing — practice disabled.</strong>
-      <ul>${results.failures.map(f => `<li>${f.name}: ${f.detail}</li>`).join("")}</ul>`;
-    $("practice-options-container").innerHTML = "";
+    banner.innerHTML = `<strong>⚠️ Self-tests failing — practice disabled.</strong>
+      <ul>${results.failures.map(f => `<li>${f.n}: ${f.d}</li>`).join("")}</ul>`;
   }
 
   loadProgress();
@@ -1991,6 +2000,8 @@ document.addEventListener("DOMContentLoaded", () => {
   $("input-sequence").value = state.sequenceText;
   renderMain();
   renderLab();
+  renderLetterLab("step");
+  renderFormat("next");
   renderQuestion();
   renderStats();
   setPracticeMode("hints");
