@@ -1064,42 +1064,29 @@ const $ = (id) => document.getElementById(id);
 const fmt = (n) => Number(n).toLocaleString("en-IN");
 const fmtSign = (n) => (n >= 0 ? "+" : "") + fmt(n);
 
+const pctMorph = {
+  reduceMotion: false,
+  raf: null,
+  // displayed values (morph toward targets)
+  base: 240, newTotal: 300, amount: 60, percent: 25, axisMax: 480,
+  target: null
+};
+
 /* =====================================================================
    6. RENDERERS
    ===================================================================== */
 
-// Draws the main before/after visual with:
-//   - BEFORE bar (with fraction subdivision if percent is a clean fraction)
-//   - AFTER bar
-//   - GHOST bar of wrong answer (if user predicted wrong)
-//   - Unified number line at bottom
-function renderMainVisual(r) {
+function paintPctBars(base, percent, amount, newTotal, axisMax) {
   const svg = $("main-visual");
-  if (!r.valid) {
-    svg.innerHTML = `<text x="360" y="150" text-anchor="middle" font-size="16" fill="#ef4444">⚠️ ${r.error}</text>`;
-    return;
-  }
-  const { base, percent, amount, newTotal } = r.intermediates;
   const isUp = percent >= 0;
-
-  // Scale: represent up to 2× base for headroom on the number line.
-  const axisMax = Math.max(base * 2, newTotal * 1.1, 100);
   const padL = 60, padR = 40;
   const plotW = 720 - padL - padR;
   const X = (val) => padL + (Math.max(0, val) / axisMax) * plotW;
-
-  const yBefore = 60;
-  const yAfter = 130;
-  const barH = 32;
-
-  // Fraction subdivision of the base bar (only when percent is a clean fraction)
+  const yBefore = 60, yAfter = 130, barH = 32;
   const absP = Math.abs(percent);
   const knownFractions = { 10: 10, 12.5: 8, 16.67: 6, 20: 5, 25: 4, 33.33: 3, 50: 2, 100: 1 };
   const divisor = knownFractions[absP];
-
   const xBase0 = X(0), xBase1 = X(base);
-
-  // Draw the BEFORE bar + optional subdivision
   let subdivisions = "";
   if (divisor && divisor > 1) {
     for (let i = 1; i < divisor; i++) {
@@ -1108,87 +1095,97 @@ function renderMainVisual(r) {
         stroke="#1e3a8a" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>`;
     }
   }
-
   const xNew0 = X(0), xNew1 = X(newTotal);
   const changeX0 = isUp ? xBase1 : xNew1;
   const changeX1 = isUp ? xNew1 : xBase1;
   const changeW = Math.abs(changeX1 - changeX0);
   const changeColor = isUp ? "#22c55e" : "#ef4444";
-
-  // Ghost bar of user's wrong answer
   let ghostBar = "";
   if (state.userPredictionValue !== null && state.userPredictionValue !== newTotal) {
     const xGhost = X(state.userPredictionValue);
-    const ghostColor = "#f59e0b";
-    // Draw ghost below the AFTER bar
     ghostBar = `
-      <text x="${padL}" y="${yAfter + barH + 24}" font-size="11" font-weight="700" fill="${ghostColor}">
-        Your answer
-      </text>
+      <text x="${padL}" y="${yAfter + barH + 24}" font-size="11" font-weight="700" fill="#f59e0b">Your answer</text>
       <rect x="${xNew0}" y="${yAfter + barH + 32}" width="${Math.max(xGhost - xNew0, 2)}" height="${barH - 6}"
-        rx="4" fill="${ghostColor}" opacity="0.35" stroke="${ghostColor}" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <text x="${xGhost + 6}" y="${yAfter + barH + 50}" font-size="11" font-weight="700" fill="${ghostColor}">
-        ${fmt(state.userPredictionValue)}
-      </text>
-    `;
+        rx="4" fill="#f59e0b" opacity="0.35" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="${xGhost + 6}" y="${yAfter + barH + 50}" font-size="11" font-weight="700" fill="#f59e0b">${fmt(state.userPredictionValue)}</text>`;
   }
-
   svg.innerHTML = `
-    <!-- BEFORE label and bar -->
     <text x="${padL}" y="${yBefore - 12}" font-size="12" font-weight="700" fill="#94a3b8">BEFORE — base</text>
-    <rect x="${xBase0}" y="${yBefore}" width="${xBase1 - xBase0}" height="${barH}"
+    <rect x="${xBase0}" y="${yBefore}" width="${Math.max(xBase1 - xBase0, 2)}" height="${barH}"
       rx="6" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
     ${subdivisions}
-    <text x="${xBase1 + 8}" y="${yBefore + barH/2 + 5}" font-size="14" font-weight="800" fill="#93c5fd">
-      ${fmt(base)}
-    </text>
-
-    <!-- AFTER label and bar -->
-    <text x="${padL}" y="${yAfter - 12}" font-size="12" font-weight="700" fill="#94a3b8">
-      AFTER — ${fmtSign(percent)}%
-    </text>
-    <rect x="${xNew0}" y="${yAfter}" width="${xNew1 - xNew0}" height="${barH}"
+    <text x="${xBase1 + 8}" y="${yBefore + barH/2 + 5}" font-size="14" font-weight="800" fill="#93c5fd">${fmt(Math.round(base))}</text>
+    <text x="${padL}" y="${yAfter - 12}" font-size="12" font-weight="700" fill="#94a3b8">AFTER — ${fmtSign(Math.round(percent * 10) / 10)}%</text>
+    <rect x="${xNew0}" y="${yAfter}" width="${Math.max(xNew1 - xNew0, 2)}" height="${barH}"
       rx="6" fill="#312e81" stroke="#6366f1" stroke-width="2"/>
-    <!-- Change segment -->
-    <rect x="${changeX0}" y="${yAfter}" width="${changeW}" height="${barH}"
+    <rect x="${changeX0}" y="${yAfter}" width="${Math.max(changeW, 0)}" height="${barH}"
       rx="6" fill="${changeColor}" opacity="0.85"/>
-    <text x="${xNew1 + 8}" y="${yAfter + barH/2 + 5}" font-size="14" font-weight="800" fill="#c7d2fe">
-      ${fmt(newTotal)}
-    </text>
-
-    <!-- Change bracket -->
+    <text x="${xNew1 + 8}" y="${yAfter + barH/2 + 5}" font-size="14" font-weight="800" fill="#c7d2fe">${fmt(Math.round(newTotal))}</text>
     <line x1="${changeX0 + changeW/2}" y1="${yAfter + barH}" x2="${changeX0 + changeW/2}" y2="${yAfter + barH + 12}"
       stroke="${changeColor}" stroke-width="2"/>
     <text x="${changeX0 + changeW/2}" y="${yAfter + barH + 26}" text-anchor="middle"
-      font-size="12" font-weight="800" fill="${changeColor}">
-      ${fmtSign(amount)}
-    </text>
-
+      font-size="12" font-weight="800" fill="${changeColor}">${fmtSign(Math.round(amount))}</text>
     ${ghostBar}
-
-    <!-- UNIFIED NUMBER LINE -->
-    <line x1="${X(0)}" y1="255" x2="${X(axisMax)}" y2="255"
-      stroke="#475569" stroke-width="2"/>
-    <!-- Base tick -->
-    <line x1="${X(base)}" y1="250" x2="${X(base)}" y2="260"
-      stroke="#3b82f6" stroke-width="2"/>
-    <text x="${X(base)}" y="278" text-anchor="middle" font-size="10" fill="#93c5fd" font-weight="700">B=${fmt(base)}</text>
-    <!-- New total tick -->
-    <line x1="${X(newTotal)}" y1="250" x2="${X(newTotal)}" y2="260"
-      stroke="${changeColor}" stroke-width="2"/>
-    <text x="${X(newTotal)}" y="278" text-anchor="middle" font-size="10" fill="${changeColor}" font-weight="700">
-      ${fmt(newTotal)}
-    </text>
-    <!-- Zero mark -->
+    <line x1="${X(0)}" y1="255" x2="${X(axisMax)}" y2="255" stroke="#475569" stroke-width="2"/>
+    <line x1="${X(base)}" y1="250" x2="${X(base)}" y2="260" stroke="#3b82f6" stroke-width="2"/>
+    <text x="${X(base)}" y="278" text-anchor="middle" font-size="10" fill="#93c5fd" font-weight="700">B=${fmt(Math.round(base))}</text>
+    <line x1="${X(newTotal)}" y1="250" x2="${X(newTotal)}" y2="260" stroke="${changeColor}" stroke-width="2"/>
+    <text x="${X(newTotal)}" y="278" text-anchor="middle" font-size="10" fill="${changeColor}" font-weight="700">${fmt(Math.round(newTotal))}</text>
     <line x1="${X(0)}" y1="250" x2="${X(0)}" y2="260" stroke="#64748b" stroke-width="1.5"/>
     <text x="${X(0)}" y="278" text-anchor="middle" font-size="10" fill="#64748b">0</text>
-    <!-- 2× base anchor -->
     <line x1="${X(base*2)}" y1="250" x2="${X(base*2)}" y2="260" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
     <text x="${X(base*2)}" y="278" text-anchor="middle" font-size="10" fill="#475569">2B</text>
   `;
-
   $("svg-live-desc").textContent =
-    `Base ${fmt(base)}, changed by ${fmtSign(percent)} percent, new total ${fmt(newTotal)}.`;
+    `Base ${fmt(Math.round(base))}, changed by ${fmtSign(Math.round(percent * 10) / 10)} percent, new total ${fmt(Math.round(newTotal))}.`;
+}
+
+// Draws the main before/after visual with smooth morph on slider change
+function renderMainVisual(r) {
+  const svg = $("main-visual");
+  if (!r.valid) {
+    if (pctMorph.raf) { cancelAnimationFrame(pctMorph.raf); pctMorph.raf = null; }
+    svg.innerHTML = `<text x="360" y="150" text-anchor="middle" font-size="16" fill="#ef4444">⚠️ ${r.error}</text>`;
+    return;
+  }
+  const { base, percent, amount, newTotal } = r.intermediates;
+  const axisMax = Math.max(base * 2, newTotal * 1.1, 100);
+  const target = { base, percent, amount, newTotal, axisMax };
+  pctMorph.target = target;
+
+  if (pctMorph.reduceMotion || pctMorph.base === 0) {
+    Object.assign(pctMorph, target);
+    paintPctBars(base, percent, amount, newTotal, axisMax);
+    return;
+  }
+
+  if (pctMorph.raf) cancelAnimationFrame(pctMorph.raf);
+  const start = {
+    base: pctMorph.base,
+    percent: pctMorph.percent,
+    amount: pctMorph.amount,
+    newTotal: pctMorph.newTotal,
+    axisMax: pctMorph.axisMax
+  };
+  const t0 = performance.now();
+  const dur = 280;
+  function step(now) {
+    const u = Math.min(1, (now - t0) / dur);
+    const e = 1 - Math.pow(1 - u, 3);
+    pctMorph.base = start.base + (target.base - start.base) * e;
+    pctMorph.percent = start.percent + (target.percent - start.percent) * e;
+    pctMorph.amount = start.amount + (target.amount - start.amount) * e;
+    pctMorph.newTotal = start.newTotal + (target.newTotal - start.newTotal) * e;
+    pctMorph.axisMax = start.axisMax + (target.axisMax - start.axisMax) * e;
+    paintPctBars(pctMorph.base, pctMorph.percent, pctMorph.amount, pctMorph.newTotal, pctMorph.axisMax);
+    if (u < 1) pctMorph.raf = requestAnimationFrame(step);
+    else {
+      pctMorph.raf = null;
+      Object.assign(pctMorph, target);
+      paintPctBars(target.base, target.percent, target.amount, target.newTotal, target.axisMax);
+    }
+  }
+  pctMorph.raf = requestAnimationFrame(step);
 }
 
 function renderReadouts(r) {
@@ -1644,6 +1641,7 @@ function wireSucc() {
    11. INIT
    ===================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
+  pctMorph.reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   wireSucc();
   const results = runSelfTests();
   state.testsPassed = results.failed === 0;

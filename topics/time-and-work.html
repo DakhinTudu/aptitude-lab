@@ -413,6 +413,21 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
       </div>
     </div>
 
+    <div class="sim-stage" aria-label="Work fill animation">
+      <div class="sim-hud">
+        <span>Day <strong id="fill-day">0.0</strong> / <span id="fill-total">7.2</span></span>
+        <span class="sim-hud-right">Job <strong id="fill-pct">0</strong>% done</span>
+      </div>
+      <svg id="fill-svg" viewBox="0 0 760 180" width="100%" role="img" aria-label="Tank filling as A and B work together"></svg>
+      <div class="sim-progress" aria-hidden="true"><span id="fill-bar"></span></div>
+      <div class="sim-controls">
+        <button type="button" id="fill-play" class="btn btn-primary btn-sm">▶ Play</button>
+        <button type="button" id="fill-reset" class="btn btn-secondary btn-sm">Reset</button>
+        <input type="range" id="fill-scrub" min="0" max="1000" value="0" aria-label="Scrub work progress" />
+      </div>
+    </div>
+
+    <p style="font-size:.8rem;font-weight:600;color:var(--text-muted);margin:0 0 8px;">Timeline — alone vs together</p>
     <div class="vis-container">
       <svg id="timeline-svg" viewBox="0 0 760 340" width="100%" role="img" aria-label="Shared work timeline with day tiles and ghost bar">
         <title>Shared timeline showing A alone, B alone, together, and ghost prediction</title>
@@ -851,6 +866,124 @@ const TOPIC_ID = "time-and-work";
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => Number(n).toLocaleString("en-IN");
 
+const fillAnim = {
+  playing: false,
+  raf: null,
+  day: 0,
+  lastTs: 0,
+  combinedTime: 7.2,
+  totalWork: 36,
+  rateA: 3,
+  rateB: 2,
+  reduceMotion: false
+};
+
+function syncFillParams(result) {
+  if (!result.valid) return;
+  const { combinedTime, totalWork, rateA, rateB } = result.intermediates;
+  fillAnim.combinedTime = Math.max(0.1, combinedTime);
+  fillAnim.totalWork = totalWork;
+  fillAnim.rateA = rateA;
+  fillAnim.rateB = rateB;
+  $("fill-total").textContent = String(combinedTime);
+  if (!fillAnim.playing) {
+    fillAnim.day = Math.min(fillAnim.day, fillAnim.combinedTime);
+    drawFillFrame(fillAnim.day);
+  }
+}
+
+function drawFillFrame(day) {
+  const svg = $("fill-svg");
+  if (!svg) return;
+  const { combinedTime, totalWork, rateA, rateB } = fillAnim;
+  const done = Math.min(1, day / combinedTime);
+  const units = Math.min(totalWork, (rateA + rateB) * day);
+  const tankX = 80, tankY = 36, tankW = 600, tankH = 100;
+  const fillH = tankH * done;
+  const fillY = tankY + tankH - fillH;
+  const status = done >= 1 ? "Job complete" : day <= 0.001 ? "Ready — press Play" : "Working together…";
+
+  svg.innerHTML = `
+    <text x="80" y="24" font-size="12" font-weight="700" fill="#94a3b8">${status}</text>
+    <text x="680" y="24" text-anchor="end" font-size="12" font-weight="700" fill="#22c55e">
+      ${rateA}+${rateB} = ${rateA + rateB} u/d
+    </text>
+    <rect x="${tankX}" y="${tankY}" width="${tankW}" height="${tankH}" rx="10"
+      fill="#0f172a" stroke="#475569" stroke-width="2"/>
+    <rect x="${tankX}" y="${fillY}" width="${tankW}" height="${fillH}" rx="8"
+      fill="${done >= 1 ? "#22c55e" : "#38bdf8"}" opacity="0.85"/>
+    <text x="${tankX + tankW / 2}" y="${tankY + tankH / 2 + 6}" text-anchor="middle"
+      font-size="18" font-weight="800" fill="#e8edf7">
+      ${units.toFixed(1)} / ${totalWork} units
+    </text>
+    <text x="${tankX}" y="${tankY + tankH + 28}" font-size="11" fill="#64748b">
+      Fill = combined rate × days. Time alone would be longer — rates add, days don't.
+    </text>
+  `;
+
+  $("fill-day").textContent = day.toFixed(1);
+  $("fill-pct").textContent = String(Math.round(done * 100));
+  $("fill-bar").style.width = (done * 100) + "%";
+  $("fill-scrub").value = String(Math.round(done * 1000));
+}
+
+function fillTick(ts) {
+  if (!fillAnim.playing) return;
+  if (!fillAnim.lastTs) fillAnim.lastTs = ts;
+  const dt = Math.min(0.05, (ts - fillAnim.lastTs) / 1000);
+  fillAnim.lastTs = ts;
+  const speedUp = fillAnim.combinedTime > 12 ? 3 : fillAnim.combinedTime > 6 ? 2 : 1.5;
+  fillAnim.day = Math.min(fillAnim.combinedTime, fillAnim.day + dt * speedUp);
+  drawFillFrame(fillAnim.day);
+  if (fillAnim.day >= fillAnim.combinedTime) {
+    fillAnim.playing = false;
+    fillAnim.raf = null;
+    $("fill-play").textContent = "▶ Play";
+    return;
+  }
+  fillAnim.raf = requestAnimationFrame(fillTick);
+}
+
+function fillPlayToggle() {
+  if (fillAnim.reduceMotion) {
+    fillAnim.day = fillAnim.combinedTime;
+    drawFillFrame(fillAnim.day);
+    return;
+  }
+  if (fillAnim.playing) {
+    fillAnim.playing = false;
+    if (fillAnim.raf) cancelAnimationFrame(fillAnim.raf);
+    fillAnim.raf = null;
+    $("fill-play").textContent = "▶ Play";
+    return;
+  }
+  if (fillAnim.day >= fillAnim.combinedTime - 1e-6) fillAnim.day = 0;
+  fillAnim.playing = true;
+  fillAnim.lastTs = 0;
+  $("fill-play").textContent = "⏸ Pause";
+  fillAnim.raf = requestAnimationFrame(fillTick);
+}
+
+function fillReset() {
+  fillAnim.playing = false;
+  if (fillAnim.raf) cancelAnimationFrame(fillAnim.raf);
+  fillAnim.raf = null;
+  fillAnim.day = 0;
+  $("fill-play").textContent = "▶ Play";
+  drawFillFrame(0);
+}
+
+function wireFillAnim() {
+  fillAnim.reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  $("fill-play").addEventListener("click", fillPlayToggle);
+  $("fill-reset").addEventListener("click", fillReset);
+  $("fill-scrub").addEventListener("input", (e) => {
+    if (fillAnim.playing) fillPlayToggle();
+    fillAnim.day = (Number(e.target.value) / 1000) * fillAnim.combinedTime;
+    drawFillFrame(fillAnim.day);
+  });
+}
+
 /* =====================================================================
    5. RENDERERS
    ===================================================================== */
@@ -1059,6 +1192,7 @@ function renderMain() {
   renderReadouts(r);
   renderRates(r);
   renderWage();
+  if (r.valid) syncFillParams(r);
   if (!state.predictLocked && r.valid) preparePredict(r);
 }
 
@@ -1421,6 +1555,7 @@ function wirePw() {
 }
 document.addEventListener("DOMContentLoaded", () => {
   wirePw();
+  wireFillAnim();
   const results = runSelfTests();
   state.testsPassed = results.failed === 0;
   const banner = $("test-status-banner");

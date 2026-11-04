@@ -121,6 +121,65 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 img, svg, video, canvas { max-width: 100%; height: auto; }
 .page-container { max-width: 100%; }
 
+/* Motion stage — Play / Pause sims */
+.sim-stage {
+  background: rgba(11, 18, 32, 0.55);
+  border: 1px solid var(--border, #2a3758);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 14px;
+}
+.sim-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-dim, #94a3b8);
+}
+.sim-hud strong { color: var(--primary, #38bdf8); }
+.sim-hud .sim-hud-right { color: var(--success, #22c55e); }
+.sim-stage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.5);
+}
+.sim-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.sim-controls input[type="range"] {
+  flex: 1 1 140px;
+  min-width: 120px;
+  accent-color: var(--primary, #38bdf8);
+}
+.sim-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--border, #2a3758);
+  overflow: hidden;
+  margin-top: 8px;
+}
+.sim-progress > span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--primary, #38bdf8), var(--success, #22c55e));
+  transition: width 80ms linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sim-progress > span { transition: none; }
+}
+
 /* Touch-friendlier controls on phone */
 @media (max-width: 640px) {
   body {

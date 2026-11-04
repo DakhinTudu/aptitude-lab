@@ -433,6 +433,10 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
           <span id="year-badge" class="badge badge-tag">Year 5</span>
         </label>
         <input type="range" id="year-slider" min="0" max="10" step="1" value="5">
+        <div class="sim-controls" style="margin-top:8px;">
+          <button type="button" id="year-play" class="btn btn-primary btn-sm">▶ Sweep years</button>
+          <button type="button" id="year-reset" class="btn btn-secondary btn-sm">Year 0</button>
+        </div>
       </div>
     </div>
 
@@ -540,10 +544,18 @@ input[type=range]:disabled { opacity: 0.5; cursor: not-allowed; }
         <input type="range" id="fq-r" min="4" max="20" value="10">
       </div>
     </div>
-    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
-      <button type="button" id="fq-next" class="btn btn-primary btn-sm">Next year →</button>
-      <button type="button" id="fq-reset" class="btn btn-secondary btn-sm">Reset to year 0</button>
-      <span id="fq-badge" class="badge badge-tag">Year 0</span>
+    <div class="sim-stage" style="margin-bottom:12px;">
+      <div class="sim-hud">
+        <span>Year <strong id="fq-year-live">0</strong> / 5</span>
+        <span class="sim-hud-right">Gap <strong id="fq-gap-live">₹0</strong></span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;">
+        <button type="button" id="fq-play" class="btn btn-primary btn-sm">▶ Play years</button>
+        <button type="button" id="fq-next" class="btn btn-secondary btn-sm">Next year →</button>
+        <button type="button" id="fq-reset" class="btn btn-secondary btn-sm">Reset to year 0</button>
+        <span id="fq-badge" class="badge badge-tag">Year 0</span>
+      </div>
+      <div class="sim-progress" aria-hidden="true"><span id="fq-bar"></span></div>
     </div>
     <div class="vis-container">
       <svg id="fq-svg" viewBox="0 0 760 300" width="100%" role="img" aria-label="SI vs CI year by year"></svg>
@@ -1055,8 +1067,41 @@ $("select-freq").addEventListener("change", (e) => {
   renderIOI();
 });
 $("year-slider").addEventListener("input", (e) => {
+  yearSweepStop();
   state.year = parseInt(e.target.value);
   $("year-badge").textContent = `Year ${state.year}`;
+  renderCurve();
+});
+const yearSweep = { playing: false, timer: null };
+function yearSweepStop() {
+  yearSweep.playing = false;
+  if (yearSweep.timer) { clearTimeout(yearSweep.timer); yearSweep.timer = null; }
+  const btn = $("year-play");
+  if (btn) btn.textContent = "▶ Sweep years";
+}
+function yearSweepToggle() {
+  if (yearSweep.playing) { yearSweepStop(); return; }
+  if (state.year >= 10) state.year = 0;
+  yearSweep.playing = true;
+  $("year-play").textContent = "⏸ Pause";
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const tick = () => {
+    if (!yearSweep.playing) return;
+    state.year = Math.min(10, state.year + 1);
+    $("year-slider").value = state.year;
+    $("year-badge").textContent = `Year ${state.year}`;
+    renderCurve();
+    if (state.year >= 10) { yearSweepStop(); return; }
+    yearSweep.timer = setTimeout(tick, reduce ? 60 : 450);
+  };
+  tick();
+}
+$("year-play").addEventListener("click", yearSweepToggle);
+$("year-reset").addEventListener("click", () => {
+  yearSweepStop();
+  state.year = 0;
+  $("year-slider").value = 0;
+  $("year-badge").textContent = "Year 0";
   renderCurve();
 });
 $("rate-lab").addEventListener("input", (e) => {
@@ -1276,52 +1321,131 @@ function handleResetStats() {
 window.handleResetStats = handleResetStats;
 
 /* ---- Why CI beats SI: year-by-year (concept first) ---- */
-const fq = { p: 10000, r: 10, year: 0, maxY: 5 };
-function renderFq() {
-  const { p, r, year } = fq;
+const fq = {
+  p: 10000, r: 10, year: 0, maxY: 5,
+  playing: false, timer: null, reduceMotion: false,
+  // smooth display heights (₹ amounts) for morph
+  dispSi: 10000, dispCi: 10000, dispGap: 0, morphRaf: null
+};
+
+function fqRows() {
   const rows = [];
-  let siA = p, ciA = p;
+  let siA = fq.p, ciA = fq.p;
   for (let y = 1; y <= fq.maxY; y++) {
-    const siAdd = p * r / 100;
-    const ciAdd = ciA * r / 100;
+    const siAdd = fq.p * fq.r / 100;
+    const ciAdd = ciA * fq.r / 100;
     siA += siAdd; ciA += ciAdd;
     rows.push({ y, siAdd, ciAdd, extra: ciAdd - siAdd, siA, ciA });
   }
-  const show = rows.filter(x => x.y <= year);
-  const maxA = rows[rows.length - 1].ciA;
-  const scale = 160 / maxA;
+  return rows;
+}
+
+function fqTargets() {
+  const rows = fqRows();
+  if (fq.year === 0) return { si: fq.p, ci: fq.p, gap: 0, show: [], maxA: rows[rows.length - 1].ciA };
+  const show = rows.filter(x => x.y <= fq.year);
+  const last = show[show.length - 1];
+  return { si: last.siA, ci: last.ciA, gap: last.ciA - last.siA, show, maxA: rows[rows.length - 1].ciA };
+}
+
+function drawFqBars() {
+  const { p, r, year } = fq;
+  const t = fqTargets();
+  const scale = 160 / t.maxA;
+  const siH = fq.dispSi * scale;
+  const ciH = fq.dispCi * scale;
+  const gapH = Math.max(4, fq.dispGap * scale * 3);
   let bars = `<text x="120" y="28" text-anchor="middle" font-size="13" fill="#f59e0b">SI (always % of ₹${p})</text>
     <text x="320" y="28" text-anchor="middle" font-size="13" fill="#38bdf8">CI (% of growing total)</text>
     <text x="560" y="28" text-anchor="middle" font-size="13" fill="#a78bfa">Extra = interest on interest</text>`;
+  bars += `<rect x="80" y="${220 - siH}" width="80" height="${siH}" fill="${year === 0 ? "#334155" : "#f59e0b"}"/>
+    <text x="120" y="245" text-anchor="middle" font-size="12" fill="#f59e0b">₹${Math.round(fq.dispSi)}</text>
+    <rect x="280" y="${220 - ciH}" width="80" height="${ciH}" fill="${year === 0 ? "#334155" : "#38bdf8"}"/>
+    <text x="320" y="245" text-anchor="middle" font-size="12" fill="#38bdf8">₹${Math.round(fq.dispCi)}</text>
+    <rect x="520" y="${220 - gapH}" width="80" height="${gapH}" fill="#a78bfa"/>
+    <text x="560" y="245" text-anchor="middle" font-size="12" fill="#a78bfa">+₹${Math.round(fq.dispGap)}</text>`;
   if (year === 0) {
-    bars += `<rect x="80" y="${220 - p * scale}" width="80" height="${p * scale}" fill="#334155"/>
-      <rect x="280" y="${220 - p * scale}" width="80" height="${p * scale}" fill="#334155"/>
-      <text x="380" y="160" text-anchor="middle" font-size="14" fill="#94a3b8">Year 0: both start at ₹${p}. Press Next year.</text>`;
+    bars += `<text x="380" y="160" text-anchor="middle" font-size="14" fill="#94a3b8">Year 0: both start at ₹${p}. Press Play years.</text>`;
   } else {
-    const last = show[show.length - 1];
-    bars += `<rect x="80" y="${220 - last.siA * scale}" width="80" height="${last.siA * scale}" fill="#f59e0b"/>
-      <text x="120" y="245" text-anchor="middle" font-size="12" fill="#f59e0b">₹${Math.round(last.siA)}</text>
-      <rect x="280" y="${220 - last.ciA * scale}" width="80" height="${last.ciA * scale}" fill="#38bdf8"/>
-      <text x="320" y="245" text-anchor="middle" font-size="12" fill="#38bdf8">₹${Math.round(last.ciA)}</text>
-      <rect x="520" y="${220 - Math.max(4, (last.ciA - last.siA) * scale * 3)}" width="80" height="${Math.max(4, (last.ciA - last.siA) * scale * 3)}" fill="#a78bfa"/>
-      <text x="560" y="245" text-anchor="middle" font-size="12" fill="#a78bfa">+₹${Math.round(last.ciA - last.siA)}</text>`;
-    // year chips
-    show.forEach((row, i) => {
+    t.show.forEach((row, i) => {
       bars += `<text x="40" y="${60 + i * 28}" font-size="12" fill="#94a3b8">Y${row.y}: SI +${Math.round(row.siAdd)} · CI +${Math.round(row.ciAdd)} · extra +${Math.round(row.extra)}</text>`;
     });
   }
   $("fq-svg").innerHTML = bars;
   $("fq-badge").textContent = `Year ${year}`;
+  $("fq-year-live").textContent = String(year);
+  $("fq-gap-live").textContent = "₹" + Math.round(fq.dispGap).toLocaleString("en-IN");
+  $("fq-bar").style.width = ((year / fq.maxY) * 100) + "%";
   $("fq-p-b").textContent = p; $("fq-r-b").textContent = r;
   if (year === 0) $("fq-cap").textContent = "Same money, same rate. Difference appears only after year 1 — because CI charges interest on last year's interest too.";
   else if (year === 1) $("fq-cap").textContent = `Year 1: both add the same ₹${Math.round(p * r / 100)} (still % of original). No gap yet. Mind tip: first year SI = CI.`;
-  else $("fq-cap").textContent = `Year ${year}: SI still adds ₹${Math.round(p * r / 100)} every year. CI adds more each year because the base grew. Gap = ₹${Math.round(show[show.length - 1].ciA - show[show.length - 1].siA)}. That gap is all you need to “see” before using the formula.`;
+  else $("fq-cap").textContent = `Year ${year}: SI still adds ₹${Math.round(p * r / 100)} every year. CI adds more each year because the base grew. Gap = ₹${Math.round(t.gap)}. That gap is all you need to “see” before using the formula.`;
 }
+
+function morphFqToTargets() {
+  if (fq.morphRaf) cancelAnimationFrame(fq.morphRaf);
+  const t = fqTargets();
+  if (fq.reduceMotion) {
+    fq.dispSi = t.si; fq.dispCi = t.ci; fq.dispGap = t.gap;
+    drawFqBars();
+    return;
+  }
+  const start = { si: fq.dispSi, ci: fq.dispCi, gap: fq.dispGap };
+  const t0 = performance.now();
+  const dur = 420;
+  function step(now) {
+    const u = Math.min(1, (now - t0) / dur);
+    const e = 1 - Math.pow(1 - u, 3);
+    fq.dispSi = start.si + (t.si - start.si) * e;
+    fq.dispCi = start.ci + (t.ci - start.ci) * e;
+    fq.dispGap = start.gap + (t.gap - start.gap) * e;
+    drawFqBars();
+    if (u < 1) fq.morphRaf = requestAnimationFrame(step);
+    else fq.morphRaf = null;
+  }
+  fq.morphRaf = requestAnimationFrame(step);
+}
+
+function renderFq() {
+  morphFqToTargets();
+}
+
+function fqStopPlay() {
+  fq.playing = false;
+  if (fq.timer) { clearTimeout(fq.timer); fq.timer = null; }
+  const btn = $("fq-play");
+  if (btn) btn.textContent = "▶ Play years";
+}
+
+function fqPlayToggle() {
+  if (fq.playing) { fqStopPlay(); return; }
+  if (fq.year >= fq.maxY) { fq.year = 0; fq.dispSi = fq.p; fq.dispCi = fq.p; fq.dispGap = 0; }
+  fq.playing = true;
+  $("fq-play").textContent = "⏸ Pause";
+  const tick = () => {
+    if (!fq.playing) return;
+    if (fq.year >= fq.maxY) { fqStopPlay(); return; }
+    fq.year += 1;
+    renderFq();
+    if (fq.year >= fq.maxY) { fqStopPlay(); return; }
+    fq.timer = setTimeout(tick, fq.reduceMotion ? 80 : 900);
+  };
+  if (fq.year === 0) {
+    renderFq();
+    fq.timer = setTimeout(tick, fq.reduceMotion ? 80 : 500);
+  } else {
+    tick();
+  }
+}
+
 function wireFq() {
-  $("fq-p").addEventListener("input", e => { fq.p = +e.target.value; fq.year = 0; renderFq(); });
-  $("fq-r").addEventListener("input", e => { fq.r = +e.target.value; fq.year = 0; renderFq(); });
-  $("fq-next").addEventListener("click", () => { fq.year = Math.min(fq.maxY, fq.year + 1); renderFq(); });
-  $("fq-reset").addEventListener("click", () => { fq.year = 0; renderFq(); });
+  fq.reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  fq.dispSi = fq.p; fq.dispCi = fq.p; fq.dispGap = 0;
+  $("fq-p").addEventListener("input", e => { fqStopPlay(); fq.p = +e.target.value; fq.year = 0; fq.dispSi = fq.p; fq.dispCi = fq.p; fq.dispGap = 0; renderFq(); });
+  $("fq-r").addEventListener("input", e => { fqStopPlay(); fq.r = +e.target.value; fq.year = 0; fq.dispSi = fq.p; fq.dispCi = fq.p; fq.dispGap = 0; renderFq(); });
+  $("fq-next").addEventListener("click", () => { fqStopPlay(); fq.year = Math.min(fq.maxY, fq.year + 1); renderFq(); });
+  $("fq-reset").addEventListener("click", () => { fqStopPlay(); fq.year = 0; fq.dispSi = fq.p; fq.dispCi = fq.p; fq.dispGap = 0; renderFq(); });
+  $("fq-play").addEventListener("click", fqPlayToggle);
   renderFq();
 }
 document.addEventListener("DOMContentLoaded", () => {
